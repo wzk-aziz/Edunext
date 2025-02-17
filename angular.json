@@ -22,10 +22,19 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/assets/vendor/font-awesome/webfonts",
+              "src/assetsback"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/vendor/font-awesome/css/all.min.css",
+              "src/assets/vendor/bootstrap-icons/bootstrap-icons.css",
+              "src/assets/vendor/tiny-slider/tiny-slider.css",
+              "src/assets/vendor/glightbox/css/glightbox.css",
+              "src/assets/css/style.css" ,
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+            
             ],
             "scripts": []
           },
