@@ -1,0 +1,22 @@
+
+<h2>Créer un examen</h2>
+<form (ngSubmit)="onSubmit()">
+  <label for="title">Titre :</label>
+  <input id="title" [(ngModel)]="exam.examTitle" name="title" required>
+
+  <label for="description">Description :</label>
+  <textarea id="description" [(ngModel)]="exam.examDescription" name="description"></textarea>
+
+  <label for="duration">Durée (min) :</label>
+  <input id="duration" type="number" [(ngModel)]="exam.examDescription" name="duration" required>
+
+  <label for="scheduledDate">Date prévue :</label>
+  <input id="scheduledDate" type="datetime-local" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required>
+  <div *ngFor="let question of exam.questions; let i = index">
+    <input [(ngModel)]="question.questionText" [name]="'questionText' + i">
+    <input [(ngModel)]="question.answerOptions" [name]="'correctAnswer' + i">
+  </div>
+  
+  <button type="button" (click)="addQuestion()">Ajouter Question</button>
+  <button type="submit">Créer</button>
+</form>

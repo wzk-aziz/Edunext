@@ -1,0 +1,691 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/reviews.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:57:31 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>:: e-Learn:: Reviews</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    
+    <!-- project css file  -->
+    <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+    <!-- Google Code  -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-264428387-1');
+    </script>
+</head>
+<body>
+
+<div id="elearn-layout" class="theme-purple">
+    <!-- sidebar -->
+    <div class="sidebar px-4 py-4 py-md-4  me-0">
+        <div class="d-flex flex-column h-100">
+            <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
+                <span class="logo-icon">
+                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                </span>
+                <span class="logo-text">e-Learn</span>
+            </a>
+            <!-- Menu: main ul -->
+            <ul class="menu-list flex-grow-1 mt-3">
+                <li><a class="m-link" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i> <span>Students</span></a></li>
+                <li class="collapsed">
+                    <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+                        <i class="icofont-teacher"></i>
+                        <span>Teachers</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+                        <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="collapsed">
+                    <a class="m-link" (click)="toggleMenu()" role="button">
+                        <i class="icofont-certificate"></i>
+                        <span>Courses</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+                        <li><a class="ms-link" routerLink="/backoffice/courses"><span>Courses</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/purchase"><span>Course Purchase</span></a></li>
+                    </ul>
+                </li>
+                <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
+            </ul>
+
+            <!-- Theme: Switch Theme -->
+            <ul class="list-unstyled mb-0">
+                <li class="d-flex align-items-center justify-content-center">
+                    <div class="form-check form-switch theme-switch">
+                        <input class="form-check-input" type="checkbox" id="theme-switch">
+                        <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                    </div>
+                </li>
+                <li class="d-flex align-items-center justify-content-center">
+                    <div class="form-check form-switch theme-rtl">
+                        <input class="form-check-input" type="checkbox" id="theme-rtl">
+                        <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+                    </div>
+                </li>
+            </ul>
+            <!-- Menu: menu collepce btn -->
+            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+                <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
+
+        <!-- Body: Header -->
+        <div class="header">
+            <nav class="navbar py-4">
+                <div class="container-xxl">
+    
+                    <!-- header rightbar icon -->
+                    <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
+                        <div class="d-flex">
+                            <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
+                                <i class="icofont-info-square fs-5"></i>
+                            </a>
+                            <div class="avatar-list avatar-list-stacked px-3">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar4.jpg" alt="">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                                <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal" data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
+                            </div>
+                        </div>
+                        <div class="dropdown notifications zindex-popover">
+                            <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="icofont-alarm fs-5"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                            <div id="NotificationsDiv" class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
+                                <div class="card border-0 w380">
+                                    <div class="card-header border-0 p-3">
+                                        <h5 class="mb-0 font-weight-light d-flex justify-content-between">
+                                            <span>Notifications</span>
+                                            <span class="badge text-white">14</span>
+                                        </h5>
+                                    </div>
+                                    <div class="tab-content card-body">
+                                        <div class="tab-pane fade show active">
+                                            <ul class="list-unstyled list mb-0">
+                                                <li class="py-2 mb-1 border-bottom">
+                                                    <a href="javascript:void(0);" class="d-flex">
+                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
+                                                        <div class="flex-fill ms-2">
+                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Molly Cornish</span> <small>2MIN</small></p>
+                                                            <span class="">Added  2021-02-19 e-Learn links_no_expiration_report.csv <span class="badge bg-success">Review</span></span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="py-2 mb-1 border-bottom">
+                                                    <a href="javascript:void(0);" class="d-flex">
+                                                        <div class="avatar rounded-circle no-thumbnail">DF</div>
+                                                        <div class="flex-fill ms-2">
+                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane Fisher</span> <small>13MIN</small></p>
+                                                            <span class="">Server added Get Started with e-Learn.pdf</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="py-2 mb-1 border-bottom">
+                                                    <a href="javascript:void(0);" class="d-flex">
+                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                                                        <div class="flex-fill ms-2">
+                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea Gill</span> <small>1HR</small></p>
+                                                            <span class="">Server added Document.docx</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="py-2 mb-1 border-bottom">
+                                                    <a href="javascript:void(0);" class="d-flex">
+                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar5.jpg" alt="">
+                                                        <div class="flex-fill ms-2">
+                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane Fisher</span> <small>13MIN</small></p>
+                                                            <span class="">Add folder on Server</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="py-2 mb-1 border-bottom">
+                                                    <a href="javascript:void(0);" class="d-flex">
+                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar6.jpg" alt="">
+                                                        <div class="flex-fill ms-2">
+                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea Gill</span> <small>1HR</small></p>
+                                                            <span class="">Delete folder on Server</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="py-2">
+                                                    <a href="javascript:void(0);" class="d-flex">
+                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
+                                                        <div class="flex-fill ms-2">
+                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
+                                                            <span class="">The generated Lorem Ipsum</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
+                            <div class="u-info me-2">
+                                <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Molly Cornish</span></p>
+                                <small>Student Profile</small>
+                            </div>
+                            <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                <img class="avatar lg rounded-circle img-thumbnail" src="/assetsback/images/profile_av.png" alt="profile">
+                            </a>
+                            <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                                <div class="card border-0 w280">
+                                    <div class="card-body pb-0">
+                                        <div class="d-flex py-1">
+                                            <img class="avatar rounded-circle" src="/assetsback/images/profile_av.png" alt="profile">
+                                            <div class="flex-fill ms-3">
+                                                <p class="mb-0"><span class="font-weight-bold">Molly Cornish</span></p>
+                                                <small class="">molly.cornishgamil.com</small>
+                                            </div>
+                                        </div>
+                                        <div><hr class="dropdown-divider border-dark"></div>
+                                    </div>
+                                    <div class="list-group m-2 ">
+                                        <a href="students.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-graduate-alt fs-6 me-3"></i>Student Profile</a>
+                                        <a href="video-class.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-black-board fs-6 me-3"></i>Video Class</a>
+                                        <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-6 me-3"></i>Signout</a>
+                                        <div><hr class="dropdown-divider border-dark"></div>
+                                        <a href="ui-elements/auth-signup.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- menu toggler -->
+                    <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
+                        <span class="fa fa-bars"></span>
+                    </button>
+    
+                    <!-- main menu Search-->
+                    <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
+                        <div class="input-group flex-nowrap input-group-lg">
+                            <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
+                            <input type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
+                            <button type="button" class="input-group-text add-member-top" id="addon-wrappingone" data-bs-toggle="modal" data-bs-target="#addUser"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+    
+                </div>
+            </nav>
+        </div>
+
+        <!-- Body: Body -->
+        <div class="body d-flex py-lg-3 py-md-2">
+            <div class="container-xxl">
+                <div class="row clearfix row-deck">
+                    <div class="col-md-12">
+                        <div class="card border-0 mb-4">
+                            <div class="card-header py-3 px-3 d-flex align-items-center px-0 justify-content-between border-bottom">
+                                <h3 class=" fw-bold flex-fill">Reviews</h3>
+                                <div class="dropdown px-2">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Sort By
+                                    </button>
+                                    <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="#">Most Recent</a></li>
+                                        <li><a class="dropdown-item" href="#">Positive First</a></li>
+                                        <li><a class="dropdown-item" href="#">Negative First</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- Row End -->
+                <div class="row clearfix g-3 py-3">
+                    <div class="col-lg-4 col-md-4">
+                        <div class="feedback-info sticky-top">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h2 class=" display-6 fw-bold mb-0">4.5</h2>
+                                    <small class="text-muted">based on 1,032 ratings</small>
+                                    <div class="d-flex align-items-center">
+                                        <span class="mb-2 me-3">
+                                            <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                            <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                            <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                            <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                            <a href="#" class="rating-link active"><i class="bi bi-star-half text-warning"></i></a>
+                                        </span>
+                                    </div>
+                                    <div class="progress-count mt-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-bold d-flex align-items-center">5<i class="bi bi-star-fill text-warning ms-1 small-11 pb-1"></i></h6>
+                                            <span class="small text-muted">661</span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar light-success-bg" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-count mt-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-bold d-flex align-items-center">4<i class="bi bi-star-fill text-warning ms-1 small-11 pb-1"></i></h6>
+                                            <span class="small text-muted">237</span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar bg-info-light" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-count mt-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-bold d-flex align-items-center">3<i class="bi bi-star-fill text-warning ms-1 small-11 pb-1"></i></h6>
+                                            <span class="small text-muted">76</span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar bg-lightyellow" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-count mt-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-bold d-flex align-items-center">2<i class="bi bi-star-fill text-warning ms-1 small-11 pb-1"></i></h6>
+                                            <span class="small text-muted">19</span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar light-danger-bg " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-count mt-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-bold d-flex align-items-center">1<i class="bi bi-star-fill text-warning ms-1 small-11 pb-1"></i></h6>
+                                            <span class="small text-muted">39</span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar bg-careys-pink" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="customer-like mt-5">
+                                        <h6 class="mb-0 fw-bold ">What Customers Like</h6>
+                                        <ul class="list-group mt-3">
+                                            <li class="list-group-item d-flex">
+                                                <div class="number border-end pe-2 fw-bold">
+                                                    <strong class="color-light-success">1</strong>
+                                                </div>
+                                                <div class="cs-text flex-fill ps-2">
+                                                    <span>Fun Factor</span>
+                                                </div>
+                                                <div class="vote-text">
+                                                    <span class="text-muted">72 votes</span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex">
+                                                <div class="number border-end pe-2 fw-bold">
+                                                    <strong class="color-light-success">2</strong>
+                                                </div>
+                                                <div class="cs-text flex-fill ps-2">
+                                                    <span>Great Value</span>
+                                                </div>
+                                                <div class="vote-text">
+                                                    <span class="text-muted">52 votes</span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex">
+                                                <div class="number border-end pe-2 fw-bold">
+                                                    <strong class="color-light-success">3</strong>
+                                                </div>
+                                                <div class="cs-text flex-fill ps-2">
+                                                    <span>Teachers</span>
+                                                </div>
+                                                <div class="vote-text">
+                                                    <span class="text-muted">35 votes</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="customer-like mt-5">
+                                        <h6 class="mb-0 fw-bold ">What Need Improvement</h6>
+                                        <ul class="list-group mt-3">
+                                            <li class="list-group-item d-flex">
+                                                <div class="number border-end pe-2 fw-bold">
+                                                    <strong class="color-careys-pink">1</strong>
+                                                </div>
+                                                <div class="cs-text flex-fill ps-2">
+                                                    <span>Value for Money</span>
+                                                </div>
+                                                <div class="vote-text">
+                                                    <span class="text-muted">12 votes</span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex">
+                                                <div class="number border-end pe-2 fw-bold">
+                                                    <strong class="color-careys-pink">2</strong>
+                                                </div>
+                                                <div class="cs-text flex-fill ps-2">
+                                                    <span>Customer service</span>
+                                                </div>
+                                                <div class="vote-text">
+                                                    <span class="text-muted">8 votes</span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex">
+                                                <div class="number border-end pe-2 fw-bold">
+                                                    <strong class="color-careys-pink">3</strong>
+                                                </div>
+                                                <div class="cs-text flex-fill ps-2">
+                                                    <span>Problem solving</span>
+                                                </div>
+                                                <div class="vote-text">
+                                                    <span class="text-muted">2 votes</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled mb-4">
+                            <li class="card mb-2">
+                                <div class="card-body p-lg-4 p-3">
+                                    <div class="d-flex mb-3 pb-3 border-bottom flex-wrap">
+                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                                        <div class="flex-fill ms-3 text-truncate">
+                                            <h6 class="mb-0"><span>Diane Fisher</span> <span class="text-muted small">450 Followers</span></h6>
+                                            <span class="text-muted">3 hours ago</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mb-2 me-3">
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-half text-warning"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item-post">
+                                        <h6 class="">E-learn is the best app for those who are looking for smart classes solutions.</h6>
+                                        <p>My overall experience with this app has been awesome and knowledgeable. I got to learn a lot of new techniques and tips to add to my teaching capabilities and experience. One of the great piece of app to add as your smart classes partner.</p>
+                                        <div class="mb-2 mt-4 text-end">
+                                            <a class="me-lg-2 me-1 btn btn-primary btn-sm" href="#"><i class="fa fa-thumbs-up"></i> <span class="d-none d-sm-none d-md-inline">Like (105)</span></a>
+                                            <a class="me-lg-2 me-1 btn btn-primary btn-sm" href="#"><i class="fa fa-comment"></i> <span class="d-none d-sm-none d-md-inline">Publice Comment</span></a>
+                                            <a class="btn btn-primary btn-sm" href="#"><i class="bi bi-chat-left-text-fill"></i> <span class="d-none d-sm-none d-md-inline">Direct Message</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li> <!-- .Card End -->
+                            <li class="card mb-2">
+                                <div class="card-body p-lg-4 p-3">
+                                    <div class="d-flex mb-3 pb-3 border-bottom flex-wrap">
+                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                                        <div class="flex-fill ms-3 text-truncate">
+                                            <h6 class="mb-0"><span>Andrea Gill</span> <span class="text-muted small">724 Followers</span></h6>
+                                            <span class="text-muted">1 Day ago</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mb-2 me-3">
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-half text-warning"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item-post">
+                                        <h6 class="">Highly Recommended this App</h6>
+                                        <p>This helped out so much. Never thought I would be able to learn some of these topics without taking some expensive college courses.</p>
+                                        <div class="mb-2 mt-4 text-end">
+                                            <a class="me-lg-2 me-1 btn btn-primary btn-sm" href="#"><i class="fa fa-thumbs-up"></i><span class="d-none d-sm-none d-md-inline">Like (90)</span></a>
+                                            <a class="me-lg-2 me-1 btn btn-primary btn-sm" href="#"><i class="fa fa-comment"></i><span class="d-none d-sm-none d-md-inline">Publice Comment</span></a>
+                                            <a class="btn btn-primary btn-sm" href="#"><i class="bi bi-chat-left-text-fill"></i><span class="d-none d-sm-none d-md-inline">Direct Message</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li> <!-- .Card End -->
+                            <li class="card mb-2">
+                                <div class="card-body p-lg-4 p-3">
+                                    <div class="d-flex mb-3 pb-3 border-bottom flex-wrap">
+                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
+                                        <div class="flex-fill ms-3 text-truncate">
+                                            <h6 class="mb-0"><span>Avery Bond</span> <span class="text-muted small">439 Followers</span></h6>
+                                            <span class="text-muted">5 Day ago</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mb-2 me-3">
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-fill text-warning"></i></a>
+                                                <a href="#" class="rating-link active"><i class="bi bi-star-half text-warning"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item-post">
+                                        <h6 class="">It was very useful!</h6>
+                                        <p>It help provided links and courses to refresh my memory on certain topics.It is place to refresh your knowledge on different topics related to your job.</p>
+                                        <div class="mb-2 mt-4 text-end">
+                                            <a class="me-lg-2 me-1 btn btn-primary btn-sm" href="#"><i class="fa fa-thumbs-up"></i><span class="d-none d-sm-none d-md-inline">Like (190)</span></a>
+                                            <a class="me-lg-2 me-1 btn btn-primary btn-sm" href="#"><i class="fa fa-comment"></i><span class="d-none d-sm-none d-md-inline">Publice Comment</span></a>
+                                            <a class="btn btn-primary btn-sm" href="#"><i class="bi bi-chat-left-text-fill"></i><span class="d-none d-sm-none d-md-inline">Direct Message</span></a>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex mt-3 pt-3 border-top">
+                                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
+                                                <div class="flex-fill ms-3 text-truncate">
+                                                    <p class="mb-0"><span>Karen Clark</span> <small class="msg-time">5 Day ago</small></p>
+                                                    <span class="text-muted">It helps Students to prepare the lesson plans very accurately by focusing on key points of the topic and adding extra knowledge to their topics better than mentioned in the textbooks.</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex mt-3 pt-3 border-top">
+                                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                                                <div class="flex-fill ms-3 text-truncate">
+                                                    <p class="mb-0"><span>Zoe Wright</span> <small class="msg-time">5 Day ago</small></p>
+                                                    <span class="text-muted">create your user profiles in this app which helps students to maintain their lessons plans and add extra information based on the searching capabilities included in the app itself.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <textarea class="form-control" placeholder="Replay"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li> <!-- .Card End -->
+                        </ul>
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-end">
+                              <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                              </li>
+                              <li class="page-item"><a class="page-link" href="#">1</a></li>
+                              <li class="page-item active" aria-current="page">
+                                <span class="page-link">2</span>
+                              </li>
+                              <li class="page-item"><a class="page-link" href="#">3</a></li>
+                              <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                              </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Members-->
+        <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title  fw-bold" id="addUserLabel">Invite Friend's</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="inviteby_email">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Members Invite" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-dark" type="button" id="button-addon2">Members Invite</button>
+                        </div>
+                    </div>
+                    <div class="members_list">
+                        <h6 class="fw-bold ">Members of e-Learn</h6>
+                        <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                        <h6 class="mb-0  fw-bold">Rachel Carr(you)</h6>
+                                        <span class="text-muted">rachel.carrgmail.com</span>
+                                    </div>
+                                    <div class="members-action">
+                                        <span class="members-role ">Admin</span>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="icofont-ui-settings  fs-6"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                        <h6 class="mb-0  fw-bold">Lucas Baker<a href="#" class="link-secondary ms-2">(Resend invitation)</a></h6>
+                                        <span class="text-muted">lucas.bakergmail.com</span>
+                                    </div>
+                                    <div class="members-action">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Members
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li>
+                                                  <a class="dropdown-item" href="#">
+                                                    <i class="icofont-check-circled"></i>
+                                                      
+                                                    <span>All operations permission</span>
+                                                   </a>
+                                                   
+                                                </li>
+                                                <li>
+                                                     <a class="dropdown-item" href="#">
+                                                        <i class="fs-6 p-2 me-1"></i>
+                                                           <span>Only Invite & manage team</span>
+                                                       </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="icofont-ui-settings  fs-6"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Delete Member</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                        <h6 class="mb-0  fw-bold">Una Coleman</h6>
+                                        <span class="text-muted">una.colemagmail.com</span>
+                                    </div>
+                                    <div class="members-action">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Members
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li>
+                                                  <a class="dropdown-item" href="#">
+                                                    <i class="icofont-check-circled"></i>
+                                                      
+                                                    <span>All operations permission</span>
+                                                   </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="fs-6 p-2 me-1"></i>
+                                                           <span>Only Invite & manage team</span>
+                                                       </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="icofont-ui-settings  fs-6"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Suspend member</a></li>
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-not-allowed fs-6 me-2"></i>Delete Member</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Jquery Core Js -->
+<script src="/assetsback/bundles/libscripts.bundle.js"></script>
+
+<!-- Jquery Page Js -->
+<script src="../js/template.js"></script>
+
+</body>
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/reviews.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:57:31 GMT -->
+</html>

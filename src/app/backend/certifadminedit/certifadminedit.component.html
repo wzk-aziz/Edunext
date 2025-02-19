@@ -1,0 +1,41 @@
+<div class="certificate-management">
+    <h2>Gestion des certificats</h2>
+
+    <!-- Formulaire de création -->
+    <div class="create-form">
+        <input [(ngModel)]="newCertificate.title" 
+               placeholder="Titre du certificat" 
+               required>
+        <input [(ngModel)]="newCertificate.recipientName" 
+               placeholder="Nom du récipiendaire" 
+               required>
+        <input type="date" 
+               [(ngModel)]="newCertificate.issueDate" 
+               required>
+        <button (click)="onCreate()" [disabled]="!newCertificate.title || !newCertificate.recipientName">Créer</button>
+    </div>
+
+    <!-- Liste des certificats -->
+    <div *ngIf="certificates.length > 0; else noCertificates">
+        <table>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Récipiendaire</th>
+                    <th>Date de délivrance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cert of certificates">
+                    <td>{{ cert.title }}</td>
+                    <td>{{ cert.recipientName }}</td>
+                    <td>{{ cert.issueDate | date: 'dd/MM/yyyy' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noCertificates>
+        <p>Aucun certificat trouvé pour cet examen.</p>
+    </ng-template>
+</div>

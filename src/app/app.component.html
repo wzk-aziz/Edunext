@@ -1,0 +1,7 @@
+
+<div class="layout-container">
+  <app-header *ngIf="showHeader && !isTeacherRoute"></app-header>
+  <app-headerteacher *ngIf="showHeader && isTeacherRoute"></app-headerteacher>
+  <router-outlet></router-outlet>
+  <app-footer *ngIf="showFooter"></app-footer>
+</div>

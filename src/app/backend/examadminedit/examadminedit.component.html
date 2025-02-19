@@ -1,0 +1,58 @@
+
+
+<div class="form-container">
+    <h2>Modifier l'examen  admin</h2>
+    <form (ngSubmit)="onSubmit()">
+      <!-- Champs de l'examen -->
+      <div class="form-group">
+        <label for="title">Titre :</label>
+        <input id="title" [(ngModel)]="exam.examTitle" name="title" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Description :</label>
+        <textarea id="description" [(ngModel)]="exam.examDescription" name="description"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="duration">Durée (min) :</label>
+        <input id="duration" type="number" [(ngModel)]="exam.examDuration" name="duration" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="scheduledDate">Date prévue :</label>
+        <input id="scheduledDate" type="datetime-local" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required>
+      </div>
+  
+      <!-- Édition des questions -->
+      <div *ngFor="let question of exam.questions; let i = index">
+        <div class="form-group">
+          <label for="questionText{{i}}">Question {{ i + 1 }}</label>
+          <input 
+            id="questionText{{i}}" 
+            [(ngModel)]="question.questionText" 
+            name="questionText{{i}}" 
+            (change)="onQuestionUpdate(question)"
+          >
+        </div>
+  
+        <div class="form-group">
+          <label for="answerOptions{{i}}">Options (séparées par des `;`)</label>
+          <input 
+            id="answerOptions{{i}}" 
+            [(ngModel)]="question.answerOptions" 
+            name="answerOptions{{i}}" 
+            (change)="onQuestionUpdate(question)"
+          >
+        </div>
+  
+        
+      </div>
+  
+      <!-- Bouton pour ajouter une nouvelle question -->
+      <button type="button" (click)="addQuestion()">Ajouter une question</button>
+  
+      <!-- Bouton de soumission -->
+      <button type="submit">Modifier</button>
+    </form>
+  </div>

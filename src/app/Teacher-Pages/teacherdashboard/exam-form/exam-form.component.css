@@ -1,0 +1,71 @@
+/* Style du formulaire */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Style des labels */
+  label {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  /* Style des champs de saisie */
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  /* Style spécifique pour les éléments de texte */
+  textarea {
+    resize: vertical;
+    height: 150px;
+  }
+  
+  /* Effet focus sur les champs */
+  input:focus, textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  /* Style du bouton */
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Style pour les champs requis */
+  input[required], textarea[required] {
+    background-color: #fff3e6; /* Légère couleur de fond pour les champs requis */
+  }
+  
+  

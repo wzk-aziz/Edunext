@@ -1,0 +1,75 @@
+/* Conteneur principal */
+.certificate-list {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f7fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .certificate-list h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Style du tableau */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  /* Entêtes du tableau */
+  th {
+    padding: 12px 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: left;
+  }
+  
+  /* Contenu des cellules */
+  td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  /* Style des lignes impaires */
+  tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Survol de ligne */
+  tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+  /* Style de l'action (boutons, etc.) */
+  th, td {
+    text-align: center;
+  }
+  
+  /* Spacing and hover for buttons (to add later for actions) */
+  button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  

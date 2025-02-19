@@ -1,0 +1,110 @@
+/* Style global pour la table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  thead {
+    background-color: #4CAF50; /* Couleur de fond de l'en-tête */
+    color: white;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd; /* Bordure douce autour des cellules */
+  }
+  
+  th {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  td {
+    font-size: 14px;
+  }
+  
+  /* Effet hover pour les lignes du tableau */
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Style des actions */
+  td:last-child {
+    text-align: center;
+  }
+  
+  /* Boutons d'action */
+  button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049; /* Couleur de survol */
+  }
+  
+  /* Style général pour l'en-tête de la page */
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+ /* Conteneur des boutons */
+.button-container {
+    display: flex;
+    gap: 10px; /* Espace entre les boutons */
+  }
+  
+  /* Bouton Modifier (vert avec une icône) */
+  button.edit {
+    background-color: #4caf50; /* Vert */
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  button.edit:hover {
+    background-color: #45a049;
+  }
+  
+  button.edit i {
+    margin-right: 0.5rem;
+  }
+  
+  /* Bouton Supprimer (rouge avec une icône) */
+  button.delete {
+    background-color: #f44336; /* Rouge */
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  button.delete:hover {
+    background-color: #e53935;
+  }
+  
+  button.delete i {
+    margin-right: 0.5rem;
+  }
+  

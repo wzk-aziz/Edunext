@@ -1,0 +1,161 @@
+<!-- Header START -->
+<header class="navbar-light navbar-sticky header-static">
+    <!-- Logo Nav START -->
+    <nav class="navbar navbar-expand-xl">
+      <div class="container-fluid px-3 px-xl-5">
+        <!-- Logo START -->
+        <a class="navbar-brand" href="index.html">
+          <img
+            class="light-mode-item navbar-brand-item"
+           />
+        
+        </a>
+        <!-- Logo END -->
+  
+        <!-- Responsive navbar toggler -->
+        <button
+          class="navbar-toggler ms-auto"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-animation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+  
+        <!-- Main navbar START -->
+        <div class="navbar-collapse w-100 collapse" id="navbarCollapse">
+          <!-- Nav Main menu START -->
+          <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <!-- Courses & Quizzes -->
+            <li class="nav-item dropdown me-3">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="coursesMenu"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Courses</a
+              >
+              <ul class="dropdown-menu" aria-labelledby="coursesMenu">
+                <li><a class="dropdown-item" routerLink="/emptyteacher">Create Courses</a></li>
+                <li><a class="dropdown-item" routerLink="/emptyteacher">Courses added</a></li>
+              </ul>
+            </li>
+            <!-- Market Place -->
+            <li class="nav-item dropdown me-3">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="marketplaceMenu"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Market Place</a
+              >
+              <ul class="dropdown-menu" aria-labelledby="marketplaceMenu">
+                <li><a class="dropdown-item"routerLink="/emptyteacher">Products</a></li>
+                <li><a class="dropdown-item" routerLink="/emptyteacher">Sell course on market place </a></li>
+             
+              </ul>
+            </li>
+         <!-- Exam -->
+         <li class="nav-item dropdown me-3">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="Exam"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            >Exam</a
+          >
+          <ul class="dropdown-menu" aria-labelledby="Exam">
+            <li><a class="dropdown-item" [routerLink]="['/creeaxam']">Create Exam</a></li>
+          
+            <li><a class="dropdown-item" routerLink="/examlist">Exam added </a></li>
+         
+          </ul>
+        </li>
+        <!-- certificate -->
+        <li class="nav-item dropdown me-3">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="Certificate"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            >Certificate</a
+          >
+          <ul class="dropdown-menu" aria-labelledby="Certificate">
+            <li><a class="dropdown-item"routerLink="/emptyteacher">Create Certificate</a></li>
+            <li><a class="dropdown-item" routerLink="/certtea">Certificate added </a></li>
+         
+          </ul>
+        </li>
+            <!-- Forum -->
+            <li class="nav-item dropdown me-3">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="forumMenu"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Forum</a
+              >
+              <ul class="dropdown-menu" aria-labelledby="forumMenu">
+                <li>
+                  <a class="dropdown-item" href="#">Discussion Boards</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Q&A</a></li>
+                <li>
+                  <a class="dropdown-item" href="#">Community Guidelines</a>
+                </li>
+              </ul>
+            </li>
+            <!-- Tutoring -->
+            <li class="nav-item dropdown me-3">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="tutoringMenu"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Tutoring</a
+              >
+              <ul class="dropdown-menu" aria-labelledby="tutoringMenu">
+                <li><a class="dropdown-item" href="#">My List of students</a></li>
+                <li><a class="dropdown-item" href="#">My Schedual</a></li>
+                <li>
+                  <a class="dropdown-item" href="#">My Tutoring Sessions</a>
+                </li>
+              </ul>
+            </li>
+            <!-- Donate -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Donate</a>
+            </li>
+            <!-- Check Profile -->
+            <li class="nav-item ms-3">
+              <a routerLink="/teachercourses">Check Profile</a>
+            </li>
+          </ul>
+          <!-- Nav Main menu END -->
+        </div>
+        <!-- Main navbar END -->
+      </div>
+    </nav>
+    <!-- Logo Nav END -->
+  </header>
+  <!-- Header END -->
+  

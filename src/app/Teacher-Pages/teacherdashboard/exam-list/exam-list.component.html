@@ -1,0 +1,36 @@
+
+<h2>Liste des examens</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Description</th>
+      <th>Durée (min)</th>
+      <th>Date prévue</th>
+     
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let exam of exams">
+      <td>{{ exam.examTitle }}</td>
+      <td>{{ exam.examDescription }}</td>
+      <td>{{ exam.examDuration }}</td>
+      <td>{{ exam.scheduledDate  }}</td>
+    
+      <td>
+        <div class="button-container">
+            <button class="edit" (click)="editExam(exam.idExam!)">
+              <i class="fas fa-edit"></i> Modifier
+            </button>
+          
+            <button class="delete" (click)="deleteExam(exam.idExam!)">
+              <i class="fas fa-trash-alt"></i> Supprimer
+            </button>
+          </div>
+          
+          
+      </td>
+    </tr>
+  </tbody>
+</table>

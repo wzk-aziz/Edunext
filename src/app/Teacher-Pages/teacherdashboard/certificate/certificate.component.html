@@ -1,0 +1,28 @@
+
+<h2>Liste des certificat</h2>
+<table>
+  <thead>
+    <tr>
+      <th>issue Date</th>
+      <th>recipien tName</th>
+      <th>title</th>
+      <th>Date prévue</th>
+     
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cert of certificates">
+      <td>{{ cert.issueDate }}</td>
+      <td>{{ cert.recipientName }}</td>
+      <td>{{ cert.title }}</td>
+      
+    
+      <td>
+        
+          
+          
+      </td>
+    </tr>
+  </tbody>
+</table>
