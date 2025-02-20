@@ -44,7 +44,11 @@ import { VideoClassComponent } from './backend/video-class/video-class.component
 import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
-import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
+import { CourseFormComponent } from './backend/courses/course-form/course-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CourseListComponent } from './backend/courses/course-list/course-list.component';
+import { CourseUpdateComponent } from './backend/courses/course-update/course-update.component';
 
 @NgModule({
   declarations: [
@@ -90,12 +94,17 @@ import { CoursesBackComponent } from './backend/courses/courses-back/courses-bac
     ClassComponent,
     StudentComponent,
     BackAppComponent,
-    CoursesBackComponent
+    CourseFormComponent,
+    CourseListComponent,
+    CourseUpdateComponent
+    
    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

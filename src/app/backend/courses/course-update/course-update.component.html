@@ -1,0 +1,64 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+</head>
+<body>
+<div id="elearn-layout" class="theme-purple">
+    <div class="main px-lg-4 px-md-4">
+        <div class="header">
+        </div>
+        <div class="body d-flex py-lg-3 py-md-2">
+            <div class="container-xxl">
+                <div class="row clearfix g-3">
+                    <div class="col-xxl-9 col-xl-8 col-lg-8">
+                        <div class="border-0 mb-4">
+                            <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom">
+                                <h3 class="fw-bold mb-0">Mettre à jour un cours</h3>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="courseName" class="form-label">Nom du cours :</label>
+                                        <input type="text" class="form-control" id="courseName" formControlName="courseName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="courseDescription" class="form-label">Description :</label>
+                                        <textarea class="form-control" id="courseDescription" formControlName="courseDescription" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="courseFormat" class="form-label">Format :</label>
+                                        <select class="form-select" id="courseFormat" formControlName="courseFormat" (change)="onFormatChange($event)">
+                                            <option value="PDF">PDF</option>
+                                            <option value="Video">Vidéo</option>
+                                            <option value="Audio">Audio</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pointsEarned" class="form-label">Points attribués :</label>
+                                        <input type="number" class="form-control" id="pointsEarned" formControlName="pointsEarned" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="courseFile" class="form-label">Fichier :</label>
+                                        <input type="file" class="form-control" id="courseFile" (change)="onFileSelect($event)">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid">Mettre à jour</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-xl-4 col-lg-4">
+                        <!-- ...existing code... -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assetsback/bundles/libscripts.bundle.js"></script>
+<script src="/assetsback/bundles/fullcalendar.bundle.js"></script>
+<script src="../js/template.js"></script>
+</body>
+</html>

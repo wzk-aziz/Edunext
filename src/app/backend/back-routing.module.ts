@@ -1,4 +1,3 @@
-import { CoursesBackComponent } from './courses/courses-back/courses-back.component';
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -15,6 +14,9 @@ import { DonationComponent } from './donation/donation.component';
 import { EventComponent } from './event/event.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
+import { CourseFormComponent } from './courses/course-form/course-form.component';
+import { CourseListComponent } from './courses/course-list/course-list.component';
+import { CourseUpdateComponent } from './courses/course-update/course-update.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -31,7 +33,9 @@ const routes: Routes = [
     { path: 'Donation', component: DonationComponent },
     { path: 'Event', component: EventComponent },
     { path: 'Marketplace', component: MarketplaceComponent },
-    {path:'courses',component:CoursesBackComponent},
+    {path:'course-form',component:CourseFormComponent},
+    {path:'courseslist',component:CourseListComponent},
+    {path:'course-update/:id',component:CourseUpdateComponent},
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];
