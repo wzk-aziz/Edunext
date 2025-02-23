@@ -1,0 +1,29 @@
+/* Hover effect for the entire card */
+.hover-effect:hover {
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Thumbnail hover zoom effect */
+.thumbnail-container {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.thumbnail-image {
+    transition: all 0.3s ease;
+    transform-origin: center center;
+}
+
+.thumbnail-container:hover .thumbnail-image {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Optional: Add hover effect to the "View more" button */
+.btn-dark:hover {
+    background-color: #333 !important;
+    transform: translateY(-2px);
+}

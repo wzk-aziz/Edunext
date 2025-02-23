@@ -1,8 +1,10 @@
+
 export enum CourseFormat {
   PDF = 'PDF',
   VIDEO = 'VIDEO',
   AUDIO = 'AUDIO'
 }
+
 
 export interface Course {
   id?: number;
@@ -12,7 +14,7 @@ export interface Course {
   pointsEarned: number;
   createdAt?: Date;
   updatedAt?: Date;
-  
+
   // Main file
   fileData?: string;
   fileName?: string;

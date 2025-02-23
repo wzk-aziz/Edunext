@@ -24,6 +24,8 @@ export class CourseFormComponent implements OnInit {
   videoPreview: string | null = null;
   isMenuOpen = false;
   page: number = 1;
+
+
   constructor(
     private fb: FormBuilder,
     private courseService: CourseService,
@@ -35,105 +37,107 @@ export class CourseFormComponent implements OnInit {
       courseDescription: ['', Validators.required],
       courseFormat: ['', Validators.required],
       pointsEarned: ['', [Validators.required, Validators.min(1)]]
+      });
+  }
+
+  ngOnInit(): void {
+    this.courseId = this.route.snapshot.params['id'];
+    this.isEditMode = !!this.courseId;
+
+    this.courseForm = this.fb.group({
+      courseName: ['', Validators.required],
+      courseDescription: ['', Validators.required],
+      courseFormat: ['PDF', Validators.required], // Set default value
+      pointsEarned: ['', [Validators.required, Validators.min(1)]],
+     
     });
-  }
- // Update file select handlers
- onPdfSelect(event: any): void {
-  const file = event.target.files[0];
-  if (file) {
-    this.selectedPdf = file;
-    this.pdfPreview = URL.createObjectURL(file);
-  }
-}
 
-onVideoSelect(event: any): void {
-  const file = event.target.files[0];
-  if (file) {
-    this.selectedVideo = file;
-    this.videoPreview = URL.createObjectURL(file);
-  }
-}
+    // Add thumbnail control conditionally
+    if (!this.isEditMode) {
+      this.courseForm.addControl('thumbnail', 
+        this.fb.control(null, Validators.required));
+    }
 
-// Clean up URLs when component destroys
-ngOnDestroy() {
-  if (this.pdfPreview) URL.revokeObjectURL(this.pdfPreview);
-  if (this.videoPreview) URL.revokeObjectURL(this.videoPreview);
-}
-
- ngOnInit(): void {
-  this.courseId = this.route.snapshot.params['id'];
-  this.isEditMode = !!this.courseId;
-
-  this.courseForm = this.fb.group({
-    courseName: ['', Validators.required],
-    courseDescription: ['', Validators.required],
-    courseFormat: ['PDF', Validators.required], // Set default value
-    pointsEarned: ['', [Validators.required, Validators.min(1)]]
-  });
-
-  // Add thumbnail control conditionally
-  if (!this.isEditMode) {
-    this.courseForm.addControl('thumbnail', 
-      this.fb.control(null, Validators.required));
+    if (this.isEditMode && this.courseId) {
+      this.courseService.getCourseById(this.courseId).subscribe({
+        next: (course) => {
+          this.courseForm.patchValue(course);
+          if (course.thumbnailData) {
+            this.thumbnailPreview = `data:image/png;base64,${course.thumbnailData}`;
+          }
+        },
+        error: (error) => console.error('Error loading course', error)
+      });
+    }
   }
 
-  if (this.isEditMode && this.courseId) {
-    this.courseService.getCourseById(this.courseId).subscribe({
-      next: (course) => {
-        this.courseForm.patchValue(course);
-        if (course.thumbnailData) {
-          this.thumbnailPreview = `data:image/png;base64,${course.thumbnailData}`;
-        }
-      },
-      error: (error) => console.error('Error loading course', error)
-    });
+  // Update file select handlers
+  onPdfSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedPdf = file;
+      this.pdfPreview = URL.createObjectURL(file);
+    }
   }
-}
+
+  onVideoSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedVideo = file;
+      this.videoPreview = URL.createObjectURL(file);
+    }
+  }
+
+  // Clean up URLs when component destroys
+  ngOnDestroy() {
+    if (this.pdfPreview) URL.revokeObjectURL(this.pdfPreview);
+    if (this.videoPreview) URL.revokeObjectURL(this.videoPreview);
+  }
 
   onFormatChange(event: any) {
     this.selectedFile = null; // Reset the file if the format changes
     this.filePreview = null;
   }
 
- // Modify onFileSelect
-onFileSelect(event: any): void {
-  const file = event.target.files[0];
-  if (file) {
-    this.selectedFile = file;
-    const url = URL.createObjectURL(file);
-    
-    // Direct DOM manipulation
-    if (this.courseForm.value.courseFormat === 'PDF') {
-      this.previewContainer.nativeElement.innerHTML = `
-        <embed src="${url}" 
-               type="application/pdf" 
-               width="100%" 
-               height="300px">
-      `;
+  // Modify onFileSelect
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const url = URL.createObjectURL(file);
+      
+      // Direct DOM manipulation
+      if (this.courseForm.value.courseFormat === 'PDF') {
+        this.previewContainer.nativeElement.innerHTML = `
+          <embed src="${url}" 
+                 type="application/pdf" 
+                 width="100%" 
+                 height="300px">
+        `;
+      }
     }
   }
-}
 
-onThumbnailSelect(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    this.selectedThumbnail = file;
-    const control = this.courseForm.get('thumbnail');
-    
-    // Update form control validity
-    if (control) {
-      control.setValue(file.name);
-      control.markAsTouched();
-      control.updateValueAndValidity();
+  onThumbnailSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedThumbnail = file;
+      const control = this.courseForm.get('thumbnail');
+      
+      // Update form control validity
+      if (control) {
+        control.setValue(file.name);
+        control.markAsTouched();
+        control.updateValueAndValidity();
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.thumbnailPreview = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.thumbnailPreview = reader.result;
-    };
-    reader.readAsDataURL(file);
   }
-}
 
   getAcceptedFileTypes(): string {
     const format = this.courseForm.get('courseFormat')?.value;
@@ -148,7 +152,6 @@ onThumbnailSelect(event: any) {
         return '';
     }
   }
-
 
   onSubmit(): void {
     if (this.courseForm.invalid) return;
@@ -166,7 +169,7 @@ onThumbnailSelect(event: any) {
     formData.append('courseDescription', formValues.courseDescription);
     formData.append('courseFormat', formValues.courseFormat);
     formData.append('pointsEarned', formValues.pointsEarned.toString());
-  
+
     // Append files with field names matching backend expectations
     if (this.selectedThumbnail) {
       formData.append('thumbnail', this.selectedThumbnail, this.selectedThumbnail.name);
@@ -213,13 +216,9 @@ onThumbnailSelect(event: any) {
   }
   isTeacherMenuOpen = false;
 
-toggleTeacherMenu() {
+  toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
-}
+  }
 
-
-
-
-
-  
+ 
 }
