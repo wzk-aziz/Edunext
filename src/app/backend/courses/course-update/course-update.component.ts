@@ -11,67 +11,148 @@ import { Course } from 'src/app/model/course.model';
 })
 export class CourseUpdateComponent implements OnInit {
   courseForm: FormGroup;
-  selectedFile: File | null = null;
-  courseId: number | null = null;
+  courseId!: number;
+  existingCourse!: Course;
+  isEditMode = true;
+  isMenuOpen = false;
+
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  isTeacherMenuOpen = false;
+
+toggleTeacherMenu() {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
+}
+  // File previews
+  thumbnailPreview: string | ArrayBuffer | null = null;
+  pdfPreview: string | ArrayBuffer | null = null;
+  videoPreview: string | ArrayBuffer | null = null;
+
+  // Current files
+  currentThumbnail: File | null = null;
+  currentPdf: File | null = null;
+  currentVideo: File | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private courseService: CourseService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private courseService: CourseService
   ) {
     this.courseForm = this.fb.group({
       courseName: ['', Validators.required],
       courseDescription: ['', Validators.required],
-      courseFormat: ['', Validators.required],
-      pointsEarned: ['', [Validators.required, Validators.min(1)]]
+      pointsEarned: [1, [Validators.required, Validators.min(1)]],
+      thumbnail: [null],
+      pdfFile: [null],
+      videoFile: [null]
     });
   }
 
   ngOnInit(): void {
     this.courseId = this.route.snapshot.params['id'];
-    if (this.courseId) {
-      this.courseService.getCourseById(this.courseId).subscribe({
-        next: (course) => this.courseForm.patchValue(course),
-        error: (error) => console.error('Error loading course', error)
-      });
+    this.loadCourseData();
+  }
+
+  loadCourseData(): void {
+    this.courseService.getCourse(this.courseId).subscribe({
+      next: (course) => {
+        this.existingCourse = course;
+        this.patchFormValues(course);
+      },
+      error: (err) => console.error('Error loading course:', err)
+    });
+  }
+
+  patchFormValues(course: Course): void {
+    this.courseForm.patchValue({
+      courseName: course.courseName,
+      courseDescription: course.courseDescription,
+      pointsEarned: course.pointsEarned
+    });
+
+    // Set current file names
+    if (course.thumbnailFileName) {
+      this.thumbnailPreview = `data:${course.thumbnailFileType};base64,${course.thumbnailData}`;
+    }
+    if (course.pdfName) {
+      this.pdfPreview = `data:${course.pdfType};base64,${course.pdfData}`;
+    }
+    if (course.videoName) {
+      this.videoPreview = `data:${course.videoType};base64,${course.videoData}`;
     }
   }
 
-  onFormatChange(event: any) {
-    this.selectedFile = null; // Reset the file if the format changes
-  }
-
-  onFileSelect(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
+  onThumbnailSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const file = input.files[0];
+      this.currentThumbnail = file;
+      this.previewFile(file, 'thumbnail');
     }
   }
 
-  onSubmit() {
-    if (this.courseForm.invalid) {
-      return;
+  onPdfSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const file = input.files[0];
+      this.currentPdf = file;
+      this.previewFile(file, 'pdf');
     }
+  }
+
+  onVideoSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const file = input.files[0];
+      this.currentVideo = file;
+      this.previewFile(file, 'video');
+    }
+  }
+
+  private previewFile(file: File, type: string): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      switch (type) {
+        case 'thumbnail':
+          this.thumbnailPreview = reader.result;
+          break;
+        case 'pdf':
+          this.pdfPreview = reader.result;
+          break;
+        case 'video':
+          this.videoPreview = reader.result;
+          break;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onSubmit(): void {
+    if (this.courseForm.invalid) return;
 
     const formData = new FormData();
-    formData.append('courseName', this.courseForm.value.courseName);
-    formData.append('courseDescription', this.courseForm.value.courseDescription);
-    formData.append('courseFormat', this.courseForm.value.courseFormat);
-    formData.append('pointsEarned', this.courseForm.value.pointsEarned);
+    formData.append('courseName', this.courseForm.get('courseName')?.value);
+    formData.append('courseDescription', this.courseForm.get('courseDescription')?.value);
+    formData.append('pointsEarned', this.courseForm.get('pointsEarned')?.value);
 
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile);
+    if (this.currentThumbnail) {
+      formData.append('thumbnail', this.currentThumbnail);
+    }
+    if (this.currentPdf) {
+      formData.append('pdfFile', this.currentPdf);
+    }
+    if (this.currentVideo) {
+      formData.append('videoFile', this.currentVideo);
     }
 
-    if (this.courseId) {
-      this.courseService.updateCourse(this.courseId, formData).subscribe({
-        next: () => {
-          alert('Cours mis à jour avec succès !');
-          this.router.navigate(['/courses']);
-        },
-        error: (error) => console.error('Erreur lors de la mise à jour du cours', error)
-      });
-    }
+    this.courseService.updateCourse(this.courseId, formData).subscribe({
+      next: () => {
+        this.router.navigate(['/courseslist']);
+      },
+      error: (err) => console.error('Update failed:', err)
+    });
   }
 }

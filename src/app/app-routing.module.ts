@@ -53,6 +53,11 @@ const routes: Routes = [
   { path: 'studentlist', component: StudentslistComponent },
   { path: 'Tutoringsessions', component: TutoringsessionsComponent },
 
+
+
+
+
+  
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },
 

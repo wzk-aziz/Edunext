@@ -15,7 +15,7 @@ import { EventComponent } from './event/event.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
 import { CourseFormComponent } from './courses/course-form/course-form.component';
-import { CourseListComponent } from './courses/course-list/course-list.component';
+import {CoursesListComponent} from './courses/course-list/course-list.component';
 import { CourseUpdateComponent } from './courses/course-update/course-update.component';
 
 const routes: Routes = [
@@ -34,7 +34,7 @@ const routes: Routes = [
     { path: 'Event', component: EventComponent },
     { path: 'Marketplace', component: MarketplaceComponent },
     {path:'course-form',component:CourseFormComponent},
-    {path:'courseslist',component:CourseListComponent},
+    {path:'courseslist',component:CoursesListComponent},
     {path:'course-update/:id',component:CourseUpdateComponent},
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}

@@ -47,9 +47,10 @@ import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CourseFormComponent } from './backend/courses/course-form/course-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { CourseListComponent } from './backend/courses/course-list/course-list.component';
 import { CourseUpdateComponent } from './backend/courses/course-update/course-update.component';
-
+import { CoursesListComponent } from './backend/courses/course-list/course-list.component';
+import { RouterModule } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,16 +96,17 @@ import { CourseUpdateComponent } from './backend/courses/course-update/course-up
     StudentComponent,
     BackAppComponent,
     CourseFormComponent,
-    CourseListComponent,
-    CourseUpdateComponent
-    
+    CourseUpdateComponent,
+    CoursesListComponent,
    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

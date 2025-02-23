@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course } from 'src/app/model/course.model'
 @Injectable({
@@ -20,15 +20,11 @@ export class CourseService {
     return this.http.get<Course>(`${this.baseUrl}/${id}`);
   }
   
-  
-  createCourse(formData: FormData): Observable<any> {
-    return this.http.post(`${this.baseUrl}/create`, formData);
+  createCourse(formData: FormData): Observable<Course> {
+    return this.http.post<Course>(`${this.baseUrl}/create`, formData);
   }
-  
-  
-  
-  updateCourse(id: number, formData:FormData): Observable<Course> {
-    return this.http.put<Course>(`${this.baseUrl}/${id}`, formData);
+  updateCourse(id: number, formData: FormData): Observable<Course> {
+    return this.http.put<Course>(`${this.baseUrl}/update/${id}`, formData);
   }
 
   deleteCourse(id: number): Observable<void> {
@@ -42,6 +38,8 @@ export class CourseService {
     return this.http.post<string>(`${this.baseUrl}/upload/${courseId}`, formData);
   }
   
-
+  getCourse(id: number): Observable<Course> {
+    return this.http.get<Course>(`${this.baseUrl}/get/${id}`);
+  }
 
 }
