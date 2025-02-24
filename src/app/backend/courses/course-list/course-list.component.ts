@@ -13,19 +13,22 @@ export class CoursesListComponent implements OnInit {
   courses: Course[] = [];
   isMenuOpen = false;
   page: number = 1;
+  isTeacherMenuOpen = false;
 
   constructor(
     private courseService: CourseService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {}
-  toggleMenu() {
+
+  toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
-  isTeacherMenuOpen = false;
 
-toggleTeacherMenu() {
+  toggleTeacherMenu(): void {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
-}
+  }
+
   ngOnInit(): void {
     this.loadCourses();
   }
@@ -46,4 +49,31 @@ toggleTeacherMenu() {
       this.loadCourses();
     });
   }
+
+  // Helper method to display a friendly course level label.
+  getCourseLevelText(course: Course): string {
+    switch(course.courseLevel) {
+      case 'ALL_LEVELS': return 'All Levels';
+      case 'BEGINNER': return 'Beginner';
+      case 'INTERMEDIATE': return 'Intermediate';
+      case 'ADVANCED': return 'Advanced';
+      default: return 'Unknown';
+    }
+  }
+
+  getPackTypeText(course: Course): string {
+    switch (course.packType) {
+      case 'COPPER': return 'Copper';
+      case 'BRONZE': return 'Bronze';
+      case 'SILVER': return 'Silver';
+      case 'GOLD': return 'Gold';
+      default: return 'Unknown';
+    }
+  }
+
+  getCategoryName(course: Course): string {
+    return course.category && course.category.name ? course.category.name : 'N/A';
+  }
+
+
 }

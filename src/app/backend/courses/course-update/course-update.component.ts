@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../Services/course.service';
 import { Course } from 'src/app/model/course.model';
+import { Category } from 'src/app/model/category.model';
+import { CategoryService } from '../Services/category.service';
 
 @Component({
   selector: 'app-course-update',
@@ -16,15 +18,14 @@ export class CourseUpdateComponent implements OnInit {
   isEditMode = true;
   isMenuOpen = false;
 
-
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
   isTeacherMenuOpen = false;
-
-toggleTeacherMenu() {
+  toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
-}
+  }
+
   // File previews
   thumbnailPreview: string | ArrayBuffer | null = null;
   pdfPreview: string | ArrayBuffer | null = null;
@@ -35,25 +36,47 @@ toggleTeacherMenu() {
   currentPdf: File | null = null;
   currentVideo: File | null = null;
 
+  // For category dropdown and inline editing
+  categories: Category[] = [];
+  editingCategory: boolean = false;
+  editedCategoryName: string = '';
+  selectedCategoryId: number | null = null;
+
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private categoryService: CategoryService
+    
   ) {
+    // Initialize the reactive form including new fields: packType, duration, and numberOfLectures.
     this.courseForm = this.fb.group({
       courseName: ['', Validators.required],
       courseDescription: ['', Validators.required],
+      courseLevel: ['ALL_LEVELS', Validators.required],
+      packType: ['', Validators.required],
       pointsEarned: [1, [Validators.required, Validators.min(1)]],
-      thumbnail: [null],
-      pdfFile: [null],
-      videoFile: [null]
+      duration: ['', Validators.required],
+      numberOfLectures: ['', [Validators.required, Validators.min(1)]],
+      categoryId: [null, Validators.required]
+      // File inputs (thumbnail, pdfFile, videoFile) are handled separately.
     });
   }
 
   ngOnInit(): void {
     this.courseId = this.route.snapshot.params['id'];
     this.loadCourseData();
+    this.loadCategories();
+
+  }
+
+  loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (categories) => this.categories = categories,
+      error: (err) => console.error('Error loading categories:', err)
+    });
   }
 
   loadCourseData(): void {
@@ -70,10 +93,14 @@ toggleTeacherMenu() {
     this.courseForm.patchValue({
       courseName: course.courseName,
       courseDescription: course.courseDescription,
-      pointsEarned: course.pointsEarned
+      courseLevel: course.courseLevel,
+      packType: course.packType,
+      pointsEarned: course.pointsEarned,
+      duration: course.duration,
+      numberOfLectures: course.numberOfLectures,
+      categoryId: course.category ? course.category.id : null
     });
-
-    // Set current file names
+    // Set current file previews if available
     if (course.thumbnailFileName) {
       this.thumbnailPreview = `data:${course.thumbnailFileType};base64,${course.thumbnailData}`;
     }
@@ -136,7 +163,13 @@ toggleTeacherMenu() {
     const formData = new FormData();
     formData.append('courseName', this.courseForm.get('courseName')?.value);
     formData.append('courseDescription', this.courseForm.get('courseDescription')?.value);
-    formData.append('pointsEarned', this.courseForm.get('pointsEarned')?.value);
+    formData.append('courseLevel', this.courseForm.get('courseLevel')?.value);
+    formData.append('packType', this.courseForm.get('packType')?.value);
+    formData.append('pointsEarned', this.courseForm.get('pointsEarned')?.value.toString());
+    formData.append('duration', this.courseForm.get('duration')?.value.toString());
+    formData.append('numberOfLectures', this.courseForm.get('numberOfLectures')?.value.toString());
+    formData.append('categoryId', this.courseForm.get('categoryId')?.value);
+
 
     if (this.currentThumbnail) {
       formData.append('thumbnail', this.currentThumbnail);
@@ -150,9 +183,62 @@ toggleTeacherMenu() {
 
     this.courseService.updateCourse(this.courseId, formData).subscribe({
       next: () => {
-        this.router.navigate(['/courseslist']);
+        this.router.navigate(['/backoffice/courseslist']);
       },
       error: (err) => console.error('Update failed:', err)
     });
+  }
+
+   // Inline category editing methods
+
+   toggleEditCategory(): void {
+    const currentCategoryId = this.courseForm.get('categoryId')?.value;
+    if (!currentCategoryId) {
+      alert("Please select a category to edit.");
+      return;
+    }
+    // Find the selected category from the list
+    const category = this.categories.find(c => c.id === currentCategoryId);
+    if (category) {
+      this.selectedCategoryId = category.id!;
+      this.editedCategoryName = category.name;
+      this.editingCategory = true;
+    }
+  }
+
+  updateCategory(): void {
+    if (!this.editedCategoryName.trim()) {
+      alert("Category name is required");
+      return;
+    }
+    if (this.selectedCategoryId) {
+      const updatedCategory: Category = {
+        id: this.selectedCategoryId,
+        name: this.editedCategoryName.trim()
+      };
+      this.categoryService.updateCategory(updatedCategory).subscribe({
+        next: (cat) => {
+          // Update local array
+          const index = this.categories.findIndex(c => c.id === cat.id);
+          if (index !== -1) {
+            this.categories[index] = cat;
+          }
+          this.courseForm.get('categoryId')?.setValue(cat.id);
+          this.editingCategory = false;
+          this.editedCategoryName = '';
+        },
+        error: (err) => console.error("Error updating category", err)
+      });
+    }
+  }
+
+  cancelEditCategory(): void {
+    this.editingCategory = false;
+    this.editedCategoryName = '';
+  }
+
+  // TrackBy function (optional)
+  trackByCategoryId(index: number, category: Category): number {
+    return category.id!;
   }
 }

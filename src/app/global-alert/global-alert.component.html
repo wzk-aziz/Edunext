@@ -1,0 +1,45 @@
+<div class="custom-alert-backdrop" *ngIf="showModal">
+  <div class="custom-alert-dialog">
+    <div class="custom-alert-header">
+      <h5>{{ alertData.title || 'Alert' }}</h5>
+      <!-- Top-right close button -->
+      <button type="button" class="btn-close-custom" (click)="onOk($event)">X</button>
+    </div>
+    
+    <div class="custom-alert-body">
+      <p>{{ alertData.message }}</p>
+    </div>
+    
+    <div class="custom-alert-footer">
+      <!-- OK / Close button -->
+      <button class="btn btn-primary" (click)="onOk($event)">
+        {{ alertData.isConfirm ? 'OK' : 'Close' }}
+      </button>
+      <!-- Cancel button only if isConfirm = true -->
+      <button *ngIf="alertData.isConfirm" class="btn btn-secondary" (click)="onCancel($event)">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+<div class="custom-alert-backdrop" *ngIf="showModal" (click)="onBackdropClick($event)">
+  <!-- Clicking the backdrop triggers onBackdropClick -->
+  <div class="custom-alert-dialog" (click)="$event.stopPropagation()">
+    <!-- Clicking inside the dialog stops propagation, preventing backdropClick -->
+    <div class="custom-alert-header">
+      <h5>{{ alertData.title || 'Alert' }}</h5>
+      <button type="button" class="btn-close-custom" (click)="onOk($event)">X</button>
+    </div>
+    <div class="custom-alert-body">
+      <p>{{ alertData.message }}</p>
+    </div>
+    <div class="custom-alert-footer">
+      <button class="btn btn-primary" (click)="onOk($event)">
+        {{ alertData.isConfirm ? 'OK' : 'Close' }}
+      </button>
+      <button *ngIf="alertData.isConfirm" class="btn btn-secondary" (click)="onCancel($event)">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

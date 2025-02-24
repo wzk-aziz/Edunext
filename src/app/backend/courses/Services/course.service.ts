@@ -17,7 +17,7 @@ export class CourseService {
   }
 
   getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.baseUrl}/${id}`);
+    return this.http.get<Course>(`${this.baseUrl}/get/${id}`);
   }
   
   createCourse(formData: FormData): Observable<Course> {
@@ -27,10 +27,11 @@ export class CourseService {
     return this.http.put<Course>(`${this.baseUrl}/update/${id}`, formData);
   }
 
-  deleteCourse(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  deleteCourse(id: number): Observable<string> {
+    return this.http.delete(`${this.baseUrl}/delete/${id}`, { responseType: 'text' });
   }
-
+  
+  
   uploadFile(courseId: number, file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
@@ -41,5 +42,7 @@ export class CourseService {
   getCourse(id: number): Observable<Course> {
     return this.http.get<Course>(`${this.baseUrl}/get/${id}`);
   }
+
+  
 
 }

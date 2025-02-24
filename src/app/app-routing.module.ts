@@ -38,7 +38,8 @@ const routes: Routes = [
   // Courses
   { path: 'coursesdashboard', component: MycoursesComponent },
   { path: 'courselist', component: CourseslistComponent },
-  { path: 'coursedetail', component: CoursedetailComponent },
+  { path: 'coursedetail/:id', component: CoursedetailComponent },
+
   { path: 'coursepage', component: CoursepageComponent },
   { path: 'coursequiz', component: CoursequizesComponent },
 

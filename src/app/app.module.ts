@@ -45,12 +45,15 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CourseFormComponent } from './backend/courses/course-form/course-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CourseUpdateComponent } from './backend/courses/course-update/course-update.component';
 import { CoursesListComponent } from './backend/courses/course-list/course-list.component';
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { GlobalAlertComponent } from './global-alert/global-alert.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -98,7 +101,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CourseFormComponent,
     CourseUpdateComponent,
     CoursesListComponent,
-   
+   GlobalAlertComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +109,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

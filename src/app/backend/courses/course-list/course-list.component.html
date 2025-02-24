@@ -106,72 +106,94 @@
         </div>
     </div>
 
-    <!-- main body area -->
-    <div class="main px-lg-4 px-md-4">
-
-        <!-- Body: Header -->
-        <div class="header">
-            <nav class="navbar py-4">
-                <div class="container-xxl">
-    
-                    <!-- header rightbar icon -->
-                    
-    
-                    <!-- menu toggler -->
-                    <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
-                        <span class="fa fa-bars"></span>
-                    </button>
-    
-                </div>
-            </nav>
-        </div>
-
-<div class="row">
-  <div class="col-md-4" *ngFor="let course of courses| paginate: { itemsPerPage: 3, currentPage: page }">
-    <div class="card mb-4 shadow-sm">
-      <img *ngIf="course.thumbnailData" 
-           [src]="'data:image/png;base64,' + course.thumbnailData"
-           class="card-img-top" 
-           alt="Course Thumbnail">
-      <div class="card-body">
-        <h5 class="card-title">{{ course.courseName }}</h5>
-        <p class="card-text">{{ course.courseDescription }}</p>
-        <div *ngIf="course.pdfData" class="mb-2">
-          <iframe [src]="getSafePdfUrl(course.pdfData)" 
-                  width="100%" 
-                  height="150"
-                  style="border: none;">
-          </iframe>
-          <small class="d-block">PDF Preview</small>
-        </div>
-        <div *ngIf="course.videoData">
-          <video controls width="100%">
-            <source [src]="'data:' + course.videoType + ';base64,' + course.videoData"
-                    [type]="course.videoType">
-            Your browser does not support the video tag.
-          </video>
-          <small class="d-block">Video Preview</small>
-        </div>
-        <p class="card-text"><strong>Points Earned:</strong> {{ course.pointsEarned }}</p>
-        <div class="d-grid gap-2">
-          <button class="btn btn-warning btn-sm" 
-                  [routerLink]="['/backoffice/course-update', course.id]">
-            Edit
+   <!-- main body area -->
+<div class="main px-lg-4 px-md-4">
+    <!-- Body: Header -->
+    <div class="header">
+      <nav class="navbar py-4">
+        <div class="container-xxl">
+          <!-- menu toggler -->
+          <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
+            <span class="fa fa-bars"></span>
           </button>
-          <button class="btn btn-danger btn-sm" 
-                  (click)="deleteCourse(course.id!)">
-            Delete
-          </button>
-          <button class="btn btn-success btn-sm" 
-                  [routerLink]="['/backoffice/add-related-quiz', course.id]">
-            Add Related Quiz
-          </button>
+        </div>
+      </nav>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-4" *ngFor="let course of courses | paginate: { itemsPerPage: 3, currentPage: page }">
+        <div class="card mb-4 shadow-sm">
+          <img *ngIf="course.thumbnailData" 
+               [src]="'data:image/png;base64,' + course.thumbnailData"
+               class="card-img-top" 
+               alt="Course Thumbnail">
+          <div class="card-body">
+            <h5 class="card-title">{{ course.courseName }}</h5>
+            <p class="card-text">{{ course.courseDescription }}</p>
+            <!-- New Course Level Display -->
+            <p class="card-text">
+              <strong>Course Level:</strong> {{ getCourseLevelText(course) }}
+            </p>
+            <!-- Pack Type -->
+            <p class="card-text">
+              <strong>Pack Type:</strong> {{ getPackTypeText(course) }}
+            </p>
+            <!-- Category -->
+            <p class="card-text">
+              <strong>Category:</strong> {{ course.category?.name || 'N/A' }}
+            </p>
+            <!-- Duration and Number of Lectures -->
+            <p class="card-text">
+              <strong>Duration (hours):</strong> {{ course.duration }}
+            </p>
+            <p class="card-text">
+              <strong>Number of Lectures:</strong> {{ course.numberOfLectures }}
+            </p>
+            <!-- PDF Preview -->
+            <div *ngIf="course.pdfData" class="mb-2">
+              <iframe [src]="getSafePdfUrl(course.pdfData)" 
+                      width="100%" 
+                      height="150"
+                      style="border: none;">
+              </iframe>
+              <small class="d-block">PDF Preview</small>
+            </div>
+            <!-- Video Preview -->
+            <div *ngIf="course.videoData">
+              <video controls width="100%">
+                <source [src]="'data:' + course.videoType + ';base64,' + course.videoData"
+                        [type]="course.videoType">
+                Your browser does not support the video tag.
+              </video>
+              <small class="d-block">Video Preview</small>
+            </div>
+            <!-- Points Earned -->
+            <p class="card-text">
+              <strong>Points Earned:</strong> {{ course.pointsEarned }}
+            </p>
+            <div class="d-grid gap-2">
+              <button class="btn btn-warning btn-sm" 
+                      [routerLink]="['/backoffice/course-update', course.id]">
+                Edit
+              </button>
+              <button class="btn btn-danger btn-sm" 
+                      (click)="deleteCourse(course.id!)">
+                Delete
+              </button>
+              <button class="btn btn-success btn-sm" 
+                      [routerLink]="['/backoffice/add-related-quiz', course.id]">
+                Add Related Quiz
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
   </div>
-</div>
-<pagination-controls (pageChange)="page = $event"></pagination-controls>
+  
+
+
   <!-- Modal Members-->
   <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -310,7 +332,7 @@
     </div>
 </div>
 </div>
-</div>
+
 
 <!-- Jquery Core Js -->
 <script src="/assetsback/bundles/libscripts.bundle.js"></script>
