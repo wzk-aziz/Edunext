@@ -104,12 +104,7 @@ export class CourseUpdateComponent implements OnInit {
     if (course.thumbnailFileName) {
       this.thumbnailPreview = `data:${course.thumbnailFileType};base64,${course.thumbnailData}`;
     }
-    if (course.pdfName) {
-      this.pdfPreview = `data:${course.pdfType};base64,${course.pdfData}`;
-    }
-    if (course.videoName) {
-      this.videoPreview = `data:${course.videoType};base64,${course.videoData}`;
-    }
+
   }
 
   onThumbnailSelect(event: Event): void {

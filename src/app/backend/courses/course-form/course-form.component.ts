@@ -15,16 +15,10 @@ import { GlobalAlertService } from 'src/app/Service/global-alert.service';
 export class CourseFormComponent implements OnInit, OnDestroy {
   @ViewChild('previewContainer') previewContainer: any;
   courseForm: FormGroup;
-  selectedFile: File | null = null;
-  filePreview: string | ArrayBuffer | null = null;
   thumbnailPreview: string | ArrayBuffer | null = null;
   isEditMode = false;
   courseId: number | null = null;
   selectedThumbnail: File | null = null;
-  selectedPdf?: File;
-  selectedVideo?: File;
-  pdfPreview: string | null = null;
-  videoPreview: string | null = null;
   isMenuOpen = false;
   page: number = 1;
   categories: Category[] = [];
@@ -42,10 +36,10 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     private courseService: CourseService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
-    private alertService: GlobalAlertService,   // <-- Inject our custom alert service
+    private alertService: GlobalAlertService,
     private router: Router
   ) {
-    // Initialize form with controls, including new fields: duration and numberOfLectures.
+    // Initialize form with controls including new fields: duration and numberOfLectures.
     this.courseForm = this.fb.group({
       courseName: ['', Validators.required],
       courseDescription: ['', Validators.required],
@@ -62,7 +56,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.courseId = this.route.snapshot.params['id'];
     this.isEditMode = !!this.courseId;
-
     // Load available categories
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
@@ -71,7 +64,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
       },
       error: (err) => console.error('Error loading categories', err)
     });
-
     // If editing, load course data
     if (this.isEditMode && this.courseId) {
       this.courseService.getCourseById(this.courseId).subscribe({
@@ -89,47 +81,8 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Cleanup if needed
   ngOnDestroy(): void {
-    if (this.pdfPreview) URL.revokeObjectURL(this.pdfPreview);
-    if (this.videoPreview) URL.revokeObjectURL(this.videoPreview);
-  }
-
-  onPdfSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedPdf = file;
-      this.pdfPreview = URL.createObjectURL(file);
-    }
-  }
-
-  onVideoSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedVideo = file;
-      this.videoPreview = URL.createObjectURL(file);
-    }
-  }
-
-  onFormatChange(event: any): void {
-    this.selectedFile = null;
-    this.filePreview = null;
-  }
-
-  onFileSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      const url = URL.createObjectURL(file);
-      if (this.courseForm.value.courseFormat === 'PDF' && this.previewContainer) {
-        this.previewContainer.nativeElement.innerHTML = `
-          <embed src="${url}" 
-                 type="application/pdf" 
-                 width="100%" 
-                 height="300px">
-        `;
-      }
-    }
+    // No file previews to revoke in this version
   }
 
   onThumbnailSelect(event: any): void {
@@ -145,20 +98,14 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   }
 
   getAcceptedFileTypes(): string {
-    const format = this.courseForm.get('courseFormat')?.value;
-    switch (format) {
-      case 'PDF': return 'application/pdf';
-      case 'VIDEO': return 'video/*';
-      case 'AUDIO': return 'audio/*';
-      default: return '';
-    }
+    // Although courseFormat is still in the form, you may choose to show only the thumbnail file type.
+    return 'image/*';
   }
 
   onSubmit(): void {
     if (this.courseForm.invalid) return;
 
     if (!this.isEditMode && !this.selectedThumbnail) {
-      // Replaces native alert with our custom alert
       this.alertService.showAlert('Thumbnail is required for new courses', 'Validation Error');
       return;
     }
@@ -179,15 +126,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     if (this.selectedThumbnail) {
       formData.append('thumbnail', this.selectedThumbnail, this.selectedThumbnail.name);
     }
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile, this.selectedFile.name);
-    }
-    if (this.selectedPdf) {
-      formData.append('pdfFile', this.selectedPdf);
-    }
-    if (this.selectedVideo) {
-      formData.append('videoFile', this.selectedVideo);
-    }
 
     console.log('FormData entries:');
     formData.forEach((value, key) => {
@@ -199,7 +137,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
         next: () => this.router.navigate(['/backoffice/courseslist']),
         error: (err) => {
           console.error('Update error:', err);
-          // Replace native alert with custom alert
           this.alertService.showAlert(`Error: ${err.error?.error || err.message}`, 'Update Failed');
         }
       });
@@ -208,7 +145,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
         next: () => this.router.navigate(['/backoffice/courseslist']),
         error: (err) => {
           console.error('Creation error:', err);
-          // Replace native alert with custom alert
           this.alertService.showAlert(`Error: ${err.error?.error || err.message}`, 'Creation Failed');
         }
       });
@@ -241,9 +177,7 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     this.categoryService.createCategory(newCategory).subscribe({
       next: (createdCategory) => {
         console.log('Created category:', createdCategory);
-        // Push the new category into the local array
         this.categories.push(createdCategory);
-        // Automatically select the new category in the dropdown
         this.courseForm.get('categoryId')?.setValue(createdCategory.id);
         this.toggleNewCategory();
       },
@@ -278,7 +212,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
       };
       this.categoryService.updateCategory(updatedCategory).subscribe({
         next: (cat) => {
-          // Update local array
           const index = this.categories.findIndex(c => c.id === cat.id);
           if (index !== -1) {
             this.categories[index] = cat;
@@ -303,24 +236,18 @@ export class CourseFormComponent implements OnInit, OnDestroy {
       this.alertService.showAlert('No category selected to delete.', 'Validation Error');
       return;
     }
-    // Replace native confirm with custom confirm
     this.alertService.showConfirm(
       'Are you sure you want to delete this category?',
       () => {
-        // On Confirm
         this.categoryService.deleteCategory(selectedCategoryId).subscribe({
           next: () => {
-            // Remove the deleted category from the local array
             this.categories = this.categories.filter(c => c.id !== selectedCategoryId);
-            // Clear the selected category from the form
             this.courseForm.get('categoryId')?.setValue(null);
           },
           error: (err) => console.error('Error deleting category', err)
         });
       },
-      () => {
-        // On Cancel (do nothing)
-      },
+      () => { /* Do nothing on cancel */ },
       'Confirm Deletion'
     );
   }

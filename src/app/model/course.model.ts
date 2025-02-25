@@ -1,4 +1,6 @@
 import { Category } from './category.model';
+import { Lecture } from './Lecture.model';
+
 
 export enum PackType {
   COPPER = 'COPPER',
@@ -25,34 +27,22 @@ export interface Course {
   courseName: string;
   courseDescription: string;
   courseFormat: CourseFormat;
-  courseLevel: CourseLevel;  // New attribute for course level
+  courseLevel: CourseLevel;
   pointsEarned: number;
   createdAt?: Date;
   updatedAt?: Date;
   packType: PackType;
-  duration: number;           // New field: Duration in hours
-  numberOfLectures: number;   // New field: Number of lectures
-  // Main file
-  fileData?: string;
-  fileName?: string;
-  fileType?: string;
+  duration: number;           // Durée en heures
+  numberOfLectures: number;   // Nombre total de leçons dans le cours
 
-  // Thumbnail
+  // Champs pour la vignette (aperçu du cours)
   thumbnailData?: string;
   thumbnailFileName?: string;
   thumbnailFileType?: string;
 
-  // Files
-  pdfData?: string;
-  pdfName?: string;
-  pdfType?: string;
-  
-  videoData?: string;
-  videoName?: string;
-  videoType?: string;
-
-
-  // Optional: include a full category object if returned from the backend.
+  // Catégorie associée
   category?: Category;
 
+  // Relation avec Lecture : liste des leçons du cours (première option)
+  lectures?: Lecture[];
 }

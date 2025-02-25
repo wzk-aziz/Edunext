@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CourseService } from '../Services/course.service';
 import { Course } from 'src/app/model/course.model';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-course-list',
@@ -39,11 +39,6 @@ export class CoursesListComponent implements OnInit {
     });
   }
 
-  getSafePdfUrl(pdfData: string): SafeResourceUrl {
-    const dataUrl = `data:application/pdf;base64,${pdfData}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
-  }
-
   deleteCourse(id: number): void {
     this.courseService.deleteCourse(id).subscribe(() => {
       this.loadCourses();
@@ -52,7 +47,7 @@ export class CoursesListComponent implements OnInit {
 
   // Helper method to display a friendly course level label.
   getCourseLevelText(course: Course): string {
-    switch(course.courseLevel) {
+    switch (course.courseLevel) {
       case 'ALL_LEVELS': return 'All Levels';
       case 'BEGINNER': return 'Beginner';
       case 'INTERMEDIATE': return 'Intermediate';
@@ -61,6 +56,7 @@ export class CoursesListComponent implements OnInit {
     }
   }
 
+  // Helper method for pack type text.
   getPackTypeText(course: Course): string {
     switch (course.packType) {
       case 'COPPER': return 'Copper';
@@ -71,9 +67,8 @@ export class CoursesListComponent implements OnInit {
     }
   }
 
+  // Helper method to get the category name.
   getCategoryName(course: Course): string {
     return course.category && course.category.name ? course.category.name : 'N/A';
   }
-
-
 }

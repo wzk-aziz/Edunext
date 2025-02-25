@@ -17,6 +17,9 @@ import { BackAppComponent } from './back-app/back-app.component';
 import { CourseFormComponent } from './courses/course-form/course-form.component';
 import {CoursesListComponent} from './courses/course-list/course-list.component';
 import { CourseUpdateComponent } from './courses/course-update/course-update.component';
+import { LectureCreationFromComponent } from './courses/Lecture/lecture-creation-from/lecture-creation-from.component';
+import { ViewlectureComponent } from './courses/Lecture/viewlecture/viewlecture.component';
+import { LectureupdateComponent } from './courses/Lecture/lectureupdate/lectureupdate.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -36,6 +39,10 @@ const routes: Routes = [
     {path:'course-form',component:CourseFormComponent},
     {path:'courseslist',component:CoursesListComponent},
     {path:'course-update/:id',component:CourseUpdateComponent},
+    { path: 'lecture-create/:courseId', component: LectureCreationFromComponent },
+    { path: 'view-lectures', component: ViewlectureComponent },
+    { path: 'lecture-update/:courseId/:lectureId', component: LectureupdateComponent }, 
+
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

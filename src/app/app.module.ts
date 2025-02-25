@@ -52,6 +52,10 @@ import { CoursesListComponent } from './backend/courses/course-list/course-list.
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
+import { LectureCreationFromComponent } from './backend/courses/Lecture/lecture-creation-from/lecture-creation-from.component';
+import { ViewlectureComponent } from './backend/courses/Lecture/viewlecture/viewlecture.component';
+import { CommonModule } from '@angular/common';
+import { LectureupdateComponent } from './backend/courses/Lecture/lectureupdate/lectureupdate.component';
 
 
 @NgModule({
@@ -101,7 +105,10 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
     CourseFormComponent,
     CourseUpdateComponent,
     CoursesListComponent,
-   GlobalAlertComponent
+   GlobalAlertComponent,
+   LectureCreationFromComponent,
+   ViewlectureComponent,
+   LectureupdateComponent
   ],
   imports: [
     BrowserModule,
@@ -111,6 +118,7 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
     RouterModule,
     NgxPaginationModule,
     FormsModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
