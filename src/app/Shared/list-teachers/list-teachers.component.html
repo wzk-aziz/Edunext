@@ -1,0 +1,60 @@
+<div class="container">
+    <h2 class="title">Liste des utilisateurs</h2>
+  
+    <h3>All Users</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>MFA activé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of allUsers">
+          <td>{{ user.id }}</td>
+          <td>{{ user.first_name }}</td>
+          <td>{{ user.last_name }}</td>
+          <td>{{ user.email_address }}</td>
+          <td>{{ user.authorities?.[0]?.authority || 'UNKNOWN' }}</td>
+          <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="allUsers.length === 0">
+      <p>Aucun utilisateur trouvé.</p>
+    </div>
+  
+    <h3>Teachers</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>MFA activé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of teachers">
+          <td>{{ user.id }}</td>
+          <td>{{ user.first_name }}</td>
+          <td>{{ user.last_name }}</td>
+          <td>{{ user.email_address }}</td>
+          <td>{{ user.authorities?.[0]?.authority || 'UNKNOWN' }}</td>
+          <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="teachers.length === 0">
+      <p>Aucun enseignant trouvé.</p>
+    </div>
+  </div>
+  

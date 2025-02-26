@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './Shared/header/header.component';
 import { FooterComponent } from './Shared/footer/footer.component';
-import { SignupComponent } from './Shared/signup/signup.component';
-import { SigninComponent } from './Shared/signin/signin.component';
 import { LandigpageComponent } from './Student-Pages/landigpage/landigpage.component';
 import { PacksComponent } from './Student-Pages/packs/packs.component';
 import { MainhomepageComponent } from './Shared/mainhomepage/mainhomepage.component';
@@ -45,14 +42,19 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './Shared/login/login.component';
+import { RegisterComponent } from './Shared/register/register.component';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    SignupComponent,
-    SigninComponent,
+    RegisterComponent,
+    LoginComponent,
     LandigpageComponent,
     PacksComponent,
     MainhomepageComponent,
@@ -90,14 +92,22 @@ import { CoursesBackComponent } from './backend/courses/courses-back/courses-bac
     ClassComponent,
     StudentComponent,
     BackAppComponent,
-    CoursesBackComponent
+    CoursesBackComponent,
+    LoginComponent,
+    RegisterComponent,
+    ListTeachersComponent
    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule
   ],
-  providers: [],
+  providers: [
+    HttpClient
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

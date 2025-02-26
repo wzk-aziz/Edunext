@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignupComponent } from './Shared/signup/signup.component';
-import { SigninComponent } from './Shared/signin/signin.component';
+import { LoginComponent } from './Shared/login/login.component';
+import { RegisterComponent } from './Shared/register/register.component';
 import { LandigpageComponent } from './Student-Pages/landigpage/landigpage.component';
 import { PacksComponent } from './Student-Pages/packs/packs.component';
 import { MainhomepageComponent } from './Shared/mainhomepage/mainhomepage.component';
@@ -21,15 +21,18 @@ import { StudentslistComponent } from './Teacher-Pages/teacherdashboard/students
 import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tutoringsessions/tutoringsessions.component';
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
 import { BackRoutingModule } from './backend/back-routing.module'; // Import the new module
+import { authGuard } from './Shared/services/auth/auth.guard';
+import { TeachersComponent } from './backend/teachers/teachers.component';
+import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
 
 const routes: Routes = [
   // Main Landing Page
-  { path: 'main', component: MainhomepageComponent },
+  { path: 'main', component: MainhomepageComponent, canActivate: [authGuard] },
   
   // Student Routes
   { path: 'studenthome', component: LandigpageComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'signin', component: SigninComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'pricing', component: PacksComponent },
   { path: 'studentdashboard', component: MaindashboardComponent },
   { path: 'myplan', component: SubscriptionComponent },
@@ -37,7 +40,7 @@ const routes: Routes = [
 
   // Courses
   { path: 'coursesdashboard', component: MycoursesComponent },
-  { path: 'courselist', component: CourseslistComponent },
+  { path: 'courselist', component: CourseslistComponent, },
   { path: 'coursedetail', component: CoursedetailComponent },
   { path: 'coursepage', component: CoursepageComponent },
   { path: 'coursequiz', component: CoursequizesComponent },
@@ -52,6 +55,8 @@ const routes: Routes = [
   { path: 'teachereditprofile', component: TeachereditprofileComponent },
   { path: 'studentlist', component: StudentslistComponent },
   { path: 'Tutoringsessions', component: TutoringsessionsComponent },
+  { path: 'Teachers', component: TeachersComponent},
+  { path: 'listTeachers', component: ListTeachersComponent},
 
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },

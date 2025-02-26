@@ -1,0 +1,194 @@
+/* Container for the form */
+.container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  margin: auto; /* Center the form */
+}
+
+/* Heading style */
+h2 {
+  text-align: center;
+  color: #333333;
+}
+
+/* Form styling */
+form {
+  text-align: center;
+}
+
+/* Grouping form elements */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left; /* Align labels to the left */
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555555;
+  font-weight: bold;
+}
+
+/* Input and select fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Prevent overflow */
+}
+
+/* Role selector style */
+select {
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  margin-right: 5px;
+  transform: scale(1.2); /* Slightly enlarge */
+  cursor: pointer;
+}
+
+/* QR Code section styling */
+.qr-code {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.qr-code img {
+  max-width: 100%;
+  border: solid 1px;
+  border-radius: 4px;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #ffffff;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Disabled button style */
+.button-disabled {
+  background-color: #cccccc;
+  color: #777777;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Link to login page */
+a {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Success message panel */
+.success-message-panel {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.success-message {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.form-group {
+  position: relative;
+}
+
+.is-valid {
+  padding-right: 30px; /* Make space for the icon */
+  border-color: #28a745;
+  background-color: #e9f7e2;
+}
+
+.is-invalid {
+  padding-right: 30px; /* Make space for the icon */
+  border-color: #dc3545;
+  background-color: #f8d7da;
+}
+
+.valid-feedback {
+  position: absolute;
+  top: 40%; /* Center vertically */
+  right: -400px; /* Distance from right edge of input */
+  transform: translateY(0%); /* Perfect vertical centering */
+  pointer-events: none; /* Prevent icon from interfering with input */
+}
+
+.bi-check-circle-fill {
+  color: #28a745;
+  font-size: 1.8em; /* Slightly smaller icon */
+  display: block; /* Ensure proper positioning */
+}
+
+/* Adjust input padding when valid */
+input.is-valid {
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+}
+
+/* Disabled button style (gray) */
+.disabled-button {
+  background-color: #cccccc; /* Light gray background */
+  color: #777777; /* Gray text */
+  cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+  opacity: 0.6; /* Slight transparency */
+}
+
+/* Enabled button style (blue) */
+.enabled-button {
+  background-color: #007bff; /* Blue background */
+  color: #ffffff; /* White text */
+  cursor: pointer; /* Change cursor to indicate it's clickable */
+  transition: background-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect for enabled button */
+.enabled-button:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
+}
+
+button:disabled {
+  pointer-events: none; /* Ensure button is not clickable when disabled */
+}
+

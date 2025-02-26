@@ -1,0 +1,127 @@
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  width: 100%;
+}
+
+h2 {
+  font-weight: bold;
+  color: #333;
+}
+
+h6 {
+  color: #666;
+}
+
+.lead {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+}
+
+.avatar-group {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar {
+  margin: 0 5px;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+/* Button State Styling */
+.enabled-button {
+  background-color: #007bff;
+}
+
+.disabled-button {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button[type="button"]:disabled {
+  cursor: not-allowed;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+.bg-primary {
+  background-color: #007bff !important;
+}
+
+.bg-opacity-10 {
+  background-color: rgba(0, 123, 255, 0.1) !important;
+}
+
+.vh-lg-100 {
+  height: 100vh !important;
+}
