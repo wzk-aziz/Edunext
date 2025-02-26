@@ -1,0 +1,243 @@
+<div class="session-container">
+  <h2>Sessions Management</h2>
+  
+  <!-- Show loading indicator -->
+  <div class="loading-indicator" *ngIf="loading">
+    <p>Loading...</p>
+  </div>
+  
+  <!-- Show error message -->
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+  
+  <!-- Test API connection button -->
+ <!-- <button (click)="testAPI()">Test API Connection</button>-->
+  <!--!<pre *ngIf="debugData">{{ debugData | json }}</pre> -->
+  
+  <!-- Button to add a new session -->
+  <div class="add-session-container">
+    <button class="add-button" (click)="showAddSessionForm()" *ngIf="showSessionList">Add New Session</button>
+  </div>
+  
+  <!-- Session list -->
+  <!-- Replace the search bar (around line 23) with this: -->
+  <div class="session-list" *ngIf="showSessionList">
+    <!-- Replace existing search bar with this -->
+    <div class="filters-container">
+      <div class="search-filter">
+        <input type="text" class="search-bar" placeholder="Search by title, subject, date..." 
+               [(ngModel)]="searchTerm" (input)="filterSessions()">
+      </div>
+      
+      <div class="advanced-filters">
+        <details>
+          <summary>Advanced Filters</summary>
+          <div class="filter-options">
+            <div>
+              <label>Subject:</label>
+              <select [(ngModel)]="filters.subject" (change)="filterSessions()">
+                <option [ngValue]="null">All Subjects</option>
+                <option *ngFor="let subject of availableSubjects" [value]="subject">{{ subject }}</option>
+              </select>
+            </div>
+            
+            <div>
+              <label>Duration:</label>
+              <div class="range-filter">
+                <input type="number" [(ngModel)]="filters.minDuration" placeholder="Min" min="0" (change)="filterSessions()">
+                <span>to</span>
+                <input type="number" [(ngModel)]="filters.maxDuration" placeholder="Max" min="0" (change)="filterSessions()">
+              </div>
+            </div>
+            
+            <div>
+              <label>Date Range:</label>
+              <div class="range-filter">
+                <input type="date" [(ngModel)]="filters.dateFrom" (change)="filterSessions()">
+                <span>to</span>
+                <input type="date" [(ngModel)]="filters.dateTo" (change)="filterSessions()">
+              </div>
+            </div>
+            
+            <button class="btn-square btn-delete" (click)="clearFilters()">🗑️</button>
+          </div>
+        </details>
+      </div>
+    </div>
+  
+    <!-- Change table to use paginatedSessions -->
+    <table *ngIf="filteredSessions && filteredSessions.length > 0">
+      <!-- table header remains the same -->
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Duration</th>
+          <th>Start Time</th>
+          <th>Subject</th>
+          <th>Instructor ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Change from filteredSessions to paginatedSessions -->
+        <tr *ngFor="let session of paginatedSessions">
+          <td>{{ session.idSession }}</td>
+          <td>{{ session.titleSession }}</td>
+          <td>{{ session.sessionDuration }} hour(s)</td>
+          <td>{{ session.startTime | date:'medium' }}</td>
+          <td>{{ session.sessionSubject }}</td>
+          <td>{{ session.instructor?.id || 'None' }}</td>
+          <td>
+            <div class="button-container">
+              <button class="btn-square btn-edit" (click)="editSession(session)" title="Edit">✏️</button>
+              <button class="btn-square btn-delete" (click)="deleteSession(session.idSession!)" title="Delete">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Add pagination controls after the table -->
+    <div class="pagination-controls" *ngIf="filteredSessions && filteredSessions.length > 0">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to 
+        {{ Math.min(currentPage * pageSize, filteredSessions.length) }} 
+        of {{ filteredSessions.length }} sessions
+      </div>
+      
+      <div class="page-size">
+        <label>Items per page:</label>
+        <select [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+      
+      <div class="page-navigation">
+        <button [disabled]="currentPage === 1" (click)="prevPage()" class="btn-nav">
+          &laquo; Previous
+        </button>
+        <span class="page-indicator">{{ currentPage }} / {{ Math.ceil(filteredSessions.length / pageSize) || 1 }}</span>
+        <button [disabled]="currentPage >= Math.ceil(filteredSessions.length / pageSize)" (click)="nextPage()" class="btn-nav">
+          Next &raquo;
+        </button>
+      </div>
+    </div>
+    
+    <!-- Existing "No sessions found" message -->
+    <p *ngIf="!filteredSessions || filteredSessions.length === 0">No sessions found</p>
+  </div>
+
+  <!-- Edit session form -->
+  <div class="session-edit" *ngIf="selectedSession && !showAddForm && !showSessionList">
+    <h3>Edit Session</h3>
+    <form (ngSubmit)="updateSession()" #editSessionForm="ngForm">
+      <div>
+        <label for="edit-title">Title:</label>
+        <input id="edit-title" [(ngModel)]="selectedSession.titleSession" name="editTitle" required minlength="3" #editTitle="ngModel">
+        <div *ngIf="editTitle.invalid && (editTitle.dirty || editTitle.touched)" class="error">
+          <div *ngIf="editTitle.errors?.['required']">Title is required.</div>
+          <div *ngIf="editTitle.errors?.['minlength']">Title must be at least 3 characters long.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="edit-duration">Duration Hour(s):</label>
+        <input id="edit-duration" type="number" [(ngModel)]="selectedSession.sessionDuration" name="editDuration" required min="1" #editDuration="ngModel">
+        <div *ngIf="editDuration.invalid && (editDuration.dirty || editDuration.touched)" class="error">
+          <div *ngIf="editDuration.errors?.['required']">Duration is required.</div>
+          <div *ngIf="editDuration.errors?.['min']">Duration must be at least 1 Hour.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="edit-startTime">Start Time:</label>
+        <input id="edit-startTime" type="datetime-local" [(ngModel)]="selectedStartTimeString" name="editStartTime" required #editStartTime="ngModel">
+        <div *ngIf="editStartTime.invalid && (editStartTime.dirty || editStartTime.touched)" class="error">
+          <div *ngIf="editStartTime.errors?.['required']">Start Time is required.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="edit-subject">Subject:</label>
+        <input id="edit-subject" [(ngModel)]="selectedSession.sessionSubject" name="editSubject" required minlength="3" #editSubject="ngModel">
+        <div *ngIf="editSubject.invalid && (editSubject.dirty || editSubject.touched)" class="error">
+          <div *ngIf="editSubject.errors?.['required']">Subject is required.</div>
+          <div *ngIf="editSubject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="edit-instructor">Instructor ID:</label>
+        <input id="edit-instructor" type="number" [(ngModel)]="selectedSession.instructor" name="editInstructor" required min="0" #editInstructor="ngModel">
+        <div *ngIf="editInstructor.invalid && (editInstructor.dirty || editInstructor.touched)" class="error">
+          <div *ngIf="editInstructor.errors?.['required']">Instructor ID is required.</div>
+        </div>
+      </div>
+      
+      <!-- Debug button to help troubleshoot -->
+      
+      <div class="form-buttons">
+        <button type="button" class="btn-square btn-edit" (click)="debugUpdate()">✏️</button>
+        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+      </div>
+      
+    </form>
+  </div>
+
+  <!-- Add session form -->
+  <div class="session-form" *ngIf="showAddForm">
+    <h3>Add New Session</h3>
+    <form (ngSubmit)="addSession()" #sessionForm="ngForm">
+      <div>
+        <label for="title">Title:</label>
+        <input id="title" [(ngModel)]="newSession.titleSession" name="titleSession" required minlength="3" #title="ngModel">
+        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error">
+          <div *ngIf="title.errors?.['required']">Title is required.</div>
+          <div *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="duration">Duration Hour(s):</label>
+        <input id="duration" type="number" [(ngModel)]="newSession.sessionDuration" name="sessionDuration" required min="1" #duration="ngModel">
+        <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="error">
+          <div *ngIf="duration.errors?.['required']">Duration is required.</div>
+          <div *ngIf="duration.errors?.['min']">Duration must be at least 1 Hour.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="startTime">Start Time:</label>
+        <input id="startTime" type="datetime-local" [(ngModel)]="startTimeString" name="startTime" required #startTime="ngModel">
+        <div *ngIf="startTime.invalid && (startTime.dirty || startTime.touched)" class="error">
+          <div *ngIf="startTime.errors?.['required']">Start Time is required.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="subject">Subject:</label>
+        <input id="subject" [(ngModel)]="newSession.sessionSubject" name="sessionSubject" required minlength="3" #subject="ngModel">
+        <div *ngIf="subject.invalid && (subject.dirty || subject.touched)" class="error">
+          <div *ngIf="subject.errors?.['required']">Subject is required.</div>
+          <div *ngIf="subject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="instructor">Instructor ID:</label>
+        <input id="instructor" type="number" [(ngModel)]="newSession.instructor" name="instructor" required min="0" #instructor="ngModel">
+        <div *ngIf="instructor.invalid && (instructor.dirty || instructor.touched)" class="error">
+          <div *ngIf="instructor.errors?.['required']">Instructor ID is required.</div>
+        </div>
+      </div>
+      
+      <div class="form-buttons">
+        <button type="submit" class="btn-square btn-add" [disabled]="sessionForm.invalid">Add</button>
+        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+      </div>
+    </form>
+  </div>
+  <!-- <button (click)="checkApiSchema()">Check API Schema</button> -->
+</div>

@@ -1,0 +1,90 @@
+<div class="goal-container">
+  <h2>Goal List</h2>
+
+  <button (click)="showCreateForm = !showCreateForm" class="add-button">
+    {{ showCreateForm ? 'Cancel' : 'Add New Goal' }}
+  </button>
+
+  <div *ngIf="showCreateForm" class="goal-form">
+    <h3>Create New Goal</h3>
+    <form (ngSubmit)="createGoal()" #goalForm="ngForm">
+      <label for="description">Description:</label>
+      <input id="description" [(ngModel)]="newGoal.goal_description" name="description" required minlength="3" #description="ngModel">
+      <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error">
+        <div *ngIf="description.errors?.['required']">Description is required.</div>
+        <div *ngIf="description.errors?.['minlength']">Description must be at least 3 characters long.</div>
+      </div>
+
+      <label for="targetDate">Target Date:</label>
+      <input id="targetDate" type="date" [(ngModel)]="newGoal.goal_target_date" name="targetDate" required #targetDate="ngModel">
+      <div *ngIf="targetDate.invalid && (targetDate.dirty || targetDate.touched)" class="error">
+        <div *ngIf="targetDate.errors?.['required']">Target Date is required.</div>
+      </div>
+
+      <label for="mentorshipProgram">Mentorship Program ID:</label>
+      <input id="mentorshipProgram" type="number" [(ngModel)]="newGoal.mentorship_program_id" name="mentorshipProgram" required min="1" #mentorshipProgram="ngModel">
+      <div *ngIf="mentorshipProgram.invalid && (mentorshipProgram.dirty || mentorshipProgram.touched)" class="error">
+        <div *ngIf="mentorshipProgram.errors?.['required']">Mentorship Program ID is required.</div>
+        <div *ngIf="mentorshipProgram.errors?.['min']">Mentorship Program ID must be at least 1.</div>
+      </div>
+
+      <button type="submit" [disabled]="goalForm.invalid">Create</button>
+    </form>
+  </div>
+
+  <div class="goal-list">
+    
+    <input type="text" placeholder="Search goals..." [(ngModel)]="searchTerm" (ngModelChange)="filterGoals()" class="search-bar">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Target Date</th>
+          <th>Mentorship Program ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let goal of filteredGoals">
+          <td>{{ goal.id_goal }}</td>
+          <td>{{ goal.goal_description }}</td>
+          <td>{{ goal.goal_target_date }}</td>
+          <td>{{ goal.mentorship_program_id }}</td>
+          <td>
+            <button (click)="selectGoal(goal)">Edit</button>
+            <button (click)="deleteGoal(goal.id_goal)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="selectedGoal" class="goal-edit">
+    
+    <form (ngSubmit)="updateGoal()" #editGoalForm="ngForm">
+      <label for="edit-description">Description:</label>
+      <input id="edit-description" [(ngModel)]="selectedGoal.goal_description" name="editDescription" required minlength="3" #editDescription="ngModel">
+      <div *ngIf="editDescription.invalid && (editDescription.dirty || editDescription.touched)" class="error">
+        <div *ngIf="editDescription.errors?.['required']">Description is required.</div>
+        <div *ngIf="editDescription.errors?.['minlength']">Description must be at least 3 characters long.</div>
+      </div>
+
+      <label for="edit-targetDate">Target Date:</label>
+      <input id="edit-targetDate" type="date" [(ngModel)]="selectedGoal.goal_target_date" name="editTargetDate" required #editTargetDate="ngModel">
+      <div *ngIf="editTargetDate.invalid && (editTargetDate.dirty || editTargetDate.touched)" class="error">
+        <div *ngIf="editTargetDate.errors?.['required']">Target Date is required.</div>
+      </div>
+
+      <label for="edit-mentorshipProgram">Mentorship Program ID:</label>
+      <input id="edit-mentorshipProgram" type="number" [(ngModel)]="selectedGoal.mentorship_program_id" name="editMentorshipProgram" required min="1" #editMentorshipProgram="ngModel">
+      <div *ngIf="editMentorshipProgram.invalid && (editMentorshipProgram.dirty || editMentorshipProgram.touched)" class="error">
+        <div *ngIf="editMentorshipProgram.errors?.['required']">Mentorship Program ID is required.</div>
+        <div *ngIf="editMentorshipProgram.errors?.['min']">Mentorship Program ID must be at least 1.</div>
+      </div>
+
+      <button type="submit" [disabled]="editGoalForm.invalid">Update</button>
+      <button type="button" (click)="clearSelection()">Cancel</button>
+    </form>
+  </div>
+</div>

@@ -7,13 +7,28 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {
   isMenuOpen = false;
+  isTeacherMenuOpen = false;
+  isVirtualClassroomMenuOpen = false;
+  isVirtualClassroomSubMenuOpen = false;
+  isLiveTutoringSubMenuOpen = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
-  isTeacherMenuOpen = false;
 
-toggleTeacherMenu() {
+  toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
-}
+  }
+
+  toggleVirtualClassroomMenu() {
+    this.isVirtualClassroomMenuOpen = !this.isVirtualClassroomMenuOpen;
+  }
+
+  toggleVirtualClassroomSubMenu() {
+    this.isVirtualClassroomSubMenuOpen = !this.isVirtualClassroomSubMenuOpen;
+  }
+
+  toggleLiveTutoringSubMenu() {
+    this.isLiveTutoringSubMenuOpen = !this.isLiveTutoringSubMenuOpen;
+  }
 }

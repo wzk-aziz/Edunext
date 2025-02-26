@@ -20,7 +20,6 @@ import { TeachereditprofileComponent } from './Teacher-Pages/teacherdashboard/te
 import { StudentslistComponent } from './Teacher-Pages/teacherdashboard/studentslist/studentslist.component';
 import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tutoringsessions/tutoringsessions.component';
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
-import { BackRoutingModule } from './backend/back-routing.module'; // Import the new module
 
 const routes: Routes = [
   // Main Landing Page

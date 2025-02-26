@@ -1,0 +1,200 @@
+.progress-report-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+
+h2 {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  animation: slideIn 1s ease-in-out;
+}
+
+.add-button {
+  display: block;
+  margin: 20px auto;
+  padding: 15px 30px;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+  font-size: 1.2em;
+}
+
+.add-button:hover {
+  background: linear-gradient(to right, #0056b3, #003f7f);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.progress-report-form,
+.progress-report-edit {
+  margin: 20px auto;
+  padding: 30px;
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  animation: fadeIn 1s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.progress-report-form h3,
+.progress-report-edit h3 {
+  margin-top: 0;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  font-size: 2em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  animation: slideIn 1s ease-in-out;
+}
+
+.progress-report-form label,
+.progress-report-edit label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #555;
+  font-size: 1.1em;
+}
+
+.progress-report-form input,
+.progress-report-edit input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.progress-report-form input:focus,
+.progress-report-edit input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.progress-report-form button,
+.progress-report-edit button {
+  padding: 15px 30px;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+  font-size: 1.2em;
+}
+
+.progress-report-form button:hover,
+.progress-report-edit button:hover {
+  background: linear-gradient(to right, #0056b3, #003f7f);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.progress-report-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-bar {
+  width: 80%;
+  max-width: 1000px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.progress-report-list table {
+  width: 80%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.progress-report-list th,
+.progress-report-list td {
+  padding: 20px;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 16px;
+}
+
+.progress-report-list th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #555;
+}
+
+.progress-report-list button {
+  margin-right: 5px;
+  padding: 10px 20px;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.progress-report-list button:hover {
+  background: linear-gradient(to right, #0056b3, #003f7f);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}

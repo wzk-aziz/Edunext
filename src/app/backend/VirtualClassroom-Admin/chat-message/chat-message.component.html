@@ -1,0 +1,76 @@
+<div class="chat-message-container">
+  <h2>Chat Messages</h2>
+
+  <button (click)="showCreateForm = !showCreateForm" class="add-button">
+    {{ showCreateForm ? 'Cancel' : 'Add New Message' }}
+  </button>
+
+  <div *ngIf="showCreateForm" class="chat-message-form">
+    <h3>Create New Chat Message</h3>
+    <form (ngSubmit)="createChatMessage()" #chatMessageForm="ngForm">
+      <label for="content">Content:</label>
+      <input id="content" [(ngModel)]="newChatMessage.content_chat_message" name="content" required minlength="3" #content="ngModel">
+      <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error">
+        <div *ngIf="content.errors?.['required']">Content is required.</div>
+        <div *ngIf="content.errors?.['minlength']">Content must be at least 3 characters long.</div>
+      </div>
+
+      <label for="session">Session ID:</label>
+      <input id="session" [(ngModel)]="newChatMessage.session_id" name="session" type="number" required min="1" #session="ngModel">
+      <div *ngIf="session.invalid && (session.dirty || session.touched)" class="error">
+        <div *ngIf="session.errors?.['required']">Session ID is required.</div>
+        <div *ngIf="session.errors?.['min']">Session ID must be at least 1.</div>
+      </div>
+
+      <button type="submit" [disabled]="chatMessageForm.invalid">Create</button>
+    </form>
+  </div>
+
+  <div class="chat-message-list">
+    
+    <input type="text" placeholder="Search messages..." [(ngModel)]="searchTerm" (ngModelChange)="filterChatMessages()" class="search-bar">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Content</th>
+          <th>Session ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let chatMessage of filteredChatMessages">
+          <td>{{ chatMessage.id_chat_message }}</td>
+          <td>{{ chatMessage.content_chat_message }}</td>
+          <td>{{ chatMessage.session_id }}</td>
+          <td>
+            <button (click)="selectChatMessage(chatMessage)">Edit</button>
+            <button (click)="deleteChatMessage(chatMessage.id_chat_message)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="selectedChatMessage" class="chat-message-edit">
+    
+    <form (ngSubmit)="updateChatMessage()" #editChatMessageForm="ngForm">
+      <label for="edit-content">Content:</label>
+      <input id="edit-content" [(ngModel)]="selectedChatMessage.content_chat_message" name="edit-content" required minlength="3" #editContent="ngModel">
+      <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched)" class="error">
+        <div *ngIf="editContent.errors?.['required']">Content is required.</div>
+        <div *ngIf="editContent.errors?.['minlength']">Content must be at least 3 characters long.</div>
+      </div>
+
+      <label for="edit-session">Session ID:</label>
+      <input id="edit-session" [(ngModel)]="selectedChatMessage.session_id" name="edit-session" type="number" required min="1" #editSession="ngModel">
+      <div *ngIf="editSession.invalid && (editSession.dirty || editSession.touched)" class="error">
+        <div *ngIf="editSession.errors?.['required']">Session ID is required.</div>
+        <div *ngIf="editSession.errors?.['min']">Session ID must be at least 1.</div>
+      </div>
+
+      <button type="submit" [disabled]="editChatMessageForm.invalid">Update</button>
+      <button type="button" (click)="clearSelection()">Cancel</button>
+    </form>
+  </div>
+</div>

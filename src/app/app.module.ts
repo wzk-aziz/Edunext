@@ -1,8 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field'; // Import MatFormFieldModule
+import { MatInputModule } from '@angular/material/input'; // Import MatInputModule
+import { MatDatepickerModule } from '@angular/material/datepicker'; // Import MatDatepickerModule
+import { MatNativeDateModule } from '@angular/material/core'; // Import MatNativeDateModule
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+
 import { HeaderComponent } from './Shared/header/header.component';
 import { FooterComponent } from './Shared/footer/footer.component';
 import { SignupComponent } from './Shared/signup/signup.component';
@@ -45,6 +58,15 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
+import { SessionComponent } from './backend/VirtualClassroom-Admin/session/session.component';
+import { FeedBackComponent } from './backend/VirtualClassroom-Admin/feed-back/feed-back.component';
+//import { SessionRecordingComponent } from './backend/VirtualClassroom-Admin/session-recording/session-recording.component';
+import { ChatMessageComponent } from './backend/VirtualClassroom-Admin/chat-message/chat-message.component';
+import { GoalComponent } from './backend/Tutoring-Admin/goal/goal.component';
+import { MentorshipPorgramComponent } from './backend/Tutoring-Admin/mentorship-porgram/mentorship-porgram.component';
+import { ProgressReportComponent } from './backend/Tutoring-Admin/progress-report/progress-report.component';
+import { RouterModule } from '@angular/router';
+import { LayoutComponent } from './backend/VirtualClassroom-Admin/layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -90,12 +112,31 @@ import { CoursesBackComponent } from './backend/courses/courses-back/courses-bac
     ClassComponent,
     StudentComponent,
     BackAppComponent,
-    CoursesBackComponent
-   
+    CoursesBackComponent,
+    SessionComponent,
+    FeedBackComponent,
+    ChatMessageComponent,
+    GoalComponent,
+    MentorshipPorgramComponent,
+    ProgressReportComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule, // Add FormsModule to the imports array 
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatFormFieldModule, // Add MatFormFieldModule to the imports array
+    MatInputModule, // Add MatInputModule to the imports array
+    MatDatepickerModule, // Add MatDatepickerModule to the imports array
+    MatNativeDateModule, // Add MatNativeDateModule to the imports array
+    RouterModule 
   ],
   providers: [],
   bootstrap: [AppComponent]
