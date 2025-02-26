@@ -50,17 +50,25 @@ export class SessionService {
     );
   }
 
-  // Helper method to clean circular JSON references
+  // In session.service.ts
   private cleanJsonResponse(rawJson: string): string {
     console.log('Cleaning JSON response...');
     
-    // Fix common circular reference patterns
+    // Use the same robust pattern as in feedback service
     let cleaned = rawJson
+      .replace(/,"session":\{"idSession":\d+,"session":/g, ',"session":{"idSession":')
       .replace(/,"feedbacks":\[.*?\]/g, '') // Remove feedbacks arrays
-      .replace(/,"session":\{[^{}]*\}/g, '') // Remove session objects
+      .replace(/,"session":\{[^{}]*\}/g, ',"session":{"idSession":1}') // Replace session objects
       .replace(/,"session":}/g, '}') // Fix dangling session references
       .replace(/\}\]\}\}\]\}\}/g, '}]}]}]'); // Fix unclosed brackets
-    
+      
+    // Add these additional cleaning steps
+    cleaned = cleaned
+      .replace(/"session"\s*:\s*\}/g, '"session":{}')
+      .replace(/\}\}\]\}\}/g, '}]}]}')
+      .replace(/\}\]\}\}/g, '}]}')
+      .replace(/\}\}\}/g, '}}');
+      
     console.log('Cleaned JSON first 100 chars:', cleaned.substring(0, 100) + '...');
     return cleaned;
   }

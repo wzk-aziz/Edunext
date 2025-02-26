@@ -610,23 +610,151 @@ checkApiSchema() {
 debugFetchSessions() {
   console.log('Debug fetch sessions called');
   this.loading = true;
+  this.error = null;
   
-  // Use fetch API directly to test endpoint
+  // Use vanilla fetch to bypass Angular's HTTP client
   fetch('http://localhost:8088/api/sessions/all')
-    .then(response => response.json())
-    .then(data => {
-      console.log('Sessions directly from API:', data);
-      this.sessions = data || [];
-      this.filteredSessions = [...this.sessions];
-      this.paginate();
+    .then(response => response.text())
+    .then(text => {
+      console.log('Raw text sample:', text.substring(0, 200));
+      
+      // Very aggressive cleaning approach - this will handle almost any malformed JSON
+      let cleanedJson = text
+        // Remove all circular references
+        .replace(/,"session":\{[^}]*\}/g, ',"session":null')
+        .replace(/,"feedbacks":\[[^\]]*\]/g, ',"feedbacks":[]')
+        .replace(/,"instructor":\{[^}]*\}/g, ',"instructor":null')
+        .replace(/,"session":}/g, '}');
+        
+      try {
+        const data = JSON.parse(cleanedJson);
+        console.log('Data parsed successfully:', data.length, 'items');
+        this.sessions = data;
+        this.filteredSessions = [...this.sessions];
+        this.paginate();
+      } catch (e) {
+        console.error('Failed to parse even with cleaning:', e);
+        // Last resort - extract just the minimal data we need
+        this.debugSessionsWithRawData();
+      }
+      
       this.loading = false;
     })
     .catch(error => {
-      console.error('Error fetching sessions directly:', error);
-      this.loading = false;
-      this.error = 'Failed to fetch sessions: ' + error.message;
+      this.error = `Failed to fetch: ${error.message}`;
+      this.loading = false; 
     });
 }
 
-
+debugSessionsWithRawData() {
+  this.loading = true;
+  this.error = null;
+  
+  fetch('http://localhost:8088/api/sessions/all')
+    .then(response => response.text())
+    .then(text => {
+      console.log('Raw API response length:', text.length);
+      console.log('Sample first 200 chars:', text.substring(0, 200));
+      
+      // Use a more flexible method to extract session data
+      // We'll use a map to deduplicate by ID
+      const sessionMap = new Map();
+      
+      // First attempt: Try as valid JSON
+      try {
+        const jsonData = JSON.parse(text);
+        if (Array.isArray(jsonData)) {
+          jsonData.forEach(session => {
+            if (session.idSession) {
+              sessionMap.set(session.idSession, session);
+            }
+          });
+          
+          console.log('Successfully parsed as valid JSON, found', sessionMap.size, 'sessions');
+        }
+      } catch (e) {
+        console.log('Not valid JSON, using regex extraction');
+        
+        // Second attempt: More flexible regex that doesn't care about field order
+        const idRegex = /\"idSession\":(\d+)/g;
+        const titleRegex = /\"titleSession\":\"([^\"]*)\"/g;
+        const subjectRegex = /\"sessionSubject\":\"([^\"]*)\"/g;
+        const startTimeRegex = /\"startTime\":\"([^\"]*)\"/g;
+        const durationRegex = /\"sessionDuration\":(\d+)/g;
+        
+        // Extract all IDs first
+        let idMatch;
+        const ids = [];
+        while ((idMatch = idRegex.exec(text)) !== null) {
+          ids.push(parseInt(idMatch[1]));
+        }
+        console.log('Found', ids.length, 'potential session IDs');
+        
+        // Now process each ID
+        ids.forEach(id => {
+          if (sessionMap.has(id)) return; // Skip duplicates
+          
+          // Find fields for this specific session
+          // We'll use substring to focus our search around each session
+          const sessionIndex = text.indexOf(`"idSession":${id}`);
+          if (sessionIndex === -1) return;
+          
+          // Extract 500 chars around this session as a smaller context
+          const startIdx = Math.max(0, sessionIndex - 100);
+          const endIdx = Math.min(text.length, sessionIndex + 400);
+          const sessionContext = text.substring(startIdx, endIdx);
+          
+          // Extract fields from this context
+          let title = '', subject = '', startTime = '', duration = 0;
+          
+          const titleMatch = /"titleSession":"([^"]*)"/g.exec(sessionContext);
+          if (titleMatch) title = titleMatch[1];
+          
+          const subjectMatch = /"sessionSubject":"([^"]*)"/g.exec(sessionContext);
+          if (subjectMatch) subject = subjectMatch[1];
+          
+          const startTimeMatch = /"startTime":"([^"]*)"/g.exec(sessionContext);
+          if (startTimeMatch) startTime = startTimeMatch[1];
+          
+          const durationMatch = /"sessionDuration":(\d+)/g.exec(sessionContext);
+          if (durationMatch) duration = parseInt(durationMatch[1]);
+          
+          // Create session object and add to map
+          sessionMap.set(id, {
+            idSession: id,
+            titleSession: title,
+            sessionSubject: subject,
+            startTime: startTime,
+            sessionDuration: duration,
+            instructor: null
+          });
+        });
+      }
+      
+      // Convert map to array
+      const extractedData = Array.from(sessionMap.values());
+      console.log('Final extracted data size:', extractedData.length);
+      
+      if (extractedData.length > 0) {
+        // Sort by ID for consistency
+        extractedData.sort((a, b) => a.idSession - b.idSession);
+        
+        this.sessions = extractedData;
+        this.filteredSessions = [...this.sessions];
+        this.paginate();
+        this.loading = false;
+        this.error = null;
+        
+        // Log what we found
+        console.log('Extracted sessions:', extractedData);
+      } else {
+        this.error = "Failed to parse sessions data. Try restarting the backend.";
+        this.loading = false;
+      }
+    })
+    .catch(error => {
+      this.error = `API error: ${error.message}`;
+      this.loading = false;
+    });
+}
 }

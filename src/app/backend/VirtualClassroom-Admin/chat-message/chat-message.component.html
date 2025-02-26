@@ -6,10 +6,38 @@
     <p>Loading...</p>
   </div>
   
+  <!-- <div style="text-align: center; margin-bottom: 20px;">
+    <button (click)="debugFetchChatMessages()" style="margin-right: 10px; padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px;">
+      Debug: Fetch Messages
+    </button>
+    
+    <button (click)="testDirectFetch()" style="margin-right: 10px; padding: 8px 16px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">
+      Test API Endpoints
+    </button>
+  </div> -->
+  
+    <!-- Show loading indicator -->
+    <div class="loading-indicator" *ngIf="loading">
+      <p>Loading...</p>
+    </div>
+
+
   <!-- Show error message -->
   <div class="error-message" *ngIf="error">
     <p>{{ error }}</p>
+    <div style="margin-top: 10px;">
+      <button (click)="fetchChatMessages()" style="margin-right: 10px; padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px;">Try Again</button>
+      <button (click)="debugFetchChatMessages()" style="padding: 8px 16px; background-color: #17a2b8; color: white; border: none; border-radius: 4px;">Test Alternative Fetch</button>
+    </div>
   </div>
+
+  <!-- Warning when data is partially loaded -->
+  <div *ngIf="error && paginatedChatMessages && paginatedChatMessages.length > 0" class="warning-but-working" 
+    style="background-color: #fff3cd; padding: 10px; border-radius: 4px; margin: 10px 0; border-left: 5px solid #ffc107;">
+ <p><strong>Warning:</strong> {{ error }}</p>
+ <p>However, some messages were still loaded and are displayed below.</p>
+</div>
+
   
   <!-- Button to add a new chat message -->
   <div class="add-session-container">

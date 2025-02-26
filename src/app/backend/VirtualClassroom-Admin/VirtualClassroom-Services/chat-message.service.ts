@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ChatMessage } from '../chat-message/chat-message.model';
 
 @Injectable({
@@ -13,9 +13,57 @@ export class ChatMessageService {
   constructor(private http: HttpClient) { }
 
   getAllChatMessages(): Observable<ChatMessage[]> {
-    return this.http.get<ChatMessage[]>(`${this.apiUrl}/all`).pipe(
-      catchError(this.handleError)
-    );
+    console.log('Fetching all chat messages from:', `${this.apiUrl}/all`);
+    
+    // Use direct fetch to get raw response
+    return new Observable<ChatMessage[]>(observer => {
+      fetch(`${this.apiUrl}/all`)
+        .then(response => response.text())
+        .then(text => {
+          console.log('Raw response first 100 chars:', text.substring(0, 100) + '...');
+          
+          try {
+            // Try parsing directly first
+            const data = JSON.parse(text);
+            console.log(`Successfully parsed ${data.length} chat messages`);
+            observer.next(data);
+            observer.complete();
+          } catch (e) {
+            console.error('Failed to parse JSON response:', e);
+            
+            // Try cleaning the JSON
+            try {
+              const cleanedJson = this.cleanJsonResponse(text);
+              const data = JSON.parse(cleanedJson);
+              console.log(`Successfully parsed ${data.length} chat messages after cleaning`);
+              observer.next(data);
+              observer.complete();
+            } catch (e2) {
+              console.error('Failed to parse cleaned JSON:', e2);
+              observer.error(new Error('Failed to parse API response'));
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Fetch error:', error);
+          observer.error(error);
+        });
+    });
+  }
+
+  private cleanJsonResponse(rawJson: string): string {
+    console.log('Cleaning JSON response...');
+    
+    // Fix common circular reference patterns
+    let cleaned = rawJson
+      .replace(/,"session":\{"idSession":\d+,"session":/g, ',"session":{"idSession":')
+      .replace(/,"feedbacks":\[[^\]]*\]/g, '')
+      .replace(/,"session":\{[^{}]*\}/g, ',"session":{"idSession":1}')
+      .replace(/,"session":}/g, '}')
+      .replace(/\}\]\}\}\]\}\}/g, '}]}]}]');
+      
+    console.log('Cleaned JSON first 100 chars:', cleaned.substring(0, 100) + '...');
+    return cleaned;
   }
 
   getChatMessageById(id: number): Observable<ChatMessage> {
@@ -25,10 +73,22 @@ export class ChatMessageService {
   }
 
   createChatMessage(chatMessage: ChatMessage): Observable<ChatMessage> {
-    // Simplify for testing - just send what we have
-    console.log('Creating message with:', chatMessage);
+    // Make sure session is in the correct format
+    const payload = {
+      contentChatMessage: chatMessage.contentChatMessage,
+      session: typeof chatMessage.session === 'number' 
+        ? { idSession: chatMessage.session } 
+        : chatMessage.session
+    };
     
-    return this.http.post<ChatMessage>(this.apiUrl, chatMessage).pipe(
+    console.log('Creating message with payload:', payload);
+    
+    return this.http.post<ChatMessage>(this.apiUrl, payload, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      })
+    }).pipe(
       catchError(error => {
         console.error('Create error details:', error);
         return this.handleError(error);
@@ -37,18 +97,23 @@ export class ChatMessageService {
   }
 
   updateChatMessage(chatMessage: ChatMessage): Observable<ChatMessage> {
-    // Transform session to match what backend expects
+    // Make sure session is in the correct format
     const payload = {
-      ...chatMessage,
-      // Try these options to see which works
+      idChatMessage: chatMessage.idChatMessage,
+      contentChatMessage: chatMessage.contentChatMessage,
       session: typeof chatMessage.session === 'number' 
         ? { idSession: chatMessage.session } 
         : chatMessage.session
     };
     
-    console.log('Sending update payload:', JSON.stringify(payload));
+    console.log('Updating with payload:', payload);
     
-    return this.http.put<ChatMessage>(`${this.apiUrl}/${chatMessage.idChatMessage}`, payload).pipe(
+    return this.http.put<ChatMessage>(`${this.apiUrl}/${chatMessage.idChatMessage}`, payload, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      })
+    }).pipe(
       catchError(this.handleError)
     );
   }
@@ -66,7 +131,7 @@ export class ChatMessageService {
     } else if (error.status) {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    console.error('API error:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
-  
 }

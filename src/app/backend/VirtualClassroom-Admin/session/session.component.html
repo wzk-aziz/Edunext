@@ -1,9 +1,15 @@
 <div class="session-container">
   <h2>Sessions Management</h2>
-<!--   <button (click)="debugFetchSessions()" style="margin: 10px; padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px;">
+ 
+ 
+<!--  <button (click)="debugFetchSessions()" style="margin: 10px; padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px;">
     Debug: Fetch Sessions
   </button>
--->  
+
+
+  <button (click)="debugSessionsWithRawData()" style="margin: 10px; padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 4px;">
+  Extract Sessions Data
+</button> -->
   <!-- Show loading indicator -->
   <div class="loading-indicator" *ngIf="loading">
     <p>Loading...</p>
@@ -13,6 +19,12 @@
   <div class="error-message" *ngIf="error">
     <p>{{ error }}</p>
   </div>
+
+  <!-- Add this after your error message div -->
+<div *ngIf="error && paginatedSessions && paginatedSessions.length > 0" class="warning-but-working">
+  <p>Warning: {{ error }}</p>
+  <p>However, some sessions were still loaded and are displayed below.</p>
+</div>
   
   <!-- Test API connection button 
  <button (click)="testAPI()">Test API Connection</button>-->
