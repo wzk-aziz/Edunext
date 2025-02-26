@@ -38,7 +38,7 @@
   
         <div class="form-group">
           <label for="answerOptions{{i}}">Options (séparées par des `;`)</label>
-          <input 
+       <!---->   <input 
             id="answerOptions{{i}}" 
             [(ngModel)]="question.answerOptions" 
             name="answerOptions{{i}}" 
@@ -49,9 +49,9 @@
         
       </div>
   
-      <!-- Bouton pour ajouter une nouvelle question -->
+      <!-- Bouton pour ajouter une nouvelle question 
       <button type="button" (click)="addQuestion()">Ajouter une question</button>
-  
+  -->
       <!-- Bouton de soumission -->
       <button type="submit">Modifier</button>
     </form>

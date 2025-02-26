@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -52,7 +52,15 @@ import { FormsModule } from '@angular/forms';
 import { ExamEditComponent } from './Teacher-Pages/teacherdashboard/exam-edit/exam-edit.component';
 import { CertifadmineditComponent } from './backend/certifadminedit/certifadminedit.component';
 import { ExamadmineditComponent } from './backend/examadminedit/examadminedit.component';
+import { ExamstudentComponent } from './Student-Pages/exam/examstudent/examstudent.component';
+import { ExamstudentdetailsComponent } from './Student-Pages/exam/examstudentdetails/examstudentdetails.component';
+import { ExamstudentsubmitComponent } from './Student-Pages/exam/examstudentsubmit/examstudentsubmit.component';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   declarations: [
     AppComponent,
@@ -102,15 +110,24 @@ import { ExamadmineditComponent } from './backend/examadminedit/examadminedit.co
     ExamFormComponent,
     ExamEditComponent,
     CertifadmineditComponent,
-    ExamadmineditComponent
+    ExamadmineditComponent,
+    ExamstudentComponent,
+    ExamstudentdetailsComponent,
+    ExamstudentsubmitComponent
    
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    BrowserAnimationsModule,
+    NgxPaginationModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]
 })

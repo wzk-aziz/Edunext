@@ -37,5 +37,16 @@ import { Question } from '../models/Question';
     console.log("URL de la requête PUT:", url);
     return this.http.put<Question>(url, question);
   }
+
+  getQuestions(idExam: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${idExam}/questions`);
+  }
+  
+  submitExam(examId: number, answers: { [key: number]: string }): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}/submit`, { examId, answers });
+  }
+  searchExams(title: string): Observable<exam[]> {
+    return this.http.get<exam[]>(`http://localhost:9090/api/exams/search?title=${title}`);
+  }
   
 }

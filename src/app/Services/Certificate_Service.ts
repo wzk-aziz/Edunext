@@ -39,6 +39,11 @@ export class CertificateService {
         })
       );
   }
+  downloadCertificate(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}`, {
+      responseType: 'blob' // Permet de récupérer un fichier
+    });
+  }
   
 
  // getCertificates(): Observable<Certificate[]> {

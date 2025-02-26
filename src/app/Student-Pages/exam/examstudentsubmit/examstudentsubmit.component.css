@@ -1,0 +1,65 @@
+.exam-container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .question-card {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .question-title {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .question-text {
+    margin-bottom: 10px;
+  }
+  
+  .option {
+    margin: 5px 0;
+  }
+  
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 5px;
+    transition: background 0.3s;
+  }
+  
+  .option-label:hover {
+    background: rgba(0, 123, 255, 0.1);
+    border-radius: 5px;
+  }
+  
+  input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .btn-submit {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .btn-submit:hover {
+    background: #0056b3;
+  }
+  

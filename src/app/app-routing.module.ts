@@ -27,6 +27,8 @@ import { ExamEditComponent } from './Teacher-Pages/teacherdashboard/exam-edit/ex
 import { ExamadmineditComponent } from './backend/examadminedit/examadminedit.component';
 import { CertifadmineditComponent } from './backend/certifadminedit/certifadminedit.component';
 import { CertificateComponent } from './Teacher-Pages/teacherdashboard/certificate/certificate.component';
+import { ExamstudentComponent } from './Student-Pages/exam/examstudent/examstudent.component';
+import { ExamstudentsubmitComponent } from './Student-Pages/exam/examstudentsubmit/examstudentsubmit.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -40,7 +42,8 @@ const routes: Routes = [
   { path: 'studentdashboard', component: MaindashboardComponent },
   { path: 'myplan', component: SubscriptionComponent },
   { path: 'editprofile', component: EditprofileComponent },
-
+  { path: 'examstudent', component: ExamstudentComponent },
+  { path: 'exam/:id', component: ExamstudentsubmitComponent },
   // Courses
   { path: 'coursesdashboard', component: MycoursesComponent },
   { path: 'courselist', component: CourseslistComponent },

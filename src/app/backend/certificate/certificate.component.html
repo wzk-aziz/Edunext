@@ -107,30 +107,81 @@
     <div class="main px-lg-4 px-md-4">
 
         
+        <h2 class="mb-4 fw-bold">Liste des certificats</h2>
+
+<!-- Champ de recherche -->
+<div class="mb-3">
+  <input 
+    type="text" 
+    class="form-control" 
+    [(ngModel)]="searchTerm" 
+    placeholder="Rechercher un certificat par titre ou nom" 
+    (input)="onSearchChange()" 
+  />
+</div>
+
+<!-- Liste des certificats sous forme de cartes -->
+<div class="row row-deck">
+  <div class="col-md-4" *ngFor="let cert of paginatedExams">
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="lesson_name">
+            <h6 class="mb-0 fw-bold fs-6 mb-2">{{ cert.title }}</h6>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <div >
+            recipientName :
+          </div>
+          <div class="flex-fill ms-2 text-truncate">
+            <div>{{ cert.recipientName }}</div>
+          </div>
+        </div>
+
+        <div class="dividers-block my-3"></div>
+
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="d-flex align-items-center">
+              <i class="icofont-calendar"></i>
+              <span class="ms-2">{{ cert.issueDate }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dividers-block my-3"></div>
+
+        <!-- Boutons d'actions -->
+        <div class="d-flex align-items-center justify-content-between">
+          <button class="btn btn-warning btn-sm" (click)="updateCertificate(cert)">
+            <i class="fas fa-edit"></i> Modifier
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteCertificate(cert.id!)">
+            <i class="fas fa-trash-alt"></i> Supprimer
+          </button>
+          <button class="btn btn-primary btn-sm" (click)="downloadCertificate(cert.id!)">
+            <i class="fas fa-download"></i> Télécharger PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-center mt-4">
+  <button class="btn btn-secondary me-2" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+    Précédent
+  </button>
+  <button class="btn btn-secondary" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
+    Suivant
+  </button>
+</div>
+
+       
           
-      <h2>Liste des certificats</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Issue Date</th>
-              <th>Recipient Name</th>
-              <th>Title</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let cert of certificates">
-              <td>{{ cert.issueDate }}</td>
-              <td>{{ cert.recipientName }}</td>
-              <td>{{ cert.title }}</td>
-              <td>
-                <button (click)="updateCertificate(cert)">Modifier</button>
-                <button (click)="deleteCertificate(cert.id!)">Supprimer</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        
 <!-- Formulaire de modification -->
 <div *ngIf="selectedCertificate">
   <h3>Modifier Certificat</h3>

@@ -1,0 +1,20 @@
+<div *ngIf="exam" class="exam-container">
+  <h2 class="text-center mb-4">{{ exam.examTitle }}</h2>
+  <form (ngSubmit)="submitExam()">
+    <div *ngFor="let question of exam.questions; let i = index" class="question-card">
+      <h5 class="question-title">Question {{ i + 1 }} :</h5>
+      <p class="question-text">{{ question.questionText }}</p>
+      <div *ngFor="let option of question.answerOptions" class="option">
+        <label class="option-label">
+          <input
+            type="radio"
+            [name]="'q' + question.id"
+            [value]="option"
+            (change)="selectAnswer(question.id, option)" />
+          {{ option }}
+        </label>
+      </div>
+    </div>
+    <button type="submit" class="btn-submit">Soumettre</button>
+  </form>
+</div>

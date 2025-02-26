@@ -1,0 +1,9 @@
+pagination-controls .pagination button {
+    font-size: 14px;  /* Adjust font size */
+    border-radius: 5px; /* Rounded corners */
+  }
+  
+  .pagination button {
+    padding: 3px 26px;
+  }
+  

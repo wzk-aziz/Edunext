@@ -1,22 +1,85 @@
-
-<h2>Créer un examen</h2>
-<form (ngSubmit)="onSubmit()">
-  <label for="title">Titre :</label>
-  <input id="title" [(ngModel)]="exam.examTitle" name="title" required>
-
-  <label for="description">Description :</label>
-  <textarea id="description" [(ngModel)]="exam.examDescription" name="description"></textarea>
-
-  <label for="duration">Durée (min) :</label>
-  <input id="duration" type="number" [(ngModel)]="exam.examDescription" name="duration" required>
-
-  <label for="scheduledDate">Date prévue :</label>
-  <input id="scheduledDate" type="datetime-local" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required>
-  <div *ngFor="let question of exam.questions; let i = index">
-    <input [(ngModel)]="question.questionText" [name]="'questionText' + i">
-    <input [(ngModel)]="question.answerOptions" [name]="'correctAnswer' + i">
-  </div>
+<main>
+  <section class="bg-dark align-items-center d-flex" style="background:url(/assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <h1 class="text-white">Create l'examen</h1>
+                  <div class="d-flex">
+                      <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
+                              <li class="breadcrumb-item"><a routerLink="/studenthome">Accueil</a></li>
+                              <li class="breadcrumb-item"><a routerLink="/examlist">Examens</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+                          </ol>
+                      </nav>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
   
-  <button type="button" (click)="addQuestion()">Ajouter Question</button>
-  <button type="submit">Créer</button>
-</form>
+  <section class="pb-0 py-sm-5">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-lg-8">
+                  <div class="card shadow p-4">
+                      <h2 class="text-center mb-4">Create l'examen</h2>
+                      <form #examForm="ngForm" (ngSubmit)="onSubmit()">
+                          <div class="mb-3">
+                              <label for="title" class="form-label">Titre :</label>
+                              <input id="title" type="text" class="form-control" [(ngModel)]="exam.examTitle" name="title" required #title="ngModel">
+                              <div *ngIf="title.invalid && title.touched" class="text-danger">Le titre est requis.</div>
+                          </div>
+
+                          <div class="mb-3">
+                              <label for="description" class="form-label">Description :</label>
+                              <textarea id="description" class="form-control" [(ngModel)]="exam.examDescription" name="description"></textarea>
+                          </div>
+
+                          <div class="mb-3">
+                              <label for="duration" class="form-label">Durée (min) :</label>
+                              <input id="duration" type="number" class="form-control" [(ngModel)]="exam.examDuration" name="duration" required min="1" #duration="ngModel">
+                              <div *ngIf="duration.invalid && duration.touched" class="text-danger">La durée doit être supérieure à 0.</div>
+                          </div>
+
+                          <div class="mb-3">
+                              <label for="scheduledDate" class="form-label">Date prévue :</label>
+                              <input id="scheduledDate" type="datetime-local" class="form-control" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required #scheduledDate="ngModel">
+                              <div *ngIf="scheduledDate.invalid && scheduledDate.touched" class="text-danger">La date est requise.</div>
+                          </div>
+
+                          <h4 class="mt-4">Questions</h4>
+                          <div *ngFor="let question of exam.questions; let i = index" class="border p-3 mb-3 rounded">
+                              <div class="mb-3">
+                                  <label for="questionText{{i}}" class="form-label">Question {{ i + 1 }}</label>
+                                  <input id="questionText{{i}}" class="form-control" [(ngModel)]="question.questionText" name="questionText{{i}}" required #questionText="ngModel">
+                                  <div *ngIf="questionText.invalid && questionText.touched" class="text-danger">La question est requise.</div>
+                              </div>
+
+                              <div class="mb-3">
+                                  <label for="answerOptions{{i}}" class="form-label">Réponse correcte :</label>
+                                  <input id="answerOptions{{i}}" class="form-control" [(ngModel)]="question.answerOptions" name="correctAnswer{{i}}" required #correctAnswer="ngModel">
+                                  <div *ngIf="correctAnswer.invalid && correctAnswer.touched" class="text-danger">La réponse est requise.</div>
+                              </div>
+                          </div>
+                          
+                          <button type="button" class="btn btn-success mb-3" (click)="addQuestion()">
+                              <i class="fas fa-plus"></i> Ajouter Question
+                          </button>
+                          
+                          <div class="text-center mt-4">
+                              <button type="submit" class="btn btn-primary me-2" [disabled]="examForm.invalid">
+                                  <i class="fas fa-save"></i> Modifier
+                              </button>
+                              <button type="button" class="btn btn-secondary" routerLink="/examlist">
+                                  <i class="fas fa-times"></i> Annuler
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+</main>
+
