@@ -1,43 +1,66 @@
-<div class="feedback-container">
-  <h2>Feedback List</h2>
-
-  <button (click)="showCreateForm = !showCreateForm" class="add-button">
-    {{ showCreateForm ? 'Cancel' : 'Add New Feedback' }}
-  </button>
-
-  <div *ngIf="showCreateForm" class="feedback-form">
-    <h3>Create New Feedback</h3>
-    <form (ngSubmit)="createFeedback()" #feedbackForm="ngForm">
-      <label for="content">Content:</label>
-      <input id="content" [(ngModel)]="newFeedback.content_feedback" name="content" required minlength="3" #content="ngModel">
-      <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error">
-        <div *ngIf="content.errors?.['required']">Content is required.</div>
-        <div *ngIf="content.errors?.['minlength']">Content must be at least 3 characters long.</div>
-      </div>
-
-      <label for="rating">Rating:</label>
-      <input id="rating" type="number" [(ngModel)]="newFeedback.rating" name="rating" required min="0" max="10" #rating="ngModel">
-      <div *ngIf="rating.invalid && (rating.dirty || rating.touched)" class="error">
-        <div *ngIf="rating.errors?.['required']">Rating is required.</div>
-        <div *ngIf="rating.errors?.['min']">Rating must be at least 0.</div>
-        <div *ngIf="rating.errors?.['max']">Rating cannot be more than 10.</div>
-      </div>
-
-      <label for="session">Session ID:</label>
-      <input id="session" type="number" [(ngModel)]="newFeedback.session_id" name="session" required min="1" #session="ngModel">
-      <div *ngIf="session.invalid && (session.dirty || session.touched)" class="error">
-        <div *ngIf="session.errors?.['required']">Session ID is required.</div>
-        <div *ngIf="session.errors?.['min']">Session ID must be at least 1.</div>
-      </div>
-
-      <button type="submit" [disabled]="feedbackForm.invalid">Create</button>
-    </form>
+<div class="container">
+  <h2>Feedback Management</h2>
+  
+  <!-- Debug button similar to session component -->
+<!-- Add this button near your other debug buttons -->
+<button (click)="testDirectFetch()" style="margin-right: 10px; padding: 8px 16px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">
+  Direct API Test
+</button>
+  
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="loading">
+    <p>Loading...</p>
   </div>
-
-  <div class="feedback-list">
-   
-    <input type="text" placeholder="Search feedbacks..." [(ngModel)]="searchTerm" (ngModelChange)="filterFeedbacks()" class="search-bar">
-    <table>
+  
+  <!-- Error message styled similar to session component -->
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+    <div style="margin-top: 10px;">
+      <button (click)="fetchFeedbacks()" style="margin-right: 10px; padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px;">Try Again</button>
+      <button (click)="testFeedbackAPI()" style="padding: 8px 16px; background-color: #17a2b8; color: white; border: none; border-radius: 4px;">Test API</button>
+    </div>
+  </div>
+  
+  <!-- Button to add a new feedback - styled like session button -->
+  <div class="add-session-container" *ngIf="showFeedbackList">
+    <button class="add-button" (click)="showAddFeedbackForm()">Add New Feedback</button>
+  </div>
+  
+  <!-- Feedback list with advanced filtering -->
+  <div class="feedback-list" *ngIf="showFeedbackList">
+    <!-- Filters container like in sessions -->
+    <div class="filters-container">
+      <div class="search-filter">
+        <input type="text" class="search-bar" placeholder="Search by content, rating..." 
+               [(ngModel)]="searchTerm" (input)="filterFeedbacks()">
+      </div>
+      
+      <div class="advanced-filters">
+        <details>
+          <summary>Advanced Filters</summary>
+          <div class="filter-options">
+            <div>
+              <label>Rating:</label>
+              <div class="range-filter">
+                <input type="number" [(ngModel)]="filters.minRating" placeholder="Min" min="1" max="5" (change)="filterFeedbacks()">
+                <span>to</span>
+                <input type="number" [(ngModel)]="filters.maxRating" placeholder="Max" min="1" max="5" (change)="filterFeedbacks()">
+              </div>
+            </div>
+            
+            <div>
+              <label>Session ID:</label>
+              <input type="number" [(ngModel)]="filters.sessionId" placeholder="Filter by session ID" (change)="filterFeedbacks()">
+            </div>
+            
+            <button class="btn-square btn-delete" (click)="clearFilters()">🗑️</button>
+          </div>
+        </details>
+      </div>
+    </div>
+  
+    <!-- Feedback table -->
+    <table *ngIf="filteredFeedbacks && filteredFeedbacks.length > 0">
       <thead>
         <tr>
           <th>ID</th>
@@ -48,47 +71,141 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let feedback of filteredFeedbacks">
-          <td>{{ feedback.id_feedback }}</td>
-          <td>{{ feedback.content_feedback }}</td>
-          <td>{{ feedback.rating }}</td>
-          <td>{{ feedback.session_id }}</td>
+        <tr *ngFor="let feedback of paginatedFeedbacks">
+          <td>{{ feedback.idFeedback }}</td>
+          <td>{{ feedback.contentFeedback }}</td>
           <td>
-            <button (click)="selectFeedback(feedback)">Edit</button>
-            <button (click)="deleteFeedback(feedback.id_feedback)">Delete</button>
+            <div class="star-rating">
+              <span *ngFor="let star of [1,2,3,4,5]">
+                <span [ngClass]="{'star-filled': star <= feedback.rating, 'star-empty': star > feedback.rating}">★</span>
+              </span>
+            </div>
+          </td>
+          <td>{{ getSessionId(feedback.session) }}</td>
+          <td>
+            <div class="button-container">
+              <button class="btn-square btn-edit" (click)="selectFeedbackForEdit(feedback)" title="Edit">✏️</button>
+              <button class="btn-square btn-delete" (click)="deleteFeedback(feedback.idFeedback)" title="Delete">🗑️</button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
+    
+    <!-- Pagination controls like in sessions -->
+    <div class="pagination-controls" *ngIf="filteredFeedbacks && filteredFeedbacks.length > 0">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to 
+        {{ Math.min(currentPage * pageSize, filteredFeedbacks.length) }} 
+        of {{ filteredFeedbacks.length }} feedbacks
+      </div>
+      
+      <div class="page-size">
+        <label>Items per page:</label>
+        <select [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+      
+      <div class="page-navigation">
+        <button [disabled]="currentPage === 1" (click)="prevPage()" class="btn-nav">
+          &laquo; Previous
+        </button>
+        <span class="page-indicator">{{ currentPage }} / {{ Math.ceil(filteredFeedbacks.length / pageSize) || 1 }}</span>
+        <button [disabled]="currentPage >= Math.ceil(filteredFeedbacks.length / pageSize)" (click)="nextPage()" class="btn-nav">
+          Next &raquo;
+        </button>
+      </div>
+    </div>
+    
+    <p *ngIf="!filteredFeedbacks || filteredFeedbacks.length === 0">No feedbacks found</p>
   </div>
-
-  <div *ngIf="selectedFeedback" class="feedback-edit">
-   
+  
+  <!-- Add feedback form styled like session form -->
+  <div class="session-form" *ngIf="showAddForm">
+    <h3>Add New Feedback</h3>
+    <form (ngSubmit)="createFeedback()" #feedbackForm="ngForm">
+      <div>
+        <label for="content">Feedback Content:</label>
+        <textarea id="content" [(ngModel)]="newFeedback.contentFeedback" name="content" required minlength="3" 
+                 #content="ngModel" rows="4" style="width: 100%; resize: vertical;"></textarea>
+        <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error">
+          <div *ngIf="content.errors?.['required']">Content is required.</div>
+          <div *ngIf="content.errors?.['minlength']">Content must be at least 3 characters long.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="rating">Rating (1-5):</label>
+        <div class="star-rating-input">
+          <span *ngFor="let star of [5,4,3,2,1]">
+            <input type="radio" [id]="'star'+star" name="rating" [value]="star" [(ngModel)]="newFeedback.rating">
+            <label [for]="'star'+star">★</label>
+          </span>
+        </div>
+        <input type="range" id="rating" [(ngModel)]="newFeedback.rating" name="rating" required min="1" max="5" step="1" #rating="ngModel">
+        <div *ngIf="rating.invalid && (rating.dirty || rating.touched)" class="error">
+          <div *ngIf="rating.errors?.['required']">Rating is required.</div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="session">Session ID:</label>
+        <input id="session" type="number" [(ngModel)]="newFeedback.session" name="session" required min="1" #session="ngModel">
+        <div *ngIf="session.invalid && (session.dirty || session.touched)" class="error">
+          <div *ngIf="session.errors?.['required']">Session ID is required.</div>
+          <div *ngIf="session.errors?.['min']">Please enter a valid Session ID.</div>
+        </div>
+      </div>
+      
+      <div class="form-buttons">
+        <button type="submit" class="btn-square btn-add" [disabled]="feedbackForm.invalid">Add</button>
+        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Edit feedback form styled like session form -->
+  <div class="session-edit" *ngIf="selectedFeedback">
+    <h3>Edit Feedback</h3>
     <form (ngSubmit)="updateFeedback()" #editFeedbackForm="ngForm">
-      <label for="edit-content">Content:</label>
-      <input id="edit-content" [(ngModel)]="selectedFeedback.content_feedback" name="editContent" required minlength="3" #editContent="ngModel">
-      <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched)" class="error">
-        <div *ngIf="editContent.errors?.['required']">Content is required.</div>
-        <div *ngIf="editContent.errors?.['minlength']">Content must be at least 3 characters long.</div>
+      <div>
+        <label for="edit-content">Feedback Content:</label>
+        <textarea id="edit-content" [(ngModel)]="selectedFeedback.contentFeedback" name="editContent" required minlength="3" 
+                 #editContent="ngModel" rows="4" style="width: 100%; resize: vertical;"></textarea>
+        <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched)" class="error">
+          <div *ngIf="editContent.errors?.['required']">Content is required.</div>
+          <div *ngIf="editContent.errors?.['minlength']">Content must be at least 3 characters long.</div>
+        </div>
       </div>
-
-      <label for="edit-rating">Rating:</label>
-      <input id="edit-rating" type="number" [(ngModel)]="selectedFeedback.rating" name="editRating" required min="1" max="5" #editRating="ngModel">
-      <div *ngIf="editRating.invalid && (editRating.dirty || editRating.touched)" class="error">
-        <div *ngIf="editRating.errors?.['required']">Rating is required.</div>
-        <div *ngIf="editRating.errors?.['min']">Rating must be at least 1.</div>
-        <div *ngIf="editRating.errors?.['max']">Rating cannot be more than 5.</div>
+      
+      <div>
+        <label for="edit-rating">Rating (1-5):</label>
+        <div class="star-rating-input">
+          <span *ngFor="let star of [5,4,3,2,1]">
+            <input type="radio" [id]="'edit-star'+star" name="editRating" [value]="star" [(ngModel)]="selectedFeedback.rating">
+            <label [for]="'edit-star'+star">★</label>
+          </span>
+        </div>
+        <input type="range" id="edit-rating" [(ngModel)]="selectedFeedback.rating" name="editRating" required min="1" max="5" step="1" #editRating="ngModel">
+        <div *ngIf="editRating.invalid && (editRating.dirty || editRating.touched)" class="error">
+          <div *ngIf="editRating.errors?.['required']">Rating is required.</div>
+        </div>
       </div>
-
-      <label for="edit-session">Session ID:</label>
-      <input id="edit-session" type="number" [(ngModel)]="selectedFeedback.session_id" name="editSession" required min="1" #editSession="ngModel">
-      <div *ngIf="editSession.invalid && (editSession.dirty || editSession.touched)" class="error">
-        <div *ngIf="editSession.errors?.['required']">Session ID is required.</div>
-        <div *ngIf="editSession.errors?.['min']">Session ID must be at least 1.</div>
+      
+      <div>
+        <label for="edit-session">Session ID:</label>
+        <input id="edit-session" type="number" [(ngModel)]="selectedFeedback.session" name="editSession" required min="1" #editSession="ngModel">
+        <div *ngIf="editSession.invalid && (editSession.dirty || editSession.touched)" class="error">
+          <div *ngIf="editSession.errors?.['required']">Session ID is required.</div>
+          <div *ngIf="editSession.errors?.['min']">Please enter a valid Session ID.</div>
+        </div>
       </div>
-
-      <button type="submit" [disabled]="editFeedbackForm.invalid">Update</button>
-      <button type="button" (click)="clearSelection()">Cancel</button>
+      
+      <div class="form-buttons">
+        <button type="submit" class="btn-square btn-edit" [disabled]="editFeedbackForm.invalid">✏️</button>
+        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+      </div>
     </form>
   </div>
 </div>

@@ -58,9 +58,28 @@ availableSubjects: string[] = [];
     this.startTimeString = this.formatDateForInput(now);
   }
 
-  ngOnInit(): void {
-    console.log('Component initialized');
-    this.fetchSessions();
+   ngOnInit(): void {
+    this.loading = true;
+    this.error = null;
+    
+    
+    this.sessionService.getSessions().subscribe({
+      next: (data) => {
+        console.log('Received sessions:', data);
+        this.sessions = data;
+        this.filteredSessions = [...this.sessions];
+        this.paginate();
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load sessions:', error);
+        this.error = 'Failed to load sessions. Please try again.';
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 
   // Helper method to format date for datetime-local input
@@ -82,8 +101,6 @@ fetchSessions() {
   this.sessionService.getSessions().subscribe({
     next: (data: Session[]) => {
       console.log('Sessions received:', data);
-
-  
       
       // Ensure data is an array
       if (!Array.isArray(data)) {
@@ -266,28 +283,30 @@ changePageSize(size: number) {
     };
   }
 
+  // Replace your addSession method with this:
   addSession() {
     this.loading = true;
     this.error = null;
     
-    // Create a MINIMAL object exactly like debugAdd() does
-    const minimalSession = {
+    // Create a session object with proper structure for your backend
+    const sessionToAdd = {
       titleSession: this.newSession.titleSession,
       sessionDuration: this.newSession.sessionDuration || 30,
       startTime: this.startTimeString ? new Date(this.startTimeString).toISOString() : new Date().toISOString(),
-      sessionSubject: this.newSession.sessionSubject
-      // Don't include instructor or other fields unless necessary
+      sessionSubject: this.newSession.sessionSubject,
+      instructor: this.newSession.instructor ? { id: this.newSession.instructor } : null
     };
     
-    console.log('Adding session with minimal data:', minimalSession);
+    console.log('Adding session with data:', sessionToAdd);
     
-    // Use direct fetch like debugAdd() does since it's more reliable
+    // Use fetch directly for more control over headers
     fetch('http://localhost:8088/api/sessions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
-      body: JSON.stringify(minimalSession)
+      body: JSON.stringify(sessionToAdd)
     })
     .then(response => {
       console.log('Add response status:', response.status);
@@ -303,6 +322,7 @@ changePageSize(size: number) {
       console.log('Add successful, response:', data);
       this.sessions.push(data);
       this.filteredSessions = [...this.sessions];
+      this.paginate(); 
       this.resetForm();
       this.loading = false;
       alert('Session added successfully!');
@@ -587,6 +607,26 @@ checkApiSchema() {
     });
 }
 
+debugFetchSessions() {
+  console.log('Debug fetch sessions called');
+  this.loading = true;
+  
+  // Use fetch API directly to test endpoint
+  fetch('http://localhost:8088/api/sessions/all')
+    .then(response => response.json())
+    .then(data => {
+      console.log('Sessions directly from API:', data);
+      this.sessions = data || [];
+      this.filteredSessions = [...this.sessions];
+      this.paginate();
+      this.loading = false;
+    })
+    .catch(error => {
+      console.error('Error fetching sessions directly:', error);
+      this.loading = false;
+      this.error = 'Failed to fetch sessions: ' + error.message;
+    });
+}
 
 
 }

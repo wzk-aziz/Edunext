@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap, finalize } from 'rxjs/operators';
+import { Observable, throwError, of } from 'rxjs';
+import { catchError, tap, map } from 'rxjs/operators';
 import { Session } from '../session/session.model';
 
 @Injectable({
@@ -12,7 +12,58 @@ export class SessionService {
 
   constructor(private http: HttpClient) {}
 
+  getSessions(): Observable<Session[]> {
+    console.log('Fetching sessions from:', `${this.apiUrl}/all`);
+    
+    // Use responseType 'text' to handle circular reference issues in JSON
+    return this.http.get(`${this.apiUrl}/all`, { 
+      responseType: 'text',
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      })
+    }).pipe(
+      map(rawResponse => {
+        console.log('Raw response first 100 chars:', rawResponse.substring(0, 100) + '...');
+        try {
+          // First attempt to parse as-is
+          return JSON.parse(rawResponse);
+        } catch (e) {
+          console.error('Failed to parse JSON response:', e);
+          
+          // Try to clean the response before parsing
+          const cleanedResponse = this.cleanJsonResponse(rawResponse);
+          
+          try {
+            return JSON.parse(cleanedResponse);
+          } catch (e2) {
+            console.error('Failed to parse cleaned JSON:', e2);
+            return [];
+          }
+        }
+      }),
+      tap(data => console.log('Sessions fetched (parsed):', data.length, 'sessions')),
+      catchError(error => {
+        console.error('Error fetching sessions:', error);
+        return of([]);
+      })
+    );
+  }
 
+  // Helper method to clean circular JSON references
+  private cleanJsonResponse(rawJson: string): string {
+    console.log('Cleaning JSON response...');
+    
+    // Fix common circular reference patterns
+    let cleaned = rawJson
+      .replace(/,"feedbacks":\[.*?\]/g, '') // Remove feedbacks arrays
+      .replace(/,"session":\{[^{}]*\}/g, '') // Remove session objects
+      .replace(/,"session":}/g, '}') // Fix dangling session references
+      .replace(/\}\]\}\}\]\}\}/g, '}]}]}]'); // Fix unclosed brackets
+    
+    console.log('Cleaned JSON first 100 chars:', cleaned.substring(0, 100) + '...');
+    return cleaned;
+  }
 
   getSession(id: number): Observable<Session> {
     return this.http.get<Session>(`${this.apiUrl}/${id}`).pipe(
@@ -83,39 +134,5 @@ export class SessionService {
     }
     console.error('HTTP Error:', errorMessage);
     return throwError(() => new Error(errorMessage));
-  }
-
-
-  getSessions(): Observable<Session[]> {
-    console.log('Calling API:', `${this.apiUrl}/all`);
-    
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-  
-    // Try first with /all endpoint
-    return this.http.get<Session[]>(`${this.apiUrl}/all`, { headers })
-      .pipe(
-        tap(data => {
-          if (data) {
-            console.log('Received data:', data);
-            console.log('Data length:', Array.isArray(data) ? data.length : 'Not an array');
-          } else {
-            console.log('Received empty or null response');
-          }
-        }),
-        catchError((error) => {
-          console.error('Error with /all endpoint:', error);
-          
-          // If first endpoint fails, try without /all
-          console.log('Trying alternative endpoint without /all');
-          return this.http.get<Session[]>(this.apiUrl, { headers }).pipe(
-            tap(data => console.log('Alternative endpoint data:', data)),
-            catchError(this.handleError)
-          );
-        }),
-        finalize(() => console.log('API call completed'))
-      );
   }
 }

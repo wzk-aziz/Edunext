@@ -1,6 +1,6 @@
 export interface Feedback {
-    id_feedback: number;
-    content_feedback: string;
-    rating: number;
-    session_id: number;
-  }
+  idFeedback?: number;
+  contentFeedback: string;
+  rating: number;
+  session: number | { idSession: number };
+}
