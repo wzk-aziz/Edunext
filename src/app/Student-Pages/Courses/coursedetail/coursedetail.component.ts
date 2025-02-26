@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { CourseService } from 'src/app/backend/courses/Services/course.service';
 import { Course } from 'src/app/model/course.model';
+import { Lecture } from 'src/app/model/Lecture.model';
+import { LectureService } from 'src/app/backend/courses/Services/lecture.service';
 
 @Component({
   selector: 'app-coursedetail',
@@ -11,41 +13,51 @@ import { Course } from 'src/app/model/course.model';
 })
 export class CoursedetailComponent implements OnInit {
   course!: Course;
+  lectures: Lecture[] = [];
   courseId!: number;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private courseService: CourseService,
+    private lectureService: LectureService,
+    private router: Router,
     private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
-    // Extract the course id from the route
     this.courseId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadCourseDetails();
+    this.loadCourse();
+    this.loadLectures();
   }
 
-  loadCourseDetails(): void {
+  loadCourse(): void {
     this.courseService.getCourseById(this.courseId).subscribe({
-      next: (course) => {
-        this.course = course;
-        console.log('Course loaded:', course);
-      },
-      error: (err) => console.error('Error loading course details:', err)
+      next: (course) => this.course = course,
+      error: (err) => console.error('Error loading course:', err)
     });
   }
 
-  participate(): void {
-    // Navigate to a course player route or enrollment page.
-    this.router.navigate(['/course-player', this.courseId]);
+  loadLectures(): void {
+    this.lectureService.getLecturesByCourseId(this.courseId).subscribe({
+      next: (lectures) => this.lectures = lectures.sort((a, b) => a.lectureOrder - b.lectureOrder),
+      error: (err) => console.error('Error loading lectures:', err)
+    });
   }
 
-  getSafePdfUrl(pdfData: string): SafeResourceUrl {
-    const dataUrl = `data:application/pdf;base64,${pdfData}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
+  getThumbnailUrl(): SafeUrl {
+    if (this.course.thumbnailData) {
+      return this.sanitizer.bypassSecurityTrustUrl(`data:image/png;base64,${this.course.thumbnailData}`);
+    }
+    return '';
+  }
+  
+
+  enrollCourse(): void {
+    // Navigate to a course player or enrollment page.
+    this.router.navigate(['/coursepage', this.courseId]);
   }
 
+  // Helper method to display a friendly course level label.
   getCourseLevelText(course: Course): string {
     switch (course.courseLevel) {
       case 'ALL_LEVELS': return 'All Levels';
@@ -56,30 +68,4 @@ export class CoursedetailComponent implements OnInit {
     }
   }
 
-  getPackTypeText(course: Course): string {
-    switch (course.packType) {
-      case 'COPPER': return 'Copper';
-      case 'BRONZE': return 'Bronze';
-      case 'SILVER': return 'Silver';
-      case 'GOLD': return 'Gold';
-      default: return 'Unknown';
-    }
-  }
-
-  getCategoryBadgeClass(course: Course): string {
-    if (!course.category || !course.category.name) {
-      return 'badge bg-secondary';
-    }
-    const catName = course.category.name.toLowerCase();
-    if (catName.includes('development')) {
-      return 'badge bg-primary';
-    } else if (catName.includes('business')) {
-      return 'badge bg-success';
-    } else if (catName.includes('design')) {
-      return 'badge bg-info';
-    } else if (catName.includes('marketing')) {
-      return 'badge bg-warning';
-    }
-    return 'badge bg-secondary';
-  }
 }

@@ -121,29 +121,16 @@
                   <li class="list-inline-item h6 fw-light mb-1 mb-sm-0">
                     <i class="fas fa-table text-orange me-2"></i>{{ course.numberOfLectures }} lectures
                   </li>
-                <li class="list-inline-item h6 fw-light">
-                  <i [ngClass]="{
-                        'fas fa-signal text-info me-2': course.courseLevel === 'BEGINNER',
-                        'fas fa-signal text-warning me-2': course.courseLevel === 'INTERMEDIATE',
-                        'fas fa-signal text-danger me-2': course.courseLevel === 'ADVANCED',
-                        'fas fa-signal text-success me-2': course.courseLevel === 'ALL_LEVELS'
-                      }"></i>
-                  {{ getCourseLevelText(course) }}
-                </li>
+                  <li class="list-inline-item h6 fw-light">
+                    <i [ngClass]="getSignalClass(course)"></i>
+                    {{ getCourseLevelText(course) }}
+                  </li>
+                  
+                  
               </ul>
   
               <!-- Instructor & View Button -->
               <div class="d-sm-flex justify-content-sm-between align-items-center">
-                <div class="d-flex align-items-center">
-                  <div class="avatar">
-                    <img class="avatar-img rounded-circle" 
-                         src="/assets/images/avatar/06.jpg" 
-                         alt="Instructor">
-                  </div>
-                  <p class="mb-0 ms-2">
-                    <a href="#" class="h6 fw-light">Jacqueline Miller</a>
-                  </p>
-                </div>
                 <div class="mt-3 mt-sm-0">
                   <a [routerLink]="['/coursedetail', course.id]" class="btn btn-dark">View more</a>
                 </div>
@@ -222,6 +209,7 @@
                                                 <input type="radio" class="btn-check" name="options" id="option3">
                                                 <label class="btn btn-light btn-primary-soft-check" for="option3">Paid</label>
                                             </li>
+                                           
                                         </ul>
                                     </div>
                                     <!-- Price END -->

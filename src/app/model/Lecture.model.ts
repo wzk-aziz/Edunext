@@ -12,5 +12,7 @@ export interface Lecture {
     videoType?: string;
     // Relation to course: store just the course ID
     courseId?: number;
+
+    course?: { id: number; courseName?: string; /* ... other course fields */ };
   }
   

@@ -1,0 +1,52 @@
+<div class="container my-5" *ngIf="course">
+    <!-- Course Header -->
+    <div class="row align-items-center mb-5">
+      <!-- Course Info -->
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold text-primary animate__animated animate__fadeInLeft">
+          {{ course.courseName }}
+        </h1>
+        <p class="lead text-muted animate__animated animate__fadeInLeft animate__delay-1s">
+          {{ course.courseDescription }}
+        </p>
+        <ul class="list-inline">
+          <li class="list-inline-item me-3">
+            <strong>Level:</strong> {{ getCourseLevelText(course) }}
+          </li>
+          <li class="list-inline-item me-3">
+            <strong>Duration:</strong> {{ course.duration }} hrs
+          </li>
+          <li class="list-inline-item">
+            <strong>Trophies:</strong>
+            <i class="fas fa-trophy text-warning me-1"></i> {{ course.pointsEarned }}
+          </li>
+        </ul>
+        <button class="btn btn-success btn-lg mt-3 animate__animated animate__fadeInUp" (click)="enrollCourse()">
+          Get Course
+        </button>
+      </div>
+      <!-- Course Image -->
+      <div class="col-lg-4 text-center">
+        <img [src]="getThumbnailUrl()" alt="{{ course.courseName }}"
+             class="img-fluid rounded shadow-lg course-img-hover animate__animated animate__zoomIn">
+      </div>
+    </div>
+  
+    <hr class="my-5">
+  
+    <!-- Lectures List -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <h3 class="mb-3 animate__animated animate__fadeInUp">Course Lectures</h3>
+        <ul class="list-group animate__animated animate__fadeInUp animate__delay-1s">
+          <li *ngFor="let lecture of lectures" class="list-group-item d-flex justify-content-between align-items-center lecture-item">
+            <span>
+              <strong>{{ lecture.lectureOrder }}.</strong> {{ lecture.lectureTitle }}
+            </span>
+            <span class="badge bg-secondary">Lecture</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

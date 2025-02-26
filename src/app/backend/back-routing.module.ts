@@ -20,6 +20,12 @@ import { CourseUpdateComponent } from './courses/course-update/course-update.com
 import { LectureCreationFromComponent } from './courses/Lecture/lecture-creation-from/lecture-creation-from.component';
 import { ViewlectureComponent } from './courses/Lecture/viewlecture/viewlecture.component';
 import { LectureupdateComponent } from './courses/Lecture/lectureupdate/lectureupdate.component';
+import { QuizCreationFormComponent } from './courses/Quiz/quiz-creation-form/quiz-creation-form.component';
+import { QuizQuestionsComponent } from './courses/Quiz/quiz-questions/quiz-questions.component';
+import { ViewQuizesComponent } from './courses/Quiz/view-quizes/view-quizes.component';
+import { ViewquestionsComponent } from './courses/Quiz/viewquestions/viewquestions.component';
+import { EditquizComponent } from './courses/Quiz/editquiz/editquiz.component';
+import { EditquestionsComponent } from './courses/Quiz/editquestions/editquestions.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -42,7 +48,12 @@ const routes: Routes = [
     { path: 'lecture-create/:courseId', component: LectureCreationFromComponent },
     { path: 'view-lectures', component: ViewlectureComponent },
     { path: 'lecture-update/:courseId/:lectureId', component: LectureupdateComponent }, 
-
+    {path:'create-quiz',component:QuizCreationFormComponent},
+    { path: 'quiz-questions/:quizId', component: QuizQuestionsComponent },
+    { path: 'view-quizes', component: ViewQuizesComponent },
+    { path: 'view-questions/:quizId', component: ViewquestionsComponent },
+    { path: 'edit-question/:questionId', component: EditquestionsComponent },
+    { path: 'edit-quiz/:quizId', component: EditquizComponent },
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

@@ -12,7 +12,7 @@ import { EditprofileComponent } from './Student-Pages/Dashboard/editprofile/edit
 import { CourseslistComponent } from './Student-Pages/Courses/courseslist/courseslist.component';
 import { CoursedetailComponent } from './Student-Pages/Courses/coursedetail/coursedetail.component';
 import { CoursepageComponent } from './Student-Pages/Courses/coursepage/coursepage.component';
-import { CoursequizesComponent } from './Student-Pages/Courses/Quiz/coursequizes/coursequizes.component';
+
 import { EmptypageComponent } from './Student-Pages/emptypage/emptypage.component';
 import { TeacherlandingpageComponent } from './Teacher-Pages/sharedforteacher/teacherlandingpage/teacherlandingpage.component';
 import { TeachercoursesComponent } from './Teacher-Pages/teacherdashboard/teachercourses/teachercourses.component';
@@ -21,6 +21,9 @@ import { StudentslistComponent } from './Teacher-Pages/teacherdashboard/students
 import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tutoringsessions/tutoringsessions.component';
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
 import { BackRoutingModule } from './backend/back-routing.module'; // Import the new module
+import { StudentQuizzesComponent } from './Student-Pages/Courses/Quiz/student-quizzes/student-quizzes.component';
+import { TakeQuizComponent } from './Student-Pages/Courses/Quiz/take-quiz/take-quiz.component';
+import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/quiz-results.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -39,10 +42,11 @@ const routes: Routes = [
   { path: 'coursesdashboard', component: MycoursesComponent },
   { path: 'courselist', component: CourseslistComponent },
   { path: 'coursedetail/:id', component: CoursedetailComponent },
-
-  { path: 'coursepage', component: CoursepageComponent },
-  { path: 'coursequiz', component: CoursequizesComponent },
-
+  {path: 'coursepage/:id', component: CoursepageComponent},
+//quizes
+{ path: 'student-quizzes', component: StudentQuizzesComponent },
+{ path: 'take-quiz/:quizId', component: TakeQuizComponent },
+{ path: 'quiz-results/:quizId', component: QuizResultsComponent },
   // Empty Pages
   { path: 'empty', component: EmptypageComponent },
   { path: 'emptyteacher', component: EmptypageteacherComponent },

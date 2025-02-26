@@ -112,5 +112,23 @@ export class CourseslistComponent implements OnInit {
     }
     return 'badge bg-secondary';
   }
+
+  getSignalClass(course: Course): string {
+    const level = (course.courseLevel || '').trim().toUpperCase();
+    switch(level) {
+      case 'BEGINNER':
+        return 'fas fa-signal text-info me-2';
+      case 'INTERMEDIATE':
+        return 'fas fa-signal text-warning me-2';
+      case 'ADVANCED':
+        return 'fas fa-signal text-danger me-2';
+      case 'ALL_LEVELS':
+        return 'fas fa-signal text-success me-2';
+      default:
+        return 'fas fa-signal text-secondary me-2';
+    }
+  }
+  
+  
  
 }

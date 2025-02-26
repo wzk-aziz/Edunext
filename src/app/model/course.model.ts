@@ -45,4 +45,6 @@ export interface Course {
 
   // Relation avec Lecture : liste des leçons du cours (première option)
   lectures?: Lecture[];
+
+  
 }

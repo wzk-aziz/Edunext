@@ -1,4 +1,3 @@
-import { GlobalAlertComponent } from './../../../../global-alert/global-alert.component';
 import { Component, OnInit } from '@angular/core';
 import { Course } from 'src/app/model/course.model';
 import { Lecture } from 'src/app/model/Lecture.model';
@@ -14,21 +13,19 @@ import { GlobalAlertService } from 'src/app/Service/global-alert.service';
 })
 export class ViewlectureComponent implements OnInit {
   courses: Course[] = [];
-  lectures: Lecture[] = [];
+  // Dictionary to hold lectures for each course: key is course id, value is array of lectures
+  lecturesByCourse: { [courseId: number]: Lecture[] } = {};
   page: number = 1;
-  courseId: number | undefined;
-  lectureId: number | undefined;
 
   constructor(
     private lectureService: LectureService,
     private courseService: CourseService,
     private route: ActivatedRoute,
-    private router: Router, // Inject the Router service
+    private router: Router,
     private globalAlertService: GlobalAlertService
   ) {}
 
   ngOnInit(): void {
-    this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
     this.loadAllCourses();
   }
 
@@ -36,23 +33,19 @@ export class ViewlectureComponent implements OnInit {
     // Fetch all courses
     this.courseService.getAllCourses().subscribe(courses => {
       this.courses = courses;
-      this.loadLecturesForAllCourses(); // After loading all courses, load lectures for them
-    });
-  }
-
-  loadLecturesForAllCourses(): void {
-    this.courses.forEach(course => {
-      this.lectureService.getLecturesByCourseId(course.id!).subscribe(lectures => {
-        this.lectures.push(...lectures);
-        this.lectures.sort((a, b) => a.lectureOrder - b.lectureOrder); // Sort lectures after adding them
+      // For each course, fetch its lectures and store them in the dictionary
+      courses.forEach(course => {
+        this.lectureService.getLecturesByCourseId(course.id!).subscribe(lectures => {
+          // Sort lectures by lectureOrder before storing
+          this.lecturesByCourse[course.id!] = lectures.sort((a, b) => a.lectureOrder - b.lectureOrder);
+        });
       });
     });
   }
-  
 
-  getSortedLectures(): Lecture[] {
-    // Sort lectures by the lectureOrder
-    return this.lectures.sort((a, b) => a.lectureOrder - b.lectureOrder);
+  // Helper to get lectures for a specific course
+  getLecturesForCourse(course: Course): Lecture[] {
+    return this.lecturesByCourse[course.id!] || [];
   }
 
   downloadFile(fileData: string | undefined, fileName: string | undefined): void {
@@ -70,42 +63,51 @@ export class ViewlectureComponent implements OnInit {
     a.click();
     window.URL.revokeObjectURL(url);
   }
-  isMenuOpen = false;
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-  isTeacherMenuOpen = false;
-  toggleTeacherMenu() {
-    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
-  }
-   // Handle delete of a lecture
-   deleteLecture(lectureId: number | undefined): void {
+  // Handle delete of a lecture using the global alert's confirm method
+  deleteLecture(lectureId: number | undefined): void {
     if (lectureId === undefined) {
       this.globalAlertService.showAlert('Invalid lecture ID!', 'Delete Error');
       return;
     }
-    if (confirm('Are you sure you want to delete this lecture?')) {
-      this.lectureService.deleteLecture(lectureId).subscribe({
-        next: () => {
-          alert('Lecture deleted successfully');
-          this.loadAllCourses(); // Reload lectures after deletion
-        },
-        error: (err) => {
-          console.error('Error deleting lecture:', err);
-          alert('Error deleting lecture');
-        }
-      });
-    }
+    this.globalAlertService.showConfirm(
+      'Are you sure you want to delete this lecture?',
+      () => {
+        // On Confirm
+        this.lectureService.deleteLecture(lectureId).subscribe({
+          next: () => {
+            this.globalAlertService.showAlert('Lecture deleted successfully', 'Success');
+            this.loadAllCourses(); // Reload courses and lectures after deletion
+          },
+          error: (err) => {
+            console.error('Error deleting lecture:', err);
+            this.globalAlertService.showAlert('Error deleting lecture', 'Error');
+          }
+        });
+      },
+      () => {
+        // On Cancel: Do nothing.
+      },
+      'Confirm Delete'
+    );
   }
 
-   // Handle edit of a lecture
-   editLecture(lectureId: number | undefined): void {
-    if (lectureId === undefined || this.courseId === undefined) {
-      this.globalAlertService.showAlert('Invalid lecture or course ID!', 'Edit Error');
+  // Handle edit of a lecture
+  editLecture(lectureId: number | undefined, courseId: number): void {
+    if (lectureId === undefined) {
+      this.globalAlertService.showAlert('Invalid lecture ID!', 'Edit Error');
       return;
     }
-    // Navigate to the edit lecture page, passing the lectureId
-    this.router.navigate([`/backoffice/lecture-update`, this.courseId, lectureId]);
+    this.router.navigate([`/backoffice/lecture-update`, courseId, lectureId]);
+  }
+
+  isMenuOpen = false;
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  
+  isTeacherMenuOpen = false;
+  toggleTeacherMenu(): void {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
   }
 }

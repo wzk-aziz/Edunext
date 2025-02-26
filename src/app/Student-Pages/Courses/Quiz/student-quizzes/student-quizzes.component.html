@@ -1,0 +1,32 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Available Quizzes</h2>
+  
+    <div *ngIf="loading" class="alert alert-info">Loading quizzes...</div>
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  
+    <table *ngIf="quizzes.length > 0" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Time Limit</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let quiz of quizzes">
+          <td>{{ quiz.title }}</td>
+          <td>{{ quiz.description }}</td>
+          <td>{{ quiz.timeLimit }} min</td>
+          <td>
+            <button class="btn btn-success btn-sm" (click)="startQuiz(quiz.id!)">Start Quiz</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="quizzes.length === 0 && !loading" class="alert alert-warning">
+      No quizzes available.
+    </div>
+  </div>
+  

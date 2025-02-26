@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Quiz Results</h2>
+  <p>Your Score: <strong>{{ studentScore }} / {{ totalPoints }}</strong></p>
+
+  <div class="card mt-4" *ngFor="let question of questions; let i = index">
+    <div class="card-body">
+      <h5 class="card-title">Q{{ i + 1 }}: {{ question.questionText }}</h5>
+      
+      <p><strong>Your Answer:</strong> {{ studentAnswers[i] }}</p>
+
+      <div *ngIf="!isCorrect(i)" class="alert alert-danger">
+        <p><strong>Correct Answer:</strong> {{ question.correctAnswers.join(', ') }}</p>
+        <p><strong>Explanation:</strong> {{ question.explanation }}</p>
+        <p><strong>Points Earned:</strong> 0 / {{ question.points }}</p>
+      </div>
+
+      <div *ngIf="isCorrect(i)" class="alert alert-success">
+        <p><strong>Correct!</strong> Well done.</p>
+        <p><strong>Points Earned:</strong> {{ question.points }} / {{ question.points }}</p>
+      </div>
+    </div>
+  </div>
+
+  <a routerLink="/student-quizzes" class="btn btn-primary mt-3">Back to Quizzes</a>
+</div>

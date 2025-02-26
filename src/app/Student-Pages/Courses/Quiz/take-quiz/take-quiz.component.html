@@ -1,0 +1,24 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Take Quiz</h2>
+
+  <div class="alert alert-info">
+    <strong>Time Left: {{ formatTimeLeft(timeLeft) }}</strong>
+  </div>
+
+  <div *ngIf="loading" class="alert alert-info">Loading questions...</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <form [formGroup]="quizForm" (ngSubmit)="submitQuiz()">
+    <div formArrayName="answers">
+      <div *ngFor="let question of questions; let i = index" class="mb-4">
+        <h5>{{ question.questionText }}</h5>
+        <div *ngFor="let option of question.answerOptions; let j = index">
+          <input type="radio" [formControlName]="i.toString()" [value]="option" [id]="'q' + i + 'o' + j">
+          <label [for]="'q' + i + 'o' + j">{{ option }}</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Quiz</button>
+  </form>
+</div>

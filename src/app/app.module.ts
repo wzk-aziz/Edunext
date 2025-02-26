@@ -19,8 +19,6 @@ import { MycoursesComponent } from './Student-Pages/Dashboard/mycourses/mycourse
 import { EditprofileComponent } from './Student-Pages/Dashboard/editprofile/editprofile.component';
 import { HeaderteacherComponent } from './Teacher-Pages/sharedforteacher/headerteacher/headerteacher.component';
 import { FooterteacherComponent } from './Teacher-Pages/sharedforteacher/footerteacher/footerteacher.component';
-import { CoursequizesComponent } from './Student-Pages/Courses/Quiz/coursequizes/coursequizes.component';
-import { StandalonequizesComponent } from './Student-Pages/Courses/Quiz/standalonequizes/standalonequizes.component';
 import { EmptypageComponent } from './Student-Pages/emptypage/emptypage.component';
 import { TeacherlandingpageComponent } from './Teacher-Pages/sharedforteacher/teacherlandingpage/teacherlandingpage.component';
 import { TeachercoursesComponent } from './Teacher-Pages/teacherdashboard/teachercourses/teachercourses.component';
@@ -45,7 +43,7 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CourseFormComponent } from './backend/courses/course-form/course-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CourseUpdateComponent } from './backend/courses/course-update/course-update.component';
 import { CoursesListComponent } from './backend/courses/course-list/course-list.component';
@@ -56,6 +54,15 @@ import { LectureCreationFromComponent } from './backend/courses/Lecture/lecture-
 import { ViewlectureComponent } from './backend/courses/Lecture/viewlecture/viewlecture.component';
 import { CommonModule } from '@angular/common';
 import { LectureupdateComponent } from './backend/courses/Lecture/lectureupdate/lectureupdate.component';
+import { QuizCreationFormComponent } from './backend/courses/Quiz/quiz-creation-form/quiz-creation-form.component';
+import { QuizQuestionsComponent } from './backend/courses/Quiz/quiz-questions/quiz-questions.component';
+import { ViewQuizesComponent } from './backend/courses/Quiz/view-quizes/view-quizes.component';
+import { EditquizComponent } from './backend/courses/Quiz/editquiz/editquiz.component';
+import { EditquestionsComponent } from './backend/courses/Quiz/editquestions/editquestions.component';
+import { ViewquestionsComponent } from './backend/courses/Quiz/viewquestions/viewquestions.component';
+import { StudentQuizzesComponent } from './Student-Pages/Courses/Quiz/student-quizzes/student-quizzes.component';
+import { TakeQuizComponent } from './Student-Pages/Courses/Quiz/take-quiz/take-quiz.component';
+import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/quiz-results.component';
 
 
 @NgModule({
@@ -77,8 +84,6 @@ import { LectureupdateComponent } from './backend/courses/Lecture/lectureupdate/
     EditprofileComponent,
     HeaderteacherComponent,
     FooterteacherComponent,
-    CoursequizesComponent,
-    StandalonequizesComponent,
     EmptypageComponent,
     TeacherlandingpageComponent,
     TeachercoursesComponent,
@@ -105,10 +110,19 @@ import { LectureupdateComponent } from './backend/courses/Lecture/lectureupdate/
     CourseFormComponent,
     CourseUpdateComponent,
     CoursesListComponent,
-   GlobalAlertComponent,
-   LectureCreationFromComponent,
-   ViewlectureComponent,
-   LectureupdateComponent
+    GlobalAlertComponent,
+    LectureCreationFromComponent,
+    ViewlectureComponent,
+    LectureupdateComponent,
+    QuizCreationFormComponent,
+    QuizQuestionsComponent,
+    ViewQuizesComponent,
+    EditquizComponent,
+    EditquestionsComponent,
+    ViewquestionsComponent,
+    StudentQuizzesComponent,
+    TakeQuizComponent,
+    QuizResultsComponent,
   ],
   imports: [
     BrowserModule,
@@ -118,7 +132,8 @@ import { LectureupdateComponent } from './backend/courses/Lecture/lectureupdate/
     RouterModule,
     NgxPaginationModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+   
   ],
   providers: [],
   bootstrap: [AppComponent]

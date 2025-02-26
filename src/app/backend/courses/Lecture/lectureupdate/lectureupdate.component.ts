@@ -89,7 +89,7 @@ export class LectureupdateComponent {
     this.lectureService.updateLecture(this.lectureId, formData).subscribe({
       next: () => {
         this.alertService.showAlert('Lecture updated successfully', 'Success');
-        this.router.navigate([`/backoffice/course-detail/${this.courseId}`]); // Redirect to course detail
+        this.router.navigate([`/backoffice/view-lectures`]); // Redirect to course detail
       },
       error: (err) => {
         console.error('Error updating lecture:', err);
