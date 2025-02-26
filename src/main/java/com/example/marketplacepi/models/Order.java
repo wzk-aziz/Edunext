@@ -23,6 +23,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String sessionId;  // Identifiant unique pour le panier
     private String orderDescription;
 
@@ -41,6 +42,7 @@ public class Order {
     private Long discount;
 
     private UUID trackingId;
+
 
 
     @OneToOne(cascade = CascadeType.MERGE)

@@ -49,5 +49,16 @@ public class WishlistServiceImpl implements WishlistService{
 		return wishlist.stream().map(Wishlist::getWishlistDto).collect(Collectors.toList());
 	}
 
+	public boolean removeProductFromWishlist(Long wishlistId) {
+		log.info("Deleting product with ID: {}", wishlistId);
+		Optional<Wishlist> wishlistItem = wishlistRepository.findById(wishlistId);
+		if (wishlistItem.isPresent()) {
+			wishlistRepository.deleteById(wishlistId);
+			return true;
+		}
+		return false;
+	}
+
+
 
 }

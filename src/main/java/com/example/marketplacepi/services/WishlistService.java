@@ -8,4 +8,5 @@ public interface WishlistService {
 	WishlistDto addProductToWishlist( WishlistDto wishlistDto);
 	
 	List<WishlistDto> getAllWishlists();
+	public boolean removeProductFromWishlist(Long wishlistId);
 }

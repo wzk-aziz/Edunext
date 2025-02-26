@@ -40,4 +40,22 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		return false;
 	}
+	// Nouvelle méthode pour mettre à jour une catégorie
+	public Category updateCategory(Long categoryId, CategoryDto categoryDto) {
+		log.info("Updating category with ID: {}", categoryId);
+		Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+		if (categoryOptional.isPresent()) {
+			Category category = categoryOptional.get();
+			category.setName(categoryDto.getName());
+			category.setDescription(categoryDto.getDescription());
+			return categoryRepository.save(category);
+		}
+		return null;
+	}
+	public Category getCategoryById(Long id) {
+		log.info("Fetching category with ID: {}", id);
+		return categoryRepository.findById(id).orElse(null);
+	}
+
+
 }

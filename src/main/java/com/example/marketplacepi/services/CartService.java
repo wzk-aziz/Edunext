@@ -20,4 +20,5 @@ public interface CartService {
 	OrderDto placedOrder(PlaceOrderDto placeOrderDto);
 	
 	OrderDto searchOrderByTrackingId(UUID trackingId);
+	ResponseEntity<?> removeProductFromCart(Long productId);
 }

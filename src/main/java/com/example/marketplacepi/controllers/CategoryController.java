@@ -26,6 +26,19 @@ public class CategoryController {
         log.info("Category created with ID: {}", category.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
+        log.info("Received request to get category with ID: {}", categoryId);
+        Category category = categoryService.getCategoryById(categoryId);
+        if (category != null) {
+            log.info("Category with ID: {} found", categoryId);
+            return ResponseEntity.ok(category);
+        } else {
+            log.warn("Category with ID: {} not found", categoryId);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> getAllCategory() {
@@ -41,6 +54,19 @@ public class CategoryController {
         if (deleted) {
             log.info("Category with ID: {} deleted successfully", categoryId);
             return ResponseEntity.noContent().build();  // Retourne un 204 No Content en cas de succès
+        } else {
+            log.warn("Category with ID: {} not found", categoryId);
+            return ResponseEntity.notFound().build();  // Retourne un 404 Not Found si la catégorie n'est pas trouvée
+        }
+    }
+    // Nouvelle méthode pour mettre à jour une catégorie
+    @PutMapping("/category/{categoryId}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDto categoryDto) {
+        log.info("Received request to update category with ID: {}", categoryId);
+        Category updatedCategory = categoryService.updateCategory(categoryId, categoryDto);
+        if (updatedCategory != null) {
+            log.info("Category with ID: {} updated successfully", categoryId);
+            return ResponseEntity.ok(updatedCategory);  // Retourne un 200 OK avec la catégorie mise à jour
         } else {
             log.warn("Category with ID: {} not found", categoryId);
             return ResponseEntity.notFound().build();  // Retourne un 404 Not Found si la catégorie n'est pas trouvée

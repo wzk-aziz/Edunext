@@ -40,61 +40,67 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private final CouponRepository couponRepository;
 
+
+
+	@Override
 	public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto) {
-		// Rechercher un ordre actif (Pending)
+
+		System.out.println(addProductInCartDto.toString());
+
+		// Récupérer la commande active (en attente)
 		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
 
-		// Si aucun ordre actif n'est trouvé, en créer un nouveau
 		if (activeOrder == null) {
-			log.info("Active order not found, creating a new order");
+			log.info("Active order not found, creating a new order.");
 			activeOrder = new Order();
 			activeOrder.setOrderStatus(OrderStatus.Pending);
-			activeOrder.setAmount(0L);
 			activeOrder.setTotalAmount(0L);
-			activeOrder.setDiscount(0L);
-			activeOrder.setCartItems(new ArrayList<>());  // Initialize the cartItems list
-			orderRepository.save(activeOrder); // Sauvegarder le nouvel ordre
+			activeOrder.setAmount(0L);
+			activeOrder.setCartItems(new ArrayList<>()); // Initialiser la liste des articles
+			activeOrder = orderRepository.save(activeOrder);
 		}
 
-		// Assurez-vous de toujours récupérer l'ordre actif avant chaque ajout
-		activeOrder = orderRepository.findById(activeOrder.getId()).orElseThrow(() -> new RuntimeException("Order not found"));
+		// Vérifier si le produit existe
+		Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
+		if (!optionalProduct.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+		}
+		Product product = optionalProduct.get();
 
-		// Vérifier si le produit existe déjà dans le panier
-		Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderId(
-				addProductInCartDto.getProductId(), activeOrder.getId());
+		// Vérifier si le produit est déjà dans le panier
+		Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderId(
+				product.getId(), activeOrder.getId());
 
-		if (optionalCartItems.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Product already in cart");
+		CartItems cartItem;
+		if (optionalCartItem.isPresent()) {
+			// Si le produit est déjà dans le panier, augmenter la quantité
+			cartItem = optionalCartItem.get();
+			cartItem.setQuantity(cartItem.getQuantity() + 1);
 		} else {
-			// Ajouter le produit au panier
-			Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
-			if (optionalProduct.isPresent()) {
-				CartItems cartItems = new CartItems();
-				cartItems.setProduct(optionalProduct.get());
-				cartItems.setPrice(optionalProduct.get().getPrice());
-				cartItems.setQuantity(1L);
-				cartItems.setOrder(activeOrder);
-
-				// Sauvegarder l'élément du panier
-				CartItems updatedCart = cartItemsRepository.save(cartItems);
-				activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItems.getPrice());
-				activeOrder.setAmount(activeOrder.getAmount() + cartItems.getPrice());
-
-				// Initialize cartItems list if null and add the new item
-				if (activeOrder.getCartItems() == null) {
-					activeOrder.setCartItems(new ArrayList<>());
-				}
-				activeOrder.getCartItems().add(updatedCart);
-
-				orderRepository.save(activeOrder); // Sauvegarder l'ordre mis à jour
-
-				return ResponseEntity.status(HttpStatus.CREATED).body(updatedCart);
-			} else {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-			}
+			// Sinon, ajouter un nouveau produit
+			cartItem = new CartItems();
+			cartItem.setProduct(product);
+			cartItem.setPrice(product.getPrice());
+			cartItem.setQuantity(1L);
+			cartItem.setOrder(activeOrder);
+			activeOrder.getCartItems().add(cartItem);
 		}
-	}
 
+		// Sauvegarder le nouvel état de l'élément
+		cartItemsRepository.save(cartItem);
+
+		// Recalculer le montant total
+		long newTotalAmount = activeOrder.getCartItems().stream()
+				.mapToLong(item -> item.getPrice() * item.getQuantity())
+				.sum();
+
+		activeOrder.setTotalAmount(newTotalAmount);
+		activeOrder.setAmount(newTotalAmount);
+
+		orderRepository.save(activeOrder);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(cartItem);
+	}
 
 	public OrderDto getCart() {
 		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
@@ -203,33 +209,84 @@ public class CartServiceImpl implements CartService {
 		return null;
 	}
 
+	@Override
 	public OrderDto placedOrder(PlaceOrderDto placeOrderDto) {
+		// Récupérer la commande en attente
 		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
 
 		if (activeOrder == null) {
-			log.info("There is no active pending order for the user");
+			log.info("Aucune commande en attente active trouvée.");
 			return null;
 		}
 
+		// Mise à jour des détails de la commande
 		activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
 		activeOrder.setAddress(placeOrderDto.getAddress());
 		activeOrder.setDate(new Date());
 		activeOrder.setOrderStatus(OrderStatus.Placed);
 		activeOrder.setTrackingId(UUID.randomUUID());
 
+		// Sauvegarde de la commande mise à jour
 		orderRepository.save(activeOrder);
-		log.info("Updated order saved with ID: {}", activeOrder.getId());
+		log.info("Commande mise à jour et enregistrée avec ID: {}", activeOrder.getId());
 
+		// Création d'une nouvelle commande en attente
 		Order newOrder = new Order();
 		newOrder.setAmount(0L);
 		newOrder.setTotalAmount(0L);
 		newOrder.setDiscount(0L);
 		newOrder.setOrderStatus(OrderStatus.Pending);
 
+		// Sauvegarde de la nouvelle commande en attente
 		orderRepository.save(newOrder);
-		log.info("New pending order created");
+		log.info("Nouvelle commande en attente créée : {}", newOrder.toString());
 
+		// Retourner le DTO de la commande passée
 		return activeOrder.getOrderDto();
+	}
+
+
+	@Override
+	public ResponseEntity<?> removeProductFromCart(Long productId) {
+		// Recherche de la commande active (statut "Pending")
+		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+		if (activeOrder == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Active order not found");
+		}
+
+		// Recherche de l'élément du panier par l'ID du produit et l'ID de la commande active
+		Optional<CartItems> cartItemOptional = cartItemsRepository.findByProductIdAndOrderId(productId, activeOrder.getId());
+
+		if (!cartItemOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found in the cart");
+		}
+
+		// Si l'élément existe, on le supprime du panier
+		CartItems cartItem = cartItemOptional.get();
+		long productPrice = cartItem.getPrice();
+		long quantity = cartItem.getQuantity();
+
+		// Suppression de l'élément du panier
+		activeOrder.getCartItems().remove(cartItem);
+		cartItemsRepository.delete(cartItem);
+
+		// Mise à jour du montant total de la commande
+		activeOrder.setTotalAmount(activeOrder.getTotalAmount() - (productPrice * quantity));
+		activeOrder.setAmount(activeOrder.getTotalAmount());
+
+		// Si un coupon est appliqué, on recalcul la réduction
+		if (activeOrder.getCoupon() != null) {
+			double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
+			double netAmount = activeOrder.getTotalAmount() - discountAmount;
+
+			activeOrder.setAmount((long) netAmount);
+			activeOrder.setDiscount((long) discountAmount);
+		}
+
+		// Sauvegarde des modifications de la commande
+		orderRepository.save(activeOrder);
+
+		return ResponseEntity.status(HttpStatus.OK).body("Product removed from cart");
 	}
 
 	public List<OrderDto> getMyPlacedOrders() {

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -20,52 +21,51 @@ import java.util.List;
 public class CartController {
 	private final CartService cartService;
 
-	@PostMapping("/cart")
+	@PostMapping("/add")
 	public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto addProductInCartDto) {
-		log.info("Received request to add product to cart");
 		return cartService.addProductToCart(addProductInCartDto);
 	}
 
+	// Obtenir les produits du panier
 	@GetMapping("/cart")
-	public ResponseEntity<?> getCart() {
-		log.info("Received request to get cart");
-		OrderDto orderDto = cartService.getCart();
-		return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+	public ResponseEntity<OrderDto> getCart() {
+		OrderDto cart = cartService.getCart();
+		return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/coupon/{code}")
-	public ResponseEntity<?> applyCoupon(@PathVariable String code) {
-		log.info("Received request to apply coupon '{}'", code);
-		try {
-			OrderDto orderDto = cartService.applyCoupon(code);
-			return ResponseEntity.ok(orderDto);
-		} catch (ValidationException e) {
-			log.warn("Failed to apply coupon '{}'", code, e);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
+	// Appliquer un coupon au panier
+	@PostMapping("/apply-coupon/{code}")
+	public ResponseEntity<OrderDto> applyCoupon(@PathVariable String code) {
+		return ResponseEntity.ok(cartService.applyCoupon(code));
 	}
 
-	@PostMapping("/addition")
+	// Augmenter la quantité d'un produit
+	@PostMapping("/increase-quantity")
 	public ResponseEntity<OrderDto> increaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
-		log.info("Received request to increase quantity of product '{}'",
-				addProductInCartDto.getProductId());
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(cartService.increaseProductQuantity(addProductInCartDto));
+		return ResponseEntity.ok(cartService.increaseProductQuantity(addProductInCartDto));
 	}
 
-	@PostMapping("/deduction")
+	// Diminuer la quantité d'un produit
+	@PostMapping("/decrease-quantity")
 	public ResponseEntity<OrderDto> decreaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
-		log.info("Received request to decrease quantity of product '{}'",
-				addProductInCartDto.getProductId());
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(cartService.decreaseProductQuantity(addProductInCartDto));
+		return ResponseEntity.ok(cartService.decreaseProductQuantity(addProductInCartDto));
 	}
 
-	@PostMapping("/placedOrder")
+	// Passer une commande
+	@PostMapping("/place-order")
 	public ResponseEntity<OrderDto> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
-		log.info("Received request to place order");
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(cartService.placedOrder(placeOrderDto));
+		return ResponseEntity.ok(cartService.placedOrder(placeOrderDto));
+	}
+
+	// Rechercher une commande par tracking ID
+	@GetMapping("/search/{trackingId}")
+	public ResponseEntity<OrderDto> searchOrderByTrackingId(@PathVariable String trackingId) {
+		return ResponseEntity.ok(cartService.searchOrderByTrackingId(UUID.fromString(trackingId)));
+	}
+	// New endpoint to remove a product from the cart
+	@DeleteMapping("/api/customer/cart/{productId}")
+	public ResponseEntity<?> removeProductFromCart(@PathVariable Long productId) {
+		return cartService.removeProductFromCart(productId);
 	}
 
 

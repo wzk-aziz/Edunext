@@ -40,4 +40,17 @@ public class WishlistController {
 		log.info("Received request to get wishlist");
 		return ResponseEntity.ok(wishlistService.getAllWishlists());
 	}
+	@DeleteMapping("/wishlist/{wishlistId}")
+	public ResponseEntity<Void> removeProductFromWishlist(@PathVariable Long wishlistId) {
+		log.info("Received request to delete wishlist with ID: {}", wishlistId);
+		boolean deleted = wishlistService.removeProductFromWishlist(wishlistId);
+		if (deleted) {
+			log.info("wishlist with ID: {} deleted successfully", wishlistId);
+			return ResponseEntity.noContent().build();
+		} else {
+			log.warn("wishlist with ID: {} not found", wishlistId);
+			return ResponseEntity.notFound().build();
+		}
+	}
+
 }
