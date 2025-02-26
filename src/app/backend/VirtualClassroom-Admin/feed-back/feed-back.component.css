@@ -21,10 +21,12 @@ h2, h3 {
 
 h2 {
   font-size: 2.5em;
+  animation: slideIn 1s ease-in-out; /* Added slideIn animation */
 }
 
 h3 {
   font-size: 2em;
+  animation: slideIn 1s ease-in-out; /* Added slideIn animation */
 }
 
 /* Button styles */
@@ -46,6 +48,7 @@ h3 {
   overflow: hidden !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
+  animation: pulse 2s infinite !important; /* Added pulsing animation */
 }
 
 .add-button:before {
@@ -58,6 +61,11 @@ h3 {
   background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
   box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4) !important;
   transform: translateY(-3px) !important;
+}
+
+.add-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3) !important;
 }
 
 .btn-square {
@@ -97,10 +105,27 @@ h3 {
 }
 
 .btn-cancel {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  border-radius: 4px !important;
   background: #dc3545 !important;
   background-image: none !important;
   color: white !important;
-  border-radius: 4px !important;
+  margin-right: 8px !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-cancel:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3) !important;
+  background: #c82333 !important;
 }
 
 /* List styling */
@@ -147,6 +172,8 @@ th {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   animation: fadeIn 1s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
 label {
@@ -320,6 +347,31 @@ input:focus, textarea:focus {
   }
 }
 
+/* Added slideIn animation from session.component.css */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Added pulse animation for the add button */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
 /* Filter container */
 .filters-container {
   margin: 20px 0;
@@ -337,6 +389,10 @@ input:focus, textarea:focus {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+}
+
+.advanced-filters {
+  margin-top: 10px;
 }
 
 .advanced-filters summary {
@@ -358,6 +414,25 @@ input:focus, textarea:focus {
   background-color: #f9f9f9;
 }
 
+.filter-options > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-options label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-options select,
+.filter-options input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
 .range-filter {
   display: flex;
   align-items: center;
@@ -366,4 +441,53 @@ input:focus, textarea:focus {
 
 .range-filter span {
   color: #666;
+}
+
+/* Add session button container styling from session component */
+.add-session-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+  padding-right: 20%;
+}
+
+/* Add form validation styles from session component */
+.ng-valid[required], .ng-valid.required {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442; /* red */
+}
+
+/* Button container for better alignment from session component */
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Specific overrides for form buttons from session component */
+.session-form .btn-square.btn-add, 
+.session-edit .btn-square.btn-add {
+  background: #28a745 !important;
+  background-image: none !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+.session-form .btn-square.btn-edit, 
+.session-edit .btn-square.btn-edit {
+  background: #ffc107 !important;
+  background-image: none !important;
+  color: #212529 !important;
+  border-radius: 4px !important;
+}
+
+.session-form .btn-cancel, 
+.session-edit .btn-cancel {
+  background: #dc3545 !important;
+  background-image: none !important;
+  color: white !important;
+  border-radius: 4px !important;
 }

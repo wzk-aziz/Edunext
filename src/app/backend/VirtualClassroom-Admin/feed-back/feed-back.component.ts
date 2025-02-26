@@ -206,7 +206,6 @@ export class FeedBackComponent implements OnInit {
     this.showFeedbackList = false;
   }
   
-  // CRUD OPERATIONS
   createFeedback(): void {
     this.loading = true;
     this.error = null;
@@ -223,10 +222,13 @@ export class FeedBackComponent implements OnInit {
     
     console.log('Creating feedback:', feedbackToCreate);
     
-    // Note the /add endpoint based on your connection tests
-    fetch(`${this.apiUrl}/add`, {
+    // Changed from ${this.apiUrl}/add to just ${this.apiUrl}
+    fetch(`${this.apiUrl}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify(feedbackToCreate)
     })
     .then(response => {

@@ -60,12 +60,14 @@ export class FeedBackService {
         ? { idSession: feedback.session } 
         : feedback.session
     };
-
+  
     console.log('Creating feedback with payload:', payload);
-
-    return this.http.post<Feedback>(`${this.apiUrl}/add`, payload, {
+  
+    // Changed from ${this.apiUrl}/add to just ${this.apiUrl}
+    return this.http.post<Feedback>(`${this.apiUrl}`, payload, {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       })
     }).pipe(
       tap(data => console.log('Feedback created:', data)),
