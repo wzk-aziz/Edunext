@@ -1,6 +1,7 @@
 package com.security.EduNext.Repositories;
 
 import com.security.EduNext.Entities.Token;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,4 +20,6 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
 
     Optional<Token> findByToken(String token);
 
+    @Transactional
+    void deleteByUserId(Integer userId);
 }

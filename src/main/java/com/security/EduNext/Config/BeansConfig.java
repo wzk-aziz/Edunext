@@ -34,6 +34,8 @@ public class BeansConfig {
                 "PUT",
                 "PATCH"
         ));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);  // Use the source here
     }
