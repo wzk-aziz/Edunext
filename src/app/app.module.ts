@@ -48,6 +48,17 @@ import { RegisterComponent } from './Shared/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
+import { UpdateUserComponent } from './Shared/update-user/update-user.component';
+import { ReactiveFormsModule } from '@angular/forms';  // Ajoute cette ligne
+import { PaginationModule, ButtonModule, GridModule } from '@coreui/angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IconModule, IconSetService } from '@coreui/icons-angular';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatlabModule } from './matlab/matlab.module';
+import { MatTableModule } from '@angular/material/table';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,7 +106,9 @@ import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.comp
     CoursesBackComponent,
     LoginComponent,
     RegisterComponent,
-    ListTeachersComponent
+    ListTeachersComponent,
+    UpdateUserComponent,
+    
    
   ],
   imports: [
@@ -103,10 +116,19 @@ import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.comp
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule,
+    PaginationModule,
+    ButtonModule,
+    BrowserAnimationsModule,
+    IconModule,    
+    GridModule,
+    MatPaginatorModule,
+    MatlabModule,
+
   ],
   providers: [
-    HttpClient
+    HttpClient,
   ],
   bootstrap: [AppComponent]
 })

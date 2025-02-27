@@ -5,6 +5,10 @@ import { AuthenticationResponse } from '../models/authentication-response';
 import { VerificationRequest } from '../models/verification-request';
 import { AuthenticationRequest } from '../models/authentication-request';
 import { Observable } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
+
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -13,16 +17,46 @@ import { HttpParams } from '@angular/common/http';
 export class AuthenticationService {
   
   private baseUrl: string = 'http://localhost:8050/api/v1/auth';
+  private apiUrl = 'http://localhost:8080/api/v1/auth/logout'; 
+
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient, private router: Router
   ) { }
 
-
-  register(registerRequest: RegisterRequest)
-  {
-    return this.http.post<AuthenticationResponse>(`${this.baseUrl}/register`, registerRequest);
+  checkEmailExistence(email: string | undefined): Observable<boolean> {
+    if (!email) {
+      return throwError(() => new Error('Email is required'));
+    }
+    return this.http.get<boolean>(`${this.baseUrl}/check-email?email=${email}`);
   }
+  
+
+
+  register(registerRequest: RegisterRequest): Observable<AuthenticationResponse> {
+    if (!registerRequest.email) {
+      return throwError(() => new Error('Email is required'));
+    }
+  
+    return this.checkEmailExistence(registerRequest.email).pipe(
+      catchError((error) => {
+        // Check if error status is 400 (Bad Request) and handle accordingly
+        if (error.status === 400 && error.error === 'Email is already in use') {
+          return throwError(() => new Error('Email is already in use'));
+        } else {
+          return throwError(() => new Error('An error occurred while checking email.'));
+        }
+      }),
+      switchMap(() => {
+        return this.http.post<AuthenticationResponse>(`${this.baseUrl}/register`, registerRequest);
+      })
+    );
+  }
+  
+  
+  
+  
+
 
 
   login(authRequest: AuthenticationRequest) {
@@ -31,6 +65,29 @@ export class AuthenticationService {
 
   verifyCode(VerificationRequest: VerificationRequest) {
     return this.http.post<AuthenticationResponse>(`${this.baseUrl}/verify`, VerificationRequest);
+  }
+
+
+
+  logout() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+  
+    this.http.post('http://localhost:8080/api/v1/auth/logout', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: () => {
+        localStorage.removeItem('token'); // Supprime le token
+        sessionStorage.clear(); // Supprime toutes les sessions
+        this.router.navigate(['/login']); // Redirige vers la page de connexion
+      },
+      error: (err) => {
+        console.error('Erreur de déconnexion', err);
+        localStorage.removeItem('token'); // Supprimer le token même si l'API échoue
+        this.router.navigate(['/login']);
+      }
+    });
+
   }
 
   

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 
@@ -19,6 +19,25 @@ export class UserService {
 
   getUsersByRole(role: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/${role}`);
+  }
+
+  getUserById(id: number): Observable<any> {
+    const token = localStorage.getItem('token'); // Récupérer le token
+    console.log('Token utilisé:', token); // Vérification
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  updateUser(id: number, userData: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/update/${id}`, userData);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
   }
 
 }

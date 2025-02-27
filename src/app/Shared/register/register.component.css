@@ -192,3 +192,11 @@ button:disabled {
   pointer-events: none; /* Ensure button is not clickable when disabled */
 }
 
+.bg-primary {
+  background-color: #E6E6FA !important;
+}
+
+/* Full Height for Layout */
+.vh-lg-100 {
+  height: 100vh !important;
+}

@@ -1,60 +1,169 @@
 <div class="container">
-    <h2 class="title">Liste des utilisateurs</h2>
-  
-    <h3>All Users</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Prénom</th>
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Rôle</th>
-          <th>MFA activé</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of allUsers">
-          <td>{{ user.id }}</td>
-          <td>{{ user.first_name }}</td>
-          <td>{{ user.last_name }}</td>
-          <td>{{ user.email_address }}</td>
-          <td>{{ user.authorities?.[0]?.authority || 'UNKNOWN' }}</td>
-          <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <div *ngIf="allUsers.length === 0">
-      <p>Aucun utilisateur trouvé.</p>
-    </div>
-  
-    <h3>Teachers</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Prénom</th>
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Rôle</th>
-          <th>MFA activé</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of teachers">
-          <td>{{ user.id }}</td>
-          <td>{{ user.first_name }}</td>
-          <td>{{ user.last_name }}</td>
-          <td>{{ user.email_address }}</td>
-          <td>{{ user.authorities?.[0]?.authority || 'UNKNOWN' }}</td>
-          <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <div *ngIf="teachers.length === 0">
-      <p>Aucun enseignant trouvé.</p>
-    </div>
+  <h2 class="title">Liste des utilisateurs</h2>
+
+  <!-- Search by First Name Input -->
+  <div class="search-container">
+    <label for="searchInput" class="form-label">Search</label>
+    <input 
+      type="text" 
+      id="searchInput" 
+      class="form-control" 
+      placeholder="Search by first name" 
+      [(ngModel)]="searchQuery"
+      (input)="onSearchByName()"
+    />
   </div>
-  
+
+  <!-- All Users Table -->
+  <h3>Tous les utilisateurs</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>2FA</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers.slice((currentPageAll - 1) * 3, currentPageAll * 3)">
+        <td>{{ user.id }}</td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email_address }}</td>
+        <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
+        <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+        <td>
+          <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
+          <span class="btn-space"></span>
+          <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="filteredUsers.length === 0">
+    <p>Aucun utilisateur trouvé.</p>
+  </div>
+
+  <!-- Pagination for All Users -->
+  <c-pagination aria-label="Page navigation example">
+    <li cPageItem [class.disabled]="currentPageAll === 1">
+      <a cPageLink aria-label="Previous" (click)="changePageAll(currentPageAll - 1)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li cPageItem *ngFor="let page of [].constructor(totalPagesAll); let i = index">
+      <a cPageLink (click)="changePageAll(i + 1)">{{ i + 1 }}</a>
+    </li>
+    <li cPageItem [class.disabled]="currentPageAll === totalPagesAll">
+      <a cPageLink aria-label="Next" (click)="changePageAll(currentPageAll + 1)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </c-pagination>
+
+  <!-- Teachers Table -->
+  <h3>Enseignants</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>2FA</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredTeachers.slice((currentPageTeachers - 1) * 3, currentPageTeachers * 3)">
+        <td>{{ user.id }}</td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email_address }}</td>
+        <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
+        <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+        <td>
+          <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
+          <span class="btn-space"></span>
+          <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="filteredTeachers.length === 0">
+    <p>Aucun enseignant trouvé.</p>
+  </div>
+
+  <!-- Pagination for Teachers -->
+  <c-pagination aria-label="Page navigation example">
+    <li cPageItem [class.disabled]="currentPageTeachers === 1">
+      <a cPageLink aria-label="Previous" (click)="changePageTeachers(currentPageTeachers - 1)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li cPageItem *ngFor="let page of [].constructor(totalPagesTeachers); let i = index">
+      <a cPageLink (click)="changePageTeachers(i + 1)">{{ i + 1 }}</a>
+    </li>
+    <li cPageItem [class.disabled]="currentPageTeachers === totalPagesTeachers">
+      <a cPageLink aria-label="Next" (click)="changePageTeachers(currentPageTeachers + 1)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </c-pagination>
+
+  <!-- Learners Table -->
+  <h3>Apprenants</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>2FA</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredLearners.slice((currentPageLearners - 1) * 3, currentPageLearners * 3)">
+        <td>{{ user.id }}</td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email_address }}</td>
+        <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
+        <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+        <td>
+          <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
+          <span class="btn-space"></span>
+          <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="filteredLearners.length === 0">
+    <p>Aucun apprenant trouvé.</p>
+  </div>
+
+  <!-- Pagination for Learners -->
+  <c-pagination aria-label="Page navigation example">
+    <li cPageItem [class.disabled]="currentPageLearners === 1">
+      <a cPageLink aria-label="Previous" (click)="changePageLearners(currentPageLearners - 1)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li cPageItem *ngFor="let page of [].constructor(totalPagesLearners); let i = index">
+      <a cPageLink (click)="changePageLearners(i + 1)">{{ i + 1 }}</a>
+    </li>
+    <li cPageItem [class.disabled]="currentPageLearners === totalPagesLearners">
+      <a cPageLink aria-label="Next" (click)="changePageLearners(currentPageLearners + 1)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </c-pagination>
+</div>
