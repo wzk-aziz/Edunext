@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Course } from 'src/app/model/course.model';
+import { Course, CourseLevel, PackType } from 'src/app/model/course.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +33,22 @@ export class CourseService {
   
   getCourse(id: number): Observable<Course> {
     return this.http.get<Course>(`${this.baseUrl}/get/${id}`);
+  }
+
+  // New search endpoints
+  getCoursesByName(name: string): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.baseUrl}/search/by-name?name=${name}`);
+  }
+
+  getCoursesByCategory(categoryId: number): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.baseUrl}/search/by-category?categoryId=${categoryId}`);
+  }
+
+  getCoursesByCourseLevel(courseLevel: CourseLevel): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.baseUrl}/search/by-course-level?courseLevel=${courseLevel}`);
+  }
+
+  getCoursesByPackType(packType: PackType): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.baseUrl}/search/by-pack-type?packType=${packType}`);
   }
 }

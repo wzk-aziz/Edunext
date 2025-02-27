@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CourseService } from 'src/app/backend/courses/Services/course.service';
-import { Course } from 'src/app/model/course.model';
+import { Course, CourseLevel, PackType } from 'src/app/model/course.model';
 
 @Component({
   selector: 'app-courseslist',
@@ -30,6 +30,56 @@ export class CourseslistComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading courses:', err);
+      }
+    });
+  }
+
+  // New search methods
+
+  searchCoursesByName(name: string): void {
+    if (!name.trim()) {
+      this.loadCourses();
+      return;
+    }
+    this.courseService.getCoursesByName(name).subscribe({
+      next: (courses) => {
+        this.courses = courses;
+      },
+      error: (err) => {
+        console.error('Error searching courses by name:', err);
+      }
+    });
+  }
+
+  searchCoursesByCategory(categoryId: number): void {
+    this.courseService.getCoursesByCategory(categoryId).subscribe({
+      next: (courses) => {
+        this.courses = courses;
+      },
+      error: (err) => {
+        console.error('Error searching courses by category:', err);
+      }
+    });
+  }
+
+  searchCoursesByCourseLevel(courseLevel: CourseLevel): void {
+    this.courseService.getCoursesByCourseLevel(courseLevel).subscribe({
+      next: (courses) => {
+        this.courses = courses;
+      },
+      error: (err) => {
+        console.error('Error searching courses by course level:', err);
+      }
+    });
+  }
+
+  searchCoursesByPackType(packType: PackType): void {
+    this.courseService.getCoursesByPackType(packType).subscribe({
+      next: (courses) => {
+        this.courses = courses;
+      },
+      error: (err) => {
+        console.error('Error searching courses by pack type:', err);
       }
     });
   }
@@ -128,7 +178,4 @@ export class CourseslistComponent implements OnInit {
         return 'fas fa-signal text-secondary me-2';
     }
   }
-  
-  
- 
 }
