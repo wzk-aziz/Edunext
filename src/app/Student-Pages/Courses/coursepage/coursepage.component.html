@@ -2,14 +2,18 @@
   <div class="row">
     <!-- Sidebar: List of Lectures -->
     <div class="col-md-3 lecture-list">
-      <h5 class="mb-3">Lectures</h5>
+      <h5 class="mb-3 text-center">Lectures</h5>
       <ul class="list-group">
         <li 
           *ngFor="let lecture of lectures" 
           (click)="selectLecture(lecture)" 
           [class.active]="lecture.id === currentLecture?.id" 
-          class="list-group-item d-flex justify-content-between align-items-center lecture-item">
-          <span>{{ lecture.lectureOrder }}. {{ lecture.lectureTitle }}</span>
+          class="list-group-item d-flex align-items-center justify-content-between lecture-item"
+          style="cursor: pointer;">
+          <div>
+            <i class="fas fa-play text-primary me-2"></i>
+            <span>{{ lecture.lectureOrder }}. {{ lecture.lectureTitle }}</span>
+          </div>
           <span class="badge bg-secondary">{{ lecture.lectureOrder }}</span>
         </li>
       </ul>
@@ -18,26 +22,63 @@
     <!-- Main Content: Lecture Player/Reader -->
     <div class="col-md-9 lecture-player">
       <div *ngIf="currentLecture; else noLectureSelected">
-        <div class="video-player mb-3" *ngIf="currentLecture?.videoData; else textContent">
-          <video controls width="100%">
-            <source [src]="getVideoUrl()" [type]="currentLecture?.videoType || 'video/mp4'">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <ng-template #textContent>
-          <div class="lecture-text p-4 bg-light rounded shadow-sm">
-            <h3>{{ currentLecture?.lectureTitle }}</h3>
-            <p>{{ currentLecture?.lectureDescription }}</p>
+        <!-- If both video and PDF are available, show a toggle button group -->
+        <div *ngIf="currentLecture.videoData && currentLecture.pdfData; else singleView">
+          <div class="btn-group mb-3">
+            <button type="button" class="btn btn-outline-primary" 
+                    [class.active]="viewMode === 'video'" 
+                    (click)="viewMode='video'">
+              Video
+            </button>
+            <button type="button" class="btn btn-outline-primary" 
+                    [class.active]="viewMode === 'pdf'" 
+                    (click)="viewMode='pdf'">
+              PDF
+            </button>
           </div>
+          <div *ngIf="viewMode === 'video'">
+            <div class="video-player mb-3">
+              <video controls width="100%" class="rounded">
+                <source [src]="getVideoUrl()" [type]="currentLecture?.videoType || 'video/mp4'">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <div *ngIf="viewMode === 'pdf'">
+            <div class="pdf-viewer mb-3">
+              <iframe [src]="getPdfUrl()" width="100%" height="500px" style="border:none;" class="rounded"></iframe>
+            </div>
+          </div>
+        </div>
+        <!-- Single view when only one type of content is available -->
+        <ng-template #singleView>
+          <div *ngIf="currentLecture.videoData; else pdfOnly">
+            <div class="video-player mb-3">
+              <video controls width="100%" class="rounded">
+                <source [src]="getVideoUrl()" [type]="currentLecture?.videoType || 'video/mp4'">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <ng-template #pdfOnly>
+            <div *ngIf="currentLecture.pdfData">
+              <div class="pdf-viewer mb-3">
+                <iframe [src]="getPdfUrl()" width="100%" height="500px" style="border:none;" class="rounded"></iframe>
+              </div>
+            </div>
+          </ng-template>
         </ng-template>
-        <!-- Enroll or Start Course Button -->
-        <div class="mt-4 text-center">
-          <button class="btn btn-success btn-lg" (click)="enrollCourse()">Start Learning</button>
+        
+        <!-- Start/Enroll Button -->
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg px-4" (click)="enrollCourse()">
+            <i class="fas fa-graduation-cap me-2"></i>Start Learning
+          </button>
         </div>
       </div>
       <ng-template #noLectureSelected>
-        <div class="text-center">
-          <p>No lecture selected.</p>
+        <div class="text-center p-4">
+          <p class="fs-5 text-muted">No lecture selected. Please choose one from the list.</p>
         </div>
       </ng-template>
     </div>
