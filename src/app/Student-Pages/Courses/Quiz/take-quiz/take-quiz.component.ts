@@ -96,17 +96,23 @@ export class TakeQuizComponent {
 
 
 
-  submitQuiz(): void {
-    clearInterval(this.interval); // Stop the timer when submitting
+submitQuiz(): void {
+  const studentAnswers = this.quizForm.value.answers.map((ans: string | string[]) => {
+    if (Array.isArray(ans)) {
+      return ans.map((a) => a.trim()); // Trim each answer in multiple-choice
+    } else if (typeof ans === 'string') {
+      return ans.trim(); // Trim single-choice answer
+    } else {
+      return ''; // Fallback for empty values
+    }
+  });
 
-    const studentAnswers = this.quizForm.value.answers.map((ans: string) => ans.trim());
+  console.log('Student Answers Submitted:', studentAnswers);
 
-    console.log('Student Answers Submitted:', studentAnswers);
-
-    this.router.navigate(['/quiz-results', this.quizId], {
-      queryParams: { answers: JSON.stringify(studentAnswers) }
-    });
-  }
+  this.router.navigate(['/quiz-results', this.quizId], {
+    queryParams: { answers: JSON.stringify(studentAnswers) }
+  });
+}
 
   ngOnDestroy(): void {
     if (this.interval) {
@@ -119,4 +125,37 @@ export class TakeQuizComponent {
     const seconds = timeLeft % 60;
     return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
   }
+  
+  selectAnswer(questionIndex: number, selectedOption: string, questionType: string): void {
+    const answersArray = this.quizForm.get('answers') as FormArray;
+  
+    if (questionType === 'SINGLE_CHOICE') {
+      // Replace the answer for single-choice questions
+      answersArray.controls[questionIndex].setValue([selectedOption]); 
+    } else {
+      // Handle multiple-choice selection
+      let selectedAnswers: string[] = answersArray.controls[questionIndex].value || [];
+  
+      if (!Array.isArray(selectedAnswers)) {
+        selectedAnswers = [];
+      }
+  
+      if (selectedAnswers.includes(selectedOption)) {
+        // Deselect if already selected
+        selectedAnswers = selectedAnswers.filter((ans: string) => ans !== selectedOption);
+      } else {
+        // Select new answer
+        selectedAnswers.push(selectedOption);
+      }
+  
+      answersArray.controls[questionIndex].setValue(selectedAnswers);
+    }
+  }
+  
+  isSelected(questionIndex: number, option: string): boolean {
+    const selectedAnswers: string[] = this.quizForm.get('answers')?.value[questionIndex] || [];
+    return Array.isArray(selectedAnswers) ? selectedAnswers.includes(option) : selectedAnswers === option;
+  }
+  
+  
 }

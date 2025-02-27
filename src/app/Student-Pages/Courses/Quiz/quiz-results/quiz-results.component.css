@@ -1,0 +1,30 @@
+.quiz-container {
+    max-width: 700px;
+    margin: auto;
+    background: #f8f9fa;
+  }
+  
+  .score-container {
+    text-align: center;
+  }
+  
+  .progress {
+    background: #e9ecef;
+  }
+  
+  .progress-bar {
+    transition: width 1s ease-in-out;
+  }
+  
+  .card {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+  }
+  
+  .alert {
+    font-size: 16px;
+  }
+  

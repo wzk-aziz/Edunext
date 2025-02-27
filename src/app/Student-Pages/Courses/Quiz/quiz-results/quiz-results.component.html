@@ -1,25 +1,49 @@
-<div class="container mt-4">
-  <h2 class="mb-4">Quiz Results</h2>
-  <p>Your Score: <strong>{{ studentScore }} / {{ totalPoints }}</strong></p>
-
-  <div class="card mt-4" *ngFor="let question of questions; let i = index">
-    <div class="card-body">
-      <h5 class="card-title">Q{{ i + 1 }}: {{ question.questionText }}</h5>
-      
-      <p><strong>Your Answer:</strong> {{ studentAnswers[i] }}</p>
-
-      <div *ngIf="!isCorrect(i)" class="alert alert-danger">
-        <p><strong>Correct Answer:</strong> {{ question.correctAnswers.join(', ') }}</p>
-        <p><strong>Explanation:</strong> {{ question.explanation }}</p>
-        <p><strong>Points Earned:</strong> 0 / {{ question.points }}</p>
-      </div>
-
-      <div *ngIf="isCorrect(i)" class="alert alert-success">
-        <p><strong>Correct!</strong> Well done.</p>
-        <p><strong>Points Earned:</strong> {{ question.points }} / {{ question.points }}</p>
+<div class="container mt-5">
+  <div class="quiz-container p-4 shadow-lg rounded bg-white">
+    <!-- Quiz Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold">Quiz Results</h2>
+      <div class="score-container text-center">
+        <p class="fs-5 mb-1"><strong>Your Score:</strong> {{ studentScore }} / {{ totalPoints }}</p>
+        <div class="progress" style="height: 12px;">
+          <div class="progress-bar bg-success" 
+               role="progressbar"
+               [style.width]="(studentScore / totalPoints) * 100 + '%'">
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <a routerLink="/student-quizzes" class="btn btn-primary mt-3">Back to Quizzes</a>
+    <!-- Question Results -->
+    <div *ngFor="let question of questions; let i = index" class="mb-4">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{ i + 1 }}. {{ question.questionText }}</h5>
+
+          <!-- Student's Selected Answers -->
+          <p><strong>Your Answer:</strong> {{ formatMultipleChoiceAnswer(studentAnswers[i]) }}</p>
+
+          <!-- Incorrect Answer Display -->
+          <div *ngIf="!isCorrect(i)" class="alert alert-danger">
+            <p><strong>Correct Answer:</strong> {{ question.correctAnswers.join(', ') }}</p>
+            <p><strong>Explanation:</strong> {{ question.explanation }}</p>
+            <p><strong>Points Earned:</strong> 0 / {{ question.points }}</p>
+          </div>
+
+          <!-- Correct Answer Display -->
+          <div *ngIf="isCorrect(i)" class="alert alert-success">
+            <p><strong>Correct!</strong> Well done.</p>
+            <p><strong>Points Earned:</strong> {{ question.points }} / {{ question.points }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+      <a routerLink="/student-quizzes" class="btn btn-lg btn-primary px-4 py-2 rounded-pill shadow-sm">
+        Back to Quizzes
+      </a>
+    </div>
+  </div>
 </div>
