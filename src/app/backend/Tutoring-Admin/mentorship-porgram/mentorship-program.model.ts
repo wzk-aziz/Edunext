@@ -1,13 +1,10 @@
 export interface MentorshipProgram {
-    id_mentorship_program: number;
-    program_description: string;
-    program_end_date: Date;
-    program_name: string;
-    program_price: number;
-    program_start_date: Date;
-    program_subject: string;
-    instructor_id: number;
-
-  }
-
-
+  idMentorshipProgram: number;
+  ProgramName: string;
+  ProgramDescription: string;
+  ProgramStartDate: Date | string; // Updated to accept both Date and string
+  ProgramEndDate: Date | string;   // Updated to accept both Date and string
+  ProgramSubject: string;
+  ProgramPrice: number;
+  instructor_id?: number; // Keep this for relationship handling
+}

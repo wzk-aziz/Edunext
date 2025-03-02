@@ -1,6 +1,12 @@
 export interface Goal {
-  id_goal: number;
-  goal_description: string;
-  goal_target_date: string;
-  mentorship_program_id: number;
+  idGoal: number;
+  goalDescription: string;
+  goalTargetDate: string;
+  mentorshipProgramId: number;
+  
+  // Optional property for when you need the full relationship object
+  mentorshipProgram?: {
+    idMentorshipProgram?: number;
+    // Add other properties if needed
+  };
 }

@@ -1,7 +1,17 @@
 export interface ProgressReport {
-  id_report: number;
-  report_content: string;
-  report_date: Date;
-  learner_id: number;
-  mentorship_program_id: number;
+  idReport: number;
+  reportContent: string;
+  reportDate: Date;
+  
+  // For component use - make these non-optional
+  learnerId: number;
+  mentorshipProgramId: number;
+  
+  // For backend communication - make these optional
+  learner?: {
+    idLearner: number;
+  };
+  mentorshipProgram?: {
+    idMentorshipProgram: number;
+  };
 }

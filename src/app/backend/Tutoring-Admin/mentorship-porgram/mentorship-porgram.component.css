@@ -1,4 +1,4 @@
-.mentorship-program-container {
+.session-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -40,8 +40,8 @@ h2 {
   transform: translateY(-3px);
 }
 
-.mentorship-program-form,
-.mentorship-program-edit {
+.session-form,
+.session-edit {
   margin: 20px auto;
   padding: 30px;
   max-width: 600px;
@@ -76,8 +76,8 @@ h2 {
   }
 }
 
-.mentorship-program-form h3,
-.mentorship-program-edit h3 {
+.session-form h3,
+.session-edit h3 {
   margin-top: 0;
   font-family: 'Arial', sans-serif;
   color: #333;
@@ -86,8 +86,8 @@ h2 {
   animation: slideIn 1s ease-in-out;
 }
 
-.mentorship-program-form label,
-.mentorship-program-edit label {
+.session-form label,
+.session-edit label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
@@ -95,8 +95,8 @@ h2 {
   font-size: 1.1em;
 }
 
-.mentorship-program-form input,
-.mentorship-program-edit input {
+.session-form input,
+.session-edit input {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
@@ -106,15 +106,15 @@ h2 {
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.mentorship-program-form input:focus,
-.mentorship-program-edit input:focus {
+.session-form input:focus,
+.session-edit input:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
-.mentorship-program-form button,
-.mentorship-program-edit button {
+.session-form button,
+.session-edit button {
   padding: 15px 30px;
   background: linear-gradient(to right, #007bff, #0056b3);
   color: white;
@@ -126,14 +126,14 @@ h2 {
   font-size: 1.2em;
 }
 
-.mentorship-program-form button:hover,
-.mentorship-program-edit button:hover {
+.session-form button:hover,
+.session-edit button:hover {
   background: linear-gradient(to right, #0056b3, #003f7f);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   transform: translateY(-3px);
 }
 
-.mentorship-program-list {
+.session-list {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
@@ -150,7 +150,7 @@ h2 {
   font-size: 16px;
 }
 
-.mentorship-program-list table {
+.session-list table {
   width: 80%;
   max-width: 1000px;
   border-collapse: collapse;
@@ -161,21 +161,21 @@ h2 {
   animation: fadeIn 1s ease-in-out;
 }
 
-.mentorship-program-list th,
-.mentorship-program-list td {
+.session-list th,
+.session-list td {
   padding: 20px;
   border: 1px solid #ccc;
   text-align: left;
   font-size: 16px;
 }
 
-.mentorship-program-list th {
+.session-list th {
   background-color: #f2f2f2;
   font-weight: bold;
   color: #555;
 }
 
-.mentorship-program-list button {
+.session-list button {
   margin-right: 5px;
   padding: 10px 20px;
   background: linear-gradient(to right, #007bff, #0056b3);
@@ -186,7 +186,7 @@ h2 {
   transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 
-.mentorship-program-list button:hover {
+.session-list button:hover {
   background: linear-gradient(to right, #0056b3, #003f7f);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transform: translateY(-3px);
@@ -197,4 +197,656 @@ h2 {
   font-size: 14px;
   margin-top: -10px;
   margin-bottom: 10px;
+}
+
+.session-edit {
+  margin: 20px auto;
+  padding: 30px;
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.session-edit h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.session-edit form div {
+  margin-bottom: 15px;
+}
+
+.session-edit label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.session-edit input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.session-edit button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.session-edit button[type="button"] {
+  background-color: #6c757d;
+}
+
+.error {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+/* Add these specific styles for form validation */
+.ng-valid[required], .ng-valid.required {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442; /* red */
+}
+
+.error-message {
+  color: white;
+  background-color: #a94442;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.loading-indicator {
+  text-align: center;
+  margin: 20px 0;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Add this at the end of your CSS file */
+
+/* Square Button Styles */
+.btn-square {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-square:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Colors */
+.btn-add {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Override the existing add button styles */
+.add-button {
+  background: #28a745 !important;
+  margin: 20px 0 !important;
+  display: inline-block !important;
+}
+
+.add-button:hover {
+  background: #218838 !important;
+}
+
+/* Button container for better alignment */
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Add session button container */
+.add-session-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+  padding-right: 20%;
+}
+
+/* Update these button styles to be more specific and use !important */
+.session-list .btn-square.btn-edit {
+  background: #ffc107 !important;
+  background-image: none !important; /* Override any gradient */
+  color: #212529 !important;
+  border-radius: 4px !important;
+}
+
+.session-list .btn-square.btn-delete {
+  background: #dc3545 !important;
+  background-image: none !important; /* Override any gradient */
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+/* Also update the add button to ensure consistency */
+.add-button {
+  background: #28a745 !important;
+  background-image: none !important; /* Override any gradient */
+  margin: 20px 0 !important;
+  display: inline-block !important;
+}
+
+/* Make table headers dark blue */
+.session-list th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #003366 !important; /* Dark blue color */
+  font-size: 1.1em;
+}
+
+/* Style for cancel buttons */
+.btn-cancel {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background: #dc3545 !important;
+  background-image: none !important;
+  color: white !important;
+  margin-right: 8px !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-cancel:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3) !important;
+  background: #c82333 !important;
+}
+
+/* Add this to make sure form buttons get the right colors too */
+.session-form .btn-square.btn-add, 
+.session-edit .btn-square.btn-add {
+  background: #28a745 !important;
+  background-image: none !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+.session-form .btn-square.btn-edit, 
+.session-edit .btn-square.btn-edit {
+  background: #ffc107 !important;
+  background-image: none !important;
+  color: #212529 !important;
+  border-radius: 4px !important;
+}
+
+.session-form .btn-cancel, 
+.session-edit .btn-cancel {
+  background: #dc3545 !important;
+  background-image: none !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+/* Replace the add-button styles with these square version */
+.add-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px 25px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 4px !important; /* Square with slightly rounded corners */
+  cursor: pointer !important;
+  box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.add-button:before {
+  content: "➕" !important;
+  margin-right: 10px !important;
+  font-size: 18px !important;
+}
+
+.add-button:hover {
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4) !important;
+  transform: translateY(-3px) !important;
+}
+
+.add-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3) !important;
+}
+
+/* Add pulsing effect */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+.add-button {
+  animation: pulse 2s infinite !important;
+}
+/* Add these styles at the end of your CSS file */
+
+/* Search and Filtering styles */
+.filters-container {
+  margin: 20px 0;
+  width: 80%;
+  max-width: 1000px;
+}
+
+.search-filter {
+  margin-bottom: 15px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.advanced-filters {
+  margin-top: 10px;
+}
+
+.advanced-filters summary {
+  cursor: pointer;
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.filter-options > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-options label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-options select,
+.filter-options input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.range-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.range-filter span {
+  color: #666;
+}
+
+/* Pagination styles */
+.pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  width: 80%;
+  max-width: 1000px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.page-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-size select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-nav {
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-nav:hover:not([disabled]) {
+  background-color: #e9ecef;
+}
+
+.btn-nav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+
+
+.content-container {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-card, .mat-card {
+  margin-bottom: 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.col-md-4, .col-md-6, .col-md-12 {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.col-md-4 {
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+.col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.col-md-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 48%;
+  margin-right: 2%;
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ml-2 {
+  margin-left: 10px;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mb-4 {
+  margin-bottom: 20px;
+}
+
+.search-container {
+  margin-left: auto;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert mat-icon {
+  margin-right: 10px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.loading-container p {
+  margin-top: 10px;
+}
+
+/* Custom pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f5f5f5;
+}
+
+.page-indicator {
+  margin: 0 10px;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 14px;
+}
+
+.page-size-selector {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Subject badge styling */
+.subject-badge {
+  background-color: #e0f2f1;
+  color: #00796b;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 12px;
+}
+
+/* Description cell styling */
+.description-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* No data message */
+.no-data-message {
+  text-align: center;
+  padding: 30px 0;
+  color: #666;
+}
+
+.no-data-message mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  color: #ccc;
+}
+
+/* Debug data container */
+.debug-data-container {
+  margin-bottom: 20px;
+}
+
+.debug-data-container pre {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  max-height: 300px;
+}
+
+/* Filter row */
+.filter-row {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .col-md-4, .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .header-actions {
+    margin-top: 15px;
+  }
+  
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .page-size-selector {
+    margin-left: 0;
+  }
+}
+
+/* Add to your component CSS */
+.btn-edit {
+  background-color: #007bff;
+  color: white;
+}
+
+.debug-actions {
+  margin-bottom: 15px;
+}
+
+.test-button {
+  background-color: #17a2b8;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }

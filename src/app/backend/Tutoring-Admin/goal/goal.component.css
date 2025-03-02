@@ -20,24 +20,38 @@ h2 {
   animation: slideIn 1s ease-in-out;
 }
 
+/* Replace the add-button styles with square version that matches session */
 .add-button {
-  display: block;
-  margin: 20px auto;
-  padding: 15px 30px;
-  background: linear-gradient(to right, #007bff, #0056b3);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
-  font-size: 1.2em;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px 25px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  animation: pulse 2s infinite !important;
+}
+
+.add-button:before {
+  content: "➕" !important;
+  margin-right: 10px !important;
+  font-size: 18px !important;
 }
 
 .add-button:hover {
-  background: linear-gradient(to right, #0056b3, #003f7f);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4) !important;
+  transform: translateY(-3px) !important;
 }
 
 .goal-form,
@@ -76,14 +90,29 @@ h2 {
   }
 }
 
+/* Add pulsing effect for buttons */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
 .goal-form h3,
 .goal-edit h3 {
   margin-top: 0;
+  text-align: center;
   font-family: 'Arial', sans-serif;
   color: #333;
   font-size: 2em;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   animation: slideIn 1s ease-in-out;
+  margin-bottom: 20px;
 }
 
 .goal-form label,
@@ -115,20 +144,21 @@ h2 {
 
 .goal-form button,
 .goal-edit button {
-  padding: 15px 30px;
-  background: linear-gradient(to right, #007bff, #0056b3);
+  padding: 12px 25px;
+  background: #28a745 !important;
+  background-image: none !important;
   color: white;
   border: none;
-  border-radius: 50px;
+  border-radius: 4px;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
-  font-size: 1.2em;
+  transition: all 0.3s ease;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 .goal-form button:hover,
 .goal-edit button:hover {
-  background: linear-gradient(to right, #0056b3, #003f7f);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   transform: translateY(-3px);
 }
@@ -140,14 +170,42 @@ h2 {
   align-items: center;
 }
 
-.search-bar {
+/* Search and Filtering styles */
+.filters-container {
+  margin: 20px 0;
   width: 80%;
   max-width: 1000px;
+}
+
+.search-filter {
+  margin-bottom: 15px;
+}
+
+.search-bar {
+  width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 16px;
+}
+
+.advanced-filters summary {
+  cursor: pointer;
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
 }
 
 .goal-list table {
@@ -172,29 +230,336 @@ h2 {
 .goal-list th {
   background-color: #f2f2f2;
   font-weight: bold;
-  color: #555;
+  color: #003366 !important; /* Dark blue color like session */
+  font-size: 1.1em;
 }
 
-.goal-list button {
-  margin-right: 5px;
-  padding: 10px 20px;
-  background: linear-gradient(to right, #007bff, #0056b3);
-  color: white;
+/* Square Button Styles */
+.btn-square {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-.goal-list button:hover {
-  background: linear-gradient(to right, #0056b3, #003f7f);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.btn-square:hover {
   transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Colors */
+.btn-edit {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.btn-delete {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.btn-cancel {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background: #dc3545 !important;
+  background-image: none !important;
+  color: white !important;
+  margin-right: 8px !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Button container for better alignment */
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Add goal button container */
+.add-goal-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+  padding-right: 20%;
 }
 
 .error {
   color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+/* Form validation */
+.ng-valid[required], .ng-valid.required {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442; /* red */
+}
+
+/* Status messages */
+.error-message {
+  color: white;
+  background-color: #a94442;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.warning-but-working {
+  background-color: #fcf8e3;
+  color: #8a6d3b;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  text-align: center;
+  border: 1px solid #faebcc;
+}
+
+.loading-indicator {
+  text-align: center;
+  margin: 20px 0;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Spinner for loading indicator */
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin: 10px auto;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-left-color: #007bff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* No data message */
+.no-data-message {
+  text-align: center;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  color: #6c757d;
+  font-style: italic;
+  width: 80%;
+  max-width: 1000px;
+}
+
+/* Form buttons */
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+/* Pagination styles */
+.pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  width: 80%;
+  max-width: 1000px;
+}
+
+.pagination-info {
   font-size: 14px;
-  margin-top: -10px;
-  margin-bottom: 10px;
+  color: #666;
+}
+
+.page-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-nav {
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.page-indicator {
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+/* Add to goal.component.css */
+.btn-add {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.test-button {
+  padding: 8px 16px;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.debug-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.test-button, .debug-button, .fetch-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.test-button {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.debug-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.fetch-button {
+  background-color: #28a745;
+  color: white;
+}
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.page-size-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-size-selector select {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-nav {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-nav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-weight: bold;
+}
+
+/* Replace your pagination styles with these */
+.pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  width: 80%;
+  max-width: 1000px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.page-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-size select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-nav {
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-nav:hover:not([disabled]) {
+  background-color: #e9ecef;
+}
+
+.btn-nav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-weight: bold;
+  padding: 0 10px;
 }

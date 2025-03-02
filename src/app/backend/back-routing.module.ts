@@ -22,6 +22,12 @@ import { ChatMessageComponent } from './VirtualClassroom-Admin/chat-message/chat
 import { FeedBackComponent } from './VirtualClassroom-Admin/feed-back/feed-back.component'; // Import the FeedBackComponent
 import { GoalComponent } from './Tutoring-Admin/goal/goal.component';
 import { ProgressReportComponent } from './Tutoring-Admin/progress-report/progress-report.component';
+
+
+
+
+
+
 const routes: Routes = [
   {
     path: '', 
