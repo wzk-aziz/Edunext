@@ -46,5 +46,13 @@ export interface Course {
   // Relation avec Lecture : liste des leçons du cours (première option)
   lectures?: Lecture[];
 
+  // New fields for likes and ratings
+  likes?: number;
+  ratingCount?: number;
+  ratingSum?: number;
+
+  // Computed field: average rating (if ratingCount > 0)
+  averageRating?: number;
+
   
 }
