@@ -1,3 +1,6 @@
+<!-- Add confetti canvas at the top -->
+<canvas #confettiCanvas class="confetti-canvas"></canvas>
+
 <div class="goal-container">
   <h2>Goals Management</h2>
 
@@ -25,39 +28,50 @@
     </button>
   </div>
   
-  <!-- Create form -->
+  <!-- Create form - updated with required field indicators -->
   <div *ngIf="showCreateForm" class="goal-form">
     <h3>Create New Goal</h3>
     <form (ngSubmit)="createGoal()" #goalForm="ngForm">
       <div>
-        <label for="description">Description:</label>
-        <input id="description" [(ngModel)]="newGoal.goalDescription" name="description" required minlength="3" #description="ngModel">
-        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error">
+        <label for="description">Description: <span class="required-field">*</span></label>
+        <input id="description" [(ngModel)]="newGoal.goalDescription" 
+               name="description" required minlength="3" #description="ngModel"
+               [class.error-field]="description.invalid && (description.dirty || description.touched || formSubmitted)">
+        <div *ngIf="description.invalid && (description.dirty || description.touched || formSubmitted)" class="error">
           <div *ngIf="description.errors?.['required']">Description is required.</div>
           <div *ngIf="description.errors?.['minlength']">Description must be at least 3 characters long.</div>
         </div>
       </div>
 
       <div>
-        <label for="targetDate">Target Date:</label>
-        <input id="targetDate" type="date" [(ngModel)]="newGoal.goalTargetDate" name="targetDate" required #targetDate="ngModel">
-        <div *ngIf="targetDate.invalid && (targetDate.dirty || targetDate.touched)" class="error">
+        <label for="targetDate">Target Date: <span class="required-field">*</span></label>
+        <input id="targetDate" type="date" [(ngModel)]="newGoal.goalTargetDate" 
+               name="targetDate" required #targetDate="ngModel"
+               [class.error-field]="targetDate.invalid && (targetDate.dirty || targetDate.touched || formSubmitted)">
+        <div *ngIf="targetDate.invalid && (targetDate.dirty || targetDate.touched || formSubmitted)" class="error">
           <div *ngIf="targetDate.errors?.['required']">Target Date is required.</div>
         </div>
       </div>
 
       <div>
-        <label for="mentorshipProgram">Mentorship Program ID:</label>
-        <input id="mentorshipProgram" type="number" [(ngModel)]="newGoal.mentorshipProgramId" name="mentorshipProgram" required min="1" #mentorshipProgram="ngModel">
-        <div *ngIf="mentorshipProgram.invalid && (mentorshipProgram.dirty || mentorshipProgram.touched)" class="error">
+        <label for="mentorshipProgram">Mentorship Program ID: <span class="required-field">*</span></label>
+        <input id="mentorshipProgram" type="number" [(ngModel)]="newGoal.mentorshipProgramId" 
+               name="mentorshipProgram" required min="1" #mentorshipProgram="ngModel"
+               [class.error-field]="mentorshipProgram.invalid && (mentorshipProgram.dirty || mentorshipProgram.touched || formSubmitted)">
+        <div *ngIf="mentorshipProgram.invalid && (mentorshipProgram.dirty || mentorshipProgram.touched || formSubmitted)" class="error">
           <div *ngIf="mentorshipProgram.errors?.['required']">Mentorship Program ID is required.</div>
           <div *ngIf="mentorshipProgram.errors?.['min']">Mentorship Program ID must be at least 1.</div>
         </div>
       </div>
 
+      <!-- Add form validation summary -->
+      <div *ngIf="formSubmitted && goalForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-add" [disabled]="goalForm.invalid">✓</button>
-        <button type="button" class="btn-cancel" (click)="showCreateForm = false">✖</button>
+        <button type="submit" class="btn-square btn-add">✓</button>
+        <button type="button" class="btn-cancel" (click)="resetForm()">✖</button>
       </div>
     </form>
   </div>
@@ -69,7 +83,8 @@
         <input type="text" placeholder="Search goals..." [(ngModel)]="searchTerm" (ngModelChange)="filterGoals()" class="search-bar">
       </div>
       
-      <!-- Add advanced filters like in session component -->
+      <!-- Advanced filters -->
+
       <div class="advanced-filters">
         <details>
           <summary>Advanced Filters</summary>
@@ -85,10 +100,14 @@
             
             <div>
               <label>Program ID:</label>
-              <input type="number" [(ngModel)]="filters.programId" placeholder="Filter by program" min="1" (change)="filterGoals()">
+              <input type="number" [(ngModel)]="filters.programId" 
+                     placeholder="Filter by program" min="1" 
+                     (change)="filterGoals()">
             </div>
             
-            <button class="btn-square btn-delete" (click)="clearFilters()">🗑️</button>
+            <div class="filter-actions">
+              <button class="btn-square btn-delete btn-clear-filters" (click)="clearFilters()" title="Clear Filters">🗑️</button>
+            </div>
           </div>
         </details>
       </div>
@@ -119,9 +138,8 @@
         </tr>
       </tbody>
     </table>
-        <!-- Add after the table but before the "no goals found" message -->
     
-    <!-- Replace the current pagination-controls div with this -->
+    <!-- Pagination controls -->
     <div class="pagination-controls" *ngIf="filteredGoals && filteredGoals.length > 0">
       <div class="pagination-info">
         Showing {{ (currentPage - 1) * pageSize + 1 }} to 
@@ -147,44 +165,55 @@
       </div>
     </div>
     
-    <!-- No goals found message styled like session -->
+    <!-- No goals found message -->
     <div *ngIf="!filteredGoals || filteredGoals.length === 0" class="no-data-message">
       No goals found. Please add a new goal.
     </div>
   </div>
 
-  <!-- Edit goal form -->
+  <!-- Edit goal form - updated with required field indicators -->
   <div *ngIf="selectedGoal" class="goal-edit">
     <h3>Edit Goal</h3>
     <form (ngSubmit)="updateGoal()" #editGoalForm="ngForm">
       <div>
-        <label for="edit-description">Description:</label>
-        <input id="edit-description" [(ngModel)]="selectedGoal.goalDescription" name="editDescription" required minlength="3" #editDescription="ngModel">
-        <div *ngIf="editDescription.invalid && (editDescription.dirty || editDescription.touched)" class="error">
+        <label for="edit-description">Description: <span class="required-field">*</span></label>
+        <input id="edit-description" [(ngModel)]="selectedGoal.goalDescription" 
+               name="editDescription" required minlength="3" #editDescription="ngModel"
+               [class.error-field]="editDescription.invalid && (editDescription.dirty || editDescription.touched || formSubmitted)">
+        <div *ngIf="editDescription.invalid && (editDescription.dirty || editDescription.touched || formSubmitted)" class="error">
           <div *ngIf="editDescription.errors?.['required']">Description is required.</div>
           <div *ngIf="editDescription.errors?.['minlength']">Description must be at least 3 characters long.</div>
         </div>
       </div>
 
       <div>
-        <label for="edit-targetDate">Target Date:</label>
-        <input id="edit-targetDate" type="date" [(ngModel)]="selectedGoal.goalTargetDate" name="editTargetDate" required #editTargetDate="ngModel">
-        <div *ngIf="editTargetDate.invalid && (editTargetDate.dirty || editTargetDate.touched)" class="error">
+        <label for="edit-targetDate">Target Date: <span class="required-field">*</span></label>
+        <input id="edit-targetDate" type="date" [(ngModel)]="selectedGoal.goalTargetDate" 
+               name="editTargetDate" required #editTargetDate="ngModel"
+               [class.error-field]="editTargetDate.invalid && (editTargetDate.dirty || editTargetDate.touched || formSubmitted)">
+        <div *ngIf="editTargetDate.invalid && (editTargetDate.dirty || editTargetDate.touched || formSubmitted)" class="error">
           <div *ngIf="editTargetDate.errors?.['required']">Target Date is required.</div>
         </div>
       </div>
 
       <div>
-        <label for="edit-mentorshipProgram">Mentorship Program ID:</label>
-        <input id="edit-mentorshipProgram" type="number" [(ngModel)]="selectedGoal.mentorshipProgramId" name="editMentorshipProgram" required min="1" #editMentorshipProgram="ngModel">
-        <div *ngIf="editMentorshipProgram.invalid && (editMentorshipProgram.dirty || editMentorshipProgram.touched)" class="error">
+        <label for="edit-mentorshipProgram">Mentorship Program ID: <span class="required-field">*</span></label>
+        <input id="edit-mentorshipProgram" type="number" [(ngModel)]="selectedGoal.mentorshipProgramId" 
+               name="editMentorshipProgram" required min="1" #editMentorshipProgram="ngModel"
+               [class.error-field]="editMentorshipProgram.invalid && (editMentorshipProgram.dirty || editMentorshipProgram.touched || formSubmitted)">
+        <div *ngIf="editMentorshipProgram.invalid && (editMentorshipProgram.dirty || editMentorshipProgram.touched || formSubmitted)" class="error">
           <div *ngIf="editMentorshipProgram.errors?.['required']">Mentorship Program ID is required.</div>
           <div *ngIf="editMentorshipProgram.errors?.['min']">Mentorship Program ID must be at least 1.</div>
         </div>
       </div>
 
+      <!-- Add form validation summary -->
+      <div *ngIf="formSubmitted && editGoalForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-edit" [disabled]="editGoalForm.invalid">✓</button>
+        <button type="submit" class="btn-square btn-edit">✏️</button>
         <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
       </div>
     </form>

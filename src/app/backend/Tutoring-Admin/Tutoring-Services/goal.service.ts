@@ -100,8 +100,12 @@ export class GoalService {
     const backendGoal = {
       goalDescription: goal.goalDescription,
       goalTargetDate: goal.goalTargetDate,
+      // Include multiple formats to ensure one works
+      mentorshipProgramId: originalProgramId,
+      programId: originalProgramId,
       mentorshipProgram: {
-        idMentorshipProgram: originalProgramId
+        idMentorshipProgram: originalProgramId,
+        id: originalProgramId
       }
     };
   
@@ -148,12 +152,19 @@ export class GoalService {
     );
   }
 
-    updateGoal(goal: Goal): Observable<Goal> {
-    const backendGoal = {
-      goalDescription: goal.goalDescription,
-      goalTargetDate: goal.goalTargetDate,
-      mentorshipProgram: {
-        idMentorshipProgram: goal.mentorshipProgramId
+  updateGoal(goal: Goal): Observable<Goal> {
+    const originalProgramId = goal.mentorshipProgramId;
+
+ 
+      const backendGoal = {
+        goalDescription: goal.goalDescription,
+        goalTargetDate: goal.goalTargetDate,
+        // Include multiple formats to ensure one works
+        mentorshipProgramId: originalProgramId,
+        programId: originalProgramId,
+        mentorshipProgram: {
+          idMentorshipProgram: originalProgramId,
+          id: originalProgramId
       }
     };
     
