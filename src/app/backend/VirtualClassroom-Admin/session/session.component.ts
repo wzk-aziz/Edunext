@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { SessionService } from '../VirtualClassroom-Services/session.service';
 import { Session } from './session.model';
 import { formatDate } from '@angular/common';
+
 
 @Component({
   selector: 'app-session',
@@ -34,6 +35,11 @@ pageSizeOptions: number[] = [5, 10, 25, 50];
 paginatedSessions: Session[] = [];
 Math = Math; // For template access
 
+toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}> = [];
+
+@ViewChild('confettiCanvas') confettiCanvas: ElementRef | undefined;
+
+
 // For filtering
 filters: {
   subject: string | null;
@@ -58,25 +64,52 @@ availableSubjects: string[] = [];
     this.startTimeString = this.formatDateForInput(now);
   }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.loading = true;
     this.error = null;
-    
     
     this.sessionService.getSessions().subscribe({
       next: (data) => {
         console.log('Received sessions:', data);
-        this.sessions = data;
+        
+        // Process the data to ensure instructor IDs are extracted
+        this.sessions = data.map(session => {
+          // Extract instructor ID from various formats
+          let instructorId = null;
+          
+          if (session.instructor) {
+            if (typeof session.instructor === 'object') {
+              instructorId = session.instructor.id || 
+                            session.instructor.idInstructor || 
+                            session.instructor.instructorId;
+            } else if (typeof session.instructor === 'number') {
+              instructorId = session.instructor;
+            } else if (typeof session.instructor === 'string' && !isNaN(Number(session.instructor))) {
+              instructorId = Number(session.instructor);
+            }
+          }
+          
+          // If we still don't have an instructorId, use existing if available
+          if (instructorId === null && session.instructorId !== undefined) {
+            instructorId = session.instructorId;
+          }
+          
+          return {
+            ...session,
+            instructorId: instructorId,
+            // CRITICAL CHANGE: Set instructor to be the numeric ID for consistency
+            instructor: instructorId
+          };
+        });
+        
         this.filteredSessions = [...this.sessions];
+        this.extractFilters();
         this.paginate();
         this.loading = false;
       },
       error: (error) => {
         console.error('Failed to load sessions:', error);
         this.error = 'Failed to load sessions. Please try again.';
-        this.loading = false;
-      },
-      complete: () => {
         this.loading = false;
       }
     });
@@ -93,47 +126,76 @@ availableSubjects: string[] = [];
     return new Date(dateString);
   }
 
-fetchSessions() {
-  this.loading = true;
-  this.error = null;
-  console.log('Fetching sessions...');
-  
-  this.sessionService.getSessions().subscribe({
-    next: (data: Session[]) => {
-      console.log('Sessions received:', data);
-      
-      // Ensure data is an array
-      if (!Array.isArray(data)) {
-        this.error = 'Invalid data format received from server';
-        this.loading = false;
-        return;
-      }
-      
-      // Process dates if needed
-      this.sessions = data.map(session => {
-        // Ensure startTime is a Date object (if it's a string)
-        if (typeof session.startTime === 'string' && session.startTime) {
+  // Replace your current fetchSessions() method with this:
+  fetchSessions() {
+    this.loading = true;
+    this.error = null;
+    console.log('Fetching sessions...');
+    
+    // First, try a direct fetch to see raw response
+    fetch('http://localhost:8088/api/sessions/all')
+      .then(response => response.text())
+      .then(text => {
+        console.log('Raw response sample:', text.substring(0, 200));
+      })
+      .catch(err => console.error('Raw fetch error:', err));
+    
+    // Then use the service
+    this.sessionService.getSessions().subscribe({
+      next: (data: Session[]) => {
+        console.log('Sessions received:', data);
+        
+        // Extra step: ensure instructorId is always processed correctly
+        this.sessions = data.map(session => {
+          // Process any instructor data we find to ensure ID is set
+          let instructorId = null;
+          
+          if (session.instructor) {
+            if (typeof session.instructor === 'object') {
+              instructorId = session.instructor.id || 
+                            session.instructor.idInstructor || 
+                            session.instructor.instructorId;
+            } else if (typeof session.instructor === 'number') {
+              instructorId = session.instructor;
+            } else if (typeof session.instructor === 'string' && !isNaN(Number(session.instructor))) {
+              instructorId = Number(session.instructor);
+            }
+          }
+          
+          // Use existing instructorId if provided
+          if (session.instructorId !== undefined && session.instructorId !== null) {
+            instructorId = session.instructorId;
+          }
+          
           return {
             ...session,
-            startTime: new Date(session.startTime)  // Update existing property, don't create a new one
+            instructorId: instructorId,
+            // Important: also set instructor to a numeric value for consistency
+            instructor: instructorId
           };
+        });
+        
+        // Log the first session to verify
+        if (this.sessions.length > 0) {
+          console.log('First session processed:', {
+            id: this.sessions[0].idSession,
+            instructor: this.sessions[0].instructor,
+            instructorId: this.sessions[0].instructorId
+          });
         }
-        return session;
-      });
-      
-      this.filteredSessions = [...this.sessions];
-      this.extractFilters(); // Add this
-      this.paginate(); // Add this     
-      this.loading = false;
-      console.log('Sessions loaded:', this.sessions.length);
-    },
-    error: (error) => {
-      console.error('Failed to fetch sessions:', error);
-      this.error = 'Failed to load sessions. Please try again.';
-      this.loading = false;
-    }
-  });
-}
+        
+        this.filteredSessions = [...this.sessions];
+        this.extractFilters();
+        this.paginate();
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load sessions:', error);
+        this.error = 'Failed to load sessions. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
 
 filterSessions() {
   // Reset filter if no search term
@@ -208,12 +270,15 @@ applyFilters(sessions: Session[]): Session[] {
 
 // Method to extract available filters from data
 extractFilters() {
-  // Extract unique subjects
-  this.availableSubjects = Array.from(new Set(
-    this.sessions
-      .map(session => session.sessionSubject)
-      .filter(Boolean) as string[]
-  ));
+  // Get all subject values (handle null/undefined too)
+  const allSubjects = this.sessions
+    .map(session => session.sessionSubject)
+    .filter(subject => subject !== null && subject !== undefined) as string[];
+  
+  // Use Set to get unique values, then sort them alphabetically
+  this.availableSubjects = Array.from(new Set(allSubjects)).sort();
+  
+  console.log('Extracted subjects:', this.availableSubjects);
 }
 
 clearFilters() {
@@ -270,6 +335,17 @@ changePageSize(size: number) {
     this.showSessionList = false;
     this.selectedSession = null;
     this.error = null;
+    this.formSubmitted = false;
+
+    if (!this.selectedSession) return;
+  
+    // Check if form is valid
+    const form = document.querySelector('form');
+    if (form && form.checkValidity() === false) {
+      this.showToast('Please fill in all required fields', 'warning');
+      return;
+    }
+    
     
     // Reset the form with current date
     const now = new Date();
@@ -283,23 +359,36 @@ changePageSize(size: number) {
     };
   }
 
-  // Replace your addSession method with this:
   addSession() {
+    this.formSubmitted = true; // Set this flag to true to trigger validation messages
+    
+    // Get reference to the form and check validity
+    const form = document.querySelector('form');
+    if (form && form.checkValidity() === false) {
+      this.showToast('Please fill in all required fields', 'warning');
+      return; // Stop execution if form is invalid
+    }
+    
     this.loading = true;
     this.error = null;
     
-    // Create a session object with proper structure for your backend
+    // Save the original instructor ID
+    const originalInstructorId = Number(this.newSession.instructor);
+    
+    // Prepare the session data to send
     const sessionToAdd = {
-      titleSession: this.newSession.titleSession,
-      sessionDuration: this.newSession.sessionDuration || 30,
+      titleSession: this.newSession.titleSession.trim(),
+      sessionDuration: Number(this.newSession.sessionDuration) || 30,
       startTime: this.startTimeString ? new Date(this.startTimeString).toISOString() : new Date().toISOString(),
-      sessionSubject: this.newSession.sessionSubject,
-      instructor: this.newSession.instructor ? { id: this.newSession.instructor } : null
+      sessionSubject: this.newSession.sessionSubject?.trim(),
+      instructor: {
+        idInstructor: originalInstructorId
+      }
     };
     
-    console.log('Adding session with data:', sessionToAdd);
+    console.log('Adding session with data:', JSON.stringify(sessionToAdd, null, 2));
     
-    // Use fetch directly for more control over headers
+    // Rest of your fetch code remains the same
     fetch('http://localhost:8088/api/sessions', {
       method: 'POST',
       headers: {
@@ -320,17 +409,47 @@ changePageSize(size: number) {
     })
     .then(data => {
       console.log('Add successful, response:', data);
-      this.sessions.push(data);
+      
+      // Process the response for instructor ID
+      let instructorId = null;
+      
+      if (data.instructor) {
+        if (typeof data.instructor === 'object') {
+          instructorId = data.instructor.id || 
+                        data.instructor.idInstructor || 
+                        data.instructor.instructorId;
+        } else if (typeof data.instructor === 'number') {
+          instructorId = data.instructor;
+        }
+      }
+      
+      // Fallback to original ID if none extracted
+      if (instructorId === null) {
+        instructorId = originalInstructorId;
+      }
+      
+      // Create processed session object
+      const processedSession = {
+        ...data,
+        instructorId: instructorId,
+        instructor: instructorId
+      };
+      
+      // Update the UI
+      this.sessions.push(processedSession);
       this.filteredSessions = [...this.sessions];
-      this.paginate(); 
+      this.paginate();
       this.resetForm();
       this.loading = false;
-      alert('Session added successfully!');
+      this.showToast('Session added successfully!', 'success');
+      this.triggerConfetti(); // Add this line
+
     })
     .catch(error => {
       console.error('Add failed:', error);
       this.error = `Add failed: ${error.message}`;
       this.loading = false;
+      this.showToast(`Failed to add session: ${error.message}`, 'error');
     });
   }
 
@@ -360,25 +479,45 @@ changePageSize(size: number) {
   }
 
   updateSession() {
+    this.formSubmitted = true; // Set flag to show validation messages
+    
     if (!this.selectedSession) return;
+    
+    // Get reference to the form and check validity
+    const form = document.querySelector('form');
+    if (form && form.checkValidity() === false) {
+      this.showToast('Please fill in all required fields', 'warning');
+      return; // Stop execution if form is invalid
+    }
     
     this.loading = true;
     this.error = null;
     
-    // IMPORTANT: Use the EXACT SAME approach as debugUpdate
-    const sessionToUpdate: Session = {
+    // Save original instructor ID
+    const originalInstructorId = Number(this.selectedSession.instructor);
+    
+    // Prepare session data to update
+    const sessionToUpdate = {
       ...this.selectedSession,
-      startTime: this.parseInputDate(this.selectedStartTimeString)  // Use Date object, not ISO string
+      // Normalize data
+      titleSession: this.selectedSession.titleSession?.trim(),
+      sessionSubject: this.selectedSession.sessionSubject?.trim(),
+      sessionDuration: Number(this.selectedSession.sessionDuration),
+      startTime: this.parseInputDate(this.selectedStartTimeString).toISOString(),
+      instructor: {
+        idInstructor: originalInstructorId
+      }
     };
     
-    console.log('Updating session with data:', sessionToUpdate);
+    console.log('Updating session with data:', JSON.stringify(sessionToUpdate, null, 2));
     
+    // REST of your fetch code remains the same
     fetch(`http://localhost:8088/api/sessions/${sessionToUpdate.idSession}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(sessionToUpdate)  // Let JSON.stringify handle the Date conversion
+      body: JSON.stringify(sessionToUpdate)
     })
     .then(response => {
       console.log('Update response status:', response.status);
@@ -389,18 +528,55 @@ changePageSize(size: number) {
     })
     .then(data => {
       console.log('Update successful, response:', data);
-      this.debugData = data;
-      this.fetchSessions();
+      
+      // Process the response for instructor ID
+      let instructorId = null;
+      
+      if (data.instructor) {
+        if (typeof data.instructor === 'object') {
+          instructorId = data.instructor.id || 
+                        data.instructor.idInstructor || 
+                        data.instructor.instructorId;
+        } else if (typeof data.instructor === 'number') {
+          instructorId = data.instructor;
+        }
+      }
+      
+      // Fallback to original ID if none extracted
+      if (instructorId === null) {
+        instructorId = originalInstructorId;
+      }
+      
+      // Create updated session object
+      const updatedSession = {
+        ...data,
+        instructorId: instructorId,
+        instructor: instructorId
+      };
+      
+      // Update the UI
+      const index = this.sessions.findIndex(s => s.idSession === data.idSession);
+      if (index !== -1) {
+        this.sessions[index] = updatedSession;
+        this.sessions = [...this.sessions];
+        this.filteredSessions = this.applyFilters([...this.sessions]);
+        this.paginate();
+      } else {
+        this.fetchSessions();
+      }
+      
       this.selectedSession = null;
       this.showSessionList = true;
       this.loading = false;
-      alert('Session updated successfully!');
+      this.showToast('Session updated successfully!', 'success');
+      this.triggerConfetti(); // Add this line
+
     })
     .catch(error => {
       console.error('Update failed:', error);
       this.error = `Update failed: ${error.message}`;
-      this.debugData = { error: error.message };
       this.loading = false;
+      this.showToast(`Failed to update session: ${error.message}`, 'error');
     });
   }
 
@@ -415,17 +591,19 @@ changePageSize(size: number) {
     this.loading = true;
     this.error = null;
     
-    this.sessionService.deleteSession(idSession).subscribe({  // Pass consistent parameter
+    this.sessionService.deleteSession(idSession).subscribe({
       next: () => {
         console.log('Session deleted successfully');
         this.sessions = this.sessions.filter(s => s.idSession !== idSession);
         this.filteredSessions = [...this.sessions];
         this.loading = false;
+        this.showToast('Session deleted successfully!', 'success');
       },
       error: (error) => {
         console.error('Error deleting session:', error);
         this.error = 'Failed to delete session. Please try again.';
         this.loading = false;
+        this.showToast(`Failed to delete session: ${error.message}`, 'error');
       }
     });
   }
@@ -585,11 +763,13 @@ debugAdd() {
     this.debugData = data;
     alert('Session added successfully!');
   })
-  .catch(error => {
-    console.error('Add failed:', error);
-    this.error = `Add failed: ${error.message}`;
-    this.debugData = { error: error.message };
-  });
+// Also update error handling:
+.catch(error => {
+  console.error('Add failed:', error);
+  this.error = `Add failed: ${error.message}`;
+  this.loading = false;
+  this.showToast(`Failed to add session: ${error.message}`, 'error');
+});
 }
 
 // Add this to your component.ts
@@ -757,4 +937,121 @@ debugSessionsWithRawData() {
       this.loading = false;
     });
 }
+
+// Add this to session.component.ts
+inspectSession(session: Session): void {
+  console.log('Session inspector:', {
+    id: session.idSession,
+    title: session.titleSession,
+    instructor: session.instructor,
+    instructorType: typeof session.instructor
+  });
+  
+  // If instructor is an object, log its properties
+  if (session.instructor && typeof session.instructor === 'object') {
+    console.log('Instructor properties:', Object.keys(session.instructor));
+  }
+}
+
+
+// Add these methods to your class
+showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info') {
+  console.log('Showing toast:', message, type); // Add this line to confirm the method is called
+  
+  // Clone the array for better change detection
+  this.toasts = [...this.toasts, { message, type }];
+  
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (this.toasts.length > 0) {
+      this.toasts = this.toasts.slice(1);
+    }
+  }, 5000);
+}
+removeToast(index: number) {
+  this.toasts.splice(index, 1);
+}
+
+formSubmitted = false;
+
+
+
+// Add this method to your component
+triggerConfetti() {
+  if (!this.confettiCanvas) return;
+  
+  const canvas = this.confettiCanvas.nativeElement;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const pieces: any[] = [];
+  const numberOfPieces = 200;
+  const colors = ['#f44336', '#2196f3', '#ffeb3b', '#4caf50', '#9c27b0'];
+
+  function randomFromTo(from: number, to: number) {
+    return Math.floor(Math.random() * (to - from + 1) + from);
+  }
+  
+  for (let i = 0; i < numberOfPieces; i++) {
+    pieces.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: randomFromTo(5, 10),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      speed: randomFromTo(1, 5),
+      friction: 0.95,
+      opacity: 1,
+      yVel: 0,
+      xVel: 0
+    });
+  }
+  
+  let rendered = 0;
+  
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    pieces.forEach((piece, i) => {
+      piece.opacity -= 0.01;
+      piece.yVel += 0.25;
+      piece.xVel *= piece.friction;
+      piece.yVel *= piece.friction;
+      piece.rotation += 1;
+      piece.x += piece.xVel + Math.random() * 2 - 1;
+      piece.y += piece.yVel;
+      
+      if (piece.opacity <= 0) {
+        pieces.splice(i, 1);
+        return;
+      }
+      
+      ctx.beginPath();
+      ctx.arc(piece.x, piece.y, piece.radius, 0, Math.PI * 2);
+      ctx.fillStyle = piece.color;
+      ctx.globalAlpha = piece.opacity;
+      ctx.fill();
+    });
+
+    rendered += 1;
+    if (pieces.length > 0 && rendered < 500) {
+      requestAnimationFrame(renderConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  
+  // Initialize confetti velocities
+  pieces.forEach((piece) => {
+    piece.xVel = (Math.random() - 0.5) * 20;
+    piece.yVel = (Math.random() - 0.5) * 20;
+  });
+  
+  renderConfetti();
+}
+
+
+
+
 }

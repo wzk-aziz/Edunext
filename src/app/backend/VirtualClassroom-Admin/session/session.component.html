@@ -1,4 +1,52 @@
 <div class="session-container">
+
+<canvas #confettiCanvas class="confetti-canvas"></canvas>
+
+  <!-- Updated  toast HTML -->
+  <div class="toast-container" *ngIf="toasts.length > 0">
+    <div *ngFor="let toast of toasts; let i = index" 
+        [ngClass]="['toast', 'toast-' + toast.type]"
+        (click)="removeToast(i)">
+      <div class="toast-content">
+        <span class="toast-icon">
+          <ng-container [ngSwitch]="toast.type">
+            <ng-container *ngSwitchCase="'success'">
+              <div class="icon-success">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="currentColor" d="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41-1.41L9,16.17z"></path>
+                </svg>
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'error'">
+              <div class="icon-error">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41z"></path>
+                </svg>
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'warning'">
+              <div class="icon-warning">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="currentColor" d="M1,21h22L12,2L1,21z M13,18h-2v-2h2V18z M13,14h-2v-4h2V14z"></path>
+                </svg>
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'info'">
+              <div class="icon-info">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="currentColor" d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M13,17h-2v-6h2V17z M13,9h-2V7h2V9z"></path>
+                </svg>
+              </div>
+            </ng-container>
+          </ng-container>
+        </span>
+        <span class="toast-message">{{ toast.message }}</span>
+      </div>
+      <button class="toast-close" (click)="$event.stopPropagation(); removeToast(i)">×</button>
+    </div>
+  </div>
+
+
   <h2>Sessions Management</h2>
  
  
@@ -103,7 +151,8 @@
           <td>{{ session.sessionDuration }} hour(s)</td>
           <td>{{ session.startTime | date:'medium' }}</td>
           <td>{{ session.sessionSubject }}</td>
-          <td>{{ session.instructor?.id || 'None' }}</td>
+          <!-- In your session list table -->
+          <td>{{ session.instructorId !== null ? session.instructorId : (session.instructor || 'None') }}</td>
           <td>
             <div class="button-container">
               <button class="btn-square btn-edit" (click)="editSession(session)" title="Edit">✏️</button>
@@ -145,112 +194,179 @@
   </div>
 
   <!-- Edit session form -->
-  <div class="session-edit" *ngIf="selectedSession && !showAddForm && !showSessionList">
+  <div class="session-form" *ngIf="selectedSession && !showAddForm && !showSessionList">
     <h3>Edit Session</h3>
-    <form (ngSubmit)="updateSession()" #editSessionForm="ngForm">
-      <div>
-        <label for="edit-title">Title:</label>
-        <input id="edit-title" [(ngModel)]="selectedSession.titleSession" name="editTitle" required minlength="3" #editTitle="ngModel">
-        <div *ngIf="editTitle.invalid && (editTitle.dirty || editTitle.touched)" class="error">
+    <form (ngSubmit)="updateSession()" #editForm="ngForm">
+      <!-- Title field -->
+      <div class="form-group">
+        <label for="edit-title">Title: <span class="required-field">*</span></label>
+        <input id="edit-title" 
+               [(ngModel)]="selectedSession.titleSession" 
+               name="editTitleSession" required minlength="3" maxlength="100"
+               #editTitle="ngModel"
+               [class.error-field]="editTitle.invalid && (editTitle.dirty || editTitle.touched || formSubmitted)">
+        <div *ngIf="editTitle.invalid && (editTitle.dirty || editTitle.touched || formSubmitted)" class="error-message">
           <div *ngIf="editTitle.errors?.['required']">Title is required.</div>
           <div *ngIf="editTitle.errors?.['minlength']">Title must be at least 3 characters long.</div>
+          <div *ngIf="editTitle.errors?.['maxlength']">Title cannot exceed 100 characters.</div>
         </div>
       </div>
       
-      <div>
-        <label for="edit-duration">Duration Hour(s):</label>
-        <input id="edit-duration" type="number" [(ngModel)]="selectedSession.sessionDuration" name="editDuration" required min="1" #editDuration="ngModel">
-        <div *ngIf="editDuration.invalid && (editDuration.dirty || editDuration.touched)" class="error">
+      <!-- Duration field -->
+      <div class="form-group">
+        <label for="edit-duration">Duration (Hours): <span class="required-field">*</span></label>
+        <input id="edit-duration" type="number" 
+               [(ngModel)]="selectedSession.sessionDuration" 
+               name="editDuration" required min="1" max="24"
+               #editDuration="ngModel"
+               [class.error-field]="editDuration.invalid && (editDuration.dirty || editDuration.touched || formSubmitted)">
+        <div *ngIf="editDuration.invalid && (editDuration.dirty || editDuration.touched || formSubmitted)" class="error-message">
           <div *ngIf="editDuration.errors?.['required']">Duration is required.</div>
-          <div *ngIf="editDuration.errors?.['min']">Duration must be at least 1 Hour.</div>
+          <div *ngIf="editDuration.errors?.['min']">Duration must be at least 1 hour.</div>
+          <div *ngIf="editDuration.errors?.['max']">Duration cannot exceed 24 hours.</div>
         </div>
       </div>
       
-      <div>
-        <label for="edit-startTime">Start Time:</label>
-        <input id="edit-startTime" type="datetime-local" [(ngModel)]="selectedStartTimeString" name="editStartTime" required #editStartTime="ngModel">
-        <div *ngIf="editStartTime.invalid && (editStartTime.dirty || editStartTime.touched)" class="error">
-          <div *ngIf="editStartTime.errors?.['required']">Start Time is required.</div>
+      <!-- Start Time field -->
+      <div class="form-group">
+        <label for="edit-startTime">Start Time: <span class="required-field">*</span></label>
+        <input id="edit-startTime" type="datetime-local" 
+               [(ngModel)]="selectedStartTimeString" 
+               name="editStartTime" required
+               #editStartTime="ngModel"
+               [class.error-field]="editStartTime.invalid && (editStartTime.dirty || editStartTime.touched || formSubmitted)">
+        <div *ngIf="editStartTime.invalid && (editStartTime.dirty || editStartTime.touched || formSubmitted)" class="error-message">
+          <div *ngIf="editStartTime.errors?.['required']">Start time is required.</div>
         </div>
       </div>
       
-      <div>
-        <label for="edit-subject">Subject:</label>
-        <input id="edit-subject" [(ngModel)]="selectedSession.sessionSubject" name="editSubject" required minlength="3" #editSubject="ngModel">
-        <div *ngIf="editSubject.invalid && (editSubject.dirty || editSubject.touched)" class="error">
+      <!-- Subject field -->
+      <div class="form-group">
+        <label for="edit-subject">Subject: <span class="required-field">*</span></label>
+        <input id="edit-subject" 
+               [(ngModel)]="selectedSession.sessionSubject" 
+               name="editSubject" required minlength="3" maxlength="50"
+               #editSubject="ngModel"
+               [class.error-field]="editSubject.invalid && (editSubject.dirty || editSubject.touched || formSubmitted)">
+        <div *ngIf="editSubject.invalid && (editSubject.dirty || editSubject.touched || formSubmitted)" class="error-message">
           <div *ngIf="editSubject.errors?.['required']">Subject is required.</div>
           <div *ngIf="editSubject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
+          <div *ngIf="editSubject.errors?.['maxlength']">Subject cannot exceed 50 characters.</div>
         </div>
       </div>
       
-      <div>
-        <label for="edit-instructor">Instructor ID:</label>
-        <input id="edit-instructor" type="number" [(ngModel)]="selectedSession.instructor" name="editInstructor" required min="0" #editInstructor="ngModel">
-        <div *ngIf="editInstructor.invalid && (editInstructor.dirty || editInstructor.touched)" class="error">
+      <!-- Instructor ID field -->
+      <div class="form-group">
+        <label for="edit-instructor">Instructor ID: <span class="required-field">*</span></label>
+        <input id="edit-instructor" type="number" 
+               [(ngModel)]="selectedSession.instructor" 
+               name="editInstructor" required min="1"
+               #editInstructor="ngModel"
+               [class.error-field]="editInstructor.invalid && (editInstructor.dirty || editInstructor.touched || formSubmitted)">
+        <div *ngIf="editInstructor.invalid && (editInstructor.dirty || editInstructor.touched || formSubmitted)" class="error-message">
           <div *ngIf="editInstructor.errors?.['required']">Instructor ID is required.</div>
+          <div *ngIf="editInstructor.errors?.['min']">Instructor ID is mandatory.</div>
         </div>
       </div>
       
-      <!-- Debug button to help troubleshoot -->
-      
-      <div class="form-buttons">
-        <button type="button" class="btn-square btn-edit" (click)="debugUpdate()">✏️</button>
-        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+      <!-- Form validation summary -->
+      <div *ngIf="formSubmitted && editForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
       </div>
       
+      <!-- Form buttons -->
+      <div class="form-buttons">
+        <button type="submit" class="btn-square btn-edit">Update</button>
+        <button type="button" class="btn-cancel" (click)="clearSelection()">X</button>
+      </div>
     </form>
   </div>
+
 
   <!-- Add session form -->
   <div class="session-form" *ngIf="showAddForm">
     <h3>Add New Session</h3>
     <form (ngSubmit)="addSession()" #sessionForm="ngForm">
-      <div>
-        <label for="title">Title:</label>
-        <input id="title" [(ngModel)]="newSession.titleSession" name="titleSession" required minlength="3" #title="ngModel">
-        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error">
+      <!-- Title field -->
+      <div class="form-group">
+        <label for="title">Title: <span class="required-field">*</span></label>
+        <input id="title" [(ngModel)]="newSession.titleSession" 
+               name="titleSession" required minlength="3" maxlength="100"
+               #title="ngModel"
+               [class.error-field]="title.invalid && (title.dirty || title.touched || formSubmitted)">
+        <div *ngIf="title.invalid && (title.dirty || title.touched || formSubmitted)" class="error-message">
           <div *ngIf="title.errors?.['required']">Title is required.</div>
           <div *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</div>
+          <div *ngIf="title.errors?.['maxlength']">Title cannot exceed 100 characters.</div>
         </div>
       </div>
       
-      <div>
-        <label for="duration">Duration Hour(s):</label>
-        <input id="duration" type="number" [(ngModel)]="newSession.sessionDuration" name="sessionDuration" required min="1" #duration="ngModel">
-        <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="error">
+      <!-- Duration field -->  
+      <div class="form-group">
+        <label for="duration">Duration (Hours): <span class="required-field">*</span></label>
+        <input id="duration" type="number" 
+               [(ngModel)]="newSession.sessionDuration" 
+               name="sessionDuration" required min="1" max="24"
+               #duration="ngModel"
+               [class.error-field]="duration.invalid && (duration.dirty || duration.touched || formSubmitted)">
+        <div *ngIf="duration.invalid && (duration.dirty || duration.touched || formSubmitted)" class="error-message">
           <div *ngIf="duration.errors?.['required']">Duration is required.</div>
-          <div *ngIf="duration.errors?.['min']">Duration must be at least 1 Hour.</div>
+          <div *ngIf="duration.errors?.['min']">Duration must be at least 1 hour.</div>
+          <div *ngIf="duration.errors?.['max']">Duration cannot exceed 24 hours.</div>
         </div>
       </div>
       
-      <div>
-        <label for="startTime">Start Time:</label>
-        <input id="startTime" type="datetime-local" [(ngModel)]="startTimeString" name="startTime" required #startTime="ngModel">
-        <div *ngIf="startTime.invalid && (startTime.dirty || startTime.touched)" class="error">
-          <div *ngIf="startTime.errors?.['required']">Start Time is required.</div>
+      <!-- Start Time field -->
+      <div class="form-group">
+        <label for="startTime">Start Time: <span class="required-field">*</span></label>
+        <input id="startTime" type="datetime-local" 
+               [(ngModel)]="startTimeString" 
+               name="startTime" required
+               #startTime="ngModel"
+               [class.error-field]="startTime.invalid && (startTime.dirty || startTime.touched || formSubmitted)">
+        <div *ngIf="startTime.invalid && (startTime.dirty || startTime.touched || formSubmitted)" class="error-message">
+          <div *ngIf="startTime.errors?.['required']">Start time is required.</div>
         </div>
       </div>
       
-      <div>
-        <label for="subject">Subject:</label>
-        <input id="subject" [(ngModel)]="newSession.sessionSubject" name="sessionSubject" required minlength="3" #subject="ngModel">
-        <div *ngIf="subject.invalid && (subject.dirty || subject.touched)" class="error">
+      <!-- Subject field -->
+      <div class="form-group">
+        <label for="subject">Subject: <span class="required-field">*</span></label>
+        <input id="subject" 
+               [(ngModel)]="newSession.sessionSubject" 
+               name="sessionSubject" required minlength="3" maxlength="50"
+               #subject="ngModel"
+               [class.error-field]="subject.invalid && (subject.dirty || subject.touched || formSubmitted)">
+        <div *ngIf="subject.invalid && (subject.dirty || subject.touched || formSubmitted)" class="error-message">
           <div *ngIf="subject.errors?.['required']">Subject is required.</div>
           <div *ngIf="subject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
+          <div *ngIf="subject.errors?.['maxlength']">Subject cannot exceed 50 characters.</div>
         </div>
       </div>
       
-      <div>
-        <label for="instructor">Instructor ID:</label>
-        <input id="instructor" type="number" [(ngModel)]="newSession.instructor" name="instructor" required min="0" #instructor="ngModel">
-        <div *ngIf="instructor.invalid && (instructor.dirty || instructor.touched)" class="error">
+      <!-- Instructor ID field -->
+      <div class="form-group">
+        <label for="instructor">Instructor ID: <span class="required-field">*</span></label>
+        <input id="instructor" type="number" 
+               [(ngModel)]="newSession.instructor" 
+               name="instructor" required min="1"
+               #instructor="ngModel"
+               [class.error-field]="instructor.invalid && (instructor.dirty || instructor.touched || formSubmitted)">
+        <div *ngIf="instructor.invalid && (instructor.dirty || instructor.touched || formSubmitted)" class="error-message">
           <div *ngIf="instructor.errors?.['required']">Instructor ID is required.</div>
+          <div *ngIf="instructor.errors?.['min']">Instructor ID is mandatory.</div>
         </div>
       </div>
       
+      <!-- Form validation summary -->
+      <div *ngIf="formSubmitted && sessionForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+      
+      <!-- Form buttons -->
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-add" [disabled]="sessionForm.invalid">Add</button>
-        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+        <button type="submit" class="btn-square btn-add">Add</button>
+        <button type="button" class="btn-cancel" (click)="clearSelection()">X</button>
       </div>
     </form>
   </div>

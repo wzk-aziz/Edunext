@@ -613,3 +613,391 @@ h2 {
   font-weight: bold;
   padding: 0 10px;
 }
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+}
+
+.toast {
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0.95;
+  cursor: pointer;
+  animation: slideInRight 0.5s ease forwards;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 0.95;
+  }
+}
+
+.toast:hover {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-icon {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-message {
+  font-size: 14px;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  color: inherit;
+  margin-left: 10px;
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+.toast-success {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: white;
+}
+
+.toast-error {
+  background: linear-gradient(135deg, #f44336, #c62828);
+  color: white;
+}
+
+.toast-warning {
+  background: linear-gradient(135deg, #ff9800, #ef6c00);
+  color: white;
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #2196f3, #1565c0);
+  color: white;
+}
+
+/* Add these styles to session.component.css */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999; /* Make sure this is high enough */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+}
+
+.toast {
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0.95;
+  transition: all 0.3s ease;
+  animation: slideInRight 0.5s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 0.95;
+  }
+}
+
+.toast:hover {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-icon {
+  font-size: 18px;
+}
+
+.toast-message {
+  font-size: 14px;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+  color: inherit;
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+.toast-success {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: white;
+}
+
+.toast-error {
+  background: linear-gradient(135deg, #f44336, #c62828);
+  color: white;
+}
+
+.toast-warning {
+  background: linear-gradient(135deg, #ff9800, #ef6c00);
+  color: white;
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #2196f3, #1565c0);
+  color: white;
+}
+/* Add to session.component.css */
+.required-field {
+  color: #ff0000;
+  margin-left: 3px;
+}
+
+.error-field {
+  border: 2px solid #ff0000;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}
+/* Add this to session.component.css */
+.required-field {
+  color: #ff0000;
+  margin-left: 3px;
+}
+
+.error-field {
+  border: 2px solid #ff0000;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}
+/* Form styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.required-field {
+  color: #ff0000;
+  margin-left: 3px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.error-field {
+  border: 2px solid #ff0000;
+  background-color: #fff8f8;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.form-error-summary {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #fff0f0;
+  border-left: 4px solid #ff0000;
+  color: #cc0000;
+}
+
+.form-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn-add {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-edit {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+/* Add to your CSS */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+/* Replace your current toast animation with this */
+.toast {
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0;
+  cursor: pointer;
+  animation: toastInOut 5s ease forwards;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add this animated progress bar */
+.toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  animation: toastProgress 5s linear forwards;
+}
+
+@keyframes toastInOut {
+  0% {
+    transform: translateX(100%) translateY(0);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%) translateY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes toastProgress {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+/* More energetic entry animation for toast types */
+.toast-success {
+  animation: successToast 5s ease forwards;
+}
+
+@keyframes successToast {
+  0% {
+    transform: translateX(100%) translateY(0);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(-10px) translateY(0);
+    opacity: 1;
+  }
+  15% {
+    transform: translateX(10px) translateY(0);
+  }
+  20% {
+    transform: translateX(-5px) translateY(0);
+  }
+  25% {
+    transform: translateX(0) translateY(0);
+  }
+  90% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%) translateY(0);
+    opacity: 0;
+  }
+}

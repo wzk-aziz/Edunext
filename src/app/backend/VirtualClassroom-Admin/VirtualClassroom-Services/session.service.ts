@@ -27,7 +27,52 @@ export class SessionService {
         console.log('Raw response first 100 chars:', rawResponse.substring(0, 100) + '...');
         try {
           // First attempt to parse as-is
-          return JSON.parse(rawResponse);
+          const parsedData = JSON.parse(rawResponse);
+          
+          // Process instructor data to ensure consistent format - THIS IS THE KEY CHANGE
+          // Update the map function in getSessions method with type annotations:
+          return parsedData.map((session: any) => {
+            // Initialize instructorId
+            let instructorId = null;
+            
+            // Debug what we received
+            console.log(`Processing session ${session.idSession}, instructor:`, 
+                        session.instructor, 'type:', typeof session.instructor);
+            
+            // Check if instructor exists
+            if (session.instructor !== null && session.instructor !== undefined) {
+              if (typeof session.instructor === 'object') {
+                // Try all possible ID field names and log what we found
+                const possibleId = session.instructor.id || 
+                                   session.instructor.idInstructor || 
+                                   session.instructor.instructorId;
+                
+                console.log(`Found instructor object with possible ID: ${possibleId}`);
+                instructorId = possibleId;
+              } else if (typeof session.instructor === 'number') {
+                console.log(`Found direct instructor ID: ${session.instructor}`);
+                instructorId = session.instructor;
+              } else if (typeof session.instructor === 'string' && !isNaN(Number(session.instructor))) {
+                // Handle case where ID is a string number
+                console.log(`Found string instructor ID: ${session.instructor}`);
+                instructorId = Number(session.instructor);
+              }
+            }
+            
+            // Handle case where instructorId is directly present
+            if (session.instructorId !== undefined && session.instructorId !== null) {
+              console.log(`Using direct instructorId field: ${session.instructorId}`);
+              instructorId = session.instructorId;
+            }
+            
+            // Always return with consistent structure
+            return {
+              ...session,
+              instructorId: instructorId,
+              // Keep original instructor for reference
+              instructor: session.instructor
+            };
+          });
         } catch (e) {
           console.error('Failed to parse JSON response:', e);
           
@@ -35,14 +80,57 @@ export class SessionService {
           const cleanedResponse = this.cleanJsonResponse(rawResponse);
           
           try {
-            return JSON.parse(cleanedResponse);
+            const parsedData = JSON.parse(cleanedResponse);
+            
+            // Apply the same instructor transformation to cleaned data
+            // Update the map function in getSessions method with type annotations:
+            return parsedData.map((session: any) => {
+              // Extract instructor ID from various possible formats
+              let instructorId = null;
+              
+              if (session.instructor) {
+                if (typeof session.instructor === 'object') {
+                  // Try multiple possible property names for the ID
+                  instructorId = session.instructor.id || 
+                                 session.instructor.idInstructor || 
+                                 session.instructor.instructorId;
+                  
+                  // Replace the instructor object with just the ID
+                  return {
+                    ...session,
+                    instructorId: instructorId, // Add explicit instructorId property
+                    instructor: instructorId    // Replace object with just the ID
+                  };
+                } else if (typeof session.instructor === 'number') {
+                  // Already a number, keep it
+                  return {
+                    ...session,
+                    instructorId: session.instructor // Add explicit instructorId property
+                  };
+                }
+              }
+              
+              return {
+                ...session,
+                instructorId: instructorId
+              };
+            });
           } catch (e2) {
             console.error('Failed to parse cleaned JSON:', e2);
             return [];
           }
         }
       }),
-      tap(data => console.log('Sessions fetched (parsed):', data.length, 'sessions')),
+      tap(data => {
+        console.log('Sessions fetched (parsed):', data.length, 'sessions');
+        // Log first item's instructor data to verify
+        if (data.length > 0) {
+          console.log('First item instructor data:', {
+            instructor: data[0].instructor,
+            instructorId: data[0].instructorId
+          });
+        }
+      }),
       catchError(error => {
         console.error('Error fetching sessions:', error);
         return of([]);

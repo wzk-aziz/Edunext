@@ -5,6 +5,7 @@ export interface Session {
   startTime: Date | string | null;
   sessionDuration: number;
   instructor: any | null;
+  instructorId?: number;
   learners?: any[];
   sessionRecording?: any | null;
   feedbacks?: any[];
