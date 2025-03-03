@@ -1,6 +1,40 @@
 <div class="session-container">
-  <h2>Mentorship Programs</h2>
+  <canvas #confettiCanvas class="confetti-canvas"></canvas>
+    <!-- Add right after the canvas element -->
+  <canvas #confettiCanvas class="confetti-canvas"></canvas>
   
+  <!-- Toast notifications container -->
+  <div class="toast-container" *ngIf="toasts.length > 0">
+    <div *ngFor="let toast of toasts; let i = index" 
+        [ngClass]="['toast', 'toast-' + toast.type]"
+        (click)="removeToast(i)">
+      <div class="toast-content">
+        <span class="toast-icon">
+          <ng-container [ngSwitch]="toast.type">
+            <ng-container *ngSwitchCase="'success'">
+              <div class="icon-success">✅</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'error'">
+              <div class="icon-error">❌</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'warning'">
+              <div class="icon-warning">⚠️</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'info'">
+              <div class="icon-info">ℹ️</div>
+            </ng-container>
+          </ng-container>
+        </span>
+        <span class="toast-message">{{ toast.message }}</span>
+      </div>
+      <button class="toast-close" (click)="$event.stopPropagation(); removeToast(i)">×</button>
+    </div>
+  </div>
+  
+  
+
+  <h2>Mentorship Programs</h2>
+
   <!-- Loading indicator -->
   <div class="loading-indicator" *ngIf="loading">
     <p>Loading...</p>
@@ -23,72 +57,92 @@
   <!-- Add mentorship program form -->
   <div class="session-form" *ngIf="showCreateForm">
     <h3>Add New Mentorship Program</h3>
-    <form (ngSubmit)="createMentorshipProgram()" #mentorshipProgramForm="ngForm">
-      <div>
-                <!-- Add inside your form buttons div -->
-        <div class="spinner-small" *ngIf="loading"></div>
-        <label for="name">Program Name:</label>
-        <input id="name" [(ngModel)]="newMentorshipProgram.ProgramName" name="name" required minlength="3" #name="ngModel">
-        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error">
-          <div *ngIf="name.errors?.['required']">Name is required.</div>
-          <div *ngIf="name.errors?.['minlength']">Name must be at least 3 characters long.</div>
-        </div>
-      </div>
-
-      <div>
-        <label for="subject">Subject:</label>
-        <input id="subject" [(ngModel)]="newMentorshipProgram.ProgramSubject" name="subject" required minlength="3" #subject="ngModel">
-        <div *ngIf="subject.invalid && (subject.dirty || subject.touched)" class="error">
-          <div *ngIf="subject.errors?.['required']">Subject is required.</div>
-          <div *ngIf="subject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
-        </div>
-      </div>
-
-      <div>
-        <label for="description">Description:</label>
-        <textarea id="description" [(ngModel)]="newMentorshipProgram.ProgramDescription" name="description" required minlength="3" rows="3" #description="ngModel"></textarea>
-        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error">
-          <div *ngIf="description.errors?.['required']">Description is required.</div>
-          <div *ngIf="description.errors?.['minlength']">Description must be at least 3 characters long.</div>
-        </div>
-      </div>
-
-      <div>
-        <label for="price">Price:</label>
-        <input id="price" type="number" [(ngModel)]="newMentorshipProgram.ProgramPrice" name="price" required min="0" #price="ngModel">
-        <div *ngIf="price.invalid && (price.dirty || price.touched)" class="error">
-          <div *ngIf="price.errors?.['required']">Price is required.</div>
-          <div *ngIf="price.errors?.['min']">Price must be at least 0.</div>
-        </div>
-      </div>
-
-      <!-- In your create form, change: -->
-      <div>
-        <label for="startDate">Start Date:</label>
-        <input id="startDate" type="datetime-local" 
-               [ngModel]="formatDateForInput(newMentorshipProgram.ProgramStartDate)" 
-               (ngModelChange)="newMentorshipProgram.ProgramStartDate = parseInputDate($event)"
-               name="startDate" required #startDate="ngModel">
-      </div>
-      
-      <div>
-        <label for="endDate">End Date:</label>
-        <input id="endDate" type="datetime-local" 
-               [ngModel]="formatDateForInput(newMentorshipProgram.ProgramEndDate)" 
-               (ngModelChange)="newMentorshipProgram.ProgramEndDate = parseInputDate($event)"
-               name="endDate" required #endDate="ngModel">
-      </div>
-      
-      <!-- Similarly for the edit form inputs -->
-
-      <div>
-        <label for="instructorId">Instructor ID:</label>
-        <input id="instructorId" type="number" [(ngModel)]="newMentorshipProgram.instructor_id" name="instructorId" required min="1" #instructorId="ngModel">
-        <div *ngIf="instructorId.invalid && (instructorId.dirty || instructorId.touched)" class="error">
-          <div *ngIf="instructorId.errors?.['required']">Instructor ID is required.</div>
-          <div *ngIf="instructorId.errors?.['min']">Instructor ID must be at least 1.</div>
-        </div>
-      </div>
+    <form (ngSubmit)="createMentorshipProgram()" #mentorshipProgramForm="ngForm" id="mentorshipProgramForm">
+                  <!-- Update your create form fields -->
+                <div>
+                  <label for="name">Program Name: <span class="required-field">*</span></label>
+                  <input id="name" [(ngModel)]="newMentorshipProgram.ProgramName" 
+                         name="name" required minlength="3" #name="ngModel"
+                         [class.error-field]="name.invalid && (name.dirty || name.touched || formSubmitted)">
+                  <div *ngIf="name.invalid && (name.dirty || name.touched || formSubmitted)" class="error">
+                    <div *ngIf="name.errors?.['required']">Name is required.</div>
+                    <div *ngIf="name.errors?.['minlength']">Name must be at least 3 characters long.</div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="subject">Subject: <span class="required-field">*</span></label>
+                  <input id="subject" [(ngModel)]="newMentorshipProgram.ProgramSubject" 
+                         name="subject" required minlength="3" #subject="ngModel"
+                         [class.error-field]="subject.invalid && (subject.dirty || subject.touched || formSubmitted)">
+                  <div *ngIf="subject.invalid && (subject.dirty || subject.touched || formSubmitted)" class="error">
+                    <div *ngIf="subject.errors?.['required']">Subject is required.</div>
+                    <div *ngIf="subject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="description">Description: <span class="required-field">*</span></label>
+                  <textarea id="description" [(ngModel)]="newMentorshipProgram.ProgramDescription" 
+                            name="description" required minlength="3" rows="3" #description="ngModel"
+                            [class.error-field]="description.invalid && (description.dirty || description.touched || formSubmitted)"></textarea>
+                  <div *ngIf="description.invalid && (description.dirty || description.touched || formSubmitted)" class="error">
+                    <div *ngIf="description.errors?.['required']">Description is required.</div>
+                    <div *ngIf="description.errors?.['minlength']">Description must be at least 3 characters long.</div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="price">Price: <span class="required-field">*</span></label>
+                  <input id="price" type="number" [(ngModel)]="newMentorshipProgram.ProgramPrice" 
+                         name="price" required min="0" #price="ngModel"
+                         [class.error-field]="price.invalid && (price.dirty || price.touched || formSubmitted)">
+                  <div *ngIf="price.invalid && (price.dirty || price.touched || formSubmitted)" class="error">
+                    <div *ngIf="price.errors?.['required']">Price is required.</div>
+                    <div *ngIf="price.errors?.['min']">Price must be at least 0.</div>
+                  </div>
+                </div>
+                
+                <!-- Similarly update the date inputs -->
+                <div>
+                  <label for="startDate">Start Date: <span class="required-field">*</span></label>
+                  <input id="startDate" type="datetime-local" 
+                         [ngModel]="formatDateForInput(newMentorshipProgram.ProgramStartDate)" 
+                         (ngModelChange)="newMentorshipProgram.ProgramStartDate = parseInputDate($event)"
+                         name="startDate" required #startDate="ngModel"
+                         [class.error-field]="startDate.invalid && (startDate.dirty || startDate.touched || formSubmitted)">
+                  <div *ngIf="startDate.invalid && (startDate.dirty || startDate.touched || formSubmitted)" class="error">
+                    <div *ngIf="startDate.errors?.['required']">Start date is required.</div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="endDate">End Date: <span class="required-field">*</span></label>
+                  <input id="endDate" type="datetime-local" 
+                         [ngModel]="formatDateForInput(newMentorshipProgram.ProgramEndDate)" 
+                         (ngModelChange)="newMentorshipProgram.ProgramEndDate = parseInputDate($event)"
+                         name="endDate" required #endDate="ngModel"
+                         [class.error-field]="endDate.invalid && (endDate.dirty || endDate.touched || formSubmitted)">
+                  <div *ngIf="endDate.invalid && (endDate.dirty || endDate.touched || formSubmitted)" class="error">
+                    <div *ngIf="endDate.errors?.['required']">End date is required.</div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="instructorId">Instructor ID: <span class="required-field">*</span></label>
+                  <input id="instructorId" type="number" [(ngModel)]="newMentorshipProgram.instructor_id" 
+                         name="instructorId" required min="1" #instructorId="ngModel"
+                         [class.error-field]="instructorId.invalid && (instructorId.dirty || instructorId.touched || formSubmitted)">
+                  <div *ngIf="instructorId.invalid && (instructorId.dirty || instructorId.touched || formSubmitted)" class="error">
+                    <div *ngIf="instructorId.errors?.['required']">Instructor ID is required.</div>
+                    <div *ngIf="instructorId.errors?.['min']">Instructor ID must be at least 1.</div>
+                  </div>
+                </div>
+                
+                <!-- Add form validation summary -->
+                <div *ngIf="formSubmitted && mentorshipProgramForm.invalid" class="form-error-summary">
+                  Please fill in all required fields correctly before submitting.
+                </div>
 
       <div class="form-buttons">
         <button type="submit" class="btn-square btn-add" [disabled]="mentorshipProgramForm.invalid">Add</button>
@@ -205,76 +259,94 @@
   </div>
 
   <!-- Edit program form -->
+  <!-- Edit program form -->
   <div class="session-edit" *ngIf="selectedMentorshipProgram">
     <h3>Edit Mentorship Program</h3>
-    <form (ngSubmit)="updateMentorshipProgram()" #editMentorshipProgramForm="ngForm">
+    <form (ngSubmit)="updateMentorshipProgram()" #editMentorshipProgramForm="ngForm" id="editMentorshipProgramForm">
       <div>
-                <!-- Add inside your form buttons div -->
-        <div class="spinner-small" *ngIf="loading"></div>
-        <label for="edit-name">Program Name:</label>
-        <input id="edit-name" [(ngModel)]="selectedMentorshipProgram.ProgramName" name="editName" required minlength="3" #editName="ngModel">
-        <div *ngIf="editName.invalid && (editName.dirty || editName.touched)" class="error">
+        <label for="edit-name">Program Name: <span class="required-field">*</span></label>
+        <input id="edit-name" [(ngModel)]="selectedMentorshipProgram.ProgramName" 
+               name="editName" required minlength="3" #editName="ngModel"
+               [class.error-field]="editName.invalid && (editName.dirty || editName.touched || formSubmitted)">
+        <div *ngIf="editName.invalid && (editName.dirty || editName.touched || formSubmitted)" class="error">
           <div *ngIf="editName.errors?.['required']">Name is required.</div>
           <div *ngIf="editName.errors?.['minlength']">Name must be at least 3 characters long.</div>
         </div>
       </div>
       
       <div>
-        <label for="edit-subject">Subject:</label>
-        <input id="edit-subject" [(ngModel)]="selectedMentorshipProgram.ProgramSubject" name="editSubject" required minlength="3" #editSubject="ngModel">
-        <div *ngIf="editSubject.invalid && (editSubject.dirty || editSubject.touched)" class="error">
+        <label for="edit-subject">Subject: <span class="required-field">*</span></label>
+        <input id="edit-subject" [(ngModel)]="selectedMentorshipProgram.ProgramSubject" 
+               name="editSubject" required minlength="3" #editSubject="ngModel"
+               [class.error-field]="editSubject.invalid && (editSubject.dirty || editSubject.touched || formSubmitted)">
+        <div *ngIf="editSubject.invalid && (editSubject.dirty || editSubject.touched || formSubmitted)" class="error">
           <div *ngIf="editSubject.errors?.['required']">Subject is required.</div>
           <div *ngIf="editSubject.errors?.['minlength']">Subject must be at least 3 characters long.</div>
         </div>
       </div>
-
+  
       <div>
-        <label for="edit-description">Description:</label>
-        <textarea id="edit-description" [(ngModel)]="selectedMentorshipProgram.ProgramDescription" name="editDescription" required minlength="3" rows="3" #editDescription="ngModel"></textarea>
-        <div *ngIf="editDescription.invalid && (editDescription.dirty || editDescription.touched)" class="error">
+        <label for="edit-description">Description: <span class="required-field">*</span></label>
+        <textarea id="edit-description" [(ngModel)]="selectedMentorshipProgram.ProgramDescription" 
+                  name="editDescription" required minlength="3" rows="3" #editDescription="ngModel"
+                  [class.error-field]="editDescription.invalid && (editDescription.dirty || editDescription.touched || formSubmitted)"></textarea>
+        <div *ngIf="editDescription.invalid && (editDescription.dirty || editDescription.touched || formSubmitted)" class="error">
           <div *ngIf="editDescription.errors?.['required']">Description is required.</div>
           <div *ngIf="editDescription.errors?.['minlength']">Description must be at least 3 characters long.</div>
         </div>
       </div>
-
+  
       <div>
-        <label for="edit-price">Price:</label>
-        <input id="edit-price" type="number" [(ngModel)]="selectedMentorshipProgram.ProgramPrice" name="editPrice" required min="0" #editPrice="ngModel">
-        <div *ngIf="editPrice.invalid && (editPrice.dirty || editPrice.touched)" class="error">
+        <label for="edit-price">Price: <span class="required-field">*</span></label>
+        <input id="edit-price" type="number" [(ngModel)]="selectedMentorshipProgram.ProgramPrice" 
+               name="editPrice" required min="0" #editPrice="ngModel"
+               [class.error-field]="editPrice.invalid && (editPrice.dirty || editPrice.touched || formSubmitted)">
+        <div *ngIf="editPrice.invalid && (editPrice.dirty || editPrice.touched || formSubmitted)" class="error">
           <div *ngIf="editPrice.errors?.['required']">Price is required.</div>
           <div *ngIf="editPrice.errors?.['min']">Price must be at least 0.</div>
         </div>
       </div>
-
-      <!-- Fix the edit form date inputs -->
+  
       <div>
-        <label for="edit-startDate">Start Date:</label>
+        <label for="edit-startDate">Start Date: <span class="required-field">*</span></label>
         <input id="edit-startDate" type="datetime-local" 
                [ngModel]="formatDateForInput(selectedMentorshipProgram.ProgramStartDate)" 
                (ngModelChange)="selectedMentorshipProgram.ProgramStartDate = parseInputDate($event)"
-               name="editStartDate" required #editStartDate="ngModel">
+               name="editStartDate" required #editStartDate="ngModel"
+               [class.error-field]="editStartDate.invalid && (editStartDate.dirty || editStartDate.touched || formSubmitted)">
+        <div *ngIf="editStartDate.invalid && (editStartDate.dirty || editStartDate.touched || formSubmitted)" class="error">
+          <div *ngIf="editStartDate.errors?.['required']">Start date is required.</div>
+        </div>
       </div>
       
       <div>
-        <label for="edit-endDate">End Date:</label>
+        <label for="edit-endDate">End Date: <span class="required-field">*</span></label>
         <input id="edit-endDate" type="datetime-local" 
                [ngModel]="formatDateForInput(selectedMentorshipProgram.ProgramEndDate)" 
                (ngModelChange)="selectedMentorshipProgram.ProgramEndDate = parseInputDate($event)"
-               name="editEndDate" required #editEndDate="ngModel">
+               name="editEndDate" required #editEndDate="ngModel"
+               [class.error-field]="editEndDate.invalid && (editEndDate.dirty || editEndDate.touched || formSubmitted)">
+        <div *ngIf="editEndDate.invalid && (editEndDate.dirty || editEndDate.touched || formSubmitted)" class="error">
+          <div *ngIf="editEndDate.errors?.['required']">End date is required.</div>
+        </div>
       </div>
-      
-      <!-- Similarly for the edit form inputs -->
-
+  
       <div>
-        <label for="edit-instructorId">Instructor ID:</label>
-        <input id="edit-instructorId" type="number" [(ngModel)]="selectedMentorshipProgram.instructor_id" name="editInstructorId" required min="1" #editInstructorId="ngModel">
-        <div *ngIf="editInstructorId.invalid && (editInstructorId.dirty || editInstructorId.touched)" class="error">
+        <label for="edit-instructorId">Instructor ID: <span class="required-field">*</span></label>
+        <input id="edit-instructorId" type="number" [(ngModel)]="selectedMentorshipProgram.instructor_id" 
+               name="editInstructorId" required min="1" #editInstructorId="ngModel"
+               [class.error-field]="editInstructorId.invalid && (editInstructorId.dirty || editInstructorId.touched || formSubmitted)">
+        <div *ngIf="editInstructorId.invalid && (editInstructorId.dirty || editInstructorId.touched || formSubmitted)" class="error">
           <div *ngIf="editInstructorId.errors?.['required']">Instructor ID is required.</div>
           <div *ngIf="editInstructorId.errors?.['min']">Instructor ID must be at least 1.</div>
         </div>
       </div>
-
-      <!-- Fix for the edit form buttons -->
+  
+      <!-- Add form validation summary -->
+      <div *ngIf="formSubmitted && editMentorshipProgramForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+  
       <div class="form-buttons">
         <button type="submit" class="btn-square btn-edit" [disabled]="editMentorshipProgramForm.invalid">Update</button>
         <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>

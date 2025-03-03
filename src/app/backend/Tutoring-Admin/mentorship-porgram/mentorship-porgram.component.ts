@@ -1,7 +1,8 @@
-import { Component, OnInit} from '@angular/core';
-//import { MatPaginator } from '@angular/material/paginator';
+// At the top of the file with other imports
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';//import { MatPaginator } from '@angular/material/paginator';
 import { MentorshipProgramService } from '../Tutoring-Services/mentorship-program.service';
 import { MentorshipProgram } from './mentorship-program.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-mentorship-porgram',
@@ -63,6 +64,16 @@ export class MentorshipPorgramComponent implements OnInit {
   loading = false;
   error: string | null = null;
   debugData: any = null; // For debugging responses
+
+    // Add these properties to the component class
+  formSubmitted = false;
+  @ViewChild('confettiCanvas') confettiCanvas: ElementRef | undefined;
+  @ViewChild('mentorshipProgramForm') mentorshipProgramForm!: NgForm;
+  @ViewChild('editMentorshipProgramForm') editMentorshipProgramForm!: NgForm;
+
+  toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}> = [];
+
+    // Place after the existing @ViewChild declarations 
 
   constructor(private mentorshipProgramService: MentorshipProgramService) {}
 
@@ -193,11 +204,37 @@ export class MentorshipPorgramComponent implements OnInit {
 
   // Replace these methods with much simpler ones that call your helper
   createMentorshipProgram(): void {
-    this.createOrUpdateMentorshipProgram(false); // false = create new
+    // Set formSubmitted to true immediately to show validation errors
+    this.formSubmitted = true;
+    
+    // Force angular to run change detection before continuing
+    setTimeout(() => {
+      // Get form reference 
+      if (this.mentorshipProgramForm && this.mentorshipProgramForm.invalid) {
+        this.showToast('Please fill in all required fields correctly', 'warning');
+        return;
+      }
+      
+      // Proceed with form submission only if valid
+      this.createOrUpdateMentorshipProgram(false);
+    }, 0);
   }
   
   updateMentorshipProgram(): void {
-    this.createOrUpdateMentorshipProgram(true); // true = update existing
+    // Set formSubmitted to true immediately to show validation errors
+    this.formSubmitted = true;
+    
+    // Force angular to run change detection before continuing
+    setTimeout(() => {
+      // Get form reference
+      if (this.editMentorshipProgramForm && this.editMentorshipProgramForm.invalid) {
+        this.showToast('Please fill in all required fields correctly', 'warning');
+        return;
+      }
+      
+      // Proceed with form submission only if valid
+      this.createOrUpdateMentorshipProgram(true);
+    }, 0);
   }
 
 
@@ -212,6 +249,7 @@ export class MentorshipPorgramComponent implements OnInit {
       ProgramSubject: '',
       instructor_id: 0
     };
+    this.formSubmitted = false;
     this.showCreateForm = false;
   }
 
@@ -259,6 +297,7 @@ export class MentorshipPorgramComponent implements OnInit {
 
   clearSelection(): void {
     this.selectedMentorshipProgram = null;
+    this.formSubmitted = false; // ADD THIS LINE
   }
 
   // Replace your current formatDateForInput method with this:
@@ -511,49 +550,85 @@ export class MentorshipPorgramComponent implements OnInit {
   }
 
 
-// Replace your current implementation with this enhanced version
 createOrUpdateMentorshipProgram(isUpdate: boolean) {
+  // Set form submission flag to show validation errors
+  this.formSubmitted = true;
+  
+  // Get Angular form reference
+  const ngForm = isUpdate ? this.editMentorshipProgramForm : this.mentorshipProgramForm;
+  
+  // If we have a form reference, validate it properly
+  if (ngForm) {
+    // Mark all controls as touched to trigger validation styling
+    Object.keys(ngForm.controls).forEach(key => {
+      const control = ngForm.controls[key];
+      control.markAsTouched();
+      control.markAsDirty(); // Ensures validation styling appears immediately
+      control.updateValueAndValidity();
+    });
+    
+    // Use Angular's validation system instead of DOM validation
+    if (ngForm.invalid) {
+      console.log('Form validation failed - fields with errors:');
+      Object.keys(ngForm.controls)
+        .filter(key => ngForm.controls[key].invalid)
+        .forEach(key => {
+          console.log(`- Field "${key}": `, ngForm.controls[key].errors);
+        });
+      this.showToast('Please fill in all required fields correctly', 'warning');
+      return; // Don't proceed if form is invalid
+    }
+  }
+  
+  // At this point, form is valid, proceed with data submission
   this.loading = true;
   this.error = null;
   
   const program = isUpdate ? this.selectedMentorshipProgram : this.newMentorshipProgram;
   
-  console.log(`DEBUG: Starting ${isUpdate ? 'update' : 'create'} operation`);
-  
   if (!program) {
     this.error = "No program data available";
     this.loading = false;
+    this.showToast("No program data available", "error");
     return;
   }
   
   // Log the program data being sent
   console.log(`PROGRAM DATA BEING SENT:`, JSON.stringify(program, null, 2));
   
-  // For create operations, remove the ID as the backend will assign one
+  // For create operations
   if (!isUpdate && program.idMentorshipProgram === 0) {
-    console.log('Setting ID to null for create operation');
-    const programCopy = {...program};
-    //delete programCopy.idMentorshipProgram; // Remove ID for create operation
+    // Make a copy to avoid modifying the original
+    const programCopy = {
+      ...program,
+      // Ensure instructor_id is a number (not undefined)
+      instructor_id: program.instructor_id || 0
+    };
     
-    // Use the service methods with more debug info
-      // Around line 539 in the createOrUpdateMentorshipProgram method for create operation
+    // Use the service methods with debug info
     this.mentorshipProgramService.addMentorshipProgram(programCopy).subscribe({
       next: (data: any) => {
         console.log(`Program created successfully:`, data);
         
+        // Store the original instructor ID before processing response
+        const originalInstructorId = programCopy.instructor_id;
+        
         // Transform received data to match frontend model
         const newProgram: MentorshipProgram = {
-          idMentorshipProgram: data.idMentorshipProgram,
-          ProgramName: data.programName || '',
-          ProgramDescription: data.programDescription || '',
-          ProgramSubject: data.programSubject || '',
-          ProgramPrice: data.programPrice || 0,
-          ProgramStartDate: data.programStartDate ? new Date(data.programStartDate) : new Date(),
-          ProgramEndDate: data.programEndDate ? new Date(data.programEndDate) : new Date(),
-          instructor_id: data.instructor?.idInstructor || data.instructor_id || 0
+          idMentorshipProgram: data.idMentorshipProgram || 0,
+          ProgramName: data.programName || programCopy.ProgramName || '',
+          ProgramDescription: data.programDescription || programCopy.ProgramDescription || '',
+          ProgramSubject: data.programSubject || programCopy.ProgramSubject || '',
+          ProgramPrice: data.programPrice || programCopy.ProgramPrice || 0,
+          ProgramStartDate: data.programStartDate ? new Date(data.programStartDate) : programCopy.ProgramStartDate,
+          ProgramEndDate: data.programEndDate ? new Date(data.programEndDate) : programCopy.ProgramEndDate,
+          // Better instructor ID handling with guaranteed number result
+          instructor_id: this.extractInstructorFromResponse(data, originalInstructorId)
         };
         
-        // Add new program to array (use newProgram instead of data)
+        console.log('Final mapped instructor_id:', newProgram.instructor_id);
+        
+        // Add new program to array
         this.mentorshipPrograms.push(newProgram);
         
         // Update filtered and paginated views
@@ -566,33 +641,46 @@ createOrUpdateMentorshipProgram(isUpdate: boolean) {
         this.showCreateForm = false;
         this.resetForm(); // Reset the form
         
-        // Notify user
-        alert(`Mentorship Program created successfully!`);
+        // Success notification
+        this.showToast('Mentorship Program created successfully!', 'success');
+        this.triggerConfetti();
       },
       error: this.handleOperationError('create')
     });
   } else if (isUpdate && program.idMentorshipProgram) {
+    // Create a copy with ensured instructor_id
+    const programToUpdate = {
+      ...program,
+      // Ensure instructor_id is a number (not undefined)
+      instructor_id: program.instructor_id || 0
+    };
+    
     // Update existing program
-       // Around line 568 in the createOrUpdateMentorshipProgram method for update operation
-    this.mentorshipProgramService.editMentorshipProgram(program).subscribe({
+    this.mentorshipProgramService.editMentorshipProgram(programToUpdate).subscribe({
       next: (data: any) => {
         console.log(`Program updated successfully:`, data);
         
+        // Store the original instructor ID before processing response
+        const originalInstructorId = programToUpdate.instructor_id;
+        
         // Transform received data to match frontend model
         const updatedProgram: MentorshipProgram = {
-          idMentorshipProgram: data.idMentorshipProgram || program.idMentorshipProgram,
-          ProgramName: data.programName || program.ProgramName,
-          ProgramDescription: data.programDescription || program.ProgramDescription,
-          ProgramSubject: data.programSubject || program.ProgramSubject,
-          ProgramPrice: data.programPrice || program.ProgramPrice,
-          ProgramStartDate: data.programStartDate ? new Date(data.programStartDate) : program.ProgramStartDate,
-          ProgramEndDate: data.programEndDate ? new Date(data.programEndDate) : program.ProgramEndDate,
-          instructor_id: data.instructor?.idInstructor || data.instructor_id || program.instructor_id || 0
+          idMentorshipProgram: data.idMentorshipProgram || programToUpdate.idMentorshipProgram,
+          ProgramName: data.programName || programToUpdate.ProgramName,
+          ProgramDescription: data.programDescription || programToUpdate.ProgramDescription,
+          ProgramSubject: data.programSubject || programToUpdate.ProgramSubject,
+          ProgramPrice: data.programPrice || programToUpdate.ProgramPrice,
+          ProgramStartDate: data.programStartDate ? new Date(data.programStartDate) : programToUpdate.ProgramStartDate,
+          ProgramEndDate: data.programEndDate ? new Date(data.programEndDate) : programToUpdate.ProgramEndDate,
+          // Better instructor ID handling with guaranteed number result
+          instructor_id: this.extractInstructorFromResponse(data, originalInstructorId)
         };
+        
+        console.log('Final mapped instructor_id:', updatedProgram.instructor_id);
         
         // Update existing program in array
         const index = this.mentorshipPrograms.findIndex(p => 
-          p.idMentorshipProgram === program.idMentorshipProgram);
+          p.idMentorshipProgram === programToUpdate.idMentorshipProgram);
         if (index !== -1) {
           this.mentorshipPrograms[index] = updatedProgram;
         }
@@ -606,19 +694,21 @@ createOrUpdateMentorshipProgram(isUpdate: boolean) {
         this.loading = false;
         this.selectedMentorshipProgram = null;
         
-        // Notify user
-        alert(`Mentorship Program updated successfully!`);
+        // Success notification
+        this.showToast('Mentorship Program updated successfully!', 'success');
+        this.triggerConfetti();
       },
       error: this.handleOperationError('update')
     });
   } else {
     this.error = `Invalid program data for ${isUpdate ? 'update' : 'create'} operation`;
     this.loading = false;
-    alert(this.error);
+    this.showToast(this.error, 'error');
   }
 }
 
 // Add this helper method for better error handling
+// Update the error handler to use toasts
 private handleOperationError(operation: string) {
   return (err: any) => {
     console.error(`Failed to ${operation} program:`, err);
@@ -639,7 +729,9 @@ private handleOperationError(operation: string) {
     
     // Show error in UI
     this.error = `Operation failed: ${errorMsg}`;
-    alert(`Failed to ${operation} program: ${errorMsg}`);
+    
+    // Replace alert with toast
+    this.showToast(`Failed to ${operation} program: ${errorMsg}`, 'error');
     this.loading = false;
   };
 }
@@ -667,6 +759,130 @@ inspectLoadedData() {
   };
 }
 
+// Add this method to your mentorship component
+triggerConfetti() {
+  if (!this.confettiCanvas) return;
+  
+  const canvas = this.confettiCanvas.nativeElement;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const pieces: any[] = [];
+  const numberOfPieces = 200;
+  const colors = ['#f44336', '#2196f3', '#ffeb3b', '#4caf50', '#9c27b0'];
 
+  function randomFromTo(from: number, to: number) {
+    return Math.floor(Math.random() * (to - from + 1) + from);
+  }
+  
+  for (let i = 0; i < numberOfPieces; i++) {
+    pieces.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: randomFromTo(5, 10),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      speed: randomFromTo(1, 5),
+      friction: 0.95,
+      opacity: 1,
+      yVel: 0,
+      xVel: 0
+    });
+  }
+  
+  let rendered = 0;
+  
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    pieces.forEach((piece, i) => {
+      piece.opacity -= 0.01;
+      piece.yVel += 0.25;
+      piece.xVel *= piece.friction;
+      piece.yVel *= piece.friction;
+      piece.rotation += 1;
+      piece.x += piece.xVel + Math.random() * 2 - 1;
+      piece.y += piece.yVel;
+      
+      if (piece.opacity <= 0) {
+        pieces.splice(i, 1);
+        return;
+      }
+      
+      ctx.beginPath();
+      ctx.arc(piece.x, piece.y, piece.radius, 0, Math.PI * 2);
+      ctx.fillStyle = piece.color;
+      ctx.globalAlpha = piece.opacity;
+      ctx.fill();
+    });
 
+    rendered += 1;
+    if (pieces.length > 0 && rendered < 500) {
+      requestAnimationFrame(renderConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  
+  // Initialize confetti velocities
+  pieces.forEach((piece) => {
+    piece.xVel = (Math.random() - 0.5) * 20;
+    piece.yVel = (Math.random() - 0.5) * 20;
+  });
+  
+  renderConfetti();
+}
+// Add these methods below your triggerConfetti method
+showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info') {
+  console.log('Showing toast:', message, type);
+  
+  // Add to toasts array
+  this.toasts = [...this.toasts, { message, type }];
+  
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (this.toasts.length > 0) {
+      this.toasts = this.toasts.slice(1);
+    }
+  }, 5000);
+}
+
+removeToast(index: number) {
+  this.toasts = this.toasts.filter((_, i) => i !== index);
+}
+
+// Add this helper method to your MentorshipPorgramComponent class
+// Improved extractInstructorFromResponse method
+private extractInstructorFromResponse(data: any, fallbackId: number): number {
+  console.log('Extracting instructor from response:', data);
+  
+  // CASE 1: Check for nested instructor object
+  if (data.instructor && typeof data.instructor === 'object') {
+    if (data.instructor.idInstructor !== undefined) {
+      console.log('Found instructor ID in instructor.idInstructor:', data.instructor.idInstructor);
+      return Number(data.instructor.idInstructor);
+    }
+    if (data.instructor.id !== undefined) {
+      console.log('Found instructor ID in instructor.id:', data.instructor.id);
+      return Number(data.instructor.id);
+    }
+  }
+  
+  // CASE 2: Check for direct instructor_id property
+  if (data.instructor_id !== undefined && data.instructor_id !== null) {
+    console.log('Found instructor_id property:', data.instructor_id);
+    return Number(data.instructor_id);
+  }
+  
+  // CASE 3: Check for instructorId property
+  if (data.instructorId !== undefined && data.instructorId !== null) {
+    console.log('Found instructorId property:', data.instructorId);
+    return Number(data.instructorId);
+  }
+  
+  // CASE 4: If all else fails, use the fallback ID
+  console.log('Using fallback instructor ID:', fallbackId);
+  return fallbackId;
+}
 }

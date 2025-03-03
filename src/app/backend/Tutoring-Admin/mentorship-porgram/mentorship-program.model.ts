@@ -1,10 +1,11 @@
+// In mentorship-program.model.ts
 export interface MentorshipProgram {
   idMentorshipProgram: number;
   ProgramName: string;
   ProgramDescription: string;
-  ProgramStartDate: Date | string; // Updated to accept both Date and string
-  ProgramEndDate: Date | string;   // Updated to accept both Date and string
+  ProgramStartDate: Date;
+  ProgramEndDate: Date;
   ProgramSubject: string;
   ProgramPrice: number;
-  instructor_id?: number; // Keep this for relationship handling
+  instructor_id: number;
 }
