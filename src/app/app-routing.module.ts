@@ -20,12 +20,17 @@ import { TeachereditprofileComponent } from './Teacher-Pages/teacherdashboard/te
 import { StudentslistComponent } from './Teacher-Pages/teacherdashboard/studentslist/studentslist.component';
 import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tutoringsessions/tutoringsessions.component';
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
-import { BackRoutingModule } from './backend/back-routing.module'; // Import the new module
+import { BackRoutingModule } from './backend/back-routing.module';
+import {ListProduitComponent} from "./Student-Pages/Marketplace/list-produit/list-produit.component";
+import {CartComponent} from "./Student-Pages/Marketplace/cart/cart.component";
+import {MyOrderComponent} from "./Student-Pages/Marketplace/my-order/my-order.component";
+import {ViewWishlistComponent} from "./Student-Pages/Marketplace/view-wishlist/view-wishlist.component";
+import {DonationComponentComponent} from "./Student-Pages/Donnation/donation-component/donation-component.component"; // Import the new module
 
 const routes: Routes = [
   // Main Landing Page
   { path: 'main', component: MainhomepageComponent },
-  
+
   // Student Routes
   { path: 'studenthome', component: LandigpageComponent },
   { path: 'signup', component: SignupComponent },
@@ -41,6 +46,17 @@ const routes: Routes = [
   { path: 'coursedetail', component: CoursedetailComponent },
   { path: 'coursepage', component: CoursepageComponent },
   { path: 'coursequiz', component: CoursequizesComponent },
+
+  // Marketplace
+  { path: 'produitList', component: ListProduitComponent},
+  { path: 'cart', component: CartComponent },
+  { path: 'order', component: MyOrderComponent },
+  { path: 'wishlist', component: ViewWishlistComponent },
+
+  // Donnation
+  { path: 'Donation', component: DonationComponentComponent},
+
+
 
   // Empty Pages
   { path: 'empty', component: EmptypageComponent },

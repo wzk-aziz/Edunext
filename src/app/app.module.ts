@@ -45,6 +45,43 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
+import { ListProduitComponent } from './Student-Pages/Marketplace/list-produit/list-produit.component';
+import { CartComponent } from './Student-Pages/Marketplace/cart/cart.component';
+import {HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { PlaceOrderComponent } from './Student-Pages/Marketplace/place-order/place-order.component';
+import { MyOrderComponent } from './Student-Pages/Marketplace/my-order/my-order.component';
+import { ReviewOrderedProductComponent } from './Student-Pages/Marketplace/review-ordered-product/review-ordered-product.component';
+import { ViewOrderedProductsComponent } from './Student-Pages/Marketplace/view-ordered-products/view-ordered-products.component';
+import { ViewProductsdetailComponent } from './Student-Pages/Marketplace/view-productsdetail/view-productsdetail.component';
+import { ViewWishlistComponent } from './Student-Pages/Marketplace/view-wishlist/view-wishlist.component';
+import { MatButtonModule } from '@angular/material/button';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { MatDialogModule } from '@angular/material/dialog';
+import {CommonModule} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatCardModule} from "@angular/material/card";
+import { OrderBackComponent } from './backend/marketplace/order-back/order-back.component';
+import { CategorieBackComponent } from './backend/marketplace/categorie-back/categorie-back.component';
+import { CouponBackComponent } from './backend/marketplace/coupon-back/coupon-back.component';
+import {ProductBackComponent} from "./backend/marketplace/product-back/product-back.component";
+import { ProductFormComponent } from './backend/marketplace/product-form/product-form.component';
+import {MatSelectModule} from "@angular/material/select";
+import {MatIconModule} from "@angular/material/icon";
+import { EditProductComponent } from './backend/marketplace/edit-product/edit-product.component';
+import { CategorieFormComponent } from './backend/marketplace/categorie-form/categorie-form.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatMenuModule} from "@angular/material/menu";
+import { EditCategoryComponent } from './backend/marketplace/edit-category/edit-category.component';
+import { DonationComponentComponent } from './Student-Pages/Donnation/donation-component/donation-component.component';
+import { DonationsListComponent } from './backend/donation/donations-list/donations-list.component';
+import { PostCouponComponent } from './backend/marketplace/post-coupon/post-coupon.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+
+
 
 @NgModule({
   declarations: [
@@ -90,12 +127,55 @@ import { CoursesBackComponent } from './backend/courses/courses-back/courses-bac
     ClassComponent,
     StudentComponent,
     BackAppComponent,
-    CoursesBackComponent
-   
+    CoursesBackComponent,
+    ListProduitComponent,
+    CartComponent,
+    PlaceOrderComponent,
+    MyOrderComponent,
+    ReviewOrderedProductComponent,
+    ViewOrderedProductsComponent,
+    ViewProductsdetailComponent,
+    ViewWishlistComponent,
+    ProductBackComponent,
+    OrderBackComponent,
+    CategorieBackComponent,
+    CouponBackComponent,
+    ProductFormComponent,
+    EditProductComponent,
+    CategorieFormComponent,
+    EditCategoryComponent,
+    DonationComponentComponent,
+    DonationsListComponent,
+    PostCouponComponent,
+
+
+
+
   ],
   imports: [
+    MatIconModule,
+    MatSelectModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatButtonModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    CommonModule,
+    ReactiveFormsModule,  // <-- Ajoutez ReactiveFormsModule
+    MatFormFieldModule,   // <-- Ajoutez MatFormFieldModule
+    MatInputModule,       // <-- Ajoutez MatInputModule      // <-- Ajoutez MatButtonModule
+    MatCardModule,
+    MatTableModule,
+    MatMenuModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+
+    // Ajoutez ce module pour utiliser mat-card, mat-card-title, etc.
+
+
   ],
   providers: [],
   bootstrap: [AppComponent]

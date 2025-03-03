@@ -1,0 +1,105 @@
+<main>
+
+  <!-- =======================
+  Page Banner START -->
+  <section class="bg-dark align-items-center d-flex" style="background:url(/assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
+    <!-- Main banner background image -->
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <!-- Title -->
+          <h1 class="text-white">Marketplace</h1>
+          <!-- Breadcrumb -->
+          <div class="d-flex">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
+                <li class="breadcrumb-item"><a routerLink="/studenthome">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- =======================
+  Page Banner END -->
+
+  <!-- =======================
+  Page content START -->
+  <section class="pb-0 py-sm-5">
+    <div class="container">
+      <!-- Title and select START -->
+      <div class="row g-3 align-items-center mb-4">
+        <!-- Content -->
+        <div class="col-md-4">
+          <h4 class="mb-0">Showing 1-7 of 32 result</h4>
+        </div>
+
+        <!-- Select option -->
+        <div class="col-md-8">
+          <div class="row g-3 align-items-center justify-content-md-end me-auto">
+
+            <!-- List and Grid icon -->
+            <div class="col-sm-4 col-xl-6 text-md-end d-none d-md-block">
+              <ul class="list-inline mb-0">
+                <!-- Grid icon -->
+                <li class="list-inline-item"><a href="course-grid.html" class="btn btn-outline-light mb-0 me-2"><i class="fas fa-fw fa-th-large"></i></a></li>
+                <!-- list icon -->
+                <li class="list-inline-item"><a href="course-list.html" class="btn btn-outline-light mb-0 me-2"><i class="fas fa-fw fa-list-ul"></i></a></li>
+              </ul>
+            </div>
+
+            <!-- Short by filter -->
+            <form class="col-md-4 bg-body shadow rounded p-1 input-borderless">
+              <select class="form-select js-choice z-index-9" aria-label=".form-select-sm">
+                <option value="">Sort by</option>
+                <option>Free</option>
+                <option>Newest</option>
+                <option>Most popular</option>
+                <option>Most Viewed</option>
+              </select>
+            </form>
+
+            <!-- Advanced filter responsive toggler START -->
+            <div class="col-4 d-xl-none text-md-end">
+              <button class="btn btn-primary mb-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <i class="fas fa-sliders-h me-1"></i> Show filter
+              </button>
+            </div>
+            <!-- Advanced filter responsive toggler END -->
+
+          </div>
+        </div>
+      </div>
+      <!-- Title and select END -->
+
+      <div class="row">
+        <!-- Main content START -->
+
+
+        <div class="center-container">
+          <div class="product-card" *ngFor="let product of products; let i = index">
+            <div class="product-image">
+              <img [src]="product.processedImg" *ngIf="product.processedImg" alt="{{product.productName}} Image" class="product-img">
+            </div>
+            <div class="product-details">
+              <h2 class="product-title">{{ product.productName }}</h2>
+              <p class="product-description">{{ product.productDescription }}</p>
+              <p class="product-price">{{ product.price | currency:'USD':true }}</p>
+              <!-- 🗑️ Bouton de suppression -->
+              <button class="btn btn-danger" (click)="removeFromWishlist(product.id)">Delete</button>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+      </div><!-- Row END -->
+    </div>
+  </section>

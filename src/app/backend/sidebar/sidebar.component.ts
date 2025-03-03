@@ -16,4 +16,12 @@ export class SidebarComponent {
 toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 }
+  showSubMenu = false;
+
+
+  toggleSubMenu() {
+    this.showSubMenu = !this.showSubMenu;
+  }
+
+
 }

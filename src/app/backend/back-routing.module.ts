@@ -15,6 +15,17 @@ import { DonationComponent } from './donation/donation.component';
 import { EventComponent } from './event/event.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
+import {ProductBackComponent} from "./marketplace/product-back/product-back.component";
+import {ProductFormComponent} from "./marketplace/product-form/product-form.component";
+import {EditprofileComponent} from "../Student-Pages/Dashboard/editprofile/editprofile.component";
+import {EditProductComponent} from "./marketplace/edit-product/edit-product.component";
+import {CategorieFormComponent} from "./marketplace/categorie-form/categorie-form.component";
+import {CategorieBackComponent} from "./marketplace/categorie-back/categorie-back.component";
+import {OrderBackComponent} from "./marketplace/order-back/order-back.component";
+import {EditCategoryComponent} from "./marketplace/edit-category/edit-category.component";
+import {DonationsListComponent} from "./donation/donations-list/donations-list.component";
+import {PostCouponComponent} from "./marketplace/post-coupon/post-coupon.component";
+
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -31,7 +42,16 @@ const routes: Routes = [
     { path: 'Donation', component: DonationComponent },
     { path: 'Event', component: EventComponent },
     { path: 'Marketplace', component: MarketplaceComponent },
-    {path:'courses',component:CoursesBackComponent},
+      {path:'productBack',component:ProductBackComponent},
+      {path:'courses',component:CoursesBackComponent},
+      {path:'categorieBack',component:CategorieBackComponent},
+      {path:'edit-category/:categoryId',component:EditCategoryComponent},
+      {path:'add-categorie',component:CategorieFormComponent},
+      {path:'order',component:OrderBackComponent},
+      {path:'add-product',component:ProductFormComponent},
+      { path: 'edit-product/:productId', component: EditProductComponent },
+      { path: 'listDonnation', component: DonationsListComponent },
+      { path: 'addCoupon', component: PostCouponComponent },
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

@@ -3,10 +3,10 @@
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:36 GMT -->
 <head>
-    <meta charset="utf-8"> 
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <title>:: e-Learn:: Education Dashboard </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
     <!-- plugin css file  -->
@@ -19,7 +19,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
+
       gtag('config', 'UA-264428387-1');
     </script>
 </head>
@@ -39,7 +39,7 @@
                 <span class="logo-text">e-Learn </span>
             </a>
             <!-- Menu: main ul -->
-             
+
             <ul class="menu-list flex-grow-1 mt-3">
                 <li><a class="m-link active" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
@@ -55,7 +55,7 @@
                         <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
                     </ul>
                 </li>
-                
+
                 <li class="collapsed">
                     <a class="m-link" (click)="toggleMenu()" role="button">
                         <i class="icofont-certificate"></i>
@@ -68,14 +68,25 @@
                     </ul>
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleMenu()" role="button">
+                  <i class="icofont-certificate"></i>
+                  <span>Marketplace</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+                  <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a></li>
+                    <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+                </ul>
+              </li>
                 <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
-                
+
             </ul>
             <!-- Theme: Switch Theme -->
             <ul class="list-unstyled mb-0">
@@ -106,7 +117,7 @@
         <div class="header">
             <nav class="navbar py-4">
                 <div class="container-xxl">
-    
+
                     <!-- header rightbar icon -->
                     <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                         <div class="d-flex">
@@ -231,12 +242,12 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <!-- menu toggler -->
                     <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
                         <span class="fa fa-bars"></span>
                     </button>
-    
+
                     <!-- main menu Search-->
                     <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
                         <div class="input-group flex-nowrap input-group-lg">
@@ -245,7 +256,7 @@
                             <button type="button" class="input-group-text add-member-top" id="addon-wrappingone" data-bs-toggle="modal" data-bs-target="#addUser"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
-    
+
                 </div>
             </nav>
         </div>
@@ -840,7 +851,7 @@
                                                         Member
                                                     <span>Can view, edit, delete, comment on and save files</span>
                                                    </a>
-                                                   
+
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" href="#">
@@ -923,7 +934,7 @@
 
 <!-- Plugin Js-->
 <script src="/assetsback/bundles/carousel.bundle.js"></script>
-<script src="/assetsback/bundles/apexcharts.bundle.js"></script> 
+<script src="/assetsback/bundles/apexcharts.bundle.js"></script>
 
 <!-- Jquery Page Js -->
 <script src="../js/template.js"></script>

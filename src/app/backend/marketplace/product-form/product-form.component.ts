@@ -1,0 +1,93 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MarketplaceService } from "../../../Student-Pages/Marketplace/services/marketplace.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
+@Component({
+    selector: 'app-product-form',
+    templateUrl: './product-form.component.html',
+    styleUrls: ['./product-form.component.css']
+})
+export class ProductFormComponent implements OnInit {
+    productForm!: FormGroup;
+    listOfCategories: any = [];
+    selectedFile: File = new File([], "placeholder.txt");
+    imagepreview!: string | ArrayBuffer | null;
+
+    constructor(
+        private fb: FormBuilder,
+        private router: Router,
+        private snackbar: MatSnackBar,
+        private marketplaceService: MarketplaceService
+    ) {
+    }
+
+    onFileSelected(event: any) {
+        this.selectedFile = event.target.files[0];
+        this.previewImage();
+    }
+
+    previewImage() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.imagepreview = reader.result;
+        }
+        reader.readAsDataURL(this.selectedFile);
+    }
+
+    ngOnInit(): void {
+        this.productForm = this.fb.group({
+            categoryId: [null, [Validators.required]],
+            name: [null, [Validators.required]],
+            price: [null, [Validators.required]],
+            description: [null, [Validators.required]],
+        });
+        this.getAllCategories();
+    }
+
+    getAllCategories() {
+        this.marketplaceService.getAllCategories().subscribe(res => {
+            this.listOfCategories = res;
+        })
+    }
+
+    addProduct(): void {
+        if (this.productForm.valid) {
+            const formData: FormData = new FormData();
+            formData.append('img', this.selectedFile);
+            formData.append('categoryId', this.productForm.get('categoryId')?.value || '');
+            formData.append('name', this.productForm.get('name')?.value || '');
+            formData.append('description', this.productForm.get('description')?.value || '');
+            formData.append('price', this.productForm.get('price')?.value || '');
+
+            this.marketplaceService.addProduct(formData).subscribe((res) => {
+                if (res.id != null) {
+                    this.snackbar.open('Product Posted Successfully!', 'close', {
+                        duration: 5000
+                    });
+                    this.router.navigate(['/backoffice/productBack']);
+                } else {
+                    this.snackbar.open(res.message, 'ERROR', {
+                        duration: 5000
+                    });
+                }
+            })
+        } else {
+            for (const i in this.productForm.contains) {
+                this.productForm.controls[i].markAsDirty();
+                this.productForm.controls[i].updateValueAndValidity();
+            }
+        }
+    }
+    isMenuOpen = false;
+
+    toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  isTeacherMenuOpen = false;
+
+  toggleTeacherMenu() {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
+  }
+}

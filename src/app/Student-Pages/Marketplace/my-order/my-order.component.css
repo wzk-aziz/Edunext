@@ -1,0 +1,23 @@
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+h2 {
+    color: #333;
+}
+
+.table {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.badge {
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.btn-sm {
+    font-size: 13px;
+}
