@@ -90,34 +90,7 @@ public class AuthenticationService {
     }
 
 
-    public AuthenticationResponse updateeUser(UpdateUserRequest request) {
-        User user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("No user found with %S", request.getEmail())
-                ));
 
-        // Update user details (ensure validations are performed)
-        if (request.getFirstname() != null) user.setFirstname(request.getFirstname());
-        if (request.getLastname() != null) user.setLastname(request.getLastname());
-        if (request.getPassword() != null) user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        // Handle MFA update if required
-        if (request.isMfaEnabled() && !user.isMfaEnabled()) {
-            user.setSecret(tfaService.generateNewSecret());
-        }
-
-        var updatedUser = repository.save(user);
-
-        // Regenerate tokens if necessary
-        var jwtToken = jwtService.generateToken(updatedUser);
-        var refreshToken = jwtService.generateRefreshToken(updatedUser);
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .mfaEnabled(updatedUser.isMfaEnabled())
-                .build();
-    }
 
 
     private void revokeAllUserTokens(User user) {

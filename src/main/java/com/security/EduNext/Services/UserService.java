@@ -6,6 +6,7 @@ import com.security.EduNext.Entities.Role;  // Make sure to import the Role enum
 import com.security.EduNext.Repositories.TokenRepository;
 import com.security.EduNext.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final TokenRepository tokenRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -51,7 +54,8 @@ public class UserService {
             existingUser.setFirstname(request.getFirstname());
             existingUser.setLastname(request.getLastname());
             existingUser.setEmail(request.getEmail());
-            existingUser.setPassword(request.getPassword());
+            String encodedPassword = passwordEncoder.encode(request.getPassword());
+            existingUser.setPassword(encodedPassword); // Utilisez le mot de passe encodé ici
             existingUser.setMfaEnabled(request.isMfaEnabled());
             // existingUser.setRole(request.getRole()); // si besoin de mettre à jour le rôle
 
