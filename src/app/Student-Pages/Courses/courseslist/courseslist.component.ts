@@ -12,6 +12,8 @@ export class CourseslistComponent implements OnInit {
   page: number = 1;
   courses: Course[] = [];
   itemsPerPage: number = 3;
+  selectedCourseLevel?: CourseLevel | null = null;
+  CourseLevel = CourseLevel;
 
   constructor(
     private courseService: CourseService,
@@ -23,33 +25,39 @@ export class CourseslistComponent implements OnInit {
   }
 
   loadCourses(): void {
-    this.courseService.getAllCourses().subscribe({
-      next: (courses) => {
-        console.log('Courses loaded:', courses);
-        this.courses = courses;
-      },
-      error: (err) => {
-        console.error('Error loading courses:', err);
-      }
-    });
+    if (this.selectedCourseLevel) {
+      this.searchCoursesByCourseLevel(this.selectedCourseLevel);
+    } else {
+      this.courseService.getAllCourses().subscribe({
+        next: (courses) => {
+          console.log('Courses loaded:', courses);
+          this.courses = courses;
+        },
+        error: (err) => {
+          console.error('Error loading courses:', err);
+        }
+      });
+    }
   }
 
-  // New search methods
-
-  searchCoursesByName(name: string): void {
+  sortCourses(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const sortBy = target.value;
+  }
+  
+  searchCoursesByName(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const name = input.value;
     if (!name.trim()) {
       this.loadCourses();
       return;
     }
     this.courseService.getCoursesByName(name).subscribe({
-      next: (courses) => {
-        this.courses = courses;
-      },
-      error: (err) => {
-        console.error('Error searching courses by name:', err);
-      }
+      next: (courses) => this.courses = courses,
+      error: (err) => console.error('Error searching courses by name:', err)
     });
   }
+  
 
   searchCoursesByCategory(categoryId: number): void {
     this.courseService.getCoursesByCategory(categoryId).subscribe({
@@ -63,108 +71,85 @@ export class CourseslistComponent implements OnInit {
   }
 
   searchCoursesByCourseLevel(courseLevel: CourseLevel): void {
-    this.courseService.getCoursesByCourseLevel(courseLevel).subscribe({
-      next: (courses) => {
-        this.courses = courses;
-      },
-      error: (err) => {
-        console.error('Error searching courses by course level:', err);
-      }
-    });
+    if (this.selectedCourseLevel === courseLevel) {
+      // If the same level is clicked again, clear the filter.
+      this.selectedCourseLevel = undefined;
+      this.loadCourses();
+    } else {
+      this.selectedCourseLevel = courseLevel;
+      this.courseService.getCoursesByCourseLevel(courseLevel).subscribe({
+        next: (courses) => {
+          this.courses = courses;
+        },
+        error: (err) => {
+          console.error('Error searching courses by course level:', err);
+        }
+      });
+    }
   }
-
-  searchCoursesByPackType(packType: PackType): void {
-    this.courseService.getCoursesByPackType(packType).subscribe({
-      next: (courses) => {
-        this.courses = courses;
-      },
-      error: (err) => {
-        console.error('Error searching courses by pack type:', err);
-      }
-    });
-  }
-
-  // Helper method for PDF preview URLs (if used in your template)
+  
   getSafePdfUrl(pdfData: string): SafeResourceUrl {
     const dataUrl = `data:application/pdf;base64,${pdfData}`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
   }
 
-  // Helper method to display a friendly course level label.
   getCourseLevelText(course: Course): string {
-    switch (course.courseLevel) {
-      case 'ALL_LEVELS': return 'All Levels';
-      case 'BEGINNER': return 'Beginner';
-      case 'INTERMEDIATE': return 'Intermediate';
-      case 'ADVANCED': return 'Advanced';
-      default: return 'Unknown';
-    }
+    return CourseLevel[course.courseLevel] || 'Unknown';
   }
 
-  // Pagination helpers
   get totalPages(): number {
     return Math.ceil(this.courses.length / this.itemsPerPage);
   }
+
   get pagesArray(): number[] {
-    const pages = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
+
   setPage(pageNumber: number, event: Event): void {
     event.preventDefault();
     this.page = pageNumber;
   }
+
   get startIndex(): number {
-    return (this.page - 1) * this.itemsPerPage + 1;
+    return (this.page - 1) * this.itemsPerPage;
   }
+
   get endIndex(): number {
     return Math.min(this.page * this.itemsPerPage, this.courses.length);
   }
 
-  // Helper method for styling the pack type (if needed)
   getPackRibbonClass(course: Course): string {
-    switch (course.packType) {
-      case 'COPPER': return 'ribbon-copper';
-      case 'BRONZE': return 'ribbon-bronze';
-      case 'SILVER': return 'ribbon-silver';
-      case 'GOLD': return 'ribbon-gold';
-      default: return 'ribbon-default';
-    }
+    return PackType[course.packType] ? `ribbon-${course.packType.toLowerCase()}` : 'ribbon-default';
   }
 
-  // Helper method to display a friendly pack type label.
   getPackTypeText(course: Course): string {
-    switch (course.packType) {
-      case 'COPPER': return 'Copper';
-      case 'BRONZE': return 'Bronze';
-      case 'SILVER': return 'Silver';
-      case 'GOLD': return 'Gold';
-      default: return 'Unknown';
-    }
+    return PackType[course.packType] || 'Unknown';
   }
 
-  // New helper method to return a CSS class for the category badge.
   getCategoryBadgeClass(course: Course): string {
+    const categoryBadgeClasses: { [key: string]: string } = {
+      development: 'badge bg-primary',
+      data: 'badge bg-success',
+      Machine: 'badge bg-info',
+      Other: 'badge bg-warning'
+    };
+  
     if (!course.category || !course.category.name) {
       return 'badge bg-secondary';
     }
+  
     const catName = course.category.name.toLowerCase();
-    if (catName.includes('development')) {
-      return 'badge bg-primary';
-    } else if (catName.includes('business')) {
-      return 'badge bg-success';
-    } else if (catName.includes('design')) {
-      return 'badge bg-info';
-    } else if (catName.includes('marketing')) {
-      return 'badge bg-warning';
+    for (const key in categoryBadgeClasses) {
+      if (catName.includes(key)) {
+        return categoryBadgeClasses[key];
+      }
     }
+  
     return 'badge bg-secondary';
   }
 
   getSignalClass(course: Course): string {
-    const level = (course.courseLevel || '').trim().toUpperCase();
+    const level = course.courseLevel ? course.courseLevel.trim().toUpperCase() : '';
     switch(level) {
       case 'BEGINNER':
         return 'fas fa-signal text-info me-2';

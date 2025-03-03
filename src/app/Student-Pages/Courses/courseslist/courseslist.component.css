@@ -27,3 +27,42 @@
     background-color: #333 !important;
     transform: translateY(-2px);
 }
+.courses-list-container {
+    max-width: 900px;
+    margin: auto;
+    background: #f8f9fa;
+  }
+  
+  .course-card {
+    background: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .pack-ribbon {
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    background: #dc3545;
+    color: #fff;
+    padding: 5px 10px;
+    transform: rotate(45deg);
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+  
+  .search-filter input {
+    max-width: 300px;
+  }
+  
+  .filter-options button {
+    margin-bottom: 5px;
+  }
+  
