@@ -337,7 +337,7 @@ changePageSize(size: number) {
     this.error = null;
     this.formSubmitted = false;
 
-    if (!this.selectedSession) return;
+
   
     // Check if form is valid
     const form = document.querySelector('form');
@@ -382,8 +382,11 @@ changePageSize(size: number) {
       startTime: this.startTimeString ? new Date(this.startTimeString).toISOString() : new Date().toISOString(),
       sessionSubject: this.newSession.sessionSubject?.trim(),
       instructor: {
-        idInstructor: originalInstructorId
-      }
+        idInstructor: originalInstructorId,
+        id: originalInstructorId
+        
+      },
+      instructorId: originalInstructorId
     };
     
     console.log('Adding session with data:', JSON.stringify(sessionToAdd, null, 2));
@@ -407,8 +410,16 @@ changePageSize(size: number) {
       }
       return response.json();
     })
+        // Modify your addSession method, focusing on the response handling:
     .then(data => {
       console.log('Add successful, response:', data);
+      
+      // Check if we received a session ID in the response
+      if (!data.idSession) {
+        console.warn('Warning: Server did not return a session ID');
+        // If no ID returned, generate a temporary one for UI purposes
+        data.idSession = new Date().getTime(); // Use timestamp as temp ID
+      }
       
       // Process the response for instructor ID
       let instructorId = null;
@@ -428,12 +439,15 @@ changePageSize(size: number) {
         instructorId = originalInstructorId;
       }
       
-      // Create processed session object
+      // Create processed session object with guaranteed ID
       const processedSession = {
         ...data,
+        idSession: data.idSession, // Ensure ID is set
         instructorId: instructorId,
         instructor: instructorId
       };
+      
+      console.log('Processed session to add to UI:', processedSession);
       
       // Update the UI
       this.sessions.push(processedSession);
@@ -442,8 +456,7 @@ changePageSize(size: number) {
       this.resetForm();
       this.loading = false;
       this.showToast('Session added successfully!', 'success');
-      this.triggerConfetti(); // Add this line
-
+      this.triggerConfetti();
     })
     .catch(error => {
       console.error('Add failed:', error);
@@ -505,8 +518,10 @@ changePageSize(size: number) {
       sessionDuration: Number(this.selectedSession.sessionDuration),
       startTime: this.parseInputDate(this.selectedStartTimeString).toISOString(),
       instructor: {
-        idInstructor: originalInstructorId
-      }
+        idInstructor: originalInstructorId,
+        id: originalInstructorId
+      },
+      instructorId: originalInstructorId
     };
     
     console.log('Updating session with data:', JSON.stringify(sessionToUpdate, null, 2));

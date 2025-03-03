@@ -1,5 +1,52 @@
 <div class="container">
+    <!-- Canvas for confetti animation -->
+    <canvas #confettiCanvas class="confetti-canvas"></canvas>
+  
+    <!-- Toast notifications container -->
+    <div class="toast-container" *ngIf="toasts.length > 0">
+      <div *ngFor="let toast of toasts; let i = index" 
+          [ngClass]="['toast', 'toast-' + toast.type]"
+          (click)="removeToast(i)">
+        <div class="toast-content">
+          <span class="toast-icon">
+            <ng-container [ngSwitch]="toast.type">
+              <ng-container *ngSwitchCase="'success'">
+                <div class="icon-success">
+                  <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41-1.41L9,16.17z"></path>
+                  </svg>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'error'">
+                <div class="icon-error">
+                  <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41z"></path>
+                  </svg>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'warning'">
+                <div class="icon-warning">
+                  <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M1,21h22L12,2L1,21z M13,18h-2v-2h2V18z M13,14h-2v-4h2V14z"></path>
+                  </svg>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'info'">
+                <div class="icon-info">
+                  <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M13,17h-2v-6h2V17z M13,9h-2V7h2V9z"></path>
+                  </svg>
+                </div>
+              </ng-container>
+            </ng-container>
+          </span>
+          <span class="toast-message">{{ toast.message }}</span>
+        </div>
+        <button class="toast-close" (click)="$event.stopPropagation(); removeToast(i)">×</button>
+      </div>
+    </div>
   <h2>Feedback Management</h2>
+
   
   <!-- Debug button similar to session component -->
 <!-- Add this button near your other debug buttons -->
@@ -79,7 +126,8 @@
               </span>
             </div>
           </td>
-          <td>{{ getSessionId(feedback.session) }}</td>
+          <!-- In your table where you display the session ID -->
+          <td>{{ feedback.sessionId || 'None' }}</td>
           <td>
             <div class="button-container">
               <button class="btn-square btn-edit" (click)="selectFeedbackForEdit(feedback)" title="Edit">✏️</button>
@@ -119,91 +167,115 @@
     <p *ngIf="!filteredFeedbacks || filteredFeedbacks.length === 0">No feedbacks found</p>
   </div>
   
-  <!-- Add feedback form styled like session form -->
+  <!-- Update the Add Feedback Form -->
   <div class="session-form" *ngIf="showAddForm">
     <h3>Add New Feedback</h3>
     <form (ngSubmit)="createFeedback()" #feedbackForm="ngForm">
-      <div>
-        <label for="content">Feedback Content:</label>
-        <textarea id="content" [(ngModel)]="newFeedback.contentFeedback" name="content" required minlength="3" 
-                 #content="ngModel" rows="4" style="width: 100%; resize: vertical;"></textarea>
-        <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error">
+      <div class="form-group">
+        <label for="content">Feedback Content: <span class="required-field">*</span></label>
+        <textarea id="content" [(ngModel)]="newFeedback.contentFeedback" 
+                  name="content" required minlength="3" 
+                  #content="ngModel" rows="4"
+                  [class.error-field]="content.invalid && (content.dirty || content.touched || formSubmitted)"></textarea>
+        <div *ngIf="content.invalid && (content.dirty || content.touched || formSubmitted)" class="error-message">
           <div *ngIf="content.errors?.['required']">Content is required.</div>
           <div *ngIf="content.errors?.['minlength']">Content must be at least 3 characters long.</div>
         </div>
       </div>
       
-      <div>
-        <label for="rating">Rating (1-5):</label>
+      <div class="form-group">
+        <label for="rating">Rating (1-5): <span class="required-field">*</span></label>
         <div class="star-rating-input">
           <span *ngFor="let star of [5,4,3,2,1]">
             <input type="radio" [id]="'star'+star" name="rating" [value]="star" [(ngModel)]="newFeedback.rating">
             <label [for]="'star'+star">★</label>
           </span>
         </div>
-        <input type="range" id="rating" [(ngModel)]="newFeedback.rating" name="rating" required min="1" max="5" step="1" #rating="ngModel">
-        <div *ngIf="rating.invalid && (rating.dirty || rating.touched)" class="error">
+        <input type="range" id="rating" [(ngModel)]="newFeedback.rating" 
+               name="rating" required min="1" max="5" step="1" #rating="ngModel"
+               [class.error-field]="rating.invalid && (rating.dirty || rating.touched || formSubmitted)">
+        <div *ngIf="rating.invalid && (rating.dirty || rating.touched || formSubmitted)" class="error-message">
           <div *ngIf="rating.errors?.['required']">Rating is required.</div>
         </div>
       </div>
       
-      <div>
-        <label for="session">Session ID:</label>
-        <input id="session" type="number" [(ngModel)]="newFeedback.session" name="session" required min="1" #session="ngModel">
-        <div *ngIf="session.invalid && (session.dirty || session.touched)" class="error">
+      <div class="form-group">
+        <label for="session">Session ID: <span class="required-field">*</span></label>
+        <input id="session" type="number" [(ngModel)]="newFeedback.session" 
+               name="session" required min="1" #session="ngModel"
+               [class.error-field]="session.invalid && (session.dirty || session.touched || formSubmitted)">
+        <div *ngIf="session.invalid && (session.dirty || session.touched || formSubmitted)" class="error-message">
           <div *ngIf="session.errors?.['required']">Session ID is required.</div>
           <div *ngIf="session.errors?.['min']">Please enter a valid Session ID.</div>
         </div>
       </div>
       
+      <!-- Form validation summary -->
+      <div *ngIf="formSubmitted && feedbackForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+      
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-add" [disabled]="feedbackForm.invalid">Add</button>
+        <button type="submit" class="btn-square btn-add">Add</button>
         <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
       </div>
     </form>
   </div>
   
-  <!-- Edit feedback form styled like session form -->
+  <!-- Update the Edit Feedback form similarly -->
   <div class="session-edit" *ngIf="selectedFeedback">
     <h3>Edit Feedback</h3>
     <form (ngSubmit)="updateFeedback()" #editFeedbackForm="ngForm">
-      <div>
-        <label for="edit-content">Feedback Content:</label>
-        <textarea id="edit-content" [(ngModel)]="selectedFeedback.contentFeedback" name="editContent" required minlength="3" 
-                 #editContent="ngModel" rows="4" style="width: 100%; resize: vertical;"></textarea>
-        <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched)" class="error">
+      <div class="form-group">
+        <label for="edit-content">Feedback Content: <span class="required-field">*</span></label>
+        <textarea id="edit-content" [(ngModel)]="selectedFeedback.contentFeedback" 
+                  name="editContent" required minlength="3" 
+                  #editContent="ngModel" rows="4"
+                  [class.error-field]="editContent.invalid && (editContent.dirty || editContent.touched || formSubmitted)"></textarea>
+        <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched || formSubmitted)" class="error-message">
           <div *ngIf="editContent.errors?.['required']">Content is required.</div>
           <div *ngIf="editContent.errors?.['minlength']">Content must be at least 3 characters long.</div>
         </div>
       </div>
       
-      <div>
-        <label for="edit-rating">Rating (1-5):</label>
+      <div class="form-group">
+        <label for="edit-rating">Rating (1-5): <span class="required-field">*</span></label>
         <div class="star-rating-input">
           <span *ngFor="let star of [5,4,3,2,1]">
             <input type="radio" [id]="'edit-star'+star" name="editRating" [value]="star" [(ngModel)]="selectedFeedback.rating">
             <label [for]="'edit-star'+star">★</label>
           </span>
         </div>
-        <input type="range" id="edit-rating" [(ngModel)]="selectedFeedback.rating" name="editRating" required min="1" max="5" step="1" #editRating="ngModel">
-        <div *ngIf="editRating.invalid && (editRating.dirty || editRating.touched)" class="error">
+        <input type="range" id="edit-rating" [(ngModel)]="selectedFeedback.rating" 
+               name="editRating" required min="1" max="5" step="1" #editRating="ngModel"
+               [class.error-field]="editRating.invalid && (editRating.dirty || editRating.touched || formSubmitted)">
+        <div *ngIf="editRating.invalid && (editRating.dirty || editRating.touched || formSubmitted)" class="error-message">
           <div *ngIf="editRating.errors?.['required']">Rating is required.</div>
         </div>
       </div>
       
-      <div>
-        <label for="edit-session">Session ID:</label>
-        <input id="edit-session" type="number" [(ngModel)]="selectedFeedback.session" name="editSession" required min="1" #editSession="ngModel">
-        <div *ngIf="editSession.invalid && (editSession.dirty || editSession.touched)" class="error">
+      <div class="form-group">
+        <label for="edit-session">Session ID: <span class="required-field">*</span></label>
+        <input id="edit-session" type="number" [(ngModel)]="selectedFeedback.session" 
+               name="editSession" required min="1" #editSession="ngModel"
+               [class.error-field]="editSession.invalid && (editSession.dirty || editSession.touched || formSubmitted)">
+        <div *ngIf="editSession.invalid && (editSession.dirty || editSession.touched || formSubmitted)" class="error-message">
           <div *ngIf="editSession.errors?.['required']">Session ID is required.</div>
           <div *ngIf="editSession.errors?.['min']">Please enter a valid Session ID.</div>
         </div>
       </div>
       
+      <!-- Form validation summary -->
+      <div *ngIf="formSubmitted && editFeedbackForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+      
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-edit" [disabled]="editFeedbackForm.invalid">✏️</button>
+        <button type="submit" class="btn-square btn-edit">Update</button>
         <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
       </div>
     </form>
   </div>
+
+
 </div>

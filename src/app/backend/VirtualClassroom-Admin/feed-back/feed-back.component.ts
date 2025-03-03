@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FeedBackService } from '../VirtualClassroom-Services/feed-back.service';
 import { Feedback } from './feed-back.model';
 
@@ -43,6 +43,12 @@ export class FeedBackComponent implements OnInit {
   currentPage = 1;
   pageSize = 5;
   pageSizeOptions = [5, 10, 25, 50];
+
+  // Add these properties to your component class
+@ViewChild('confettiCanvas') confettiCanvas: ElementRef | undefined;
+formSubmitted = false;
+toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}> = [];
+
   
   constructor(private feedbackService: FeedBackService) {}
   
@@ -96,6 +102,10 @@ export class FeedBackComponent implements OnInit {
   
   processFeedbacks(data: any[]): void {
     this.feedbacks = Array.isArray(data) ? data : [];
+    
+    // Add this line to normalize the data
+    this.normalizeSessionIds();
+    
     this.filterFeedbacks();
     this.loading = false;
   }
@@ -177,6 +187,8 @@ export class FeedBackComponent implements OnInit {
     this.showAddForm = true;
     this.showFeedbackList = false;
     this.selectedFeedback = null;
+    this.formSubmitted = false; // Reset form submission flag
+
     this.newFeedback = {
       contentFeedback: '',
       rating: 0,
@@ -188,6 +200,8 @@ export class FeedBackComponent implements OnInit {
     this.selectedFeedback = null;
     this.showAddForm = false;
     this.showFeedbackList = true;
+    this.formSubmitted = false; // Reset form submission flag
+
   }
   
   selectFeedbackForEdit(feedback: Feedback): void {
@@ -207,12 +221,21 @@ export class FeedBackComponent implements OnInit {
   }
   
   createFeedback(): void {
+    this.formSubmitted = true; // Set this flag to show validation errors
+    
+    // Get reference to form and check validity
+    const form = document.querySelector('form');
+    if (form && form.checkValidity() === false) {
+      this.showToast('Please fill in all required fields', 'warning');
+      return;
+    }
+    
     this.loading = true;
     this.error = null;
     
     const feedbackToCreate = {
-      contentFeedback: this.newFeedback.contentFeedback,
-      rating: this.newFeedback.rating,
+      contentFeedback: this.newFeedback.contentFeedback.trim(),
+      rating: Number(this.newFeedback.rating),
       session: {
         idSession: typeof this.newFeedback.session === 'number' 
           ? this.newFeedback.session 
@@ -222,7 +245,6 @@ export class FeedBackComponent implements OnInit {
     
     console.log('Creating feedback:', feedbackToCreate);
     
-    // Changed from ${this.apiUrl}/add to just ${this.apiUrl}
     fetch(`${this.apiUrl}`, {
       method: 'POST',
       headers: { 
@@ -246,17 +268,29 @@ export class FeedBackComponent implements OnInit {
       this.clearSelection();
       this.filterFeedbacks();
       this.loading = false;
+      this.showToast('Feedback added successfully!', 'success');
+      this.triggerConfetti(); // Add confetti animation
     })
     .catch(error => {
       console.error('Add failed:', error);
       this.error = `Add failed: ${error.message}`;
       this.loading = false;
+      this.showToast(`Failed to add feedback: ${error.message}`, 'error');
     });
   }
   
   updateFeedback(): void {
+    this.formSubmitted = true; // Set this flag to show validation errors
+    
     if (!this.selectedFeedback || this.selectedFeedback.idFeedback === undefined) {
       this.error = "Cannot update feedback: invalid data";
+      return;
+    }
+    
+    // Get reference to form and check validity
+    const form = document.querySelector('form');
+    if (form && form.checkValidity() === false) {
+      this.showToast('Please fill in all required fields', 'warning');
       return;
     }
     
@@ -265,8 +299,8 @@ export class FeedBackComponent implements OnInit {
     
     const feedbackToUpdate = {
       idFeedback: this.selectedFeedback.idFeedback,
-      contentFeedback: this.selectedFeedback.contentFeedback,
-      rating: this.selectedFeedback.rating,
+      contentFeedback: this.selectedFeedback.contentFeedback.trim(),
+      rating: Number(this.selectedFeedback.rating),
       session: {
         idSession: typeof this.selectedFeedback.session === 'number' 
           ? this.selectedFeedback.session 
@@ -298,24 +332,28 @@ export class FeedBackComponent implements OnInit {
       this.clearSelection();
       this.filterFeedbacks();
       this.loading = false;
+      this.showToast('Feedback updated successfully!', 'success');
+      this.triggerConfetti(); // Add confetti animation
     })
     .catch(error => {
       console.error('Update failed:', error);
       this.error = `Update failed: ${error.message}`;
       this.loading = false;
+      this.showToast(`Failed to update feedback: ${error.message}`, 'error');
     });
   }
   
-// Fix by ensuring all paths return a value
+// Update the deleteFeedback method
 deleteFeedback(id: number | undefined): Promise<void> {
   if (id === undefined) {
     console.error('Cannot delete feedback with undefined ID');
     this.error = 'Cannot delete feedback: Missing ID';
-    return Promise.resolve(); // Add return here
+    this.showToast('Cannot delete feedback: Missing ID', 'error');
+    return Promise.resolve();
   }
   
   if (!confirm('Are you sure you want to delete this feedback?')) {
-    return Promise.resolve(); // Add return here too
+    return Promise.resolve();
   }
   
   this.loading = true;
@@ -334,13 +372,15 @@ deleteFeedback(id: number | undefined): Promise<void> {
     this.feedbacks = this.feedbacks.filter(f => f.idFeedback !== id);
     this.filterFeedbacks();
     this.loading = false;
-    return; // Explicit return for clarity
+    this.showToast('Feedback deleted successfully!', 'success');
+    return;
   })
   .catch(error => {
     console.error('Delete failed:', error);
     this.error = `Failed to delete feedback: ${error.message}`;
     this.loading = false;
-    return; // Explicit return for clarity
+    this.showToast(`Failed to delete feedback: ${error.message}`, 'error');
+    return;
   });
 }
   
@@ -393,16 +433,20 @@ deleteFeedback(id: number | undefined): Promise<void> {
   }
 
   // UTILITY METHODS
-  getSessionId(session: number | { idSession: number } | null): string {
+  getSessionId(session: any): string {
     if (session === null || session === undefined) {
       return 'None';
     }
     
-    if (typeof session === 'object') {
+    if (typeof session === 'object' && session.idSession !== undefined) {
       return session.idSession.toString();
     }
     
-    return session.toString();
+    if (typeof session !== 'object' && session !== null) {
+      return session.toString();
+    }
+    
+    return 'None';
   }
   
   // Method to generate star display for a rating
@@ -448,4 +492,133 @@ deleteFeedback(id: number | undefined): Promise<void> {
         this.loading = false;
       });
   }
+
+  // Add these methods to your component class
+showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info') {
+  console.log('Showing toast:', message, type);
+  
+  // Clone the array for better change detection
+  this.toasts = [...this.toasts, { message, type }];
+  
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (this.toasts.length > 0) {
+      this.toasts = this.toasts.slice(1);
+    }
+  }, 5000);
+}
+
+removeToast(index: number) {
+  this.toasts = this.toasts.filter((_, i) => i !== index);
+}
+
+triggerConfetti() {
+  if (!this.confettiCanvas) return;
+  
+  const canvas = this.confettiCanvas.nativeElement;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const pieces: any[] = [];
+  const numberOfPieces = 200;
+  const colors = ['#f44336', '#2196f3', '#ffeb3b', '#4caf50', '#9c27b0'];
+
+  function randomFromTo(from: number, to: number) {
+    return Math.floor(Math.random() * (to - from + 1) + from);
+  }
+  
+  for (let i = 0; i < numberOfPieces; i++) {
+    pieces.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: randomFromTo(5, 10),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      speed: randomFromTo(1, 5),
+      friction: 0.95,
+      opacity: 1,
+      yVel: 0,
+      xVel: 0
+    });
+  }
+  
+  let rendered = 0;
+  
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    pieces.forEach((piece, i) => {
+      piece.opacity -= 0.01;
+      piece.yVel += 0.25;
+      piece.xVel *= piece.friction;
+      piece.yVel *= piece.friction;
+      piece.rotation += 1;
+      piece.x += piece.xVel + Math.random() * 2 - 1;
+      piece.y += piece.yVel;
+      
+      if (piece.opacity <= 0) {
+        pieces.splice(i, 1);
+        return;
+      }
+      
+      ctx.beginPath();
+      ctx.arc(piece.x, piece.y, piece.radius, 0, Math.PI * 2);
+      ctx.fillStyle = piece.color;
+      ctx.globalAlpha = piece.opacity;
+      ctx.fill();
+    });
+
+    rendered += 1;
+    if (pieces.length > 0 && rendered < 500) {
+      requestAnimationFrame(renderConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  
+  // Initialize confetti velocities
+  pieces.forEach((piece) => {
+    piece.xVel = (Math.random() - 0.5) * 20;
+    piece.yVel = (Math.random() - 0.5) * 20;
+  });
+  
+  renderConfetti();
+}
+
+
+// Add this method to your feed-back.component.ts
+// Replace your normalizeSessionIds method with this
+normalizeSessionIds(): void {
+  console.log('Normalizing session IDs...');
+  
+  // Use type assertion to fix TypeScript errors
+  this.feedbacks = this.feedbacks.map(feedback => {
+    // Extract session ID
+    let sessionId: number | null = null;
+    
+    if (feedback.session) {
+      if (typeof feedback.session === 'object' && feedback.session.idSession !== undefined) {
+        sessionId = feedback.session.idSession;
+      } else if (typeof feedback.session === 'number') {
+        sessionId = feedback.session;
+      }
+    }
+    
+    // Create a properly typed object that matches your interface
+    return {
+      ...feedback,
+      session: {
+        idSession: sessionId || 0
+      },
+      sessionId: sessionId
+    } as Feedback;  // Type assertion to Feedback
+  });
+  
+  console.log('After normalization, first feedback:', this.feedbacks[0]);
+}
+
+
+
+
 }
