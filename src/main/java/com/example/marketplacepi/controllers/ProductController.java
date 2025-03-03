@@ -80,6 +80,15 @@ public class ProductController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	@GetMapping("/search")
+	public List<ProductDto> searchProducts(
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String category,
+			@RequestParam(required = false) Double priceMin,
+			@RequestParam(required = false) Double priceMax,
+			@RequestParam(required = false, defaultValue = "name") String sortBy) {  // Valeur par défaut : tri par nom
+		return adminProductService.searchProducts(name, category, priceMin, priceMax, sortBy);
+	}
 
 	@PutMapping("/product/{productId}")
 	public ResponseEntity<ProductDto> updateProduct(@PathVariable Long productId, @ModelAttribute ProductDto productDto) throws IOException, IOException {

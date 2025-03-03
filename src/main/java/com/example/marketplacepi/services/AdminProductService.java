@@ -20,4 +20,5 @@ public interface AdminProductService {
     ProductDto getProductById(Long productId);
 
     ProductDto updateProduct(Long productId, ProductDto productDto) throws IOException;
+    List<ProductDto> searchProducts(String name, String category, Double priceMin, Double priceMax, String sortBy);
 }

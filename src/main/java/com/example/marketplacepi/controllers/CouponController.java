@@ -19,7 +19,7 @@ public class CouponController {
 
 	private final AdminCouponService adminCouponService;
 
-	@PostMapping
+	@PostMapping("/creat")
 	public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
 		log.info("Received request to create coupon with code: {}", coupon.getCode());
 		if (coupon.getCode() == null) {
@@ -36,6 +36,7 @@ public class CouponController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
 
 	@GetMapping
 	public ResponseEntity<List<Coupon>> getAllCoupon() {

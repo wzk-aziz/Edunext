@@ -31,6 +31,15 @@ public class WishlistServiceImpl implements WishlistService{
 		Optional<Product> optionalProduct = productRepository.findById(wishlistDto.getProductId());
 
 		if (optionalProduct.isPresent()) {
+			// Vérifier si le produit est déjà dans la wishlist
+			Optional<Wishlist> existingWishlist = wishlistRepository.findByProductId(wishlistDto.getProductId());
+
+			if (existingWishlist.isPresent()) {
+				log.info("Product with ID {} is already in the wishlist.", wishlistDto.getProductId());
+				return null;  // Le produit est déjà dans la wishlist, on ne l'ajoute pas
+			}
+
+			// Ajouter le produit à la wishlist
 			Wishlist wishlist = new Wishlist();
 			wishlist.setProduct(optionalProduct.get());  // Associer le produit trouvé à la wishlist
 
@@ -43,6 +52,7 @@ public class WishlistServiceImpl implements WishlistService{
 	}
 
 
+
 	public List<WishlistDto> getAllWishlists() {
 		List<Wishlist> wishlist = wishlistRepository.findAll();  // Récupère toutes les wishlists sans filtrer par utilisateur
 		log.info("Retrieved all wishlists.");
@@ -50,14 +60,19 @@ public class WishlistServiceImpl implements WishlistService{
 	}
 
 	public boolean removeProductFromWishlist(Long wishlistId) {
-		log.info("Deleting product with ID: {}", wishlistId);
+		log.info("Deleting wishlist item with ID: {}", wishlistId);
 		Optional<Wishlist> wishlistItem = wishlistRepository.findById(wishlistId);
+
 		if (wishlistItem.isPresent()) {
-			wishlistRepository.deleteById(wishlistId);
+			wishlistRepository.delete(wishlistItem.get());  // Supprimer l'élément de la wishlist
+			log.info("Product with ID {} removed from wishlist.", wishlistId);
 			return true;
 		}
+
+		log.warn("Product with ID {} not found in wishlist.", wishlistId);
 		return false;
 	}
+
 
 
 

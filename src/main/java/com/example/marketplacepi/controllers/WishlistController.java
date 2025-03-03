@@ -31,26 +31,26 @@ public class WishlistController {
 
 		return postedWishlistDto != null
 				? ResponseEntity.status(HttpStatus.CREATED).body(postedWishlistDto)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produit non trouvé");
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found or already in wishlist");
 	}
-
 
 	@GetMapping("/wishlist")
 	public ResponseEntity<List<WishlistDto>> getWishlist() {
 		log.info("Received request to get wishlist");
 		return ResponseEntity.ok(wishlistService.getAllWishlists());
 	}
-	@DeleteMapping("/wishlist/{wishlistId}")
-	public ResponseEntity<Void> removeProductFromWishlist(@PathVariable Long wishlistId) {
-		log.info("Received request to delete wishlist with ID: {}", wishlistId);
-		boolean deleted = wishlistService.removeProductFromWishlist(wishlistId);
+	@DeleteMapping("/wishlist/product/{productId}")
+	public ResponseEntity<Void> removeProductFromWishlist(@PathVariable Long productId) {
+		log.info("Received request to delete product with ID: {}", productId);
+		boolean deleted = wishlistService.removeProductFromWishlist(productId);
 		if (deleted) {
-			log.info("wishlist with ID: {} deleted successfully", wishlistId);
+			log.info("Product with ID: {} removed from wishlist successfully", productId);
 			return ResponseEntity.noContent().build();
 		} else {
-			log.warn("wishlist with ID: {} not found", wishlistId);
+			log.warn("Product with ID: {} not found in wishlist", productId);
 			return ResponseEntity.notFound().build();
 		}
 	}
+
 
 }

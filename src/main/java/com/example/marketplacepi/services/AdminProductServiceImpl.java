@@ -5,10 +5,22 @@ import com.example.marketplacepi.models.Category;
 import com.example.marketplacepi.models.Product;
 import com.example.marketplacepi.repository.CategoryRepository;
 import com.example.marketplacepi.repository.ProductRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+
+
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,6 +79,40 @@ public class AdminProductServiceImpl implements AdminProductService {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         return optionalProduct.map(Product::getDto).orElse(null);
     }
+    public List<ProductDto> searchProducts(String name, String category, Double priceMin, Double priceMax, String sortBy) {
+        log.info("Recherche de produits avec filtres : name={}, category={}, priceMin={}, priceMax={}, sortBy={}",
+                name, category, priceMin, priceMax, sortBy);
+
+        List<Product> products;
+
+        if (name != null && category != null && priceMin != null && priceMax != null) {
+            products = productRepository.findByNameContainingIgnoreCaseAndCategory_NameIgnoreCaseAndPriceBetween(name, category, priceMin, priceMax);
+        } else if (name != null) {
+            products = productRepository.findByNameContainingIgnoreCase(name);
+        } else if (category != null) {
+            products = productRepository.findByCategory_NameIgnoreCase(category);
+        } else if (priceMin != null && priceMax != null) {
+            products = productRepository.findByPriceBetween(priceMin, priceMax);
+        } else {
+            products = productRepository.findAll();
+        }
+
+        // Ajout de la logique de tri
+        switch (sortBy) {
+            case "priceAsc":
+                products.sort(Comparator.comparing(Product::getPrice));
+                break;
+            case "priceDesc":
+                products.sort(Comparator.comparing(Product::getPrice).reversed());
+                break;
+            case "name":
+            default:
+                products.sort(Comparator.comparing(Product::getName));
+                break;
+        }
+
+        return products.stream().map(Product::getDto).collect(Collectors.toList());
+    }
 
     public ProductDto updateProduct(Long productId, ProductDto productDto) {
         log.info("Updating product with ID: {}", productId);
@@ -86,4 +132,5 @@ public class AdminProductServiceImpl implements AdminProductService {
         }
         return null;
     }
+
 }
