@@ -56,48 +56,68 @@ toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}>
     this.fetchFeedbacks();
   }
   
-  fetchFeedbacks(): void {
-    this.loading = true;
-    this.error = null;
-    
-    // Use direct fetch with text processing to handle malformed JSON
-    fetch(`${this.apiUrl}/all`)
-      .then(response => response.text())
-      .then(text => {
-        try {
-          const data = JSON.parse(text);
-          console.log('API returned data count:', data.length);
-          console.log('First few items:', data.slice(0, 3));
-          this.processFeedbacks(data);
-        } catch (e) {
-          console.error('JSON parse error:', e);
-          
-          // Try to clean the JSON
-          const cleaned = this.cleanJsonText(text);
-          try {
-            const data = JSON.parse(cleaned);
-            this.processFeedbacks(data);
-          } catch (e2) {
-            console.error('Failed to parse cleaned JSON:', e2);
-            this.error = 'Failed to process feedback data';
-            this.loading = false;
-          }
-        }
-      })
-      .catch(error => {
-        console.error('Fetch error:', error);
-        this.error = `Failed to fetch feedbacks: ${error.message}`;
-        this.loading = false;
-      });
+  async fetchFeedbacks(): Promise<void> {
+    try {
+      this.loading = true;
+      this.error = null;
+      
+      const response = await fetch(`${this.apiUrl}/all`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      // Get response as JSON directly - skip the cleaning step
+      const data = await response.json();
+      console.log(`Successfully parsed JSON with ${data.length} feedback items`);
+      
+      // Inspect the first item to debug session structure
+      if (data.length > 0) {
+        console.log('First feedback item:', data[0]);
+        console.log('Session structure:', JSON.stringify(data[0].session));
+      }
+      
+      // Process the data
+      this.feedbacks = data;
+      
+      // Use the direct normalization instead of cleanJsonText
+      this.normalizeSessionIds();
+      this.filterFeedbacks();
+      
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+      this.error = `Failed to fetch feedback: ${error instanceof Error ? error.message : String(error)}`;
+    } finally {
+      this.loading = false;
+    }
   }
   
   cleanJsonText(text: string): string {
-    return text
-      .replace(/,"session":\{"idSession":\d+,"session":/g, ',"session":{"idSession":')
-      .replace(/,"feedbacks":\[.*?\]/g, '') // Remove feedbacks arrays
-      .replace(/,"session":\{[^{}]*\}/g, ',"session":{"idSession":1}') // Replace session objects
-      .replace(/,"session":}/g, '}') // Fix dangling session references
-      .replace(/\}\]\}\}\]\}\}/g, '}]}]}]'); // Fix unclosed brackets
+    console.log('Raw JSON sample:', text.substring(0, 100));
+    
+    // IMPORTANT: Store all idSession values before we modify anything
+    let sessionIds: number[] = [];
+    const matches = text.match(/idSession":(\d+)/g);
+    if (matches) {
+      sessionIds = matches.map(m => parseInt(m.replace('idSession":', '')));
+      console.log('Found session IDs:', sessionIds);
+    }
+    
+    // Keep track of which ID to use
+    let idIndex = 0;
+    
+    // Fix JSON - carefully preserving the session IDs
+    const cleaned = text
+      .replace(/,"feedbacks":\[.*?\]/g, '')  // Remove nested feedbacks
+      .replace(/,"session":\{([^{}]*)\}/g, (match) => {
+        // Use an actual extracted session ID rather than a hardcoded value
+        const sessionId = idIndex < sessionIds.length ? sessionIds[idIndex++] : 0;
+        return `,"session":{"idSession":${sessionId}}`;
+      })
+      .replace(/\}\]\}\}\]\}\}/g, '}]}]}]'); // Fix extra brackets
+    
+    console.log('Cleaned JSON sample:', cleaned.substring(0, 100));
+    return cleaned;
   }
   
   processFeedbacks(data: any[]): void {
@@ -264,10 +284,18 @@ toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}>
     })
     .then(data => {
       console.log('Add successful, response:', data);
-      this.feedbacks.push(data);
+      console.log('Session data structure:', data.session);
+      
+      // Normalize the new feedback before adding to array
+      const normalizedFeedback = this.normalizeFeedback(data);
+      this.feedbacks.push(normalizedFeedback);
+      
+      this.feedbacks = [...this.feedbacks]; // Create new array reference for change detection
+
+      this.refreshUIData(); // Force UI refresh with normalized session IDs 
       this.clearSelection();
       this.filterFeedbacks();
-      this.loading = false;
+      //this.loading = false;
       this.showToast('Feedback added successfully!', 'success');
       this.triggerConfetti(); // Add confetti animation
     })
@@ -279,7 +307,7 @@ toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}>
     });
   }
   
-  updateFeedback(): void {
+   updateFeedback(): void {
     this.formSubmitted = true; // Set this flag to show validation errors
     
     if (!this.selectedFeedback || this.selectedFeedback.idFeedback === undefined) {
@@ -325,12 +353,20 @@ toasts: Array<{message: string, type: 'success' | 'error' | 'info' | 'warning'}>
     })
     .then(data => {
       console.log('Update successful, response:', data);
-      const index = this.feedbacks.findIndex(f => f.idFeedback === data.idFeedback);
+      console.log('Session data structure:', data.session);
+      
+      // Normalize the updated feedback before updating array
+      const normalizedFeedback = this.normalizeFeedback(data);
+      
+      const index = this.feedbacks.findIndex(f => f.idFeedback === normalizedFeedback.idFeedback);
       if (index !== -1) {
-        this.feedbacks[index] = data;
+        this.feedbacks[index] = normalizedFeedback;
+        this.feedbacks = [...this.feedbacks]; 
       }
+
+      this.refreshUIData(); // Force UI refresh with normalized session IDs
       this.clearSelection();
-      this.filterFeedbacks();
+      //this.filterFeedbacks();
       this.loading = false;
       this.showToast('Feedback updated successfully!', 'success');
       this.triggerConfetti(); // Add confetti animation
@@ -432,7 +468,6 @@ deleteFeedback(id: number | undefined): Promise<void> {
       });
   }
 
-  // UTILITY METHODS
   getSessionId(session: any): string {
     if (session === null || session === undefined) {
       return 'None';
@@ -587,38 +622,130 @@ triggerConfetti() {
 }
 
 
-// Add this method to your feed-back.component.ts
-// Replace your normalizeSessionIds method with this
+
+// Replace your current normalizeSessionIds method with this one
 normalizeSessionIds(): void {
-  console.log('Normalizing session IDs...');
+  console.log(`Normalizing ${this.feedbacks.length} feedback items`);
   
-  // Use type assertion to fix TypeScript errors
+  // Debug the first item before normalization
+  if (this.feedbacks.length > 0) {
+    console.log('Before normalization - first item:', JSON.stringify(this.feedbacks[0]));
+  }
+  
   this.feedbacks = this.feedbacks.map(feedback => {
-    // Extract session ID
-    let sessionId: number | null = null;
+    let sessionId: number | undefined = undefined;
     
-    if (feedback.session) {
-      if (typeof feedback.session === 'object' && feedback.session.idSession !== undefined) {
-        sessionId = feedback.session.idSession;
-      } else if (typeof feedback.session === 'number') {
+    // IMPORTANT: First check if the API returned sessionId directly
+    if (feedback.sessionId !== undefined && feedback.sessionId !== null) {
+      sessionId = Number(feedback.sessionId);
+      console.log(`Found direct sessionId: ${sessionId}`);
+    }
+    // Then check the session property in various formats
+    else if (feedback.session !== null && feedback.session !== undefined) {
+      // Case 1: Session is an object with idSession
+      if (typeof feedback.session === 'object' && 'idSession' in feedback.session) {
+        sessionId = Number(feedback.session.idSession);
+        console.log(`Found session.idSession: ${sessionId}`);
+      }
+      // Case 2: Session is an object with id
+      else if (typeof feedback.session === 'object' && 'id' in feedback.session) {
+        sessionId = Number((feedback.session as any).id);
+        console.log(`Found session.id: ${sessionId}`);
+      }
+      // Case 3: Session is a direct number
+      else if (typeof feedback.session === 'number') {
         sessionId = feedback.session;
+        console.log(`Found session as number: ${sessionId}`);
+      }
+      // Case 4: Session might be a string that needs converting
+      else if (typeof feedback.session === 'string' && !isNaN(Number(feedback.session))) {
+        sessionId = Number(feedback.session);
+        console.log(`Found session as string number: ${sessionId}`);
+      }
+      // Log unknown formats for debugging
+      else {
+        console.log('Unknown session format:', feedback.session);
+        
+        // Try to stringify to inspect deeply
+        try {
+          console.log('Stringified session:', JSON.stringify(feedback.session));
+        } catch (e) {
+          console.log('Could not stringify session:', e);
+        }
       }
     }
     
-    // Create a properly typed object that matches your interface
+    // Return normalized object with explicit sessionId
     return {
       ...feedback,
-      session: {
-        idSession: sessionId || 0
-      },
+      session: { idSession: sessionId ?? 0 },
       sessionId: sessionId
-    } as Feedback;  // Type assertion to Feedback
+    };
   });
   
-  console.log('After normalization, first feedback:', this.feedbacks[0]);
+  // Debug the first item after normalization
+  if (this.feedbacks.length > 0) {
+    console.log('After normalization - first item:', JSON.stringify(this.feedbacks[0]));
+    console.log(`Session IDs found: ${this.feedbacks.filter(f => f.sessionId !== undefined).length}/${this.feedbacks.length}`);
+  }
 }
 
+// Helper method to normalize a single feedback item
+// Update this helper method to match the main normalize function
+normalizeFeedback(feedback: any): Feedback {
+  let sessionId: number | undefined = undefined;
+  
+  if (feedback.session !== null && feedback.session !== undefined) {
+    // Case 1: Session is an object with idSession
+    if (typeof feedback.session === 'object' && feedback.session.idSession !== undefined) {
+      sessionId = Number(feedback.session.idSession);
+      console.log(`Found session.idSession: ${sessionId}`);
+    }
+    // Case 2: Session is a direct number
+    else if (typeof feedback.session === 'number') {
+      sessionId = Number(feedback.session);
+      console.log(`Found session as number: ${sessionId}`);
+    }
+    // Case 3: Session is an object with id instead of idSession
+    else if (typeof feedback.session === 'object' && 'id' in feedback.session) {
+      sessionId = Number(feedback.session.id);
+      console.log(`Found session.id: ${sessionId}`);
+    }
+    // Case 4: Nested structure
+    else if (typeof feedback.session === 'object' && 
+            feedback.session.session && 
+            typeof feedback.session.session === 'object') {
+      sessionId = Number(feedback.session.session.idSession);
+      console.log(`Found nested session.session.idSession: ${sessionId}`);
+    }
+  }
+  
+  return {
+    ...feedback,
+    session: { idSession: sessionId !== undefined ? sessionId : 0 },
+    sessionId: sessionId
+  } as Feedback;
+}
 
+// Add this method to force UI refresh
+// Add this method to force UI refresh
+refreshUIData(): void {
+  // Force deep refresh of all feedback objects
+  this.feedbacks = this.feedbacks.map(feedback => ({
+    ...feedback,
+    // Recreate session object to ensure change detection
+    session: typeof feedback.session === 'object' ? 
+      { ...feedback.session } : 
+      { idSession: feedback.sessionId || 0 },
+    // Use undefined instead of null to match your interface
+    sessionId: typeof feedback.session === 'object' ? 
+      feedback.session.idSession : 
+      (typeof feedback.sessionId === 'number' ? feedback.sessionId : undefined)
+  }));
+  
+  // Log after refresh
+  console.log('UI data refreshed with', this.feedbacks.length, 'items');
+}
 
 
 }
