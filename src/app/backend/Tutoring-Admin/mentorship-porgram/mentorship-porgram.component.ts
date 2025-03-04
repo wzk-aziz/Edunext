@@ -269,7 +269,7 @@ export class MentorshipPorgramComponent implements OnInit {
         this.filteredMentorshipPrograms = [...this.mentorshipPrograms];
         this.paginate();
         this.loading = false;
-        alert('Mentorship Program deleted successfully!');
+        this.triggerConfetti();
       },
       error: (err) => {
         console.error('Delete failed:', err);
@@ -659,7 +659,7 @@ createOrUpdateMentorshipProgram(isUpdate: boolean) {
     this.mentorshipProgramService.editMentorshipProgram(programToUpdate).subscribe({
       next: (data: any) => {
         console.log(`Program updated successfully:`, data);
-        
+        this.triggerConfetti();
         // Store the original instructor ID before processing response
         const originalInstructorId = programToUpdate.instructor_id;
         

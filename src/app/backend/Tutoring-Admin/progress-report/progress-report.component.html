@@ -1,3 +1,7 @@
+<!-- Add this at the top of your progress-report.component.html file, 
+     right after the opening <div class="progress-report-container"> -->
+<canvas #confettiCanvas class="confetti-canvas"></canvas>
+
 <div class="progress-report-container">
   <h2>Progress Reports Management</h2>
   
@@ -116,47 +120,61 @@
     <p *ngIf="!filteredProgressReports || filteredProgressReports.length === 0">No progress reports found</p>
   </div>
 
+
   <!-- Edit progress report form -->
   <div class="progress-report-edit" *ngIf="selectedProgressReport && !showCreateForm && !showProgressReportList">
     <h3>Edit Progress Report</h3>
     <form (ngSubmit)="updateProgressReport()" #editReportForm="ngForm">
       <div>
-        <label for="edit-content">Content:</label>
-        <input id="edit-content" [(ngModel)]="selectedProgressReport.reportContent" name="editContent" required minlength="3" #editContent="ngModel">
-        <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched)" class="error">
+        <label for="edit-content">Content: <span class="required-field">*</span></label>
+        <input id="edit-content" [(ngModel)]="selectedProgressReport.reportContent" 
+               name="editContent" required minlength="3" #editContent="ngModel"
+               [class.error-field]="editContent.invalid && (editContent.dirty || editContent.touched || formSubmitted)">
+        <div *ngIf="editContent.invalid && (editContent.dirty || editContent.touched || formSubmitted)" class="error">
           <div *ngIf="editContent.errors?.['required']">Content is required.</div>
           <div *ngIf="editContent.errors?.['minlength']">Content must be at least 3 characters long.</div>
         </div>
       </div>
       
       <div>
-        <label for="edit-reportDate">Report Date:</label>
-        <input id="edit-reportDate" type="date" [(ngModel)]="selectedReportDateString" name="editReportDate" required #editReportDate="ngModel">
-        <div *ngIf="editReportDate.invalid && (editReportDate.dirty || editReportDate.touched)" class="error">
+        <label for="edit-reportDate">Report Date: <span class="required-field">*</span></label>
+        <input id="edit-reportDate" type="date" [(ngModel)]="selectedReportDateString" 
+               name="editReportDate" required #editReportDate="ngModel"
+               [class.error-field]="editReportDate.invalid && (editReportDate.dirty || editReportDate.touched || formSubmitted)">
+        <div *ngIf="editReportDate.invalid && (editReportDate.dirty || editReportDate.touched || formSubmitted)" class="error">
           <div *ngIf="editReportDate.errors?.['required']">Report Date is required.</div>
         </div>
       </div>
       
       <div>
-        <label for="edit-learnerId">Learner ID:</label>
-        <input id="edit-learnerId" type="number" [(ngModel)]="selectedProgressReport.learnerId" name="editLearnerId" required min="1" #editLearnerId="ngModel">
-        <div *ngIf="editLearnerId.invalid && (editLearnerId.dirty || editLearnerId.touched)" class="error">
+        <label for="edit-learnerId">Learner ID: <span class="required-field">*</span></label>
+        <input id="edit-learnerId" type="number" [(ngModel)]="selectedProgressReport.learnerId" 
+               name="editLearnerId" required min="1" #editLearnerId="ngModel"
+               [class.error-field]="editLearnerId.invalid && (editLearnerId.dirty || editLearnerId.touched || formSubmitted)">
+        <div *ngIf="editLearnerId.invalid && (editLearnerId.dirty || editLearnerId.touched || formSubmitted)" class="error">
           <div *ngIf="editLearnerId.errors?.['required']">Learner ID is required.</div>
           <div *ngIf="editLearnerId.errors?.['min']">Learner ID must be at least 1.</div>
         </div>
       </div>
       
       <div>
-        <label for="edit-programId">Mentorship Program ID:</label>
-        <input id="edit-programId" type="number" [(ngModel)]="selectedProgressReport.mentorshipProgramId" name="editProgramId" required min="1" #editProgramId="ngModel">
-        <div *ngIf="editProgramId.invalid && (editProgramId.dirty || editProgramId.touched)" class="error">
+        <label for="edit-programId">Mentorship Program ID: <span class="required-field">*</span></label>
+        <input id="edit-programId" type="number" [(ngModel)]="selectedProgressReport.mentorshipProgramId" 
+               name="editProgramId" required min="1" #editProgramId="ngModel"
+               [class.error-field]="editProgramId.invalid && (editProgramId.dirty || editProgramId.touched || formSubmitted)">
+        <div *ngIf="editProgramId.invalid && (editProgramId.dirty || editProgramId.touched || formSubmitted)" class="error">
           <div *ngIf="editProgramId.errors?.['required']">Mentorship Program ID is required.</div>
           <div *ngIf="editProgramId.errors?.['min']">Mentorship Program ID must be at least 1.</div>
         </div>
       </div>
       
+      <!-- Add form validation summary -->
+      <div *ngIf="formSubmitted && editReportForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+      
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-edit" [disabled]="editReportForm.invalid">✏️</button>
+        <button type="submit" class="btn-square btn-edit">✓</button>
         <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
       </div>
     </form>
@@ -167,44 +185,58 @@
     <h3>Add New Progress Report</h3>
     <form (ngSubmit)="createProgressReport()" #reportForm="ngForm">
       <div>
-        <label for="content">Content:</label>
-        <input id="content" [(ngModel)]="newProgressReport.reportContent" name="content" required minlength="3" #content="ngModel">
-        <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error">
+        <label for="content">Content: <span class="required-field">*</span></label>
+        <input id="content" [(ngModel)]="newProgressReport.reportContent" 
+               name="content" required minlength="3" #content="ngModel"
+               [class.error-field]="content.invalid && (content.dirty || content.touched || formSubmitted)">
+        <div *ngIf="content.invalid && (content.dirty || content.touched || formSubmitted)" class="error">
           <div *ngIf="content.errors?.['required']">Content is required.</div>
           <div *ngIf="content.errors?.['minlength']">Content must be at least 3 characters long.</div>
         </div>
       </div>
       
       <div>
-        <label for="reportDate">Report Date:</label>
-        <input id="reportDate" type="date" [(ngModel)]="reportDateString" name="reportDate" required #reportDate="ngModel">
-        <div *ngIf="reportDate.invalid && (reportDate.dirty || reportDate.touched)" class="error">
+        <label for="reportDate">Report Date: <span class="required-field">*</span></label>
+        <input id="reportDate" type="date" [(ngModel)]="reportDateString" 
+               name="reportDate" required #reportDate="ngModel"
+               [class.error-field]="reportDate.invalid && (reportDate.dirty || reportDate.touched || formSubmitted)">
+        <div *ngIf="reportDate.invalid && (reportDate.dirty || reportDate.touched || formSubmitted)" class="error">
           <div *ngIf="reportDate.errors?.['required']">Report Date is required.</div>
         </div>
       </div>
       
       <div>
-        <label for="learnerId">Learner ID:</label>
-        <input id="learnerId" type="number" [(ngModel)]="newProgressReport.learnerId" name="learnerId" required min="1" #learnerId="ngModel">
-        <div *ngIf="learnerId.invalid && (learnerId.dirty || learnerId.touched)" class="error">
+        <label for="learnerId">Learner ID: <span class="required-field">*</span></label>
+        <input id="learnerId" type="number" [(ngModel)]="newProgressReport.learnerId" 
+               name="learnerId" required min="1" #learnerId="ngModel"
+               [class.error-field]="learnerId.invalid && (learnerId.dirty || learnerId.touched || formSubmitted)">
+        <div *ngIf="learnerId.invalid && (learnerId.dirty || learnerId.touched || formSubmitted)" class="error">
           <div *ngIf="learnerId.errors?.['required']">Learner ID is required.</div>
           <div *ngIf="learnerId.errors?.['min']">Learner ID must be at least 1.</div>
         </div>
       </div>
       
       <div>
-        <label for="programId">Mentorship Program ID:</label>
-        <input id="programId" type="number" [(ngModel)]="newProgressReport.mentorshipProgramId" name="programId" required min="1" #programId="ngModel">
-        <div *ngIf="programId.invalid && (programId.dirty || programId.touched)" class="error">
+        <label for="programId">Mentorship Program ID: <span class="required-field">*</span></label>
+        <input id="programId" type="number" [(ngModel)]="newProgressReport.mentorshipProgramId" 
+               name="programId" required min="1" #programId="ngModel"
+               [class.error-field]="programId.invalid && (programId.dirty || programId.touched || formSubmitted)">
+        <div *ngIf="programId.invalid && (programId.dirty || programId.touched || formSubmitted)" class="error">
           <div *ngIf="programId.errors?.['required']">Mentorship Program ID is required.</div>
           <div *ngIf="programId.errors?.['min']">Mentorship Program ID must be at least 1.</div>
         </div>
       </div>
       
+      <!-- Add form validation summary -->
+      <div *ngIf="formSubmitted && reportForm.invalid" class="form-error-summary">
+        Please fill in all required fields correctly before submitting.
+      </div>
+      
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-add" [disabled]="reportForm.invalid">Add</button>
-        <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
+        <button type="submit" class="btn-square btn-add">✓</button>
+        <button type="button" class="btn-cancel" (click)="resetForm()">✖</button>
       </div>
     </form>
   </div>
+
 </div>

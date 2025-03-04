@@ -80,21 +80,32 @@ export class ProgressReportService {
     );
   }
 
+  // In progress-report.service.ts
   createProgressReport(report: Partial<ProgressReport>): Observable<ProgressReport> {
-    // Create backend format
+    // Save original IDs for fallback
+    const originalLearnerId = report.learnerId;
+    const originalProgramId = report.mentorshipProgramId;
+    
+    // Create backend format with MULTIPLE ID formats
     const backendReport = {
       reportContent: report.reportContent,
       reportDate: this.formatDateForBackend(report.reportDate),
+      // Send direct properties
+      learnerId: originalLearnerId,
+      mentorshipProgramId: originalProgramId,
+      // Also send nested objects
       learner: {
-        idLearner: report.learnerId
+        idLearner: originalLearnerId,
+        id: originalLearnerId
       },
       mentorshipProgram: {
-        idMentorshipProgram: report.mentorshipProgramId
+        idMentorshipProgram: originalProgramId,
+        id: originalProgramId
       }
     };
-
+  
     console.log('Sending to backend:', JSON.stringify(backendReport));
-
+  
     return this.http.post<any>(this.apiUrl, backendReport, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -106,10 +117,9 @@ export class ProgressReportService {
         idReport: data.idReport || 0,
         reportContent: data.reportContent || '',
         reportDate: new Date(data.reportDate || new Date()),
-        learnerId: data.learnerId || (data.learner?.idLearner) || report.learnerId || 0,
-        mentorshipProgramId: data.mentorshipProgramId || 
-                            (data.mentorshipProgram?.idMentorshipProgram) || 
-                            report.mentorshipProgramId || 0,
+        // Use original IDs as fallback
+        learnerId: this.extractLearnerId(data, originalLearnerId),
+        mentorshipProgramId: this.extractProgramId(data, originalProgramId),
         learner: data.learner,
         mentorshipProgram: data.mentorshipProgram
       })),
@@ -119,23 +129,73 @@ export class ProgressReportService {
       })
     );
   }
+  
+  // Helper method to extract learner ID
+  private extractLearnerId(data: any, fallbackId: number | undefined): number {
+    if (data.learnerId !== undefined && data.learnerId !== null) {
+      return Number(data.learnerId);
+    }
+    
+    if (data.learner) {
+      if (typeof data.learner === 'object') {
+        if (data.learner.idLearner !== undefined) {
+          return Number(data.learner.idLearner);
+        }
+        if (data.learner.id !== undefined) {
+          return Number(data.learner.id);
+        }
+      }
+    }
+    
+    return fallbackId || 0;
+  }
+  
+  // Helper method to extract program ID
+  private extractProgramId(data: any, fallbackId: number | undefined): number {
+    if (data.mentorshipProgramId !== undefined && data.mentorshipProgramId !== null) {
+      return Number(data.mentorshipProgramId);
+    }
+    
+    if (data.mentorshipProgram) {
+      if (typeof data.mentorshipProgram === 'object') {
+        if (data.mentorshipProgram.idMentorshipProgram !== undefined) {
+          return Number(data.mentorshipProgram.idMentorshipProgram);
+        }
+        if (data.mentorshipProgram.id !== undefined) {
+          return Number(data.mentorshipProgram.id);
+        }
+      }
+    }
+    
+    return fallbackId || 0;
+  }
 
   updateProgressReport(report: ProgressReport): Observable<ProgressReport> {
-    // Create backend format
+    // Save original IDs for fallback
+    const originalLearnerId = report.learnerId;
+    const originalProgramId = report.mentorshipProgramId;
+    
+    // Create backend format with MULTIPLE ID formats
     const backendReport = {
       idReport: report.idReport,
       reportContent: report.reportContent,
       reportDate: this.formatDateForBackend(report.reportDate),
+      // Send direct properties
+      learnerId: originalLearnerId,
+      mentorshipProgramId: originalProgramId,
+      // Also send nested objects
       learner: {
-        idLearner: report.learnerId
+        idLearner: originalLearnerId,
+        id: originalLearnerId
       },
       mentorshipProgram: {
-        idMentorshipProgram: report.mentorshipProgramId
+        idMentorshipProgram: originalProgramId,
+        id: originalProgramId
       }
     };
-
+  
     console.log('Updating with:', JSON.stringify(backendReport));
-
+  
     return this.http.put<any>(`${this.apiUrl}/${report.idReport}`, backendReport, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -147,10 +207,9 @@ export class ProgressReportService {
         idReport: data.idReport || report.idReport,
         reportContent: data.reportContent || report.reportContent,
         reportDate: new Date(data.reportDate || report.reportDate),
-        learnerId: data.learnerId || (data.learner?.idLearner) || report.learnerId,
-        mentorshipProgramId: data.mentorshipProgramId || 
-                            (data.mentorshipProgram?.idMentorshipProgram) || 
-                            report.mentorshipProgramId,
+        // Use original IDs as fallback
+        learnerId: this.extractLearnerId(data, originalLearnerId),
+        mentorshipProgramId: this.extractProgramId(data, originalProgramId),
         learner: data.learner,
         mentorshipProgram: data.mentorshipProgram
       })),

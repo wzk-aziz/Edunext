@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { ProgressReport } from './progress-report.model';
 import { ProgressReportService } from '../Tutoring-Services/progress-report.service';
-import { Observable, of } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-progress-report',
@@ -45,6 +45,15 @@ export class ProgressReportComponent implements OnInit {
     dateFrom: null,
     dateTo: null
   };
+
+  @ViewChild('confettiCanvas') confettiCanvas: ElementRef | undefined;
+
+    // In progress-report.component.ts - add this property
+  formSubmitted: boolean = false;
+
+    // Add these ViewChild references
+  @ViewChild('reportForm') reportForm!: NgForm;
+  @ViewChild('editReportForm') editReportForm!: NgForm;
 
   constructor(private progressReportService: ProgressReportService) {
     // Format the current date for the datetime-local input
@@ -225,71 +234,169 @@ export class ProgressReportComponent implements OnInit {
     };
   }
 
-  // In createProgressReport method
   createProgressReport(): void {
-    this.loading = true;
-    this.error = null;
+    // Set formSubmitted to true immediately to show validation errors
+    this.formSubmitted = true;
     
-    // Check for required fields first
-    if (!this.newProgressReport.learnerId || !this.newProgressReport.mentorshipProgramId) {
-      this.error = "Learner ID and Mentorship Program ID are required";
-      this.loading = false;
-      return;
-    }
-    
-    // Create a progress report object with non-nullable values
-    const reportToAdd: Partial<ProgressReport> = {
-      reportContent: this.newProgressReport.reportContent,
-      reportDate: this.reportDateString ? new Date(this.reportDateString) : new Date(),
-      learnerId: this.newProgressReport.learnerId,
-      mentorshipProgramId: this.newProgressReport.mentorshipProgramId
-    };
-    
-    console.log('Adding progress report with data:', reportToAdd);
-    
-    this.progressReportService.createProgressReport(reportToAdd).subscribe({
-      next: (data) => {
-        console.log('Add successful, response:', data);
+    // Force Angular to run validation before continuing
+    setTimeout(() => {
+      // Check if form is valid first
+      if (this.reportForm && this.reportForm.invalid) {
+        this.showToast('Please fill in all required fields', 'warning');
+        return;
+      }
+      
+      this.loading = true;
+      this.error = null;
+      
+      // Keep original IDs for fallback
+      const originalLearnerId = this.newProgressReport.learnerId;
+      const originalProgramId = this.newProgressReport.mentorshipProgramId;
+      
+      // Create a progress report object with non-nullable values
+      const reportToAdd = {
+        reportContent: this.newProgressReport.reportContent,
+        reportDate: this.reportDateString ? new Date(this.reportDateString) : new Date(),
+        // Send IDs in multiple formats to ensure backend acceptance
+        learnerId: originalLearnerId,
+        mentorshipProgramId: originalProgramId,
+        learner: {
+          idLearner: originalLearnerId,
+          id: originalLearnerId
+        },
+        mentorshipProgram: {
+          idMentorshipProgram: originalProgramId,
+          id: originalProgramId
+        }
+      };
+      
+      console.log('Adding progress report with data:', reportToAdd);
+      
+      this.progressReportService.createProgressReport(reportToAdd).subscribe({
+        next: (data) => {
+          console.log('Add successful, response:', data);
+          
+          // Ensure IDs are preserved if they come back null
+          const createdReport = {
+            ...data,
+            learnerId: data.learnerId || originalLearnerId,
+            mentorshipProgramId: data.mentorshipProgramId || originalProgramId
+          };
+          
+          this.progressReports.push(createdReport);
+          this.filteredProgressReports = [...this.progressReports];
+          this.paginate();
+          this.resetForm();
+          this.loading = false;
+          this.formSubmitted = false;
+          this.showToast('Progress Report added successfully!', 'success');
+          this.triggerConfetti();
+        },
+        error: (error) => {
+          console.error('Add failed:', error);
+          this.error = `Add failed: ${error.message}`;
+          this.loading = false;
+          this.showToast(`Failed to add progress report: ${error.message}`, 'error');
+        }
+      });
+    }, 0);
+  }
+
+    updateProgressReport(): void {
+      // Early validation
+      if (!this.selectedProgressReport) {
+        this.showToast('No report selected for update', 'warning');
+        return;
+      }
+      
+      // Set formSubmitted to true immediately to show validation errors
+      this.formSubmitted = true;
+      
+      // Force Angular to run validation before continuing
+      setTimeout(() => {
+        // Check if form is valid first
+        if (this.editReportForm && this.editReportForm.invalid) {
+          this.showToast('Please fill in all required fields', 'warning');
+          return;
+        }
         
-        // Ensure the data has the correct shape
-        const newReport: ProgressReport = {
-          idReport: data.idReport,
-          reportContent: data.reportContent,
-          reportDate: data.reportDate,
-          learnerId: data.learnerId || reportToAdd.learnerId!,  // Non-null assertion
-          mentorshipProgramId: data.mentorshipProgramId || reportToAdd.mentorshipProgramId!,  // Non-null assertion
-          learner: data.learner || { idLearner: reportToAdd.learnerId! },  // Non-null assertion
-          mentorshipProgram: data.mentorshipProgram || { idMentorshipProgram: reportToAdd.mentorshipProgramId! }  // Non-null assertion
+        this.loading = true;
+        this.error = null;
+        
+        // Keep original IDs for fallback
+        const originalLearnerId = this.selectedProgressReport!.learnerId;
+        const originalProgramId = this.selectedProgressReport!.mentorshipProgramId;
+        
+        // Create a report object for update with multiple ID formats
+        const reportToUpdate = {
+          idReport: this.selectedProgressReport!.idReport,
+          reportContent: this.selectedProgressReport!.reportContent,
+          reportDate: this.selectedReportDateString ? new Date(this.selectedReportDateString) : new Date(),
+          // Send IDs in multiple formats to ensure backend acceptance
+          learnerId: originalLearnerId,
+          mentorshipProgramId: originalProgramId,
+          learner: {
+            idLearner: originalLearnerId,
+            id: originalLearnerId
+          },
+          mentorshipProgram: {
+            idMentorshipProgram: originalProgramId,
+            id: originalProgramId
+          }
         };
         
-        this.progressReports.push(newReport);
-        this.filteredProgressReports = [...this.progressReports];
-        this.paginate();
-        this.resetForm();
-        this.loading = false;
-        alert('Progress Report added successfully!');
-      },
-      error: (error) => {
-        // Error handling logic
-      }
-    });
-  }
+        console.log('Updating progress report with data:', reportToUpdate);
+        
+        this.progressReportService.updateProgressReport(reportToUpdate as ProgressReport).subscribe({
+          next: (data) => {
+            console.log('Update successful, response:', data);
+            
+            // Ensure IDs are preserved if they come back null
+            const updatedReport = {
+              ...data,
+              learnerId: data.learnerId || originalLearnerId,
+              mentorshipProgramId: data.mentorshipProgramId || originalProgramId
+            };
+            
+            // Update in local list
+            const index = this.progressReports.findIndex(r => r.idReport === updatedReport.idReport);
+            if (index !== -1) {
+              this.progressReports[index] = updatedReport;
+            }
+            
+            this.filteredProgressReports = [...this.progressReports];
+            this.paginate();
+            this.selectedProgressReport = null;
+            this.showProgressReportList = true;
+            this.loading = false;
+            this.formSubmitted = false;
+            this.showToast('Progress Report updated successfully!', 'success');
+            this.triggerConfetti();
+          },
+          error: (error) => {
+            console.error('Update failed:', error);
+            this.error = `Update failed: ${error.message}`;
+            this.loading = false;
+            this.showToast(`Failed to update progress report: ${error.message}`, 'error');
+          }
+        });
+      }, 0);
+    }
   
-  // Similar changes for updateProgressReport
-
-  resetForm(): void {
-    this.newProgressReport = {
-      idReport: 0,
-      reportContent: '',
-      reportDate: new Date(),
-      learnerId: 0,
-      mentorshipProgramId: 0
-    };
-    this.reportDateString = this.formatDateForInput(new Date());
-    this.showProgressReportList = true;
-    this.showCreateForm = false;
-  }
-
+// In resetForm method
+resetForm(): void {
+  this.newProgressReport = {
+    idReport: 0,
+    reportContent: '',
+    reportDate: new Date(),
+    learnerId: 0,
+    mentorshipProgramId: 0
+  };
+  this.reportDateString = this.formatDateForInput(new Date());
+  this.showProgressReportList = true;
+  this.showCreateForm = false;
+  this.formSubmitted = false; // Reset formSubmitted flag
+}
   selectProgressReport(report: ProgressReport): void {
     // Create a deep copy to avoid modifying the original
     this.selectedProgressReport = { ...report };
@@ -304,44 +411,7 @@ export class ProgressReportComponent implements OnInit {
     this.showProgressReportList = false;
   }
 
-  updateProgressReport(): void {
-    if (!this.selectedProgressReport) return;
-    
-    this.loading = true;
-    this.error = null;
-    
-    // Create a report object for update
-    const reportToUpdate = {
-      ...this.selectedProgressReport,
-      reportDate: this.selectedReportDateString ? new Date(this.selectedReportDateString) : new Date()
-    };
-    
-    console.log('Updating progress report with data:', reportToUpdate);
-    
-    this.progressReportService.updateProgressReport(reportToUpdate as ProgressReport).subscribe({
-      next: (data) => {
-        console.log('Update successful, response:', data);
-        
-        // Update in local list
-        const index = this.progressReports.findIndex(r => r.idReport === data.idReport);
-        if (index !== -1) {
-          this.progressReports[index] = data;
-        }
-        
-        this.filteredProgressReports = [...this.progressReports];
-        this.paginate();
-        this.selectedProgressReport = null;
-        this.showProgressReportList = true;
-        this.loading = false;
-        alert('Progress Report updated successfully!');
-      },
-      error: (error) => {
-        console.error('Update failed:', error);
-        this.error = `Update failed: ${error.message}`;
-        this.loading = false;
-      }
-    });
-  }
+
 
   deleteProgressReport(id: number): void {
     if (!confirm('Are you sure you want to delete this progress report?')) return;
@@ -356,22 +426,25 @@ export class ProgressReportComponent implements OnInit {
         this.filteredProgressReports = [...this.progressReports];
         this.paginate();
         this.loading = false;
-        alert('Progress Report deleted successfully!');
+        this.showToast('Progress Report deleted successfully!', 'success');
+        this.triggerConfetti();
       },
       error: (error) => {
         console.error('Delete failed:', error);
         this.error = `Delete failed: ${error.message}`;
         this.loading = false;
+        this.showToast(`Failed to delete progress report: ${error.message}`, 'error');
       }
     });
   }
 
-  clearSelection(): void {
-    this.selectedProgressReport = null;
-    this.showProgressReportList = true;
-    this.showCreateForm = false;
-  }
-
+// In clearSelection method
+clearSelection(): void {
+  this.selectedProgressReport = null;
+  this.showProgressReportList = true;
+  this.showCreateForm = false;
+  this.formSubmitted = false; // Reset formSubmitted flag
+}
 
 
 debugData(): void {
@@ -387,6 +460,102 @@ debugData(): void {
     console.log('learnerId available:', sample.learnerId !== undefined);
     console.log('mentorshipProgramId available:', sample.mentorshipProgramId !== undefined);
   }
+}
+
+
+// Toast notification
+showToast(message: string, type: 'success' | 'error' | 'info' | 'warning'): void {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  
+  // Add to document
+  document.body.appendChild(toast);
+  
+  // Trigger animation
+  setTimeout(() => toast.classList.add('show'), 10);
+  
+  // Remove after delay
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => document.body.removeChild(toast), 300);
+  }, 3000);
+}
+
+// Confetti animation
+triggerConfetti(): void {
+  if (!this.confettiCanvas) return;
+  
+  const canvas = this.confettiCanvas.nativeElement;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const pieces: any[] = [];
+  const numberOfPieces = 200;
+  const colors = ['#f44336', '#2196f3', '#ffeb3b', '#4caf50', '#9c27b0'];
+
+  function randomFromTo(from: number, to: number) {
+    return Math.floor(Math.random() * (to - from + 1) + from);
+  }
+  
+  for (let i = 0; i < numberOfPieces; i++) {
+    pieces.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: randomFromTo(5, 10),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      speed: randomFromTo(1, 5),
+      friction: 0.95,
+      opacity: 1,
+      yVel: 0,
+      xVel: 0
+    });
+  }
+  
+  let rendered = 0;
+  
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    pieces.forEach((piece, i) => {
+      piece.opacity -= 0.01;
+      piece.yVel += 0.25;
+      piece.xVel *= piece.friction;
+      piece.yVel *= piece.friction;
+      piece.rotation += 1;
+      piece.x += piece.xVel + Math.random() * 2 - 1;
+      piece.y += piece.yVel;
+      
+      if (piece.opacity <= 0) {
+        pieces.splice(i, 1);
+        return;
+      }
+      
+      ctx.beginPath();
+      ctx.arc(piece.x, piece.y, piece.radius, 0, Math.PI * 2);
+      ctx.fillStyle = piece.color;
+      ctx.globalAlpha = piece.opacity;
+      ctx.fill();
+    });
+
+    rendered += 1;
+    if (pieces.length > 0 && rendered < 500) {
+      requestAnimationFrame(renderConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  
+  // Initialize confetti velocities
+  pieces.forEach((piece) => {
+    piece.xVel = (Math.random() - 0.5) * 20;
+    piece.yVel = (Math.random() - 0.5) * 20;
+  });
+  
+  renderConfetti();
 }
 
 

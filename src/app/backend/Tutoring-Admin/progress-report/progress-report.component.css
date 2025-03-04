@@ -392,3 +392,78 @@ h2 {
   font-weight: bold;
   padding: 0 10px;
 }
+/* Add to progress-report.component.css */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+  max-width: 350px;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10000;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-success {
+  background-color: #4caf50;
+}
+
+.toast-warning {
+  background-color: #ff9800;
+}
+
+.toast-error {
+  background-color: #f44336;
+}
+
+.toast-info {
+  background-color: #2196f3;
+}
+/* Add to progress-report.component.css if not already there */
+.required-field {
+  color: #f44336;
+  margin-left: 2px;
+}
+
+.error-field {
+  border: 1px solid #f44336 !important;
+  background-color: rgba(244, 67, 54, 0.05);
+}
+
+.form-error-summary {
+  color: #f44336;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-left: 3px solid #f44336;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+/* Add this to your progress-report.component.css file if it's not already there */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
