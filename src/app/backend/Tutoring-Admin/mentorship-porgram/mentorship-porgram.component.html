@@ -144,8 +144,10 @@
                   Please fill in all required fields correctly before submitting.
                 </div>
 
+      <!-- Change this line in mentorship-porgram.component.html -->
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-add" [disabled]="mentorshipProgramForm.invalid">Add</button>
+        <!-- Remove the [disabled] attribute -->
+        <button type="submit" class="btn-square btn-add">Add</button>
         <button type="button" class="btn-cancel" (click)="resetForm()">✖</button>
       </div>
     </form>
@@ -348,7 +350,8 @@
       </div>
   
       <div class="form-buttons">
-        <button type="submit" class="btn-square btn-edit" [disabled]="editMentorshipProgramForm.invalid">Update</button>
+        <!-- Remove the [disabled] attribute -->
+        <button type="submit" class="btn-square btn-edit">✏️</button>
         <button type="button" class="btn-cancel" (click)="clearSelection()">✖</button>
       </div>
     </form>

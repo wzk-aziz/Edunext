@@ -1019,3 +1019,19 @@ h2 {
   margin: 10px 0;
   font-size: 14px;
 }
+/* Check that these styles are in your mentorship-porgram.component.css */
+.error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.error-field {
+  border: 1px solid #f44336 !important;
+  background-color: rgba(244, 67, 54, 0.05);
+}
+
+.required-field {
+  color: #f44336;
+  margin-left: 2px;
+}
