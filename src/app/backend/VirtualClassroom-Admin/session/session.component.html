@@ -148,7 +148,7 @@
         <tr *ngFor="let session of paginatedSessions">
           <td>{{ session.idSession }}</td>
           <td>{{ session.titleSession }}</td>
-          <td>{{ session.sessionDuration }} hour(s)</td>
+          <td>{{ session.sessionDuration }} Mins</td>
           <td>{{ session.startTime | date:'medium' }}</td>
           <td>{{ session.sessionSubject }}</td>
           <!-- In your session list table -->
@@ -214,16 +214,16 @@
       
       <!-- Duration field -->
       <div class="form-group">
-        <label for="edit-duration">Duration (Hours): <span class="required-field">*</span></label>
+        <label for="edit-duration">Duration (Minutes): <span class="required-field">*</span></label>
         <input id="edit-duration" type="number" 
                [(ngModel)]="selectedSession.sessionDuration" 
-               name="editDuration" required min="1" max="24"
+               name="editDuration" required min="30" max="300"
                #editDuration="ngModel"
                [class.error-field]="editDuration.invalid && (editDuration.dirty || editDuration.touched || formSubmitted)">
         <div *ngIf="editDuration.invalid && (editDuration.dirty || editDuration.touched || formSubmitted)" class="error-message">
           <div *ngIf="editDuration.errors?.['required']">Duration is required.</div>
-          <div *ngIf="editDuration.errors?.['min']">Duration must be at least 1 hour.</div>
-          <div *ngIf="editDuration.errors?.['max']">Duration cannot exceed 24 hours.</div>
+          <div *ngIf="editDuration.errors?.['min']">Duration must be at least 30 mins.</div>
+          <div *ngIf="editDuration.errors?.['max']">Duration cannot exceed 300 mins.</div>
         </div>
       </div>
       
@@ -303,16 +303,16 @@
       
       <!-- Duration field -->  
       <div class="form-group">
-        <label for="duration">Duration (Hours): <span class="required-field">*</span></label>
+        <label for="duration">Duration (Minutes): <span class="required-field">*</span></label>
         <input id="duration" type="number" 
                [(ngModel)]="newSession.sessionDuration" 
-               name="sessionDuration" required min="1" max="24"
+               name="sessionDuration" required min="30" max="300"
                #duration="ngModel"
                [class.error-field]="duration.invalid && (duration.dirty || duration.touched || formSubmitted)">
         <div *ngIf="duration.invalid && (duration.dirty || duration.touched || formSubmitted)" class="error-message">
           <div *ngIf="duration.errors?.['required']">Duration is required.</div>
-          <div *ngIf="duration.errors?.['min']">Duration must be at least 1 hour.</div>
-          <div *ngIf="duration.errors?.['max']">Duration cannot exceed 24 hours.</div>
+          <div *ngIf="duration.errors?.['min']">Duration must be at least 30 minutes.</div>
+          <div *ngIf="duration.errors?.['max']">Duration cannot exceed 300 minutes.</div>
         </div>
       </div>
       

@@ -21,6 +21,11 @@ import { StudentslistComponent } from './Teacher-Pages/teacherdashboard/students
 import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tutoringsessions/tutoringsessions.component';
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
 
+
+import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/student-virtual-classroom-sessions/student-virtual-classroom-sessions.component';
+
+
+
 const routes: Routes = [
   // Main Landing Page
   { path: 'main', component: MainhomepageComponent },
@@ -52,6 +57,10 @@ const routes: Routes = [
   { path: 'studentlist', component: StudentslistComponent },
   { path: 'Tutoringsessions', component: TutoringsessionsComponent },
 
+
+  { path: 'student-virtual-classroom-sessions', component: StudentVirtualClassroomSessionsComponent },
+
+
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },
 
@@ -59,7 +68,14 @@ const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
 
   // Wildcard Routes
-  { path: '**', redirectTo: 'studenthome', pathMatch: 'full' }
+  { path: '**', redirectTo: 'studenthome', pathMatch: 'full' },
+
+    { path: 'student-virtual-classroom-sessions', component: StudentVirtualClassroomSessionsComponent },
+
+
+
+
+
 ];
 
 @NgModule({

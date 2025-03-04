@@ -1,0 +1,242 @@
+<div class="sessions-container">
+  <div class="sessions-header">
+    <h1>Virtual Classroom Sessions</h1>
+    <p>Join live sessions with your instructors and fellow students</p>
+    
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="searchText" (input)="applyFilters()" 
+             placeholder="Search by title, instructor or description...">
+      <button class="search-btn">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+    
+    <!-- Filter Section -->
+    <div class="filters-container">
+      <h3>Filter Sessions</h3>
+      <div class="filters-grid">
+        <!-- Status Filter -->
+        <div class="filter-item">
+          <label>Status</label>
+          <div class="status-filter-buttons">
+            <button [ngClass]="{'active': statusFilter === 'all'}" 
+                    (click)="setStatusFilter('all')">All</button>
+            <button [ngClass]="{'active': statusFilter === 'live'}" 
+                    (click)="setStatusFilter('live')">Live Now</button>
+            <button [ngClass]="{'active': statusFilter === 'upcoming'}" 
+                    (click)="setStatusFilter('upcoming')">Upcoming</button>
+          </div>
+        </div>
+        
+        <!-- Date Filter -->
+        <div class="filter-item">
+          <label>Date</label>
+          <div class="date-filter">
+            <div class="date-presets">
+              <button [ngClass]="{'active': datePreset === 'all'}" 
+                      (click)="setDatePreset('all')">All</button>
+              <button [ngClass]="{'active': datePreset === 'today'}" 
+                      (click)="setDatePreset('today')">Today</button>
+              <button [ngClass]="{'active': datePreset === 'tomorrow'}" 
+                      (click)="setDatePreset('tomorrow')">Tomorrow</button>
+              <button [ngClass]="{'active': datePreset === 'week'}" 
+                      (click)="setDatePreset('week')">This Week</button>
+              <button [ngClass]="{'active': datePreset === 'custom'}" 
+                      (click)="setDatePreset('custom')">Custom</button>
+            </div>
+            <div class="date-range" *ngIf="datePreset === 'custom'">
+              <div class="date-input">
+                <label>From</label>
+                <input type="date" [(ngModel)]="dateRange.start" (change)="applyFilters()">
+              </div>
+              <div class="date-input">
+                <label>To</label>
+                <input type="date" [(ngModel)]="dateRange.end" (change)="applyFilters()">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+<!-- Update instructor filter with class -->
+<div class="filter-item instructor-filter" *ngIf="availableInstructors.length > 0">
+  <label>Instructor</label>
+  <select [(ngModel)]="instructorFilter" (change)="applyFilters()">
+    <option value="all">All Instructors</option>
+    <option *ngFor="let instructor of availableInstructors" [value]="instructor.id">
+      {{ instructor.name }}
+    </option>
+  </select>
+</div>
+        
+<!-- Update duration filter with class -->
+<div class="filter-item duration-filter">
+  <label>Duration</label>
+  <select [(ngModel)]="durationFilter" (change)="applyFilters()">
+    <option value="all">Any Length</option>
+    <option value="short">Short (< 30 min)</option>
+    <option value="medium">Medium (30-60 min)</option>
+    <option value="long">Long (> 60 min)</option>
+  </select>
+</div>
+        
+<!-- Replace the reset button with this wrapped version -->
+<div class="filter-item reset-filter">
+  <label>&nbsp;</label> <!-- Empty label for alignment -->
+  <button class="reset-filters-btn" (click)="resetFilters()">
+    Reset Filters
+  </button>
+</div>
+    </div>
+  </div>
+  
+  <!-- Display active filters as chips/tags -->
+  <div class="active-filters" *ngIf="hasActiveFilters()">
+    <span class="active-filters-label">Active Filters:</span>
+    <div class="filter-chips">
+      <div class="filter-chip" *ngIf="statusFilter !== 'all'">
+        Status: {{ statusFilter === 'live' ? 'Live Now' : statusFilter === 'upcoming' ? 'Upcoming' : 'Completed' }}
+        <button class="remove-filter" (click)="setStatusFilter('all')">×</button>
+      </div>
+      <div class="filter-chip" *ngIf="datePreset !== 'all'">
+        Date: {{ getDateFilterDisplayText() }}
+        <button class="remove-filter" (click)="setDatePreset('all')">×</button>
+      </div>
+      <div class="filter-chip" *ngIf="instructorFilter !== 'all'">
+        Instructor: {{ getInstructorName(instructorFilter) }}
+        <button class="remove-filter" (click)="instructorFilter = 'all'; applyFilters()">×</button>
+      </div>
+      <div class="filter-chip" *ngIf="durationFilter !== 'all'">
+        Duration: {{ getDurationDisplayText() }}
+        <button class="remove-filter" (click)="durationFilter = 'all'; applyFilters()">×</button>
+      </div>
+      <div class="filter-chip" *ngIf="searchText.trim() !== ''">
+        Search: {{ searchText }}
+        <button class="remove-filter" (click)="searchText = ''; applyFilters()">×</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Loading indicator -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading sessions...</p>
+  </div>
+  
+  <!-- Error message -->
+  <div class="error-container" *ngIf="error && !loading">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadSessions()" class="retry-btn">Try Again</button>
+  </div>
+  
+  <!-- No sessions found -->
+  <div class="no-sessions" *ngIf="!loading && !error && filteredSessions.length === 0">
+    <i class="fas fa-calendar-times"></i>
+    <h2>No Sessions Found</h2>
+    <p>There are no virtual classroom sessions available matching your search.</p>
+  </div>
+  
+  <!-- Sessions list -->
+  <div class="sessions-grid" *ngIf="!loading && !error && filteredSessions.length > 0">
+    <div class="session-card" *ngFor="let session of filteredSessions" [attr.data-status]="session.status">
+      <!-- Session status badge -->
+      <div class="session-status" [ngClass]="{
+        'live': session.status === 'live',
+        'upcoming': session.status === 'upcoming',
+        'completed': session.status === 'completed'
+      }">
+        {{ session.status === 'live' ? 'LIVE NOW' : 
+           session.status === 'upcoming' ? 'UPCOMING' : 'COMPLETED' }}
+      </div>
+      
+      <div class="session-content">
+        <h2 class="session-title">{{ session.titleSession }}</h2>
+        <p class="session-instructor">with {{ session.instructorName }}</p>
+        
+        <div class="session-details">
+          <div class="detail-item">
+            <i class="far fa-calendar"></i>
+            <span>{{ session.startTime | date:'mediumDate' }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="far fa-clock"></i>
+            <span>{{ session.startTime | date:'shortTime' }} - {{ session.endTime | date:'shortTime' }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-hourglass-half"></i>
+            <span>{{ session.sessionDuration }} minutes</span>
+          </div>
+        </div>
+        
+        <p class="session-description">{{ session.description }}</p>
+        
+        <div class="session-actions">
+          <button class="join-btn" 
+          [ngClass]="{'join-live': session.status === 'live', 'join-upcoming': session.status === 'upcoming', 'join-completed': session.status === 'completed'}"
+          [disabled]="session.status === 'completed'"
+          (click)="session.idSession !== undefined ? showReminderDialog(session) : null">
+            {{ session.status === 'live' ? 'Join Live Session' : 
+              session.status === 'upcoming' ? 'Join When Available' : 'Session Completed' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Reminder Modal -->
+<div class="reminder-modal" *ngIf="showReminderModal">
+  <div class="reminder-modal-content">
+    <div class="reminder-header">
+      <h2>Session Reminder</h2>
+      <button class="close-btn" (click)="closeReminderModal()">×</button>
+    </div>
+    
+    <div class="modal-content-inner">
+      <div class="session-details" *ngIf="currentSession">
+        <h3>{{currentSession.titleSession}}</h3>
+        <p class="session-time">
+          <i class="far fa-calendar"></i> 
+          {{currentSession.startTime | date:'medium'}}
+        </p>
+        <p class="session-instructor">{{currentSession.instructorName}}</p>
+      </div>
+      
+      <div *ngIf="!reminderSuccess" class="reminder-form">
+        <div class="form-field">
+          <label for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            [(ngModel)]="reminderEmail" 
+            placeholder="yourname@example.com"
+          >
+          <div class="error-message" *ngIf="emailError">
+            {{emailError}}
+          </div>
+        </div>
+        
+        <div class="form-field checkbox">
+          <input type="checkbox" id="remind" checked>
+          <label for="remind">Remind me 24 hours before the session starts</label>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="closeReminderModal()">Cancel</button>
+          <button type="button" class="submit-btn" (click)="submitReminder()">Sign Up</button>
+        </div>
+      </div>
+      
+      <div *ngIf="reminderSuccess" class="success-message">
+        <div class="success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h3>Thanks for signing up!</h3>
+        <p>You've been registered for this session and will receive a reminder 24 hours before it starts.</p>
+        <p class="email-note">A confirmation has been sent to <strong>{{reminderEmail}}</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>

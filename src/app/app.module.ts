@@ -73,15 +73,10 @@ import { MentorshipPorgramComponent } from './backend/Tutoring-Admin/mentorship-
 import { ProgressReportComponent } from './backend/Tutoring-Admin/progress-report/progress-report.component';
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './backend/VirtualClassroom-Admin/layout/layout.component';
-import { VirtualClassroomComponent } from './Teacher-Pages/virtual-classroom/virtual-classroom.component';
-import { InstructorControlsComponent } from './Teacher-Pages/virtual-classroom/instructor-controls/instructor-controls.component';
-import { VideoPresentationComponent } from './Teacher-Pages/virtual-classroom/video-presentation/video-presentation.component';
-import { StudentListComponent } from './Teacher-Pages/virtual-classroom/student-list/student-list.component';
-import { VideoViewComponent } from './Student-Pages/virtual-classroom/video-view/video-view.component';
-import { NoteTakingComponent } from './Student-Pages/virtual-classroom/note-taking/note-taking.component';
-import { InteractionToolsComponent } from './Student-Pages/virtual-classroom/interaction-tools/interaction-tools.component';
+
 import { ChatPanelComponent } from './Shared/classroom/chat-panel/chat-panel.component';
 import { ResourcePanelComponent } from './Shared/classroom/resource-panel/resource-panel.component';
+import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/student-virtual-classroom-sessions/student-virtual-classroom-sessions.component';
 
 @NgModule({
   declarations: [
@@ -135,15 +130,9 @@ import { ResourcePanelComponent } from './Shared/classroom/resource-panel/resour
     MentorshipPorgramComponent,
     ProgressReportComponent,
     LayoutComponent,
-    VirtualClassroomComponent,
-    InstructorControlsComponent,
-    VideoPresentationComponent,
-    StudentListComponent,
-    VideoViewComponent,
-    NoteTakingComponent,
-    InteractionToolsComponent,
     ChatPanelComponent,
     ResourcePanelComponent,
+    StudentVirtualClassroomSessionsComponent,
 
   ],
   imports: [
