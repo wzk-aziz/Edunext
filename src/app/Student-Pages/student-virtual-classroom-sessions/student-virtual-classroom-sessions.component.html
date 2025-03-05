@@ -220,11 +220,16 @@
           <label for="remind">Remind me 24 hours before the session starts</label>
         </div>
         
+        <!-- Find the submit button in the reminder modal and update it -->
         <div class="form-actions">
           <button type="button" class="cancel-btn" (click)="closeReminderModal()">Cancel</button>
-          <button type="button" class="submit-btn" (click)="submitReminder()">Sign Up</button>
+          <button type="button" class="submit-btn" [disabled]="sendingEmail" (click)="submitReminder()">
+            <span *ngIf="!sendingEmail">Sign Up</span>
+            <span *ngIf="sendingEmail">
+              <i class="fas fa-spinner fa-spin"></i> Sending...
+            </span>
+          </button>
         </div>
-      </div>
       
       <div *ngIf="reminderSuccess" class="success-message">
         <div class="success-icon">

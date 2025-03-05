@@ -4,6 +4,9 @@ import { StudentVirtualClassroomService } from 'src/app/Student-Pages/Student-Se
 import { ClassroomSession } from './student-virtual-classroom-session.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import emailjs from '@emailjs/browser';
+
+
 @Component({
   selector: 'app-student-virtual-classroom-sessions',
   templateUrl: './student-virtual-classroom-sessions.component.html',
@@ -33,6 +36,10 @@ currentSession: ClassroomSession | null = null;
 reminderEmail: string = '';
 reminderSuccess = false;
 emailError: string | null = null;
+
+//Email sender
+sendingEmail: boolean = false;
+
   
   constructor(
     private studentVirtualClassroomService: StudentVirtualClassroomService,
@@ -42,6 +49,8 @@ emailError: string | null = null;
 
   ngOnInit(): void {
     this.loadSessions();
+    emailjs.init("mp4opsuYaJa1NMSqU"); // Your EmailJS public key
+
   }
 
   loadSessions(): void {
@@ -328,30 +337,85 @@ emailError: string | null = null;
       return;
     }
     
-    // In a real app, you'd send this to your backend
-    console.log(`Reminder set for session ${this.currentSession?.idSession} to email ${this.reminderEmail}`);
+    this.sendingEmail = true;
+    this.emailError = null;
     
-    // Save to localStorage for demo purposes
-    const reminders = JSON.parse(localStorage.getItem('sessionReminders') || '[]');
-    reminders.push({
-      sessionId: this.currentSession?.idSession,
-      email: this.reminderEmail,
-      sessionTitle: this.currentSession?.titleSession,
-      startTime: this.currentSession?.startTime,
-      date: new Date().toISOString()
+    // Create email template parameters
+    const templateParams = {
+      to_email: this.reminderEmail,
+      session_title: this.currentSession?.titleSession || "Virtual Classroom Session",
+      instructor_name: this.currentSession?.instructorName || "Your Instructor",
+      session_date: this.formatDate(this.currentSession?.startTime),
+      session_time: this.formatTime(this.currentSession?.startTime),
+      session_duration: this.currentSession?.sessionDuration + " minutes",
+      session_subject: this.currentSession?.sessionSubject || "Online Learning"
+    };
+    
+    // Send email using EmailJS
+    emailjs.send(
+      'service_3h2lycg',     // Your EmailJS service ID
+      'template_s9fn0ie',    // Your EmailJS template ID
+      templateParams,
+      'mp4opsuYaJa1NMSqU'    // Your EmailJS public key
+    )
+    .then((response) => {
+      console.log('Session reminder email sent successfully!', response);
+      this.sendingEmail = false;
+      
+      // Save to localStorage for demo purposes (keep this part)
+      const reminders = JSON.parse(localStorage.getItem('sessionReminders') || '[]');
+      reminders.push({
+        sessionId: this.currentSession?.idSession,
+        email: this.reminderEmail,
+        sessionTitle: this.currentSession?.titleSession,
+        startTime: this.currentSession?.startTime,
+        date: new Date().toISOString()
+      });
+      localStorage.setItem('sessionReminders', JSON.stringify(reminders));
+      
+      // Show success message
+      this.reminderSuccess = true;
+      
+      // Close modal after delay
+      setTimeout(() => {
+        this.showReminderModal = false;
+      }, 3000);
+    })
+    .catch((error) => {
+      console.error('Error sending reminder email:', error);
+      this.sendingEmail = false;
+      this.emailError = "Failed to send reminder. Please try again.";
     });
-    localStorage.setItem('sessionReminders', JSON.stringify(reminders));
-    
-    // Show success message
-    this.reminderSuccess = true;
-    
-    // Close modal after delay
-    setTimeout(() => {
-      this.showReminderModal = false;
-    }, 3000);
   }
   
   closeReminderModal(): void {
     this.showReminderModal = false;
   }
+
+  // Add these helper methods for formatting date and time
+formatDate(dateString: string | Date | null | undefined): string {
+  if (!dateString) return "Scheduled Date";
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+formatTime(dateString: string | Date | null | undefined): string {
+  if (!dateString) return "Scheduled Time";
+  
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+
+
+
 }
