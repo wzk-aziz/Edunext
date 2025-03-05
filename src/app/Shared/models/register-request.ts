@@ -5,4 +5,5 @@ export interface RegisterRequest {
     password?: string;
     role?: string;
     mfaEnabled?: string;
+    Image?: string;
   }

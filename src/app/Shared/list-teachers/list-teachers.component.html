@@ -20,6 +20,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Image</th>
         <th>Prénom</th>
         <th>Nom</th>
         <th>Email</th>
@@ -31,6 +32,7 @@
     <tbody>
       <tr *ngFor="let user of filteredUsers.slice((currentPageAll - 1) * 3, currentPageAll * 3)">
         <td>{{ user.id }}</td>
+        <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
         <td>{{ user.first_name }}</td>
         <td>{{ user.last_name }}</td>
         <td>{{ user.email_address }}</td>
@@ -71,6 +73,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Image</th>
         <th>Prénom</th>
         <th>Nom</th>
         <th>Email</th>
@@ -82,6 +85,7 @@
     <tbody>
       <tr *ngFor="let user of filteredTeachers.slice((currentPageTeachers - 1) * 3, currentPageTeachers * 3)">
         <td>{{ user.id }}</td>
+        <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
         <td>{{ user.first_name }}</td>
         <td>{{ user.last_name }}</td>
         <td>{{ user.email_address }}</td>
@@ -122,6 +126,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Image</th>
         <th>Prénom</th>
         <th>Nom</th>
         <th>Email</th>
@@ -133,6 +138,7 @@
     <tbody>
       <tr *ngFor="let user of filteredLearners.slice((currentPageLearners - 1) * 3, currentPageLearners * 3)">
         <td>{{ user.id }}</td>
+        <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
         <td>{{ user.first_name }}</td>
         <td>{{ user.last_name }}</td>
         <td>{{ user.email_address }}</td>

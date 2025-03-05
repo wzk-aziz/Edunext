@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/Shared/services/user/user.service';
+import { Component } from '@angular/core';
+
 @Component({
   selector: 'app-student',
   templateUrl: './student.component.html',
   styleUrls: ['./student.component.css']
 })
-export class StudentComponent implements OnInit {
-  students: any[] = [];
+export class StudentComponent {
+  isMenuOpen = false;
 
-  constructor(private userService: UserService) { }
-
-  ngOnInit(): void {
-    this.loadStudents();
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
+  isTeacherMenuOpen = false;
 
-  loadStudents(): void {
-    this.userService.getUsersByRole('LEARNER').subscribe(data => {
-      this.students = data;
-    });
-  }
+toggleTeacherMenu() {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
+}
+
 }

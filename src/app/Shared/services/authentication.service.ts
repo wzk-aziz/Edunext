@@ -17,7 +17,7 @@ import { HttpParams } from '@angular/common/http';
 export class AuthenticationService {
   
   private baseUrl: string = 'http://localhost:8050/api/v1/auth';
-  private apiUrl = 'http://localhost:8080/api/v1/auth/logout'; 
+  private apiUrl: string = 'http://localhost:8050/api/v1/auth/logout'; 
 
 
   constructor(
@@ -29,6 +29,11 @@ export class AuthenticationService {
       return throwError(() => new Error('Email is required'));
     }
     return this.http.get<boolean>(`${this.baseUrl}/check-email?email=${email}`);
+  }
+  
+
+  registerWithFile(formData: FormData): Observable<AuthenticationResponse> {
+    return this.http.post<AuthenticationResponse>(`${this.baseUrl}/register`, formData);
   }
   
 
@@ -73,7 +78,7 @@ export class AuthenticationService {
     const token = localStorage.getItem('token');
     if (!token) return;
   
-    this.http.post('http://localhost:8080/api/v1/auth/logout', {}, {
+    this.http.post('http://localhost:8050/api/v1/auth/logout', {}, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {
@@ -89,6 +94,8 @@ export class AuthenticationService {
     });
 
   }
+
+
 
   
 

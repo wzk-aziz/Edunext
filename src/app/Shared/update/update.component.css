@@ -1,0 +1,81 @@
+/* src/app/components/update-user/update-user.component.css */
+
+/* Container Styling */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Form Group */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Input Fields */
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .form-control:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Invalid Field Styling */
+  .is-invalid {
+    border-color: #dc3545;
+  }
+  
+  /* Feedback Styling */
+  .invalid-feedback {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Submit Button */
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  
+  /* Error message for incomplete form */
+  .mt-3 {
+    margin-top: 20px;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+  }
+  
+  /* Space between Role and Submit Button */
+  div[style="margin-bottom: 20px;"] {
+    margin-bottom: 20px;
+  }
+  
+  /* Responsive Design: Adjust input size for smaller screens */
+  @media (max-width: 576px) {
+    .form-control {
+      font-size: 14px;
+    }
+  
+    .btn-primary {
+      width: 100%;
+    }
+  }
+  

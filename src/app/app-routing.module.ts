@@ -24,7 +24,7 @@ import { BackRoutingModule } from './backend/back-routing.module'; // Import the
 import { authGuard } from './Shared/services/auth/auth.guard';
 import { TeachersComponent } from './backend/teachers/teachers.component';
 import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
-import { UpdateUserComponent } from './Shared/update-user/update-user.component';
+import { UpdateUserComponent } from './Shared/update/update.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -34,7 +34,8 @@ const routes: Routes = [
   { path: 'studenthome', component: LandigpageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'update-user/:id', component: UpdateUserComponent },
+  { path: 'update', component: UpdateUserComponent },
+  { path: 'update/:id', component: UpdateUserComponent },
   { path: 'pricing', component: PacksComponent },
   { path: 'studentdashboard', component: MaindashboardComponent },
   { path: 'myplan', component: SubscriptionComponent },

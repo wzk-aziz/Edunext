@@ -18,6 +18,7 @@ export class RegisterComponent {
   authResponse: AuthenticationResponse = {};
   message = '';
   otpCode = '';
+  selectedFile?: File;  // Ajout de la variable pour stocker le fichier
 
   constructor(
     private authService: AuthenticationService,
@@ -39,25 +40,39 @@ export class RegisterComponent {
     );
   }
 
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0]; // Stocke le fichier sélectionné
+    }
+  }
+
   registerUser() {
-    if (this.registerRequest.email) {  // Vérifie si l'email existe
+    if (this.registerRequest.email) {
       this.message = '';
-      this.authService.register(this.registerRequest)
-        .subscribe({
-          next: (response) => {
-            if (response) {
-              this.authResponse = response;
-            } else {
-              this.message = 'Account created successfully\nYou will be redirected to the Login page in 3 seconds';
-              setTimeout(() => {
-                this.router.navigate(['login']);
-              }, 2000);
-            }
-          },
-          error: (err) => {
-            this.message = err.message; // Affiche l'erreur reçue
+      
+      // Création d'un `FormData` pour envoyer les données et le fichier
+      const formData = new FormData();
+      formData.append('request', JSON.stringify(this.registerRequest));
+      
+      if (this.selectedFile) {
+        formData.append('file', this.selectedFile); // Ajoute le fichier à l'envoi
+      }
+
+      this.authService.registerWithFile(formData).subscribe({
+        next: (response) => {
+          if (response) {
+            this.authResponse = response;
+          } else {
+            this.message = 'Account created successfully\nYou will be redirected to the Login page in 3 seconds';
+            setTimeout(() => {
+              this.router.navigate(['login']);
+            }, 2000);
           }
-        });
+        },
+        error: (err) => {
+          this.message = err.message;
+        }
+      });
     } else {
       this.message = 'Email is required';
     }
@@ -86,4 +101,7 @@ export class RegisterComponent {
         }
       });
   }
+
+
+
 }

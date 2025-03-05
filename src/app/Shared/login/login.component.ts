@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  loading: boolean = false;  // Déclaration de la propriété 'loading'
   authRequest: AuthenticationRequest = {};
   otpCode = '';
   authResponse: AuthenticationResponse = {};
@@ -24,36 +23,40 @@ export class LoginComponent {
   ) {}
 
   authenticate() {
-    this.loading = true;  // Activer l'indicateur de chargement
-  
-    // Retarder l'appel à authService.login() de 3 secondes
-    setTimeout(() => {
-      this.authService.login(this.authRequest)
-        .subscribe({
-          next: (response) => {
-            this.loading = false;  // Désactiver l'indicateur de chargement
-            this.authResponse = response;
-  
-            if (!this.authResponse.mfaEnabled) {
-              localStorage.setItem('token', this.authResponse.accessToken as string);
-              this.router.navigate(['main']);
-            }
-          },
-          error: (err) => {
-            this.loading = false;  // Désactiver l'indicateur de chargement en cas d'erreur
-  
-            if (err.status === 400) {
-              this.errorMessage = 'Email is not valid';
-            } else if (err.status === 401) {
-              this.errorMessage = 'Password is incorrect';
+    this.authService.login(this.authRequest)
+      .subscribe({
+        next: (response) => {
+          this.authResponse = response;
+
+          // Debugging the role to check its value
+          console.log("User role:", this.authResponse.role);
+
+          if (!this.authResponse.mfaEnabled) {
+            localStorage.setItem('token', this.authResponse.accessToken as string);
+            
+            // Check user role and navigate accordingly, ensuring case sensitivity is handled
+            const userRole = this.authResponse.role?.toUpperCase(); // Ensure case consistency
+            if (userRole === 'TEACHER') {
+                this.router.navigate(['listTeachers']).catch(err => console.error('Navigation error:', err));
+            } else if (userRole === 'LEARNER') {
+                this.router.navigate(['studenthome']).catch(err => console.error('Navigation error:', err));
             } else {
-              this.errorMessage = 'An error occurred. Please try again later.';
+                this.router.navigate(['defaultPage']).catch(err => console.error('Navigation error:', err));
             }
           }
-        });
-    }, 2000);  // 2000 ms = 2 secondes
-  }
-  
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            this.errorMessage = 'Email is not valid';
+          } else if (err.status === 401) {
+            this.errorMessage = 'Password is incorrect';
+          } else {
+            this.errorMessage = 'An error occurred. Please try again later.';
+          }
+        }
+      });
+}
+
 
   verifyCode() {
     const verifyRequest: VerificationRequest = {

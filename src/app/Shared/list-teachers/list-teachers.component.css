@@ -147,3 +147,24 @@
 .table td .btn {
   margin-right: 8px; /* Ajoute un petit espace entre les boutons */
 }
+
+.user-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Makes the image round */
+}
+.user-image {
+  width: 100px;  /* Adjust this value as needed */
+  height: 100px; /* Adjust this value as needed */
+  object-fit: cover;
+  border-radius: 50%; /* This will make the image circular */
+}
+
+.user-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+

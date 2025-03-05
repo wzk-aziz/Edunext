@@ -32,6 +32,10 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${id}`, { headers });
   }
 
+  getUserImage(fileName: string): string {
+    return `http://localhost:8050/api/v1/auth/files/${fileName}`;
+  }
+
   updateUser(id: number, userData: Partial<User>): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/update/${id}`, userData);
   }

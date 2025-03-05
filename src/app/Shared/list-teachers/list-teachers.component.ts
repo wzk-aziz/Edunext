@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user/user.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-list-teachers',
@@ -8,20 +9,26 @@ import { UserService } from '../services/user/user.service';
 })
 export class ListTeachersComponent implements OnInit {
   searchQuery: string = '';
-  filteredUsers: any[] = [];
-  filteredTeachers: any[] = [];
-  filteredLearners: any[] = [];
-  currentPageAll: number = 1;
-  currentPageTeachers: number = 1;
-  currentPageLearners: number = 1;
-  totalPagesAll: number = 1;
-  totalPagesTeachers: number = 1;
-  totalPagesLearners: number = 1;
+    allUsers: User[] = []; // Declare allUsers as an empty array
+    filteredUsers: User[] = [];
+    allTeachers: User[] = []; // Declare allTeachers as an empty array
+    allLearners: User[] = []; // Declare allLearners as an empty array
+    filteredTeachers: User[] = [];
+    filteredLearners: User[] = [];
+    currentPageAll: number = 1;
+    currentPageTeachers: number = 1;
+    currentPageLearners: number = 1;
+    totalPagesAll: number = 1;
+    totalPagesTeachers: number = 1;
+    totalPagesLearners: number = 1;
+  
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.loadUsers();
+    this.getAllUsers(); // Load all users
+    this.getTeachers(); // Fetch teachers
+    this.getLearners(); // Fetch learners
   }
 
   // Load all users, categorize them into filtered arrays
@@ -37,6 +44,37 @@ export class ListTeachersComponent implements OnInit {
       this.totalPagesLearners = Math.ceil(this.filteredLearners.length / 3);
     });
   }
+
+
+  
+  
+
+
+  getAllUsers(): void {
+      this.userService.getAllUsers().subscribe((users: User[]) => {
+        this.allUsers = users;
+        this.filteredUsers = [...this.allUsers]; // Set filteredUsers to all users
+        this.totalPagesAll = Math.ceil(this.filteredUsers.length / 3);
+      });
+    }
+  
+    // Fetch teachers
+    getTeachers(): void {
+      this.userService.getUsersByRole('Teacher').subscribe((users: User[]) => {
+        this.allTeachers = users;
+        this.filteredTeachers = [...this.allTeachers];
+        this.totalPagesTeachers = Math.ceil(this.filteredTeachers.length / 3);
+      });
+    }
+  
+    // Fetch learners
+    getLearners(): void {
+      this.userService.getUsersByRole('Learner').subscribe((users: User[]) => {
+        this.allLearners = users;
+        this.filteredLearners = [...this.allLearners];
+        this.totalPagesLearners = Math.ceil(this.filteredLearners.length / 3);
+      });
+    }
 
   // Search users by first name
   onSearchByName() {
@@ -74,5 +112,9 @@ export class ListTeachersComponent implements OnInit {
     this.userService.deleteUser(userId).subscribe(() => {
       this.loadUsers(); // Reload users after deletion
     });
+  }
+
+  getUserImage(fileName: string): string {
+    return this.userService.getUserImage(fileName);
   }
 }
