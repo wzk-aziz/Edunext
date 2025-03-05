@@ -24,6 +24,8 @@ import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/empt
 
 import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/student-virtual-classroom-sessions/student-virtual-classroom-sessions.component';
 
+import { StudentLiveClassComponent } from './Student-Pages/student-live-class/student-live-class.component';
+
 
 
 const routes: Routes = [
@@ -60,6 +62,11 @@ const routes: Routes = [
 
   { path: 'student-virtual-classroom-sessions', component: StudentVirtualClassroomSessionsComponent },
 
+
+  //Live classees 
+  { 
+    path: 'student-virtual-classroom/:id', component: StudentLiveClassComponent 
+  },
 
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },

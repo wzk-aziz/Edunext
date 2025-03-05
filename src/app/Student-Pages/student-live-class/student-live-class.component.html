@@ -1,0 +1,174 @@
+<div class="live-session-container">
+  <!-- Loading State -->
+  <div class="loading-overlay" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Connecting to session...</p>
+  </div>
+  
+  <!-- Error State -->
+  <div class="error-overlay" *ngIf="error">
+    <div class="error-message">
+      <i class="fas fa-exclamation-circle"></i>
+      <h3>Connection Error</h3>
+      <p>{{ error }}</p>
+      <button class="primary-btn" (click)="loadSessionDetails()">Try Again</button>
+      <button class="secondary-btn" routerLink="/student-virtual-classroom-sessions">Back to Sessions</button>
+    </div>
+  </div>
+
+  <!-- Session Header -->
+  <header class="session-header">
+    <div class="session-info">
+      <h1>{{ session?.titleSession }}</h1>
+      <p>By {{ session?.instructorName }}</p>
+    </div>
+    <!-- Replace the session-actions div with this version -->
+    <div class="session-actions">
+      <button class="control-btn" [class.disabled]="!cameraEnabled" (click)="toggleCamera()">
+        <i class="fas" [ngClass]="cameraEnabled ? 'fa-video' : 'fa-video-slash'"></i>
+      </button>
+      
+      <button class="control-btn" [class.disabled]="!micEnabled" (click)="toggleMic()">
+        <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
+      </button>
+      
+      <button class="control-btn" [class.active]="handRaised" [class.hand-btn]="handRaised" (click)="toggleRaiseHand()">
+        <i class="fas fa-hand-paper"></i>
+      </button>
+      
+      <button class="control-btn" [class.active]="screenSharing" (click)="toggleScreenShare()">
+        <i class="fas fa-desktop"></i>
+      </button>
+      
+      <button class="leave-btn" (click)="leaveSession()">
+        <i class="fas fa-phone-slash"></i> Leave Session
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Video Area -->
+    <!-- Replace the entire video area div with this -->
+    <div class="video-area">
+      <!-- Instructor Video -->
+      <div class="video-container instructor-video">
+        <div class="video-placeholder" *ngIf="!videoStarted">
+          <div class="connecting-indicator">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p>Connecting to instructor...</p>
+        </div>
+        <div class="video-frame" *ngIf="videoStarted">
+          <div class="instructor-video-placeholder">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div class="video-label">
+            <span>{{ session?.instructorName }}</span>
+            <span class="status-badge">Live</span>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Update the student video container section -->
+      <div class="video-container student-video">
+        <div class="video-frame">
+          <!-- Show screen share when active -->
+          <video #screenVideo 
+                 *ngIf="screenSharing && screenStream" 
+                 [srcObject]="screenStream" 
+                 autoplay 
+                 class="screen-share-video">
+          </video>
+          
+          <!-- Show user placeholder when not screen sharing -->
+          <div class="user-video-placeholder" *ngIf="!screenSharing || !screenStream">
+            <i class="fas fa-user"></i>
+          </div>
+          
+          <!-- Show appropriate label based on screen sharing state -->
+          <div class="video-label" [class.sharing]="screenSharing">
+            <span>{{ screenSharing ? 'Your Screen' : 'You' }}</span>
+            <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
+            <i *ngIf="handRaised" class="fas fa-hand-paper raise-hand-icon"></i>
+            <i *ngIf="screenSharing" class="fas fa-desktop screen-share-icon"></i>
+          </div>
+
+          <div class="hand-raised-indicator" *ngIf="handRaised">
+            <i class="fas fa-hand-paper"></i>
+            <span>Hand Raised</span>
+          </div>
+
+
+        </div>
+      </div>
+
+
+    </div>
+    
+    <!-- Replace the chat sidebar section with this corrected version -->
+    <div class="chat-sidebar">
+      <div class="chat-header">
+        <h3>Live Chat</h3>
+        <span class="online-indicator">
+          <span class="dot"></span> {{ messages.length }} messages
+        </span>
+      </div>
+      
+      <div class="messages-container" #messagesContainer>
+        <div class="message" 
+             *ngFor="let message of messages" 
+             [ngClass]="{
+               'my-message': message.sender === 'You',
+               'system-message': message.sender === 'System'
+             }">
+          <div class="message-header">
+            <strong>{{ message.sender }}</strong>
+            <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+          </div>
+          <div class="message-content">
+            {{ message.content }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="message-input">
+        <input 
+          type="text" 
+          [(ngModel)]="newMessage" 
+          placeholder="Type your message..." 
+          (keyup.enter)="sendMessage()"
+        >
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+
+  </div>
+
+    <!-- Add this at the end of your component, just before the closing </div> of .live-session-container -->
+  <!-- Leave Confirmation Modal -->
+  <div class="leave-confirmation-overlay" *ngIf="showLeaveConfirmation">
+    <div class="leave-confirmation-dialog">
+      <div class="leave-dialog-header">
+        <i class="fas fa-sign-out-alt"></i>
+        <h3>Leave Session?</h3>
+      </div>
+      <div class="leave-dialog-content">
+        <p>Are you sure you want to leave this live session? You may miss important content.</p>
+      </div>
+      <div class="leave-dialog-actions">
+        <button class="cancel-btn" (click)="confirmLeave(false)">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="confirm-btn" (click)="confirmLeave(true)">
+          <i class="fas fa-check"></i> Leave Session
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

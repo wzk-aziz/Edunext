@@ -1,0 +1,696 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100%;
+}
+
+.live-session-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #f8f9fa;
+}
+
+/* Header styling */
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.session-info h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.session-info p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.session-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.control-btn {
+  background: #f1f3f4;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.control-btn:hover {
+  background: #e1e3e5;
+}
+
+.control-btn.disabled {
+  background: #ff5252;
+  color: white;
+}
+
+.leave-btn {
+  background: linear-gradient(135deg, #ff5252, #d32f2f);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+
+.leave-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+}
+
+/* Main content */
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100% - 70px);
+}
+
+/* Video area */
+.video-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: auto;
+}
+
+.video-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.instructor-video {
+  height: 60%;
+  min-height: 300px;
+}
+
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 10px;
+}
+
+.connecting-indicator {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1s infinite alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.video-frame {
+  width: 100%;
+  height: 100%;
+  background: #222;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.instructor-video-placeholder, .user-video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #444;
+}
+
+.instructor-video-placeholder i {
+  font-size: 4rem;
+  color: #9c9c9c;
+}
+
+.user-video-placeholder i {
+  font-size: 3rem;
+  color: #9c9c9c;
+}
+
+.video-label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-badge {
+  background: #f44336;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.participants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  height: 40%;
+}
+
+.participant-video {
+  height: 150px;
+}
+
+/* Chat sidebar */
+.chat-sidebar {
+  width: 300px;
+  border-left: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.online-indicator {
+  font-size: 0.8rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.online-indicator .dot {
+  width: 8px;
+  height: 8px;
+  background: #4caf50;
+  border-radius: 50%;
+  animation: none;
+}
+
+.messages-container {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 8px;
+  background: #f1f3f4;
+  max-width: 85%;
+  align-self: flex-start;
+}
+
+.message.my-message {
+  background: #e3f2fd;
+  align-self: flex-end;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.message-header strong {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.message-content {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.message-input {
+  padding: 15px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 10px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+}
+
+.message-input input:focus {
+  border-color: #7c4dff;
+}
+
+.send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #7c4dff, #5e35b1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.send-btn:hover {
+  transform: scale(1.05);
+}
+
+.send-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #5e35b1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error overlay */
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.error-message {
+  text-align: center;
+  padding: 30px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+}
+
+.error-message i {
+  font-size: 3rem;
+  color: #f44336;
+  margin-bottom: 15px;
+}
+
+.error-message h3 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.error-message p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #7c4dff, #5e35b1);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.secondary-btn {
+  background: #f1f3f4;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .chat-sidebar {
+    width: 100%;
+    height: 300px;
+    border-left: none;
+    border-top: 1px solid #ddd;
+  }
+  
+  .instructor-video {
+    height: 300px;
+  }
+  
+  .participants-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .session-info h1 {
+    font-size: 1.2rem;
+  }
+}
+/* Add these styles at the end of your CSS file */
+/* Leave confirmation modal */
+.leave-confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.leave-confirmation-dialog {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.leave-dialog-header {
+  background: linear-gradient(135deg, #ff5252, #d32f2f);
+  color: white;
+  padding: 18px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.leave-dialog-header i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.leave-dialog-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.leave-dialog-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.leave-dialog-content p {
+  margin: 0;
+  color: #555;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.leave-dialog-actions {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+
+.leave-dialog-actions button {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.leave-dialog-actions .cancel-btn {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.leave-dialog-actions .cancel-btn:hover {
+  background: #e5e5e5;
+}
+
+.leave-dialog-actions .confirm-btn {
+  background: #ff5252;
+  color: white;
+}
+
+.leave-dialog-actions .confirm-btn:hover {
+  background: #d32f2f;
+}
+
+.leave-dialog-actions i {
+  font-size: 0.9rem;
+}
+/* New video layout */
+.video-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: auto;
+  gap: 20px;
+}
+
+.instructor-video {
+  height: 65%;
+  min-height: 350px;
+}
+
+.student-video {
+  height: 35%;
+  min-height: 180px;
+}
+
+/* Control buttons enhancements */
+.control-btn.active {
+  background: #5e35b1;
+  color: white;
+}
+
+.control-btn.active:hover {
+  background: #4527a0;
+}
+
+/* Hand raise and screen share indicators */
+.raise-hand-icon {
+  color: #ffc107;
+  animation: pulse-hand 2s infinite;
+  margin-left: 5px;
+}
+
+.screen-share-icon {
+  color: #4caf50;
+  margin-left: 5px;
+}
+
+@keyframes pulse-hand {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* System messages in chat */
+.message.system-message {
+  background: #f5f5f5;
+  border-left: 3px solid #7c4dff;
+  font-style: italic;
+  align-self: center;
+  max-width: 90%;
+}
+/* Add these styles for screen sharing */
+.screen-share-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.video-label.sharing {
+  background: rgba(76, 175, 80, 0.8);
+}
+
+/* Make screen share icon more prominent when actually sharing */
+.screen-share-icon {
+  color: #4caf50;
+  margin-left: 5px;
+  animation: pulse 2s infinite;
+}
+
+/* Replace the existing raise-hand-icon styles with these enhanced ones */
+.raise-hand-icon {
+  color: #ffca28;
+  margin-left: 5px;
+  font-size: 1.1em;
+  filter: drop-shadow(0 0 3px rgba(255, 202, 40, 0.5));
+  animation: hand-bounce 1.5s infinite;
+}
+
+/* Enhanced animation for raised hand */
+@keyframes hand-bounce {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  30% { transform: rotate(15deg) scale(1.1); }
+  60% { transform: rotate(-10deg) scale(1.05); }
+  80% { transform: rotate(5deg) scale(1); }
+}
+
+/* Add a cool indicator in the video area when hand is raised */
+.hand-raised-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #ff9800, #ffca28);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 3px 10px rgba(255, 152, 0, 0.5);
+  animation: pulse-indicator 2s infinite;
+  z-index: 5;
+}
+
+.hand-raised-indicator i {
+  animation: wave-hand 1.5s infinite;
+}
+
+@keyframes pulse-indicator {
+  0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+}
+
+@keyframes wave-hand {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(20deg); }
+}
+
+/* Enhance the control button for raised hand */
+.control-btn.active.hand-btn {
+  background: linear-gradient(135deg, #ff9800, #ffca28);
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(255, 152, 0, 0.5);
+}
+
+.control-btn.active.hand-btn:hover {
+  background: linear-gradient(135deg, #fb8c00, #ffb300);
+}
