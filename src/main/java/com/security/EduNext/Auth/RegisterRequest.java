@@ -1,12 +1,12 @@
 package com.security.EduNext.Auth;
 
 import com.security.EduNext.Entities.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.awt.*;
 
 @Data
 @Builder
@@ -22,6 +22,8 @@ public class RegisterRequest {
     private String phonenumber;
     private boolean mfaEnabled;
     private Role role;
+    private String Image;
+
 
 
     public String getFirstname() {
@@ -86,5 +88,13 @@ public class RegisterRequest {
 
     public void setMfaEnabled(boolean mfaEnabled) {
         this.mfaEnabled = mfaEnabled;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
     }
 }

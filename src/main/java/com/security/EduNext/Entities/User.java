@@ -40,6 +40,9 @@ public class User implements UserDetails {
     private boolean mfaEnabled;
     private String secret;
 
+    @Column(name = "image")
+    private String Image;
+
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -47,6 +50,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Token> tokens;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -83,7 +87,7 @@ public class User implements UserDetails {
         return password;
     }
 
-    public User(Integer id, String firstname, String lastname, String email, String password, Boolean mfaEnabled, String secret, Role role, List<Token> tokens) {
+    public User(Integer id, String firstname, String lastname, String email, String password, boolean mfaEnabled, String secret, String image, Role role, List<Token> tokens) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -91,6 +95,7 @@ public class User implements UserDetails {
         this.password = password;
         this.mfaEnabled = mfaEnabled;
         this.secret = secret;
+        this.Image = image;
         this.role = role;
         this.tokens = tokens;
     }

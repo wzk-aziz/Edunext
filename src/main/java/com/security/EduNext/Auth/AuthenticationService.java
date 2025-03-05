@@ -46,6 +46,7 @@ public class AuthenticationService {
                 //.phonenumber(request.getPhonenumber())
                 .role(request.getRole())
                 .mfaEnabled(request.isMfaEnabled())
+                .Image(request.getImage()) // Ensure that this is set here
                 .build();
         // if MFA enabled --> Generate Secret
         if (request.isMfaEnabled()){
@@ -64,30 +65,42 @@ public class AuthenticationService {
     }
 
 
-    public AuthenticationResponse authenticate (AuthenticateRequest request) {
+    public AuthenticationResponse authenticate(AuthenticateRequest request) {
+        // Authenticate the user
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
+
+        // Fetch user from repository
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
+
+        // Check if MFA is enabled
         if (user.isMfaEnabled()) {
             return AuthenticationResponse.builder()
                     .accessToken("")
                     .refreshToken("")
                     .mfaEnabled(true)
+                    .role(user.getRole().name())  // Add role to response
                     .build();
         }
+
+        // Generate JWT and refresh tokens
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+
+        // Return response with role
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
+                .role(user.getRole().name())  // Add role to response
                 .build();
     }
+
 
 
 

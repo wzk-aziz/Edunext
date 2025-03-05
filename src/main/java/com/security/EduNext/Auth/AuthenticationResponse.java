@@ -18,6 +18,8 @@ public class AuthenticationResponse {
     private String refreshToken;
     private boolean mfaEnabled;
     private String secretImageUri;
+    @JsonProperty("role")
+    private String role;
 
 
 }

@@ -1,15 +1,24 @@
 package com.security.EduNext.Auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.Resource;
 import com.security.EduNext.Entities.User;
 import com.security.EduNext.Repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,21 +28,97 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final UserRepository userRepository;
 
+
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(
+            @RequestPart("request") String requestJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            RegisterRequest request = mapper.readValue(requestJson, RegisterRequest.class);
+
+            if (file != null && !file.isEmpty()) {
+                String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                request.setImage(fileName);
+
+                // uploadDir doit être défini dans vos propriétés (@Value("${upload.dir}"))
+                File uploadDirectory = new File(uploadDir);
+                if (!uploadDirectory.exists()) {
+                    uploadDirectory.mkdirs();
+                }
+
+                File dest = new File(uploadDirectory, fileName);
+                file.transferTo(dest);
+            }
+
             var response = service.register(request);
-            // Si MFA est activé, on retourne la réponse avec l'image QR et les tokens
+
             if (request.isMfaEnabled()) {
                 return ResponseEntity.ok(response);
             }
-            // Si MFA n'est pas activé, on accepte la requête sans corps de réponse
+
             return ResponseEntity.accepted().build();
         } catch (RuntimeException e) {
-            // En cas d'erreur (par exemple, email déjà existant), on retourne un BadRequest
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use!!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred!");
         }
     }
+
+    @GetMapping("/files/{fileName}")
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
+        try {
+            // Chemin complet du fichier à partir du nom du fichier
+            File file = new File(uploadDir + "/" + fileName);
+
+            // Vérifie si le fichier existe
+            if (!file.exists()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            // Crée une ressource à partir du fichier
+            Resource resource = new FileSystemResource(file);
+
+            // Détecte le type du contenu
+            String contentType = "application/octet-stream";
+            try {
+                contentType = Files.probeContentType(file.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Retourne le fichier comme une ressource avec le bon content-type
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(resource);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/user/image")
+    public ResponseEntity<String> getUserImage(@RequestParam String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null || user.getImage() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image not found");
+        }
+
+        String imageUrl = "/api/v1/auth/files/" + user.getImage();
+        return ResponseEntity.ok(imageUrl);
+    }
+
+
+
+
+
 
 
     @PostMapping("/authenticate")
@@ -60,6 +145,11 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
         boolean exists = userRepository.existsByEmail(email);
         return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping
+    public ResponseEntity<String> hello() {
+        return  ResponseEntity.ok("hello from social medias");
     }
 
 

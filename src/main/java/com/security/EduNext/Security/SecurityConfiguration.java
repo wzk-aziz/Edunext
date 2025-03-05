@@ -11,6 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -26,7 +30,7 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
-    @Bean
+   /* @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
@@ -46,7 +50,42 @@ public class SecurityConfiguration {
                 );
 
         return http.build();
+    }*/
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**").permitAll()  // Permet l'accès à ces routes
+                        .anyRequest().authenticated()  // Toute autre requête nécessite une authentification
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configuration pour une session stateless
+                )
+                .authenticationProvider(authenticationProvider)  // Utilisation du provider d'authentification
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)  // Ajout du filtre JWT
+                .logout(logout -> logout
+                        .logoutUrl("/api/v1/auth/logout") // URL de déconnexion personnalisée
+                        .addLogoutHandler(logoutHandler)  // Handler de déconnexion
+                        .logoutSuccessHandler(logoutSuccessHandler())  // Handler personnalisé après déconnexion
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/api/v1/auth/login")  // Page de login personnalisée
+                        .authorizationEndpoint(authz -> authz
+                                .baseUri("/oauth2/authorize")  // URI de base pour l'autorisation OAuth2
+                        )
+                        .tokenEndpoint(token -> token
+                                .accessTokenResponseClient(new DefaultAuthorizationCodeTokenResponseClient())  // Utilisation du client par défaut
+                        )
+                );
+        return http.build();  // Appelez build une seule fois à la fin
     }
+
+
+
+
+
 
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
