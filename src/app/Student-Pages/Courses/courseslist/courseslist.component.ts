@@ -93,8 +93,15 @@ export class CourseslistComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
   }
 
-  getCourseLevelText(course: Course): string {
-    return CourseLevel[course.courseLevel] || 'Unknown';
+   // Helper method to display a friendly course level label.
+   getCourseLevelText(course: Course): string {
+    switch (course.courseLevel) {
+      case 'ALL_LEVELS': return 'All Levels';
+      case 'BEGINNER': return 'Beginner';
+      case 'INTERMEDIATE': return 'Intermediate';
+      case 'ADVANCED': return 'Advanced';
+      default: return 'Unknown';
+    }
   }
 
   get totalPages(): number {
