@@ -1,0 +1,717 @@
+.mentorship-programs-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.mentorship-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.mentorship-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.mentorship-header h1::after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #7c4dff, #5e35b1);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.mentorship-header p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 700px;
+  margin: 20px auto 0;
+}
+
+/* Filters and Search */
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #7c4dff;
+  box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+}
+
+.filter-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-dropdown label {
+  font-weight: 500;
+  color: #555;
+}
+
+.filter-dropdown select {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  background-color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.filter-dropdown select:focus {
+  outline: none;
+  border-color: #7c4dff;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(124, 77, 255, 0.2);
+  border-top-color: #7c4dff;
+  border-radius: 50%;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error-container {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff5f5;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.error-icon {
+  font-size: 3rem;
+  color: #f44336;
+  margin-bottom: 20px;
+}
+
+.retry-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.retry-btn:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+}
+
+/* No Results */
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: #9e9e9e;
+  margin-bottom: 20px;
+}
+
+.reset-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  background: #7c4dff;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.reset-btn:hover {
+  background: #5e35b1;
+  transform: translateY(-2px);
+}
+
+/* Programs Grid */
+.programs-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+
+/* Update the program-card style to be wider */
+.program-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: all 0.3s;
+    position: relative;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 900px; /* Make it wider */
+    margin: 0 auto; /* Center it */
+  }
+
+.program-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.program-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 20px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Different badge colors based on subject */
+.program-badge[data-subject="Mathematics"] {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+}
+
+.program-badge[data-subject="Computer Science"] {
+  background: linear-gradient(135deg, #2196F3, #0D47A1);
+}
+
+.program-badge[data-subject="Physics"] {
+  background: linear-gradient(135deg, #9C27B0, #6A1B9A);
+}
+
+.program-badge[data-subject="Chemistry"] {
+  background: linear-gradient(135deg, #F44336, #B71C1C);
+}
+
+.program-badge[data-subject="Biology"] {
+  background: linear-gradient(135deg, #009688, #00695C);
+}
+
+/* Default for other subjects */
+.program-badge {
+  background: linear-gradient(135deg, #FF9800, #E65100);
+}
+
+/* Optional: Enhance the program title for the wider format */
+.program-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    padding-right: 100px; /* Make room for the badge */
+  }
+
+/* Optional: Improve the layout of details in the wider format */
+.program-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: #666;
+}
+
+.detail-item i {
+  width: 20px;
+  margin-right: 10px;
+  color: #7c4dff;
+}
+
+.detail-item.price {
+  font-weight: 600;
+  color: #4CAF50;
+  font-size: 1.1rem;
+}
+
+.program-description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    padding: 15px 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    margin: 15px 0;
+  }
+/* Update the program actions to be right-aligned */
+.program-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+.details-btn, .enroll-btn {
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  text-align: center;
+  border: none;
+}
+
+.details-btn {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.details-btn:hover {
+  background: #e0e0e0;
+}
+
+.enroll-btn {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+  }
+
+.enroll-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(94, 53, 177, 0.3);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .programs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-box, .filter-dropdown {
+    width: 100%;
+  }
+}
+/* Just add these lines at the end of your CSS file */
+
+/* Improve the instructor name display */
+.detail-item i.fa-user-tie + span {
+  font-weight: 500;
+  color: #5e35b1;
+}
+
+/* Add styles for button icons */
+.details-btn i, .enroll-btn i {
+  margin-right: 6px;
+}
+
+/* Add these styles to enhance the filters section */
+
+.filters-section {
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.filters-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.filters-heading i {
+  color: #7c4dff;
+  margin-right: 8px;
+}
+
+.filter-count {
+  font-size: 0.9rem;
+  background-color: #7c4dff;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.filters-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  align-items: end;
+}
+
+.filter-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-dropdown label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.filter-dropdown select {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-box {
+  grid-column: span 2;
+}
+
+.clear-filters-btn {
+  background-color: #f5f5f5;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.clear-filters-btn i {
+  font-size: 12px;
+}
+
+.clear-filters-btn:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* Make the search box responsive */
+@media screen and (max-width: 992px) {
+  .filters-container {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  
+  .search-box {
+    grid-column: span 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .filters-container {
+    grid-template-columns: 1fr;
+  }
+}
+/* Add these styles */
+
+.sorting-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.sorting-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  padding: 8px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.sorting-controls label {
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
+}
+
+.sorting-controls select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.sorting-controls select:focus {
+  outline: none;
+  border-color: #7c4dff;
+  box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.1);
+}
+/* Add these styles */
+
+/* Enrollment Modal Styles */
+.enrollment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.enrollment-modal {
+  background: white;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.enrollment-modal-header {
+  background: linear-gradient(135deg, #7c4dff, #5e35b1);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enrollment-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+.enrollment-modal-content {
+  padding: 25px;
+}
+
+.enrollment-program-info {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 15px;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.enrollment-program-info .program-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.enrollment-program-detail {
+  margin: 10px 0;
+}
+
+.enrollment-price {
+  font-size: 1.2rem;
+  color: #4CAF50;
+}
+
+.enrollment-form h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.enrollment-form p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.enrollment-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.enrollment-input:focus {
+  outline: none;
+  border-color: #7c4dff;
+  box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+}
+
+.enrollment-input.invalid {
+  border-color: #f44336;
+  background-color: #ffebee;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: block;
+}
+
+.enrollment-status {
+  margin: 15px 0;
+}
+
+.success-message, .error-message {
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.enrollment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.cancel-btn, .confirm-btn {
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #555;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #7c4dff, #5e35b1);
+  color: white;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(124, 77, 255, 0.3);
+}
+
+.confirm-btn:disabled {
+  background: #b39ddb;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.fa-spinner {
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

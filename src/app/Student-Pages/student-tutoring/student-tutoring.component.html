@@ -1,0 +1,214 @@
+<div class="mentorship-programs-container">
+  <div class="mentorship-header">
+    <h1>Mentorship Programs</h1>
+    <p>Enhance your skills with personalized guidance from industry experts</p>
+  </div>
+
+  <!-- Filters and Search -->
+  <!-- Replace the existing filter container with this enhanced version -->
+  
+  <div class="filters-section">
+    <h3 class="filters-heading">
+      <i class="fas fa-filter"></i> Filter Programs
+      <span class="filter-count" *ngIf="filteredPrograms.length > 0">{{ filteredPrograms.length }} programs</span>
+    </h3>
+    
+    <!-- Search -->
+    <div class="filters-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearchChange()" 
+          placeholder="Search programs...">
+      </div>
+      
+      <!-- Subject Filter -->
+      <div class="filter-dropdown">
+        <label for="subject-filter">Subject:</label>
+        <select id="subject-filter" [(ngModel)]="selectedSubject" (change)="filterPrograms()">
+          <option value="all">All Subjects</option>
+          <option *ngFor="let subject of subjects" [value]="subject">{{ subject }}</option>
+        </select>
+      </div>
+      
+      <!-- Instructor Filter -->
+      <div class="filter-dropdown">
+        <label for="instructor-filter">Instructor:</label>
+        <select id="instructor-filter" [(ngModel)]="selectedInstructor" (change)="onInstructorChange()">
+          <option [value]="0">All Instructors</option>
+          <option *ngFor="let instructor of instructorsList" [value]="instructor.id">{{ instructor.name }}</option>
+        </select>
+      </div>
+      
+      <!-- Price Range Filter -->
+      <div class="filter-dropdown">
+        <label for="price-filter">Price Range:</label>
+        <select id="price-filter" [(ngModel)]="selectedPriceRange" (change)="onPriceRangeChange()">
+          <option *ngFor="let range of priceRanges" [value]="range.value">{{ range.label }}</option>
+        </select>
+      </div>
+      
+      <!-- Date Range Filter -->
+      <div class="filter-dropdown">
+        <label for="date-filter">Start Date:</label>
+        <select id="date-filter" [(ngModel)]="selectedDateRange" (change)="onDateRangeChange()">
+          <option *ngFor="let range of dateRanges" [value]="range.value">{{ range.label }}</option>
+        </select>
+      </div>
+      
+      <!-- Clear Filters Button -->
+      <button class="clear-filters-btn" 
+        (click)="searchTerm = ''; selectedSubject = 'all'; selectedInstructor = 0; selectedPriceRange = 'all'; selectedDateRange = 'all'; filterPrograms()">
+        <i class="fas fa-times"></i> Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading mentorship programs...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="loadMentorshipPrograms()">Try Again</button>
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="!loading && !error && filteredPrograms.length === 0">
+    <div class="empty-icon">
+      <i class="fas fa-search"></i>
+    </div>
+    <p>No mentorship programs match your search criteria.</p>
+    <button class="reset-btn" (click)="searchTerm = ''; selectedSubject = 'all'; filterPrograms()">Reset Filters</button>
+  </div>
+
+    <!-- Add this right after the filters section and before the programs grid -->
+  
+  <div class="sorting-section" *ngIf="!loading && !error && filteredPrograms.length > 0">
+    <div class="sorting-controls">
+      <label for="sort-price">Sort by Price:</label>
+      <select id="sort-price" [(ngModel)]="sortByPrice" (change)="onSortChange()">
+        <option value="none">Default Order</option>
+        <option value="asc">Lowest to Highest</option>
+        <option value="desc">Highest to Lowest</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Programs Grid -->
+  <div class="programs-grid" *ngIf="!loading && !error && filteredPrograms.length > 0">
+    <div class="program-card" *ngFor="let program of filteredPrograms">
+    <!-- Update these property references to use camelCase -->
+    
+    <div class="program-badge" [attr.data-subject]="program.programSubject">
+      {{ program.programSubject }}
+    </div>
+    
+    <h3 class="program-title">{{ program.programName }}</h3>
+    
+    <div class="program-details">
+      <div class="detail-item">
+        <i class="far fa-calendar-alt"></i>
+        <span>{{ formatDate(program.programStartDate) }} - {{ formatDate(program.programEndDate) }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <i class="fas fa-user-tie"></i>
+        <span>Instructor: {{ program.instructor_name }}</span>
+      </div>
+      
+      <div class="detail-item price">
+        <i class="fas fa-tag"></i>
+        <span>{{ program.programPrice | currency }}</span>
+      </div>
+    </div>
+    
+    <p class="program-description">{{ program.programDescription }}</p>
+      
+      <!-- Change the enroll button to this -->
+      <div class="program-actions">
+        <button class="enroll-btn" (click)="openEnrollmentModal(program)">
+          <i class="fas fa-user-plus"></i> Enroll Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add this at the end of the file -->
+
+<!-- Enrollment Modal -->
+<div class="enrollment-modal-overlay" *ngIf="showEnrollmentModal">
+  <div class="enrollment-modal">
+    <div class="enrollment-modal-header">
+      <h2>Enroll in {{ selectedProgram?.programName }}</h2>
+      <button class="close-btn" (click)="closeEnrollmentModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="enrollment-modal-content">
+      <div class="enrollment-program-info">
+        <div class="program-badge" [attr.data-subject]="selectedProgram?.programSubject">
+          {{ selectedProgram?.programSubject }}
+        </div>
+        <p class="enrollment-program-detail">
+          <strong>Instructor:</strong> {{ selectedProgram?.instructor_name }}
+        </p>
+        <p class="enrollment-program-detail">
+          <strong>Dates:</strong> {{ formatDate(selectedProgram?.programStartDate) }} - {{ formatDate(selectedProgram?.programEndDate) }}
+        </p>
+        <p class="enrollment-program-detail enrollment-price">
+          <strong>Price:</strong> {{ selectedProgram?.programPrice | currency }}
+        </p>
+      </div>
+      
+      <div class="enrollment-form">
+        <h3>Complete Your Enrollment</h3>
+        <p>Enter your email to receive enrollment confirmation and program details.</p>
+        
+        <div class="input-group">
+          <label for="enrollment-email">Email Address</label>
+          <input 
+            type="email" 
+            id="enrollment-email"
+            [(ngModel)]="enrollmentEmail" 
+            placeholder="your.email@example.com"
+            class="enrollment-input"
+            [class.invalid]="!isValidEmail(enrollmentEmail) && enrollmentEmail">
+          <small class="error-message" *ngIf="!isValidEmail(enrollmentEmail) && enrollmentEmail">
+            Please enter a valid email address
+          </small>
+        </div>
+        
+        <div class="enrollment-status" *ngIf="enrollmentStatus">
+          <div [class]="enrollmentStatus.success ? 'success-message' : 'error-message'">
+            <i class="fas" [ngClass]="enrollmentStatus.success ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+            <span>{{ enrollmentStatus.message }}</span>
+          </div>
+        </div>
+        
+        <div class="enrollment-actions">
+          <button class="cancel-btn" (click)="closeEnrollmentModal()">Cancel</button>
+          <button 
+            class="confirm-btn" 
+            [disabled]="!isValidEmail(enrollmentEmail) || sendingEnrollment" 
+            (click)="sendEnrollmentEmail()">
+            <span *ngIf="!sendingEnrollment">Confirm Enrollment</span>
+            <span *ngIf="sendingEnrollment">
+              <i class="fas fa-spinner fa-spin"></i> Processing...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

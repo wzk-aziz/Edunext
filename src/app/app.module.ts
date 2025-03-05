@@ -78,6 +78,7 @@ import { ChatPanelComponent } from './Shared/classroom/chat-panel/chat-panel.com
 import { ResourcePanelComponent } from './Shared/classroom/resource-panel/resource-panel.component';
 import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/student-virtual-classroom-sessions/student-virtual-classroom-sessions.component';
 import { StudentLiveClassComponent } from './Student-Pages/student-live-class/student-live-class.component';
+import { StudentTutoringComponent } from './Student-Pages/student-tutoring/student-tutoring.component';
 
 @NgModule({
   declarations: [
@@ -135,6 +136,7 @@ import { StudentLiveClassComponent } from './Student-Pages/student-live-class/st
     ResourcePanelComponent,
     StudentVirtualClassroomSessionsComponent,
     StudentLiveClassComponent,
+    StudentTutoringComponent,
 
   ],
   imports: [

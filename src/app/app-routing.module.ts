@@ -26,6 +26,7 @@ import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/studen
 
 import { StudentLiveClassComponent } from './Student-Pages/student-live-class/student-live-class.component';
 
+import { StudentTutoringComponent } from './Student-Pages/student-tutoring/student-tutoring.component'; 
 
 
 const routes: Routes = [
@@ -67,6 +68,9 @@ const routes: Routes = [
   { 
     path: 'student-virtual-classroom/:id', component: StudentLiveClassComponent 
   },
+
+  { path: 'student-tutoring', component: StudentTutoringComponent },
+
 
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },
