@@ -5,6 +5,7 @@ import { LectureService } from '../../Services/lecture.service';
 import { CourseService } from '../../Services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalAlertService } from 'src/app/Service/global-alert.service';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-viewlecture',
@@ -29,14 +30,19 @@ export class ViewlectureComponent implements OnInit {
     this.loadAllCourses();
   }
 
+  ngAfterViewInit(): void {
+    // Initialize all collapse elements after the view is rendered
+    const collapses = document.querySelectorAll('.accordion-collapse');
+    collapses.forEach((collapseEl: Element) => {
+      new bootstrap.Collapse(collapseEl, { toggle: false });
+    });
+  }
+
   loadAllCourses(): void {
-    // Fetch all courses
     this.courseService.getAllCourses().subscribe(courses => {
       this.courses = courses;
-      // For each course, fetch its lectures and store them in the dictionary
       courses.forEach(course => {
         this.lectureService.getLecturesByCourseId(course.id!).subscribe(lectures => {
-          // Sort lectures by lectureOrder before storing
           this.lecturesByCourse[course.id!] = lectures.sort((a, b) => a.lectureOrder - b.lectureOrder);
         });
       });
@@ -110,4 +116,6 @@ export class ViewlectureComponent implements OnInit {
   toggleTeacherMenu(): void {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
   }
+
+  
 }

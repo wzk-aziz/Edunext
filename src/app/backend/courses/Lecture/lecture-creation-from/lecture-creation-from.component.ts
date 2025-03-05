@@ -12,16 +12,14 @@ import { CourseService } from '../../Services/course.service';
   styleUrls: ['./lecture-creation-from.component.css']
 })
 export class LectureCreationFromComponent implements OnInit {
-   // Parent FormGroup containing a FormArray named "lectures"
   lectureFormGroup!: FormGroup;
-  // Convenience getter for the FormArray
   get lecturesFormArray(): FormArray {
     return this.lectureFormGroup.get('lectures') as FormArray;
   }
   isMenuOpen = false;
   courseId!: number;
-  course!: Course; // Store the fetched course data
-  // Arrays for file management per lecture
+  course!: Course;
+  existingLecturesCount: number = 0;  // New property to hold current lecture count
   selectedPdfFiles: (File | null)[] = [];
   selectedVideoFiles: (File | null)[] = [];
   pdfPreviews: string[] = [];
@@ -37,29 +35,34 @@ export class LectureCreationFromComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Retrieve the course ID from the URL parameter
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
-
-    // Load the course data to display in the UI (optional)
-    this.courseService.getCourseById(this.courseId).subscribe({
-      next: (course) => {
-        this.course = course;  // Store the course data
-      },
-      error: (err) => console.error('Error loading course:', err)
+    // Fetch current lectures count for this course
+    this.lectureService.getLecturesByCourseId(this.courseId).subscribe(lectures => {
+      this.existingLecturesCount = lectures.length;
+      // Optionally update the course's lecture count if your course object uses it:
+      this.courseService.getCourseById(this.courseId).subscribe({
+        next: (course) => {
+          this.course = course;
+          this.course.numberOfLectures = this.existingLecturesCount; // Update course info
+          this.initializeForm();
+        },
+        error: (err) => console.error('Error loading course:', err)
+      });
     });
+  }
 
-    // Create the parent form group with a 'lectures' FormArray
+  initializeForm(): void {
     this.lectureFormGroup = this.fb.group({
       lectures: this.fb.array([])
     });
-
-    // Initialize with one lecture group; lectureOrder will be 1
+    // Start with one lecture form group
     this.addLectureFormGroup();
   }
 
-  // Adds a new lecture form group to the FormArray and initializes file arrays for that lecture
+  // Adds a new lecture form group and calculates order based on existing lectures count
   addLectureFormGroup(): void {
-    const order = this.lecturesFormArray.length + 1; // Automatically increment lecture order
+    // Use existing lectures count as base
+    const order = this.existingLecturesCount + this.lecturesFormArray.length + 1;
     const lectureGroup = this.fb.group({
       lectureTitle: ['', Validators.required],
       lectureDescription: ['', Validators.required],
@@ -72,7 +75,7 @@ export class LectureCreationFromComponent implements OnInit {
     this.videoPreviews.push('');
   }
 
-  // Remove a lecture form group at a given index and update orders accordingly
+  // Remove a lecture form group and update orders accordingly
   removeLectureFormGroup(index: number): void {
     this.lecturesFormArray.removeAt(index);
     this.selectedPdfFiles.splice(index, 1);
@@ -82,10 +85,10 @@ export class LectureCreationFromComponent implements OnInit {
     this.updateLectureOrders();
   }
 
-  // Recalculate lectureOrder values for all groups
+  // Update lecture orders based on existing lectures count
   updateLectureOrders(): void {
     for (let i = 0; i < this.lecturesFormArray.length; i++) {
-      this.lecturesFormArray.at(i).get('lectureOrder')?.setValue(i + 1);
+      this.lecturesFormArray.at(i).get('lectureOrder')?.setValue(this.existingLecturesCount + i + 1);
     }
   }
 
@@ -111,7 +114,6 @@ export class LectureCreationFromComponent implements OnInit {
       return;
     }
 
-    // For each lecture in the FormArray, build a FormData and send the creation request.
     const requests: Promise<any>[] = [];
     for (let i = 0; i < this.lecturesFormArray.length; i++) {
       const lectureGroup = this.lecturesFormArray.at(i);
@@ -144,7 +146,7 @@ export class LectureCreationFromComponent implements OnInit {
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
-  
+
   isTeacherMenuOpen = false;
   toggleTeacherMenu(): void {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;

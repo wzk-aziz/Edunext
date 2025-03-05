@@ -121,35 +121,46 @@
                 </div>
             </nav>
         </div>
+
+
 <!-- mainbody start -->
 <div class="container my-4">
-  <h2>Create Lectures for {{ course.courseName}}</h2>
+  <h2>Create Lectures for {{ course.courseName }}</h2>
   <form [formGroup]="lectureFormGroup" (ngSubmit)="submitLectures()" enctype="multipart/form-data">
     <div formArrayName="lectures">
       <div *ngFor="let lectureGroup of lecturesFormArray.controls; let i = index" [formGroupName]="i" class="border p-3 mb-3 rounded">
         <h5>Lecture {{ i + 1 }}</h5>
+        <!-- Lecture Title -->
         <div class="mb-2">
-          <label for="lectureTitle{{ i }}" class="form-label">Lecture Title</label>
+          <label for="lectureTitle{{ i }}" class="form-label">
+            Lecture Title <span class="text-danger">*</span>
+          </label>
           <input type="text" id="lectureTitle{{ i }}" formControlName="lectureTitle" class="form-control" required>
           <div *ngIf="lectureGroup.get('lectureTitle')?.invalid && (lectureGroup.get('lectureTitle')?.dirty || lectureGroup.get('lectureTitle')?.touched)" class="text-danger">
             Lecture title is required.
           </div>
         </div>
+        <!-- Lecture Description -->
         <div class="mb-2">
-          <label for="lectureDescription{{ i }}" class="form-label">Lecture Description</label>
+          <label for="lectureDescription{{ i }}" class="form-label">
+            Lecture Description <span class="text-danger">*</span>
+          </label>
           <textarea id="lectureDescription{{ i }}" formControlName="lectureDescription" class="form-control" rows="2" required></textarea>
           <div *ngIf="lectureGroup.get('lectureDescription')?.invalid && (lectureGroup.get('lectureDescription')?.dirty || lectureGroup.get('lectureDescription')?.touched)" class="text-danger">
             Lecture description is required.
           </div>
         </div>
+        <!-- Lecture Order -->
         <div class="mb-2">
-          <label for="lectureOrder{{ i }}" class="form-label">Lecture Order</label>
+          <label for="lectureOrder{{ i }}" class="form-label">
+            Lecture Order <span class="text-danger">*</span>
+          </label>
           <input type="number" id="lectureOrder{{ i }}" formControlName="lectureOrder" class="form-control" required min="1">
           <div *ngIf="lectureGroup.get('lectureOrder')?.invalid && (lectureGroup.get('lectureOrder')?.dirty || lectureGroup.get('lectureOrder')?.touched)" class="text-danger">
             Lecture order is required and must be at least 1.
           </div>
         </div>
-        <!-- PDF File Input -->
+        <!-- PDF File Input (optional) -->
         <div class="mb-2">
           <label for="pdfFile{{ i }}" class="form-label">PDF File (optional)</label>
           <input type="file" id="pdfFile{{ i }}" class="form-control" (change)="onPdfSelect($event, i)" accept="application/pdf">
@@ -157,7 +168,7 @@
             <iframe [src]="pdfPreviews[i]" width="100%" height="150" style="border: none;"></iframe>
           </div>
         </div>
-        <!-- Video File Input -->
+        <!-- Video File Input (optional) -->
         <div class="mb-2">
           <label for="videoFile{{ i }}" class="form-label">Video File (optional)</label>
           <input type="file" id="videoFile{{ i }}" class="form-control" (change)="onVideoSelect($event, i)" accept="video/*">

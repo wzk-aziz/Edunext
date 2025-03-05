@@ -121,189 +121,208 @@
                 </div>
             </nav>
         </div>
-<!-- mainbody start -->
-<div class="body d-flex py-lg-3 py-md-2">
-  <div class="container-xxl">
-    <div class="row clearfix g-3">
-      <div class="col-xxl-9 col-xl-8 col-lg-8">
-        <div class="border-0 mb-4">
-          <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom">
-            <h3 class="fw-bold mb-0">
-              {{ isEditMode ? 'Update Course' : 'Create New Course' }}
-            </h3>
+        <div class="body d-flex py-lg-3 py-md-2">
+          <div class="container-xxl">
+            <div class="row clearfix g-3">
+              <div class="col-xxl-9 col-xl-8 col-lg-8">
+                <div class="border-0 mb-4">
+                  <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom">
+                    <h3 class="fw-bold mb-0">
+                      {{ isEditMode ? 'Update Course' : 'Create New Course' }}
+                    </h3>
+                  </div>
+                </div>
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+                      <!-- Course Name -->
+                      <div class="mb-3">
+                        <label for="courseName" class="form-label">
+                          Course Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="courseName" formControlName="courseName" required>
+                        <div *ngIf="courseForm.get('courseName')?.invalid && (courseForm.get('courseName')?.dirty || courseForm.get('courseName')?.touched)" class="text-danger">
+                          Course name is required.
+                        </div>
+                      </div>
+              
+                      <!-- Course Description -->
+                      <div class="mb-3">
+                        <label for="courseDescription" class="form-label">
+                          Description <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="courseDescription" formControlName="courseDescription" rows="3" required></textarea>
+                        <div *ngIf="courseForm.get('courseDescription')?.invalid && (courseForm.get('courseDescription')?.dirty || courseForm.get('courseDescription')?.touched)" class="text-danger">
+                          Description is required.
+                        </div>
+                      </div>
+              
+                      <!-- Course Level -->
+                      <div class="mb-3">
+                        <label for="courseLevel" class="form-label">
+                          Course Level <span class="text-danger">*</span>
+                        </label>
+                        <select id="courseLevel" class="form-select" formControlName="courseLevel" required>
+                          <option value="ALL_LEVELS">All Levels</option>
+                          <option value="BEGINNER">Beginner</option>
+                          <option value="INTERMEDIATE">Intermediate</option>
+                          <option value="ADVANCED">Advanced</option>
+                        </select>
+                        <div *ngIf="courseForm.get('courseLevel')?.invalid && (courseForm.get('courseLevel')?.dirty || courseForm.get('courseLevel')?.touched)" class="text-danger">
+                          Course level is required.
+                        </div>
+                      </div>
+              
+                      <!-- Pack Type -->
+                      <div class="mb-3">
+                        <label for="packType" class="form-label">
+                          Pack Type <span class="text-danger">*</span>
+                        </label>
+                        <select id="packType" formControlName="packType" class="form-select" required>
+                          <option value="COPPER">Copper</option>
+                          <option value="BRONZE">Bronze</option>
+                          <option value="SILVER">Silver</option>
+                          <option value="GOLD">Gold</option>
+                        </select>
+                        <div *ngIf="courseForm.get('packType')?.invalid && (courseForm.get('packType')?.dirty || courseForm.get('packType')?.touched)" class="text-danger">
+                          Pack type is required.
+                        </div>
+                      </div>
+              
+                      <!-- Course Format -->
+                      <div class="mb-3">
+                        <label for="courseFormat" class="form-label">
+                          Course Format <span class="text-danger">*</span>
+                        </label>
+                        <select id="courseFormat" class="form-select" formControlName="courseFormat" required>
+                          <option value="PDF">PDF</option>
+                          <option value="VIDEO">Video</option>
+                          <option value="AUDIO">Audio</option>
+                        </select>
+                        <div *ngIf="courseForm.get('courseFormat')?.invalid && (courseForm.get('courseFormat')?.dirty || courseForm.get('courseFormat')?.touched)" class="text-danger">
+                          Course format is required.
+                        </div>
+                      </div>
+              
+                      <!-- Category Dropdown with Inline Edit and Add -->
+                      <div class="mb-3">
+                        <label for="categoryId" class="form-label">
+                          Category <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                          <select id="categoryId" formControlName="categoryId" class="form-select" required>
+                            <option value="">Select a category</option>
+                            <option *ngFor="let category of categories; trackBy: trackByCategoryId" [value]="category.id">
+                              {{ category.name }}
+                            </option>
+                          </select>
+                          <button type="button" class="btn btn-outline-secondary" (click)="toggleEditCategory()">
+                            <i class="fas fa-pencil-alt"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-danger" (click)="deleteSelectedCategory()">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </div>
+                        <div *ngIf="courseForm.get('categoryId')?.invalid && (courseForm.get('categoryId')?.dirty || courseForm.get('categoryId')?.touched)" class="text-danger">
+                          Category is required.
+                        </div>
+                        <button type="button" class="btn btn-link" (click)="toggleNewCategory()">
+                          Add New Category
+                        </button>
+                      </div>
+              
+                      <!-- Inline Category Edit Form -->
+                      <div *ngIf="editingCategory" class="mt-2 border p-2 rounded">
+                        <div class="mb-2">
+                          <label for="editedCategoryName" class="form-label">Edit Category Name <span class="text-danger">*</span></label>
+                          <input type="text" id="editedCategoryName" class="form-control" 
+                                 [(ngModel)]="editedCategoryName" name="editedCategoryName" 
+                                 [ngModelOptions]="{standalone: true}" required>
+                        </div>
+                        <div>
+                          <button type="button" class="btn btn-primary btn-sm me-2" (click)="updateCategory()">Update</button>
+                          <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEditCategory()">Cancel</button>
+                        </div>
+                      </div>
+              
+                      <!-- Inline New Category Form -->
+                      <div *ngIf="showNewCategory" class="mt-2 border p-2 rounded">
+                        <h5>Add New Category</h5>
+                        <div class="mb-2">
+                          <label for="newCategoryName" class="form-label">Category Name <span class="text-danger">*</span></label>
+                          <input type="text" id="newCategoryName" class="form-control" 
+                                 [(ngModel)]="newCategoryName" name="newCategoryName" 
+                                 [ngModelOptions]="{standalone: true}" required>
+                        </div>
+                        <div>
+                          <button type="button" class="btn btn-primary btn-sm me-2" (click)="createNewCategory()">Save Category</button>
+                          <button type="button" class="btn btn-secondary btn-sm" (click)="toggleNewCategory()">Cancel</button>
+                        </div>
+                      </div>
+              
+                      <!-- Duration -->
+                      <div class="mb-3">
+                        <label for="duration" class="form-label">
+                          Duration (hours) <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" class="form-control" id="duration" formControlName="duration" required step="0.1" min="0">
+                        <div *ngIf="courseForm.get('duration')?.invalid && (courseForm.get('duration')?.dirty || courseForm.get('duration')?.touched)" class="text-danger">
+                          Duration is required.
+                        </div>
+                      </div>
+              
+                      <!-- Number of Lectures -->
+                      <div class="mb-3">
+                        <label for="numberOfLectures" class="form-label">
+                          Number of Lectures <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" class="form-control" id="numberOfLectures" formControlName="numberOfLectures" required min="1">
+                        <div *ngIf="courseForm.get('numberOfLectures')?.invalid && (courseForm.get('numberOfLectures')?.dirty || courseForm.get('numberOfLectures')?.touched)" class="text-danger">
+                          Number of lectures is required.
+                        </div>
+                      </div>
+              
+                      <!-- Points Earned -->
+                      <div class="mb-3">
+                        <label for="pointsEarned" class="form-label">
+                          Points Earned <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" class="form-control" id="pointsEarned" formControlName="pointsEarned" min="1" required>
+                        <div *ngIf="courseForm.get('pointsEarned')?.invalid && (courseForm.get('pointsEarned')?.dirty || courseForm.get('pointsEarned')?.touched)" class="text-danger">
+                          Points must be at least 1.
+                        </div>
+                      </div>
+              
+                      <!-- Thumbnail Section -->
+                      <div class="mb-3">
+                        <label for="thumbnail" class="form-label">
+                          Course Thumbnail <span *ngIf="!isEditMode" class="text-danger">*</span>
+                        </label>
+                        <div class="custom-file">
+                          <input type="file" class="form-control" id="thumbnail" accept="image/*" (change)="onThumbnailSelect($event)" [attr.required]="!isEditMode ? true : null">
+                        </div>
+                        <div *ngIf="!isEditMode && courseForm.get('thumbnail')?.errors?.['required']" class="text-danger">
+                          Thumbnail is required.
+                        </div>
+                        <div *ngIf="thumbnailPreview" class="mt-2">
+                          <img [src]="thumbnailPreview" class="img-thumbnail" style="max-width: 200px;">
+                        </div>
+                      </div>
+              
+                      <!-- Submit Button -->
+                      <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid">
+                          {{ isEditMode ? 'Update Course' : 'Create Course' }}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="card mb-3">
-          <div class="card-body">
-            <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-              <!-- Course Name -->
-              <div class="mb-3">
-                <label for="courseName" class="form-label">Course Name</label>
-                <input type="text" class="form-control" id="courseName" formControlName="courseName" required>
-                <div *ngIf="courseForm.get('courseName')?.invalid && (courseForm.get('courseName')?.dirty || courseForm.get('courseName')?.touched)" class="text-danger">
-                  Course name is required
-                </div>
-              </div>
-      
-              <!-- Course Description -->
-              <div class="mb-3">
-                <label for="courseDescription" class="form-label">Description</label>
-                <textarea class="form-control" id="courseDescription" formControlName="courseDescription" rows="3" required></textarea>
-                <div *ngIf="courseForm.get('courseDescription')?.invalid && (courseForm.get('courseDescription')?.dirty || courseForm.get('courseDescription')?.touched)" class="text-danger">
-                  Description is required
-                </div>
-              </div>
-      
-              <!-- Course Level -->
-              <div class="mb-3">
-                <label for="courseLevel" class="form-label">Course Level</label>
-                <select id="courseLevel" class="form-select" formControlName="courseLevel" required>
-                  <option value="ALL_LEVELS">All Levels</option>
-                  <option value="BEGINNER">Beginner</option>
-                  <option value="INTERMEDIATE">Intermediate</option>
-                  <option value="ADVANCED">Advanced</option>
-                </select>
-                <div *ngIf="courseForm.get('courseLevel')?.invalid && (courseForm.get('courseLevel')?.dirty || courseForm.get('courseLevel')?.touched)" class="text-danger">
-                  Course level is required
-                </div>
-              </div>
-      
-              <!-- Pack Type -->
-              <div class="mb-3">
-                <label for="packType" class="form-label">Pack Type</label>
-                <select id="packType" formControlName="packType" class="form-select" required>
-                  <option value="COPPER">Copper</option>
-                  <option value="BRONZE">Bronze</option>
-                  <option value="SILVER">Silver</option>
-                  <option value="GOLD">Gold</option>
-                </select>
-                <div *ngIf="courseForm.get('packType')?.invalid && (courseForm.get('packType')?.dirty || courseForm.get('packType')?.touched)" class="text-danger">
-                  Pack type is required
-                </div>
-              </div>
-      <!-- Course Format -->
-<div class="mb-3">
-  <label for="courseFormat" class="form-label">Course Format</label>
-  <select id="courseFormat" class="form-select" formControlName="courseFormat" required>
-    <option value="PDF">PDF</option>
-    <option value="VIDEO">Video</option>
-    <option value="AUDIO">Audio</option>
-  </select>
-  <div *ngIf="courseForm.get('courseFormat')?.invalid && (courseForm.get('courseFormat')?.dirty || courseForm.get('courseFormat')?.touched)" class="text-danger">
-    Course format is required.
-  </div>
-</div>
-
-              <!-- Category Dropdown with Inline Edit and Add -->
-              <div class="mb-3">
-                <label for="categoryId" class="form-label">Category</label>
-                <div class="input-group">
-                  <select id="categoryId" formControlName="categoryId" class="form-select" required>
-                    <option value="">Select a category</option>
-                    <option *ngFor="let category of categories; trackBy: trackByCategoryId" [value]="category.id">
-                      {{ category.name }}
-                    </option>
-                  </select>
-                  <button type="button" class="btn btn-outline-secondary" (click)="toggleEditCategory()">
-                    <i class="fas fa-pencil-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-danger" (click)="deleteSelectedCategory()">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                <div *ngIf="courseForm.get('categoryId')?.invalid && (courseForm.get('categoryId')?.dirty || courseForm.get('categoryId')?.touched)" class="text-danger">
-                  Category is required.
-                </div>
-                <button type="button" class="btn btn-link" (click)="toggleNewCategory()">
-                  Add New Category
-                </button>
-              </div>
-      
-              <!-- Inline Category Edit Form -->
-              <div *ngIf="editingCategory" class="mt-2 border p-2 rounded">
-                <div class="mb-2">
-                  <label for="editedCategoryName" class="form-label">Edit Category Name</label>
-                  <input type="text" id="editedCategoryName" class="form-control" 
-                         [(ngModel)]="editedCategoryName" name="editedCategoryName" 
-                         [ngModelOptions]="{standalone: true}" required>
-                </div>
-                <div>
-                  <button type="button" class="btn btn-primary btn-sm me-2" (click)="updateCategory()">Update</button>
-                  <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEditCategory()">Cancel</button>
-                </div>
-              </div>
-      
-              <!-- Inline New Category Form -->
-              <div *ngIf="showNewCategory" class="mt-2 border p-2 rounded">
-                <h5>Add New Category</h5>
-                <div class="mb-2">
-                  <label for="newCategoryName" class="form-label">Category Name</label>
-                  <input type="text" id="newCategoryName" class="form-control" 
-                         [(ngModel)]="newCategoryName" name="newCategoryName" 
-                         [ngModelOptions]="{standalone: true}" required>
-                </div>
-                <div>
-                  <button type="button" class="btn btn-primary btn-sm me-2" (click)="createNewCategory()">Save Category</button>
-                  <button type="button" class="btn btn-secondary btn-sm" (click)="toggleNewCategory()">Cancel</button>
-                </div>
-              </div>
-      
-              <!-- New Fields: Duration and Number of Lectures -->
-              <div class="mb-3">
-                <label for="duration" class="form-label">Duration (hours)</label>
-                <input type="number" class="form-control" id="duration" formControlName="duration" required step="0.1" min="0">
-                <div *ngIf="courseForm.get('duration')?.invalid && (courseForm.get('duration')?.dirty || courseForm.get('duration')?.touched)" class="text-danger">
-                  Duration is required.
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="numberOfLectures" class="form-label">Number of Lectures</label>
-                <input type="number" class="form-control" id="numberOfLectures" formControlName="numberOfLectures" required min="1">
-                <div *ngIf="courseForm.get('numberOfLectures')?.invalid && (courseForm.get('numberOfLectures')?.dirty || courseForm.get('numberOfLectures')?.touched)" class="text-danger">
-                  Number of lectures is required.
-                </div>
-              </div>
-      
-              <!-- Points Earned -->
-              <div class="mb-3">
-                <label for="pointsEarned" class="form-label">Points Earned</label>
-                <input type="number" class="form-control" id="pointsEarned" formControlName="pointsEarned" min="1" required>
-                <div *ngIf="courseForm.get('pointsEarned')?.invalid && (courseForm.get('pointsEarned')?.dirty || courseForm.get('pointsEarned')?.touched)" class="text-danger">
-                  Points must be at least 1
-                </div>
-              </div>
-      
-              <!-- Update Thumbnail Section -->
-              <div class="mb-3">
-                <label for="thumbnail" class="form-label">
-                  Course Thumbnail
-                  <span *ngIf="!isEditMode" class="text-danger">*</span>
-                </label>
-                <div class="custom-file">
-                  <input type="file" class="form-control" id="thumbnail" accept="image/*" (change)="onThumbnailSelect($event)" [attr.required]="!isEditMode ? true : null">
-                </div>
-                <div *ngIf="!isEditMode && courseForm.get('thumbnail')?.errors?.['required']" class="text-danger">
-                  Thumbnail is required
-                </div>
-                <div *ngIf="thumbnailPreview" class="mt-2">
-                  <img [src]="thumbnailPreview" class="img-thumbnail" style="max-width: 200px;">
-                </div>
-              </div>
-      
-              <!-- Submit Button -->
-              <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid">
-                  {{ isEditMode ? 'Update Course' : 'Create Course' }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- mainbody end -->
+        
 
 
         <!-- Modal Members-->
