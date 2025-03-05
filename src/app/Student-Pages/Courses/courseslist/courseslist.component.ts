@@ -163,4 +163,57 @@ export class CourseslistComponent implements OnInit {
         return 'fas fa-signal text-secondary me-2';
     }
   }
+
+
+// Like or Dislike
+likeCourse(courseId: number): void {
+  this.courseService.voteCourse(courseId, 'like').subscribe({
+    next: (updated) => {
+      // Update the local array
+      const index = this.courses.findIndex(c => c.id === updated.id);
+      if (index !== -1) {
+        this.courses[index] = updated;
+      }
+    },
+    error: (err) => console.error('Error liking course:', err)
+  });
+}
+
+dislikeCourse(courseId: number): void {
+  this.courseService.voteCourse(courseId, 'dislike').subscribe({
+    next: (updated) => {
+      // Update the local array
+      const index = this.courses.findIndex(c => c.id === updated.id);
+      if (index !== -1) {
+        this.courses[index] = updated;
+      }
+    },
+    error: (err) => console.error('Error disliking course:', err)
+  });
+}
+  // Helper to compute a ratio-based star rating
+  // Example: ratio * 5 => star rating
+  // ratio = likes / (likes + dislikes)
+  getStarRating(course: Course): number {
+    const likes = course.likes ?? 0;
+    const dislikes = course.dislikes ?? 0;
+    const total = likes + dislikes;
+    if (total === 0) {
+      return 0;
+    }
+    const ratio = likes / total;
+    // Convert ratio (0..1) to 0..5 star rating
+    return Math.round(ratio * 5);
+  }
+// Helper to return an array for star rendering
+getRatingStars(course: Course): boolean[] {
+  const rating = this.getStarRating(course); // e.g. 0..5
+  const stars: boolean[] = [];
+  for (let i = 0; i < 5; i++) {
+    stars.push(i < rating);
+  }
+  return stars;
+}
+  
+
 }

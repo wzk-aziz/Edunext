@@ -51,4 +51,10 @@ export class CourseService {
   getCoursesByPackType(packType: PackType): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.baseUrl}/search/by-pack-type?packType=${packType}`);
   }
+
+ 
+
+  voteCourse(courseId: number, vote: 'like' | 'dislike'): Observable<Course> {
+    return this.http.post<Course>(`${this.baseUrl}/${courseId}/vote?vote=${vote}`, {});
+  }
 }

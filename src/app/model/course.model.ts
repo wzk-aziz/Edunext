@@ -48,8 +48,7 @@ export interface Course {
 
   // New fields for likes and ratings
   likes?: number;
-  ratingCount?: number;
-  ratingSum?: number;
+  dislikes?: number;
 
   // Computed field: average rating (if ratingCount > 0)
   averageRating?: number;
