@@ -1,0 +1,682 @@
+<main>
+  <!-- Dashboard Summary Cards -->
+  <section class="py-3">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Stats Card 1: Total Sessions -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-body border-0 shadow-sm p-4 h-100 bg-success bg-opacity-10">
+            <div class="d-flex align-items-center">
+              <div class="icon-lg bg-success bg-opacity-10 rounded-circle text-success">
+                <i class="fas fa-video fa-fw"></i>
+              </div>
+              <div class="ms-3">
+                <h4 class="mb-0">{{ sessions.length }}</h4>
+                <p class="mb-0 small">Total Sessions</p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 small">Active: {{ getSessionCountByStatus('ongoing') }}</p>
+                <p class="mb-0 small text-success">
+                  <i class="fas fa-arrow-up me-1"></i>
+                  {{ calculateActiveSessionChange() }}%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Card 2: Total Students -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-body border-0 shadow-sm p-4 h-100 bg-info bg-opacity-10">
+            <div class="d-flex align-items-center">
+              <div class="icon-lg bg-info bg-opacity-10 rounded-circle text-info">
+                <i class="fas fa-user-graduate fa-fw"></i>
+              </div>
+              <div class="ms-3">
+                <h4 class="mb-0">{{ getTotalStudents() }}</h4>
+                <p class="mb-0 small">Total Students</p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 small">Avg. Per Session: {{ getAverageStudentsPerSession() }}</p>
+                <p class="mb-0 text-info">
+                  <i class="fas fa-chart-line me-1"></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Card 3: Upcoming Sessions -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-body border-0 shadow-sm p-4 h-100 bg-warning bg-opacity-10">
+            <div class="d-flex align-items-center">
+              <div class="icon-lg bg-warning bg-opacity-10 rounded-circle text-warning">
+                <i class="fas fa-calendar-alt fa-fw"></i>
+              </div>
+              <div class="ms-3">
+                <h4 class="mb-0">{{ getSessionCountByStatus('scheduled') }}</h4>
+                <p class="mb-0 small">Upcoming Sessions</p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 small">Next: {{ getNextSessionDateString() }}</p>
+                <p class="mb-0 text-warning">
+                  <i class="fas fa-clock me-1"></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Card 4: Completed Sessions -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-body border-0 shadow-sm p-4 h-100 bg-primary bg-opacity-10">
+            <div class="d-flex align-items-center">
+              <div class="icon-lg bg-primary bg-opacity-10 rounded-circle text-primary">
+                <i class="fas fa-check-circle fa-fw"></i>
+              </div>
+              <div class="ms-3">
+                <h4 class="mb-0">{{ getSessionCountByStatus('completed') }}</h4>
+                <p class="mb-0 small">Completed Sessions</p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 small">Total Hours: {{ getTotalTeachingHours() }}</p>
+                <p class="mb-0 text-primary">
+                  <i class="fas fa-award me-1"></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Banner -->
+  <section class="pt-0">
+    <!-- Banner -->
+    <div class="container-fluid px-0">
+      <div class="bg-blue h-100px h-md-200px rounded-0" style="background:url(/assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
+      </div>
+    </div>
+    <div class="container mt-n4">
+      <div class="row">
+        <!-- Profile banner -->
+        <div class="col-12">
+          <div class="card bg-transparent card-body p-0">
+            <div class="row d-flex justify-content-between">
+              <!-- Avatar -->
+              <div class="col-auto mt-4 mt-md-0">
+                <div class="avatar avatar-xxl mt-n3">
+                  <img class="avatar-img rounded-circle border border-white border-3 shadow" src="/assets/images/avatar/02.jpg" alt="">
+                </div>
+              </div>
+              <!-- Profile info -->
+              <div class="col d-md-flex justify-content-between align-items-center mt-4">
+                <div>
+                  <h1 class="my-1 fs-4">Ahmed Kaabi's <span class="text-primary">Sessions</span> <i class="bi bi-patch-check-fill text-info small"></i></h1>
+                  <ul class="list-inline mb-0">
+                    <li class="list-inline-item h6 fw-light me-3 mb-1 mb-sm-0">
+                      <i class="fas fa-video text-purple me-2"></i>{{ sessions.length }} Sessions
+                    </li>
+                    <li class="list-inline-item h6 fw-light me-3 mb-1 mb-sm-0">
+                      <i class="fas fa-user-graduate text-orange me-2"></i>{{ getTotalStudents() }} Total Students
+                    </li>
+                    <li class="list-inline-item h6 fw-light me-3 mb-1 mb-sm-0" *ngIf="getSessionCountByStatus('ongoing') > 0">
+                      <span class="badge bg-success"><i class="fas fa-circle fa-sm me-2"></i>{{ getSessionCountByStatus('ongoing') }} Active Now</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mt-2 mt-md-0">
+                  <button class="btn btn-success mb-0" data-bs-toggle="modal" data-bs-target="#createSessionModal">
+                    <i class="fas fa-plus me-2"></i>Create Session
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content START -->
+  <section class="pt-4">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Main content START -->
+        <div class="col-12">
+          <!-- Content START -->
+          <div class="card bg-transparent border">
+            <!-- Card header START -->
+            <div class="card-header bg-light border-bottom">
+              <!-- Advanced filters and view toggle -->
+              <div class="d-sm-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Session Management <span class="badge bg-success bg-opacity-10 text-success ms-2">{{ filteredSessions.length }} results</span></h5>
+                
+                <!-- View toggle buttons -->
+                <div class="btn-group btn-group-sm" role="group" aria-label="View options">
+                  <input type="radio" class="btn-check" name="viewOptions" id="gridView" [(ngModel)]="viewMode" value="grid" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="gridView">
+                    <i class="fas fa-th-large fa-fw"></i>
+                  </label>
+                  
+                  <input type="radio" class="btn-check" name="viewOptions" id="listView" [(ngModel)]="viewMode" value="list" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="listView">
+                    <i class="fas fa-list fa-fw"></i>
+                  </label>
+
+                </div>
+              </div>
+
+              <!-- Filter options -->
+              <!-- Replace the search bar section (around line 220) -->
+<!-- Filter options -->
+<div class="row g-3 align-items-center">
+  <!-- Search bar - MADE SMALLER -->
+  <div class="col-md-3 col-lg-4">
+    <form class="rounded position-relative">
+      <input 
+        class="form-control bg-body py-2" 
+        type="search" 
+        placeholder="Search sessions..." 
+        aria-label="Search"
+        [(ngModel)]="searchTerm"
+        [ngModelOptions]="{standalone: true}"
+        (input)="onSearchChange()">
+      <button 
+        class="btn bg-transparent px-2 py-0 position-absolute top-50 end-0 translate-middle-y" 
+        type="submit">
+        <i class="fas fa-search fs-6"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Filter dropdowns - MADE WIDER -->
+  <div class="col-md-8 col-lg-7">
+    <div class="d-flex gap-2">
+      <!-- Status filter -->
+      <select 
+        class="form-select form-select-sm" 
+        aria-label="Status filter"
+        [(ngModel)]="statusFilter"
+        (change)="applyFilters()">
+        <option value="all">All Status</option>
+        <option value="scheduled">Scheduled</option>
+        <option value="ongoing">Ongoing</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      
+      <!-- Subject filter -->
+      <select
+        class="form-select form-select-sm"
+        aria-label="Subject filter"
+        [(ngModel)]="subjectFilter"
+        (change)="applyFilters()">
+        <option value="all">All Subjects</option>
+        <option *ngFor="let subject of getUniqueSubjects()" [value]="subject">
+          {{ subject }}
+        </option>
+      </select>
+      
+      <!-- Advanced filters button -->
+      <button class="btn btn-sm btn-primary" type="button" (click)="showAdvancedFilters = !showAdvancedFilters">
+        <i class="fas fa-sliders-h me-1"></i>
+        {{ showAdvancedFilters ? 'Hide' : 'Filters' }}
+      </button>
+    </div>
+  </div>
+</div>
+              <!-- Advanced filters panel (collapsible) -->
+              <div class="mt-3" *ngIf="showAdvancedFilters">
+                <div class="card card-body bg-light border-0">
+                  <div class="row g-3">
+                    <!-- Date range filter -->
+                    <div class="col-md-4">
+                      <label class="form-label small">Date Range</label>
+                      <div class="d-flex">
+                        <input type="date" class="form-control form-control-sm me-2"
+                            [(ngModel)]="dateRangeStart" (change)="applyFilters()">
+                        <span class="align-self-center me-2">to</span>
+                        <input type="date" class="form-control form-control-sm"
+                            [(ngModel)]="dateRangeEnd" (change)="applyFilters()">
+                      </div>
+                    </div>
+                    
+                    <!-- Duration filter -->
+                    <div class="col-md-4">
+                      <label class="form-label small">Session Duration</label>
+                      <select class="form-select form-select-sm" [(ngModel)]="durationFilter" (change)="applyFilters()">
+                        <option value="all">All Durations</option>
+                        <option value="short">Short (< 60 min)</option>
+                        <option value="medium">Medium (60-120 min)</option>
+                        <option value="long">Long (> 120 min)</option>
+                      </select>
+                    </div>
+                    
+                    <!-- Sort order -->
+                    <div class="col-md-4">
+                      <label class="form-label small">Sort By</label>
+                      <select class="form-select form-select-sm" [(ngModel)]="sortOrder" (change)="applyFilters()">
+                        <option value="dateDesc">Newest First</option>
+                        <option value="dateAsc">Oldest First</option>
+                        <option value="titleAsc">Title (A-Z)</option>
+                        <option value="titleDesc">Title (Z-A)</option>
+                        <option value="studentsDesc">Most Students</option>
+                      </select>
+                    </div>
+                    
+                    <!-- Quick filters -->
+                    <div class="col-12">
+                      <div class="d-flex flex-wrap gap-2 mt-1">
+                        <button class="btn btn-sm btn-outline-success" (click)="applyQuickFilter('today')">
+                          <i class="far fa-calendar-day me-1"></i>Today
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning" (click)="applyQuickFilter('thisWeek')">
+                          <i class="far fa-calendar-week me-1"></i>This Week
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="applyQuickFilter('upcoming')">
+                          <i class="far fa-calendar-alt me-1"></i>Upcoming
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" (click)="applyQuickFilter('popular')">
+                          <i class="fas fa-star me-1"></i>Most Popular
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">
+                          <i class="fas fa-undo me-1"></i>Reset All
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Card header END -->
+            
+            <!-- Card body START -->
+            <div class="card-body">
+              <!-- Loading state -->
+              <div class="d-flex justify-content-center my-5" *ngIf="loading">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              
+              <!-- Error state -->
+              <div class="alert alert-danger" role="alert" *ngIf="error">
+                {{ error }}
+                <button class="btn btn-sm btn-danger-soft ms-2" (click)="loadTeacherSessions()">
+                  Try Again
+                </button>
+              </div>
+              
+              <!-- Empty state -->
+              <div class="text-center py-5" *ngIf="!loading && !error && filteredSessions.length === 0">
+                <img src="/assets/images/elements/empty-state.svg" class="mb-4" width="200" alt="No sessions found">
+                <h4>No sessions found</h4>
+                <p class="text-muted">You don't have any virtual classroom sessions matching your criteria.</p>
+                <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createSessionModal">
+                  <i class="fas fa-plus me-2"></i>Create Your First Session
+                </button>
+              </div>
+              
+              <!-- GRID VIEW: Sessions list -->
+              <div class="row g-4" *ngIf="!loading && !error && filteredSessions.length > 0 && viewMode === 'grid'">
+                <!-- Session item -->
+                <div class="col-sm-6 col-lg-4 col-xl-3" *ngFor="let session of filteredSessions">
+                  <div class="card shadow-hover h-100 animate__animated animate__fadeIn"
+                    >
+
+                    <!-- Status icon and subject header -->
+                    <div class="position-relative">
+                      <!-- Card status badge -->
+                      <div class="position-absolute top-0 start-0 mt-3 ms-3" *ngIf="session.status">
+                        <span class="badge" [ngClass]="getStatusClass(session.status || '')">
+                          <i class="fas" [ngClass]="getStatusIcon(session.status || '')"></i>
+                          {{ session.status | titlecase }}
+                        </span>
+                      </div>
+                      
+                      <!-- Top-right menu -->
+                      <div class="position-absolute top-0 end-0 mt-3 me-3">
+                        <div class="dropdown">
+                          <button class="btn btn-sm btn-light py-1 px-2" type="button" id="sessionMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sessionMenu">
+                            <li><a class="dropdown-item" href="#"><i class="far fa-edit me-2"></i>Edit Session</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="far fa-copy me-2"></i>Duplicate</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>View Analytics</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="far fa-trash-alt me-2"></i>Cancel Session</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      
+                      <!-- Session subject -->
+<!-- Session subject - IMPROVED VISIBILITY -->
+<div class="subject-header p-3 text-center" 
+  [ngStyle]="{'background-color': getSubjectColor(session.sessionSubject)}">
+  <h3 class="text-white mb-0 fw-bold text-shadow">{{ getSubjectDisplay(session.sessionSubject) }}</h3>
+</div>
+                    </div>
+                    
+                    <!-- Card body -->
+                    <div class="card-body pb-0">
+                      <!-- Title -->
+                      <h5 class="card-title">
+                        <a href="#" class="stretched-link text-truncate d-block">
+                          {{ session.titleSession || 'Untitled Session' }}
+                        </a>
+                      </h5>
+                      
+                      <!-- Session details -->
+                      <ul class="list-group list-group-borderless small mb-3">
+                        <li class="list-group-item px-0 d-flex justify-content-between">
+                          <span><i class="far fa-calendar-alt text-danger me-2"></i> {{ formatDate(session.startTime) }}</span>
+                          <span class="badge bg-success bg-opacity-10 text-success" *ngIf="isSessionToday(session)">Today</span>
+                        </li>
+                        <li class="list-group-item px-0">
+                          <i class="far fa-clock text-info me-2"></i> 
+                          {{ formatTime(session.startTime) }} 
+                          <span *ngIf="session.endTime"> - {{ session.endTime }}</span>
+                          <span *ngIf="!session.endTime && session.sessionDuration"> ({{ getDurationDisplay(session) }})</span>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between">
+                          <span><i class="fas fa-users text-orange me-2"></i> {{ session.enrolledStudents || 0 }} students</span>
+                          <span class="progress-bar-container">
+                            <div class="progress" style="width: 60px; height: 6px;">
+                              <div class="progress-bar bg-success" role="progressbar" 
+                                [style.width.%]="getCapacityPercentage(session)" 
+                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                              </div>
+                            </div>
+                          </span>
+                        </li>
+                      </ul>
+                      
+                      <!-- Session description (truncated) -->
+                      <p class="mb-3 text-truncate-2">{{ session.description || 'No description available' }}</p>
+                    </div>
+                    
+                    <!-- Card footer -->
+                    <div class="card-footer pt-0 pb-3">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <a [href]="session.zoomLink || '#'" target="_blank" class="btn btn-sm btn-success">
+                          <i class="fas fa-video me-1"></i> Join
+                        </a>
+                        <a href="#" class="btn btn-sm btn-primary-soft">Manage</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- LIST VIEW: Sessions table -->
+              <div class="table-responsive" *ngIf="!loading && !error && filteredSessions.length > 0 && viewMode === 'list'">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">Title & Subject</th>
+                      <th scope="col">Date & Time</th>
+                      <th scope="col">Students</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let session of filteredSessions" class="animate__animated animate__fadeIn">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <!-- Subject color dot -->
+                          <div class="avatar avatar-xs flex-shrink-0">
+                            <div class="avatar-img rounded-circle" 
+                              [ngStyle]="{'background-color': getSubjectColor(session.sessionSubject)}">
+                            </div>
+                          </div>
+                          <!-- Session info -->
+                          <div class="ms-2">
+                            <h6 class="mb-0">{{ session.titleSession || 'Untitled Session' }}</h6>
+                            <p class="mb-0 small">{{ getSubjectDisplay(session.sessionSubject) }}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <h6 class="mb-0">{{ formatDate(session.startTime) }}</h6>
+                          <p class="mb-0 small">{{ formatTime(session.startTime) }} 
+                            <span *ngIf="!session.endTime && session.sessionDuration">({{ getDurationDisplay(session) }})</span>
+                          </p>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <h6 class="mb-0 me-2">{{ session.enrolledStudents || 0 }}</h6>
+                          <div class="progress" style="width: 80px; height: 6px;">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                              [style.width.%]="getCapacityPercentage(session)" 
+                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="badge" [ngClass]="getStatusClass(session.status || '')">
+                          <i class="fas" [ngClass]="getStatusIcon(session.status || '')"></i>
+                          {{ session.status | titlecase }}
+                        </div>
+                      </td>
+                      <td>
+                        <div class="btn-group" role="group">
+                          <a [href]="session.zoomLink || '#'" target="_blank" class="btn btn-sm btn-success-soft me-1">
+                            <i class="fas fa-video"></i>
+                          </a>
+                          <button class="btn btn-sm btn-primary-soft me-1">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button class="btn btn-sm btn-danger-soft">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- CALENDAR VIEW -->
+              <div *ngIf="!loading && !error && filteredSessions.length > 0 && viewMode === 'calendar'" class="calendar-container animate__animated animate__fadeIn">
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  Calendar view would display sessions in a monthly/weekly calendar format. This feature can be implemented using FullCalendar or similar libraries.
+                </div>
+              </div>
+            </div>
+            <!-- Card body END -->
+          </div>
+          <!-- Content END -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Main content END -->
+</main>
+
+
+<!-- Replace the duplicate modal with this beautifully styled one -->
+<div class="modal fade" id="createSessionModal" tabindex="-1" aria-labelledby="createSessionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0">
+      <!-- Modal header with gradient -->
+      <div class="modal-header border-0" style="background: linear-gradient(135deg, #7F7FD5, #86A8E7, #91EAE4); color: white;">
+        <h5 class="modal-title" id="createSessionModalLabel">
+          <i class="fas fa-chalkboard-teacher me-2"></i>Create New Classroom Session
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Modal body with styled form -->
+      <div class="modal-body p-4">
+        <form [formGroup]="sessionForm" (ngSubmit)="createSession()">
+          <div class="row g-4">
+            <!-- Title with floating label -->
+            <div class="col-12">
+              <div class="form-floating">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="titleSession" 
+                  formControlName="titleSession"
+                  placeholder="Enter session title"
+                  [ngClass]="{'is-invalid': sessionForm.get('titleSession')?.invalid && sessionForm.get('titleSession')?.touched}">
+                <label for="titleSession">Session Title <span class="text-danger">*</span></label>
+                <div class="invalid-feedback">
+                  Please enter a title for your classroom session
+                </div>
+              </div>
+            </div>
+            
+            <!-- Subject with nice select -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <select 
+                  class="form-select" 
+                  id="sessionSubject" 
+                  formControlName="sessionSubject"
+                  [ngClass]="{'is-invalid': sessionForm.get('sessionSubject')?.invalid && sessionForm.get('sessionSubject')?.touched}">
+                  <option value="" disabled selected>Choose a subject</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Science">Science</option>
+                  <option value="History">History</option>
+                  <option value="English">English</option>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Programming">Programming</option>
+                  <option value="Art">Art</option>
+                  <option value="General">General</option>
+                </select>
+                <label for="sessionSubject">Subject <span class="text-danger">*</span></label>
+                <div class="invalid-feedback">
+                  Please select a subject
+                </div>
+              </div>
+            </div>
+            
+            <!-- Date with date picker -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="startDate" 
+                  formControlName="startDate"
+                  [min]="today"
+                  [ngClass]="{'is-invalid': sessionForm.get('startDate')?.invalid && sessionForm.get('startDate')?.touched}">
+                <label for="startDate">Session Date <span class="text-danger">*</span></label>
+                <div class="invalid-feedback">
+                  Please select a valid date
+                </div>
+              </div>
+            </div>
+            
+            <!-- Time with time picker -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input 
+                  type="time" 
+                  class="form-control" 
+                  id="startTime" 
+                  formControlName="startTime"
+                  [ngClass]="{'is-invalid': sessionForm.get('startTime')?.invalid && sessionForm.get('startTime')?.touched}">
+                <label for="startTime">Start Time <span class="text-danger">*</span></label>
+                <div class="invalid-feedback">
+                  Please select a start time
+                </div>
+              </div>
+            </div>
+            
+            <!-- Duration with number spinner -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="sessionDuration" 
+                  formControlName="sessionDuration"
+                  min="15" 
+                  max="360"
+                  [ngClass]="{'is-invalid': sessionForm.get('sessionDuration')?.invalid && sessionForm.get('sessionDuration')?.touched}">
+                <label for="sessionDuration">Duration (minutes) <span class="text-danger">*</span></label>
+                <div class="invalid-feedback">
+                  Please enter a duration between 15 and 360 minutes
+                </div>
+              </div>
+            </div>
+            
+            <!-- Description text area -->
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea 
+                  class="form-control" 
+                  id="description" 
+                  formControlName="description"
+                  placeholder="Enter a description"
+                  style="height: 100px"></textarea>
+                <label for="description">Description (optional)</label>
+              </div>
+              <div class="form-text">
+                Briefly describe what this session will cover
+              </div>
+            </div>
+            
+            <!-- Zoom meeting link -->
+            <div class="col-12">
+              <div class="form-floating">
+                <input 
+                  type="url" 
+                  class="form-control" 
+                  id="zoomLink" 
+                  formControlName="zoomLink"
+                  placeholder="Enter meeting URL"
+                  [ngClass]="{'is-invalid': sessionForm.get('zoomLink')?.invalid && sessionForm.get('zoomLink')?.touched}">
+                <label for="zoomLink">Meeting Link (optional)</label>
+                <div class="invalid-feedback">
+                  Please enter a valid URL (e.g., https://zoom.us/j/123456789)
+                </div>
+              </div>
+              <div class="form-text">
+                <i class="fas fa-info-circle me-1 text-info"></i>
+                Share your Zoom, Google Meet or Microsoft Teams link
+              </div>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Required fields note -->
+        <div class="mt-3 small text-muted">
+          <span class="text-danger">*</span> Required fields
+        </div>
+      </div>
+      
+      <!-- Modal footer with styled buttons -->
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i> Cancel
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          [disabled]="sessionForm.invalid" 
+          (click)="createSession()">
+          <i class="fas fa-save me-1"></i> Create Session
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

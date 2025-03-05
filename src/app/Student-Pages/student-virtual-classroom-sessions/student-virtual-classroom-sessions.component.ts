@@ -4,7 +4,10 @@ import { StudentVirtualClassroomService } from 'src/app/Student-Pages/Student-Se
 import { ClassroomSession } from './student-virtual-classroom-session.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+
 import emailjs from '@emailjs/browser';
+
+import { FeedbackService, SessionFeedback } from 'src/app/Student-Pages/Student-Services/feedback.service';
 
 
 @Component({
@@ -40,9 +43,17 @@ emailError: string | null = null;
 //Email sender
 sendingEmail: boolean = false;
 
+//Feedback 
+showFeedbackModal = false;
+currentFeedback: SessionFeedback | null = null;
+loadingFeedback = false;
+feedbackError: string | null = null;
+showingFeedback = false;
   
   constructor(
     private studentVirtualClassroomService: StudentVirtualClassroomService,
+    private feedbackService: FeedbackService,  // Add this line
+
     private router: Router,
     private http: HttpClient
   ) { }
@@ -414,6 +425,157 @@ formatTime(dateString: string | Date | null | undefined): string {
     minute: '2-digit'
   });
 }
+
+// Add this method to view session feedback
+// Update the viewSessionFeedback method to be more robust
+viewSessionFeedback(session: ClassroomSession): void {
+  if (!session.idSession) {
+    console.error('Session ID is undefined');
+    this.feedbackError = 'Unable to load feedback: Session ID is missing.';
+    return;
+  }
+  
+  this.loadingFeedback = true;
+  this.feedbackError = null;
+  this.showFeedbackModal = true;
+  this.currentSession = session;
+  
+  console.log(`Requesting feedback for session ID: ${session.idSession}`);
+  
+  this.feedbackService.getSessionFeedback(session.idSession).subscribe({
+    next: (feedback) => {
+      console.log('Feedback received:', feedback);
+      if (feedback) {
+        this.currentFeedback = feedback;
+        this.loadingFeedback = false;
+      } else {
+        this.feedbackError = 'No feedback available for this session.';
+        this.loadingFeedback = false;
+      }
+    },
+    error: (err) => {
+      console.error('Error loading feedback:', err);
+      this.feedbackError = 'Unable to load feedback for this session. Please try again later.';
+      this.loadingFeedback = false;
+    }
+  });
+}
+
+// Add method to close the feedback modal
+closeFeedbackModal(): void {
+  this.showFeedbackModal = false;
+  this.currentFeedback = null;
+}
+
+// Add helper method to get star rating display
+getStarRating(rating: number): string[] {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  
+  const stars: string[] = [];
+  
+  // Add full stars
+  for (let i = 0; i < fullStars; i++) {
+    stars.push('full');
+  }
+  
+  // Add half star if needed
+  if (halfStar) {
+    stars.push('half');
+  }
+  
+  // Add empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push('empty');
+  }
+  
+  return stars;
+}
+
+// Add this method to StudentVirtualClassroomSessionsComponent
+formatSubmittedDate(dateString: string): string {
+  if (!dateString) return 'Unknown date';
+  
+  return new Date(dateString).toLocaleDateString();
+}
+
+// Add this comprehensive testing method
+testSessionFeedbackEndpoints(): void {
+  if (!this.currentSession?.idSession) {
+    console.error('No session ID available for testing');
+    return;
+  }
+  
+  const sessionId = this.currentSession.idSession;
+  console.log('--------- COMPREHENSIVE FEEDBACK API TESTING ---------');
+  console.log(`Testing all possible API patterns for Session ID: ${sessionId}`);
+  
+  // Test all common Spring Boot REST API patterns
+  // 1. Direct resource URLs with path variables
+  this.testEndpoint(`/api/feedbacks/by-session-id/${sessionId}`);
+  this.testEndpoint(`/api/feedbacks/by-sessionId/${sessionId}`);
+  this.testEndpoint(`/api/feedbacks/bySessionId/${sessionId}`);
+  this.testEndpoint(`/api/sessions/${sessionId}/feedback`);
+  this.testEndpoint(`/api/session/${sessionId}/feedback`);
+  
+  // 2. Query parameter options
+  this.testEndpoint(`/api/feedbacks?sessionId=${sessionId}`);
+  this.testEndpoint(`/api/feedbacks?session_id=${sessionId}`);
+  this.testEndpoint(`/api/feedback?sessionId=${sessionId}`);
+  
+  // 3. Direct ID lookup (if feedback IDs match session IDs)
+  this.testEndpoint(`/api/feedbacks/${sessionId}`);
+  
+  // 4. Try repository-style endpoints
+  this.testEndpoint(`/api/feedbacks/findBySessionId/${sessionId}`);
+  this.testEndpoint(`/api/feedbacks/find-by-session-id/${sessionId}`);
+  this.testEndpoint(`/api/feedbacks/findBySession/${sessionId}`);
+  
+  alert("Testing all feedback endpoints - check console for results");
+}
+
+// Helper method to test individual endpoints
+private testEndpoint(path: string): void {
+  const baseUrl = 'http://localhost:8088';
+  const fullUrl = baseUrl + path;
+  
+  this.http.get(fullUrl).subscribe({
+    next: (res) => {
+      if (res === null) {
+        console.log(`⚠️ ${path} - Returns null (endpoint exists but no data)`);
+      } else if (Array.isArray(res) && res.length === 0) {
+        console.log(`⚠️ ${path} - Returns empty array []`);
+      } else {
+        console.log(`✅ SUCCESS: ${path}`, res);
+      }
+    },
+    error: (err) => console.log(`❌ FAILED (${err.status}): ${path}`)
+  });
+}
+
+// Add this method to your component
+showMockFeedback(): void {
+  this.feedbackError = null;
+  this.loadingFeedback = false;
+  this.currentFeedback = {
+    idFeedback: 999,
+    contentFeedback: "This session was excellent! The instructor explained complex topics clearly and provided practical examples that helped me understand the material better. The interactive portions were particularly helpful.",
+    rating: 4.5,
+    sessionId: this.currentSession?.idSession,
+    
+    // UI properties
+    id: 999,
+    comments: "This session was excellent! The instructor explained complex topics clearly and provided practical examples that helped me understand the material better. The interactive portions were particularly helpful.",
+    dateSubmitted: new Date().toISOString(),
+    instructorId: 1,
+    strengths: ["Clear explanations", "Good examples", "Interactive content"],
+    improvements: ["Could use more practice exercises"]
+  };
+}
+
+
+
 
 
 

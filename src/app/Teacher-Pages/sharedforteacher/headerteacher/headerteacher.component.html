@@ -88,23 +88,19 @@
                 </li>
               </ul>
             </li>
-            <!-- Tutoring -->
+            <!-- headerteacher.component.html (modified section) -->
+            <!-- Tutoring dropdown -->
             <li class="nav-item dropdown me-3">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="tutoringMenu"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                >Tutoring</a
-              >
+              <a class="nav-link dropdown-toggle"
+                 href="#"
+                 id="tutoringMenu"
+                 data-bs-toggle="dropdown"
+                 aria-haspopup="true"
+                 aria-expanded="false">Tutoring</a>
               <ul class="dropdown-menu" aria-labelledby="tutoringMenu">
-                <li><a class="dropdown-item" href="#">My List of students</a></li>
-                <li><a class="dropdown-item" href="#">My Schedual</a></li>
-                <li>
-                  <a class="dropdown-item" href="#">My Tutoring Sessions</a>
-                </li>
+                <!-- Replace routerLink with click event -->
+                <li><a class="dropdown-item" href="#" (click)="onVirtualClassroomsClick($event)">My Virtual Classrooms</a></li>
+                <li><a class="dropdown-item" href="#" (click)="onMentorshipProgramsClick($event)">My Mentorship Programs</a></li>
               </ul>
             </li>
             <!-- Donate -->

@@ -20,7 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule,ReactiveFormsModule } from '@angular/forms'; // Import FormsModule
 
 import { HeaderComponent } from './Shared/header/header.component';
 import { FooterComponent } from './Shared/footer/footer.component';
@@ -79,6 +79,9 @@ import { ResourcePanelComponent } from './Shared/classroom/resource-panel/resour
 import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/student-virtual-classroom-sessions/student-virtual-classroom-sessions.component';
 import { StudentLiveClassComponent } from './Student-Pages/student-live-class/student-live-class.component';
 import { StudentTutoringComponent } from './Student-Pages/student-tutoring/student-tutoring.component';
+import { TeacherVirtualClassroomsComponent } from './Teacher-Pages/teacher-virtual-classrooms/teacher-virtual-classrooms.component';
+import { TeacherDashboardComponent } from './Teacher-Pages/teacher-dashboard/teacher-dashboard.component';
+import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-layout.component';
 
 @NgModule({
   declarations: [
@@ -137,12 +140,16 @@ import { StudentTutoringComponent } from './Student-Pages/student-tutoring/stude
     StudentVirtualClassroomSessionsComponent,
     StudentLiveClassComponent,
     StudentTutoringComponent,
+    TeacherVirtualClassroomsComponent,
+    TeacherDashboardComponent,
+    TeacherLayoutComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule, // Add FormsModule to the imports array 
+    ReactiveFormsModule, // Add this line
     HttpClientModule,
     BrowserAnimationsModule,
     MatTableModule,

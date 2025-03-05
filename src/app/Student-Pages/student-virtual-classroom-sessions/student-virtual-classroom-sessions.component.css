@@ -876,3 +876,208 @@
 .error-message::before {
   content: "⚠️";
 }
+/* Add these styles for the feedback button and modal */
+
+/* Update the feedback button styles to make it smaller */
+.feedback-btn {
+  background: linear-gradient(135deg, #9c27b0, #673ab7);
+  color: white;
+  padding: 6px 12px; /* Reduced from 8px 16px */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Reduced from 8px */
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-left: 10px;
+  font-size: 0.85rem; /* Added smaller font size */
+  margin-top: 10px; /* Added margin top */
+}
+
+.feedback-btn i {
+  font-size: 12px; /* Reduced from 14px */
+}
+
+
+
+/* Feedback Modal */
+.feedback-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.feedback-modal-content {
+  background-color: white;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-header {
+  background: linear-gradient(135deg, #9c27b0, #673ab7);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.feedback-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.modal-content-inner {
+  padding: 20px;
+}
+
+.session-info {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.session-info h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.session-date, .session-instructor {
+  margin: 5px 0;
+  color: #666;
+}
+
+/* Star Rating */
+.feedback-rating {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  background-color: #f9f4ff;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.rating-label {
+  font-weight: 600;
+  margin-right: 15px;
+  color: #333;
+}
+
+.star-rating {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  font-size: 20px;
+  margin-right: 2px;
+  position: relative;
+}
+
+.star.full::before {
+  content: "★";
+  color: #ffc107;
+}
+
+.star.half::before {
+  content: "★";
+  position: absolute;
+  color: #ffc107;
+  width: 50%;
+  overflow: hidden;
+}
+
+.star.half::after {
+  content: "☆";
+  color: #ddd;
+}
+
+.star.empty::before {
+  content: "☆";
+  color: #ddd;
+}
+
+.rating-number {
+  margin-left: 10px;
+  font-weight: bold;
+  color: #9c27b0;
+}
+
+/* Comments */
+.feedback-comments, .feedback-strengths, .feedback-improvements {
+  margin: 20px 0;
+}
+
+.feedback-comments h4, .feedback-strengths h4, .feedback-improvements h4 {
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.feedback-comments p {
+  line-height: 1.6;
+  color: #555;
+}
+
+.feedback-strengths ul, .feedback-improvements ul {
+  padding-left: 20px;
+}
+
+.feedback-strengths li, .feedback-improvements li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.feedback-strengths li::marker {
+  color: #4caf50;
+}
+
+.feedback-improvements li::marker {
+  color: #ff9800;
+}
+
+.feedback-date {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Loading state */
+.loading-feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 0;
+}
+
+.feedback-error {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.error-icon {
+  font-size: 2rem;
+  color: #f44336;
+  margin-bottom: 15px;
+}

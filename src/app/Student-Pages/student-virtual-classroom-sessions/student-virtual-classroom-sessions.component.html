@@ -170,13 +170,25 @@
         
         <p class="session-description">{{ session.description }}</p>
         
+        <!-- Find the session-actions div and update it to include the feedback button -->
         <div class="session-actions">
+          <!-- Change this line in the template -->
           <button class="join-btn" 
-          [ngClass]="{'join-live': session.status === 'live', 'join-upcoming': session.status === 'upcoming', 'join-completed': session.status === 'completed'}"
-          [disabled]="session.status === 'completed'"
-          (click)="session.idSession !== undefined ? showReminderDialog(session) : null">
+            [ngClass]="{'join-live': session.status === 'live', 'join-upcoming': session.status === 'upcoming', 'join-completed': session.status === 'completed'}"
+            [disabled]="session.status === 'completed'"
+
+            (click)="session.idSession !== undefined ? 
+              (session.status === 'completed' ? viewSessionFeedback(session) : showReminderDialog(session)) 
+              : null">
             {{ session.status === 'live' ? 'Join Live Session' : 
-              session.status === 'upcoming' ? 'Join When Available' : 'Session Completed' }}
+               session.status === 'upcoming' ? 'Join When Available' : 'Session Completed' }}
+          </button>
+          
+          <!-- Add this new button for viewing feedback -->
+          <button *ngIf="session.status === 'completed'" 
+            class="feedback-btn"
+            (click)="viewSessionFeedback(session)">
+            <i class="fas fa-comments"></i> View Feedback
           </button>
         </div>
       </div>
@@ -242,6 +254,74 @@
     </div>
   </div>
 </div>
+</div>
+<!-- Add at the end of your file -->
 
+<!-- Feedback Modal -->
+<div class="feedback-modal" *ngIf="showFeedbackModal">
+  <div class="feedback-modal-content">
+    <div class="feedback-header">
+      <h2>Session Feedback</h2>
+      <button class="close-btn" (click)="closeFeedbackModal()">×</button>
+    </div>
+    
+    <div class="modal-content-inner">
+      <!-- Loading State -->
+      <div class="loading-feedback" *ngIf="loadingFeedback">
+        <div class="spinner"></div>
+        <p>Loading feedback...</p>
+      </div>
+      
+      <!-- Error State -->
+      <div class="feedback-error" *ngIf="feedbackError && !loadingFeedback">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <p>{{ feedbackError }}</p>
+      </div>
 
+        <!-- Add these debug buttons -->
+  <div class="debug-actions">
+    <button class="debug-btn" (click)="testSessionFeedbackEndpoints()">
+      <i class="fas fa-tools"></i> Test API Endpoints
+    </button>
+    
+    <button class="show-mock-btn" (click)="showMockFeedback()">
+      <i class="fas fa-vial"></i> Show Sample Feedback
+    </button>
+  </div>
+      
+      <!-- Feedback Content -->
+      <div class="feedback-content" *ngIf="currentFeedback && !loadingFeedback && !feedbackError">
+        <div class="session-info" *ngIf="currentSession">
+          <h3>{{ currentSession.titleSession }}</h3>
+          <p class="session-date">{{ formatDate(currentSession.startTime) }}</p>
+          <p class="session-instructor">Instructor: {{ currentSession.instructorName }}</p>
+        </div>
+        
+        <!-- Rating -->
+        <div class="feedback-rating">
+          <span class="rating-label">Overall Rating:</span>
+          <div class="star-rating">
+            <span *ngFor="let star of getStarRating(currentFeedback.rating)" class="star" [ngClass]="{
+              'full': star === 'full',
+              'half': star === 'half',
+              'empty': star === 'empty'
+            }"></span>
+            <span class="rating-number">{{ currentFeedback.rating.toFixed(1) }} / 5</span>
+          </div>
+        </div>
+        
+        <div class="feedback-comments">
+          <h4>Instructor Comments</h4>
+          <p>{{ currentFeedback.contentFeedback }}</p>
+        </div>
+        
+
+        
+        <div class="feedback-date" *ngIf="currentFeedback.dateSubmitted">
+          <p>Feedback provided on {{ formatSubmittedDate(currentFeedback.dateSubmitted) }}</p>
+        </div>
+    </div>
+  </div>
 </div>

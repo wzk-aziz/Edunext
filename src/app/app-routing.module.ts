@@ -28,6 +28,13 @@ import { StudentLiveClassComponent } from './Student-Pages/student-live-class/st
 
 import { StudentTutoringComponent } from './Student-Pages/student-tutoring/student-tutoring.component'; 
 
+import { TeacherVirtualClassroomsComponent } from './Teacher-Pages/teacher-virtual-classrooms/teacher-virtual-classrooms.component';
+
+import { TeacherDashboardComponent } from './Teacher-Pages/teacher-dashboard/teacher-dashboard.component';
+
+import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-layout.component';
+
+
 
 const routes: Routes = [
   // Main Landing Page
@@ -71,7 +78,32 @@ const routes: Routes = [
 
   { path: 'student-tutoring', component: StudentTutoringComponent },
 
+  //Teacher 
+  // Teacher Routes under layout component
+  {
+    path: 'teacher',
+    component: TeacherLayoutComponent,
+    children: [
+      // Dashboard is the default teacher page
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: TeacherDashboardComponent },
+      { path: 'virtual-classrooms', component: TeacherVirtualClassroomsComponent },
+      { path: 'courses', component: TeachercoursesComponent },
+      { path: 'edit-profile', component: TeachereditprofileComponent },
+      { path: 'students', component: StudentslistComponent },
+      { path: 'tutoring-sessions', component: TutoringsessionsComponent },
+      { path: 'empty', component: EmptypageteacherComponent },
+      // Add other teacher pages here
+    ]
+  },
 
+  // Legacy Teacher Routes (redirect to new structure)
+  { path: 'teacherhome', redirectTo: 'teacher', pathMatch: 'full' },
+  { path: 'teachercourses', redirectTo: 'teacher/courses', pathMatch: 'full' },
+  { path: 'teachereditprofile', redirectTo: 'teacher/edit-profile', pathMatch: 'full' },
+  { path: 'teacher-dashboard', redirectTo: 'teacher/dashboard', pathMatch: 'full' },
+  { path: 'teacher-virtual-classrooms', redirectTo: 'teacher/virtual-classrooms', pathMatch: 'full' },
+  
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },
 
