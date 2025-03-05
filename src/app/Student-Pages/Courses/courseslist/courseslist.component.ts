@@ -14,7 +14,7 @@ export class CourseslistComponent implements OnInit {
   itemsPerPage: number = 3;
   selectedCourseLevel?: CourseLevel | null = null;
   CourseLevel = CourseLevel;
-
+  mostLikedCourses: Course[] = [];
   constructor(
     private courseService: CourseService,
     private sanitizer: DomSanitizer
@@ -31,6 +31,13 @@ export class CourseslistComponent implements OnInit {
       this.courseService.getAllCourses().subscribe({
         next: (courses) => {
           console.log('Courses loaded:', courses);
+          // Filter courses: at least 5 likes and likes are not less than dislikes.
+          this.mostLikedCourses = courses
+            .filter(course => 
+              (course.likes || 0) >= 5 && (course.likes || 0) >= (course.dislikes || 0)
+            )
+            .sort((a, b) => (b.likes || 0) - (a.likes || 0))
+            .slice(0, 5);
           this.courses = courses;
         },
         error: (err) => {
@@ -39,6 +46,8 @@ export class CourseslistComponent implements OnInit {
       });
     }
   }
+  
+  
 
   sortCourses(event: Event): void {
     const target = event.target as HTMLSelectElement;

@@ -253,3 +253,32 @@
     }
   </style>
 </main>
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">Most Liked Courses</h2>
+  <div id="mostLikedCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover">
+    <div class="carousel-inner">
+      <div *ngFor="let course of mostLikedCourses; let i = index" class="carousel-item" [class.active]="i === 0">
+        <div class="card border-0 shadow-sm mx-auto" style="max-width: 300px;">
+          <img *ngIf="course.thumbnailData" [src]="'data:image/png;base64,' + course.thumbnailData" class="card-img-top" alt="Course Thumbnail">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ course.courseName }}</h5>
+            <p class="card-text small">
+              <i class="fas fa-heart text-danger me-1"></i>{{ course.likes || 0 }} likes
+            </p>
+            <a [routerLink]="['/course-detail', course.id]" class="btn btn-primary btn-sm">View Course</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Carousel controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#mostLikedCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mostLikedCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
