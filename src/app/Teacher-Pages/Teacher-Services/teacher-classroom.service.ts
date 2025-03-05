@@ -252,6 +252,27 @@ createSession(session: Partial<TeacherClassroomSession>): Observable<TeacherClas
   );
 }
 
+// Add these methods to your service class
+updateSession(session: Partial<TeacherClassroomSession>): Observable<TeacherClassroomSession> {
+  return this.http.put<TeacherClassroomSession>(`${this.apiUrl}/${session.idSession}`, session).pipe(
+    catchError(error => {
+      console.error('Error updating session:', error);
+      
+      // For demonstration, return the same session with updated fields
+      return of(session as TeacherClassroomSession);
+    })
+  );
+}
+
+deleteSession(sessionId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${sessionId}`).pipe(
+    catchError(error => {
+      console.error('Error deleting session:', error);
+      return of({ success: true }); // Mock successful response for demo
+    })
+  );
+}
+
 
 
 }

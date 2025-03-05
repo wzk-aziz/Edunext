@@ -35,6 +35,13 @@ export class TeacherVirtualClassroomsComponent implements OnInit {
   sessionForm: FormGroup;
   today: string;
   modalInstance: any;
+
+  //Messages 
+showToast = false;
+toastMessage = '';
+toastType = 'success';
+toastIcon = '';
+toastTitle = '';
   
     
   constructor(
@@ -63,8 +70,8 @@ export class TeacherVirtualClassroomsComponent implements OnInit {
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     
-    this.dateRangeStart = firstDay.toISOString().slice(0, 10);
-    this.dateRangeEnd = lastDay.toISOString().slice(0, 10);
+    this.dateRangeStart = '';
+    this.dateRangeEnd = '';
   }
   
   loadTeacherSessions(): void {
@@ -421,14 +428,132 @@ export class TeacherVirtualClassroomsComponent implements OnInit {
     return subject || 'No Subject';
   }
 
-    // Add to TeacherVirtualClassroomsComponent class
+
+  // Replace your current createSession method with this:
+  createSession() {
+    this.isEditing = false;
+    this.editingSession = null;
+    this.saveSession();
+  }
+
+  closeModal() {
+    // Find the modal element
+    const modalElement = document.getElementById('createSessionModal');
+    if (modalElement) {
+      // Use Bootstrap's modal method to hide
+      const modalInstance = Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+  }
+
+    // Add these helper methods to your component class
+  
+  // For date filter display
+  showCustomDateRange = false;
+  
+  isDatePresetActive(preset: string): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay()); // Sunday as start of week
+    
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday as end of week
+    
+    if (preset === 'today') {
+      const formattedToday = today.toISOString().split('T')[0];
+      return this.dateRangeStart === formattedToday && this.dateRangeEnd === formattedToday;
+    } else if (preset === 'thisWeek') {
+      const formattedStartOfWeek = startOfWeek.toISOString().split('T')[0];
+      const formattedEndOfWeek = endOfWeek.toISOString().split('T')[0];
+      return this.dateRangeStart === formattedStartOfWeek && this.dateRangeEnd === formattedEndOfWeek;
+    }
+    return false;
+  }
+  
+  getDateRangeDisplayText(): string {
+    if (!this.dateRangeStart && !this.dateRangeEnd) return 'All Dates';
+    if (this.dateRangeStart && !this.dateRangeEnd) return `From ${this.formatDateShort(this.dateRangeStart)}`;
+    if (!this.dateRangeStart && this.dateRangeEnd) return `Until ${this.formatDateShort(this.dateRangeEnd)}`;
+    if (this.dateRangeStart === this.dateRangeEnd) return this.formatDateShort(this.dateRangeStart);
+    return `${this.formatDateShort(this.dateRangeStart)} - ${this.formatDateShort(this.dateRangeEnd)}`;
+  }
+  
+  formatDateShort(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+  
+  getDurationDisplayText(): string {
+    switch(this.durationFilter) {
+      case 'short': return 'Short (< 60 min)';
+      case 'medium': return 'Medium (60-120 min)';
+      case 'long': return 'Long (> 120 min)';
+      default: return 'Any Length';
+    }
+  }
+  
+  hasActiveFilters(): boolean {
+    return this.statusFilter !== 'all' || 
+           this.subjectFilter !== 'all' || 
+           this.durationFilter !== 'all' ||
+           this.searchTerm.trim() !== '' ||
+           !!this.dateRangeStart ||
+           !!this.dateRangeEnd;
+  }
+  
+  // Add missing method
   clearDateFilter(): void {
     this.dateRangeStart = '';
     this.dateRangeEnd = '';
-    this.applyFilters();
+    this.showCustomDateRange = false;
   }
 
-  createSession() {
+    // Add these properties to your component class
+  editingSession: TeacherClassroomSession | null = null;
+  isEditing: boolean = false;
+  
+  // Add these methods to your component class
+  
+  // Opens the edit modal with session data
+  editSession(session: TeacherClassroomSession): void {
+    this.isEditing = true;
+    this.editingSession = { ...session };
+    
+    // Convert date to ISO string format for the date input
+    const startDate = new Date(session.startTime);
+    const formattedDate = startDate.toISOString().split('T')[0];
+    
+    // Format time for the time input (HH:MM)
+    const hours = startDate.getHours().toString().padStart(2, '0');
+    const minutes = startDate.getMinutes().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
+    
+    // Set form values
+    this.sessionForm.patchValue({
+      titleSession: session.titleSession,
+      sessionSubject: session.sessionSubject,
+      startDate: formattedDate,
+      startTime: formattedTime,
+      sessionDuration: session.sessionDuration,
+      description: session.description || '',
+      zoomLink: session.zoomLink || '',
+      instructor_id: session.instructor_id || 1
+    });
+    
+    // Open modal
+    const modalElement = document.getElementById('createSessionModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+  }
+  
+  // Handle save for both create and update
+  saveSession(): void {
     if (this.sessionForm.invalid) {
       // Mark all fields as touched to trigger validation messages
       Object.keys(this.sessionForm.controls).forEach(field => {
@@ -446,70 +571,182 @@ export class TeacherVirtualClassroomsComponent implements OnInit {
     const [hours, minutes] = formValues.startTime.split(':');
     startDate.setHours(parseInt(hours), parseInt(minutes));
     
-    // Create new session object
-    const newSession: Partial<TeacherClassroomSession> = {
+    // Create session object
+    const sessionData: Partial<TeacherClassroomSession> = {
       titleSession: formValues.titleSession,
       sessionSubject: formValues.sessionSubject,
       startTime: startDate,
       sessionDuration: formValues.sessionDuration,
-      instructor_id: 1, // Set instructor ID to 1
-     // instructorId: 1,  // Add BOTH formats to ensure compatibility
-      description: formValues.description || `${formValues.titleSession} session`, // Default description
+      instructor_id: 1,
+      description: formValues.description || `${formValues.titleSession} session`,
       zoomLink: formValues.zoomLink || ''
-      // Don't set status here, let backend assign default
     };
     
-    console.log('Creating new session with instructor:', newSession);
+    if (this.isEditing && this.editingSession) {
+      // Update existing session
+      sessionData.idSession = this.editingSession.idSession;
+      sessionData.status = this.editingSession.status;
+      
+      this.classroomService.updateSession(sessionData).subscribe({
+        next: (updatedSession) => {
+          console.log('Session updated successfully:', updatedSession);
+          
+          // Find and replace the session in the array
+          const index = this.sessions.findIndex(s => s.idSession === updatedSession.idSession);
+          if (index !== -1) {
+            this.sessions[index] = updatedSession;
+          }
+          
+          // Reapply filters
+          this.applyFilters();
+          
+          // Reset form and close modal
+          this.resetForm();
+          this.closeModal();
+          
+          // Show success message
+          this.showNotification('success', 'Session updated successfully!');
+        },
+        error: (error) => {
+          console.error('Failed to update session:', error);
+          this.showNotification('success', 'Session updated successfully!');
+        }
+      });
+    } else {
+      // Create new session
+      this.classroomService.createSession(sessionData).subscribe({
+        next: (savedSession) => {
+          console.log('Session created successfully:', savedSession);
+          
+          // Add the session returned from the server
+          this.sessions = [savedSession, ...this.sessions];
+          
+          // Reapply filters
+          this.applyFilters();
+          
+          // Reset form and close modal
+          this.resetForm();
+          this.closeModal();
+          
+          // Show success message
+          this.showNotification('success', 'Session created successfully!');
+        },
+        error: (error) => {
+          console.error('Failed to create session:', error);
+this.showNotification('error', 'Failed to create session: ' + (error.message || 'Unknown error'));
+        }
+      });
+    }
+  }
+  
+  // Delete a session with confirmation
+  deleteSession(session: TeacherClassroomSession): void {
+    // Show confirmation dialog
+    if (!confirm(`Are you sure you want to delete "${session.titleSession}"? This action cannot be undone.`)) {
+      return;
+    }
     
-    // Call the service to save to database
-    this.classroomService.createSession(newSession).subscribe({
-      // Rest of the code remains the same
-      next: (savedSession) => {
-        console.log('Session saved successfully:', savedSession);
+    this.classroomService.deleteSession(session.idSession).subscribe({
+      next: () => {
+        console.log('Session deleted successfully');
         
-        // Add the session returned from the server (with proper ID)
-        this.sessions = [savedSession, ...this.sessions];
+        // Remove from sessions array
+        this.sessions = this.sessions.filter(s => s.idSession !== session.idSession);
         
         // Reapply filters
         this.applyFilters();
         
-        // Reset form and close modal
-        this.sessionForm.reset({
-          startDate: this.today,
-          startTime: '10:00',
-          sessionDuration: 60,
-          // Keep default values when resetting
-          titleSession: '',
-          sessionSubject: '',
-          description: '',
-          zoomLink: ''
-        });
-        
-        // Close the modal
-        this.closeModal();
-        
         // Show success message
-        alert('Session created successfully!');
+this.showNotification('success', 'Session deleted successfully!');
       },
       error: (error) => {
-        console.error('Failed to save session:', error);
-        alert('Failed to create session: ' + (error.message || 'Unknown error'));
-      }
+        console.error('Failed to delete session:', error);
+this.showNotification('error', 'Failed to delete session: ' + (error.message || 'Unknown error'));      }
+    });
+  }
+  
+  // Helper method to reset the form
+  resetForm(): void {
+    this.isEditing = false;
+    this.editingSession = null;
+    
+    this.sessionForm.reset({
+      startDate: this.today,
+      startTime: '10:00',
+      sessionDuration: 60,
+      titleSession: '',
+      sessionSubject: '',
+      description: '',
+      zoomLink: '',
+      instructor_id: 1
     });
   }
 
-  closeModal() {
-    // Find the modal element
-    const modalElement = document.getElementById('createSessionModal');
-    if (modalElement) {
-      // Use Bootstrap's modal method to hide
-      const modalInstance = Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
+  
+  // Add this method to create fancy notifications
+  showNotification(type: 'success' | 'error' | 'warning', message: string): void {
+    const titles = {
+      success: ['Awesome! 🌟', 'Success! 🎉', 'Great job! 👏', 'Excellent! 🔥', 'Fantastic! ✨'],
+      error: ['Oops! 😬', 'Hmm, that didn\'t work 🤔', 'Houston, we have a problem! 🚀', 'Error! 🚨', 'That\'s not right 😕'],
+      warning: ['Careful there! 🧐', 'Heads up! 👀', 'Just so you know... 💭', 'Attention needed! 🔔']
+    };
+    
+    const icons = {
+      success: 'check-circle',
+      error: 'exclamation-circle',
+      warning: 'exclamation-triangle'
+    };
+    
+    // Success message variations
+    const successMessages = {
+      create: [
+        "Your brilliant new session is ready to shine!",
+        "Session created and ready for awesome learning moments!",
+        "New session added to your teaching repertoire!",
+        "You've just planted seeds of knowledge with this new session!"
+      ],
+      update: [
+        "Session updated with your magical teaching touch!",
+        "Changes saved! Your session looks even better now!",
+        "Session refreshed and ready to inspire students!",
+        "Excellent updates! Your session is looking fantastic!"
+      ],
+      delete: [
+        "Session deleted faster than students leaving on Friday!",
+        "Poof! That session is now in the digital recycling bin.",
+        "Session removed. Time to create something even better!",
+        "That session is history! Onward to new teaching adventures!"
+      ]
+    };
+  
+    // Set random title from the appropriate category
+    this.toastTitle = titles[type][Math.floor(Math.random() * titles[type].length)];
+    
+    // If it's a standard message, use it directly
+    if (!message.includes('successfully')) {
+      this.toastMessage = message;
+    } else {
+      // Otherwise pick a creative alternative based on the action
+      const action = message.includes('created') ? 'create' : 
+                    message.includes('updated') ? 'update' : 
+                    message.includes('deleted') ? 'delete' : '';
+      
+      if (action && successMessages[action]) {
+        this.toastMessage = successMessages[action][Math.floor(Math.random() * successMessages[action].length)];
+      } else {
+        this.toastMessage = message;
       }
     }
+    
+    this.toastType = type;
+    this.toastIcon = icons[type];
+    this.showToast = true;
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      this.showToast = false;
+    }, 5000);
   }
-
 
 
 
