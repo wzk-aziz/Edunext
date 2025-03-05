@@ -208,30 +208,42 @@
                   </div>
                 </div>
                 <!-- Category Dropdown -->
+<!-- Category Dropdown -->
 <div class="mb-3">
-    <label for="categoryId" class="form-label">Category</label>
-    <select id="categoryId" formControlName="categoryId" class="form-select" required>
-      <option value="">Select a category</option>
-      <option *ngFor="let category of categories; trackBy: trackByCategoryId" [value]="category.id">
-        {{ category.name }}
-      </option>
-    </select>
-    <div *ngIf="courseForm.get('categoryId')?.invalid && (courseForm.get('categoryId')?.dirty || courseForm.get('categoryId')?.touched)" class="text-danger">
-      Category is required.
-    </div>
-    <button type="button" class="btn btn-link" (click)="toggleEditCategory()">Edit Category</button>
+  <label for="categoryId" class="form-label">
+    Category <span class="text-danger">*</span>
+  </label>
+  <select id="categoryId" formControlName="categoryId" class="form-select" required>
+    <option value="">Select a category</option>
+    <option *ngFor="let category of categories; trackBy: trackByCategoryId" [value]="category.id">
+      {{ category.name }}
+    </option>
+  </select>
+  <div *ngIf="courseForm.get('categoryId')?.invalid && (courseForm.get('categoryId')?.dirty || courseForm.get('categoryId')?.touched)" class="text-danger">
+    Category is required.
   </div>
-  
-  <!-- Inline Category Edit Form -->
-  <div *ngIf="editingCategory" class="mb-3 border p-3 rounded">
-    <h5>Edit Category</h5>
-    <div class="mb-3">
-      <label for="editedCategoryName" class="form-label">Name</label>
-      <input type="text" id="editedCategoryName" class="form-control" [(ngModel)]="editedCategoryName" name="editedCategoryName" [ngModelOptions]="{standalone: true}" required>
+  <button type="button" class="btn btn-link" (click)="toggleEditCategory()">Edit Category</button>
+</div>
+
+<!-- Inline Category Edit Form -->
+<div *ngIf="editingCategory" class="mb-3 border p-3 rounded">
+  <h5>Edit Category</h5>
+  <div class="mb-3">
+    <label for="editedCategoryName" class="form-label">
+      Name <span class="text-danger">*</span>
+    </label>
+    <input type="text" id="editedCategoryName" class="form-control"
+           [(ngModel)]="editedCategoryName" name="editedCategoryName"
+           [ngModelOptions]="{ standalone: true }" required>
+    <!-- Display an error if the field is empty after user interaction -->
+    <div *ngIf="editedCategoryName?.trim() === ''" class="text-danger">
+      Category name is required.
     </div>
-    <button type="button" class="btn btn-primary me-2" (click)="updateCategory()">Update Category</button>
-    <button type="button" class="btn btn-secondary" (click)="cancelEditCategory()">Cancel</button>
   </div>
+  <button type="button" class="btn btn-primary me-2" (click)="updateCategory()">Update Category</button>
+  <button type="button" class="btn btn-secondary" (click)="cancelEditCategory()">Cancel</button>
+</div>
+
         
                 <!-- Thumbnail Upload -->
                 <div class="mb-3">
