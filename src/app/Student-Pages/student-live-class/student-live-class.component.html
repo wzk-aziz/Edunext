@@ -1,28 +1,72 @@
-<div class="live-session-container">
-  <!-- Loading State -->
-  <div class="loading-overlay" *ngIf="loading">
-    <div class="spinner"></div>
-    <p>Connecting to session...</p>
-  </div>
+<!-- Loading State - Visible for both modes -->
+<div class="loading-overlay" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading session...</p>
+</div>
+
+<!-- Error State - Visible for both modes -->
+<div class="error-overlay" *ngIf="error">
+  <div class="error-message">
+    <i class="fas fa-exclamation-circle"></i>
+    <h3>Connection Error</h3>
+    <p>{{ error }}</p>
+    <button class="primary-btn" (click)="loadSessionDetails()">Try Again</button>
+    <button class="secondary-btn" routerLink="/student-virtual-classroom-sessions">Back to Sessions</button>
   
-  <!-- Error State -->
-  <div class="error-overlay" *ngIf="error">
-    <div class="error-message">
-      <i class="fas fa-exclamation-circle"></i>
-      <h3>Connection Error</h3>
-      <p>{{ error }}</p>
-      <button class="primary-btn" (click)="loadSessionDetails()">Try Again</button>
-      <button class="secondary-btn" routerLink="/student-virtual-classroom-sessions">Back to Sessions</button>
+    <button class="join-later-btn" *ngIf="error.includes('not currently available')" (click)="openJoinModal()">
+      <i class="fas fa-calendar-plus"></i> Join When Available
+    </button>
+  
+  </div>
+</div>
+
+<!-- COMPLETED SESSION VIEW -->
+<div class="completed-session-overlay" *ngIf="viewMode === 'completed' && !loading && !error">
+  <div class="completed-header">
+    <h1>{{ session?.titleSession }}</h1>
+    <div class="session-meta">
+      <div class="instructor-info">
+        <i class="fas fa-user-tie"></i>
+        <span>{{ session?.instructorName }}</span>
+      </div>
+      <div class="session-date">
+        <i class="far fa-calendar-alt"></i>
+        <span>{{ session?.startTime | date:'medium' }}</span>
+      </div>
+      <!-- Find the session-status div in the completed session view and modify it like this: -->
+      <div class="session-status">
+        <i class="fas fa-check-circle"></i>
+        <span>Session Completed</span>
+        <button class="feedback-btn" (click)="showFeedback()">
+          <i class="fas fa-comments"></i> View Feedback
+        </button>
+        <button class="reminder-btn" (click)="openEmailModal()">
+          <i class="fas fa-bell"></i> Set Reminder
+        </button>
+      </div>
+    </div>
+    
+    <div class="session-description" *ngIf="session?.description">
+      <h3>Session Description</h3>
+      <p>{{ session?.description }}</p>
+    </div>
+    
+    <div class="back-button">
+      <button class="primary-btn" routerLink="/student-virtual-classroom-sessions">
+        <i class="fas fa-arrow-left"></i> Back to Sessions
+      </button>
     </div>
   </div>
+</div>
 
+<!-- LIVE SESSION VIEW -->
+<div class="live-session-container" *ngIf="viewMode === 'live' && !loading && !error">
   <!-- Session Header -->
   <header class="session-header">
     <div class="session-info">
       <h1>{{ session?.titleSession }}</h1>
-      <p>By {{ session?.instructorName }}</p>
+      <p>with {{ session?.instructorName }}</p>
     </div>
-    <!-- Replace the session-actions div with this version -->
     <div class="session-actions">
       <button class="control-btn" [class.disabled]="!cameraEnabled" (click)="toggleCamera()">
         <i class="fas" [ngClass]="cameraEnabled ? 'fa-video' : 'fa-video-slash'"></i>
@@ -49,7 +93,6 @@
   <!-- Main Content -->
   <div class="main-content">
     <!-- Video Area -->
-    <!-- Replace the entire video area div with this -->
     <div class="video-area">
       <!-- Instructor Video -->
       <div class="video-container instructor-video">
@@ -71,24 +114,33 @@
           </div>
         </div>
       </div>
-    
-      <!-- Update the student video container section -->
+
+      <!-- Student Video -->
       <div class="video-container student-video">
         <div class="video-frame">
           <!-- Show screen share when active -->
           <video #screenVideo 
-                 *ngIf="screenSharing && screenStream" 
-                 [srcObject]="screenStream" 
-                 autoplay 
-                 class="screen-share-video">
+                *ngIf="screenSharing && screenStream" 
+                [srcObject]="screenStream" 
+                autoplay 
+                class="screen-share-video">
           </video>
           
-          <!-- Show user placeholder when not screen sharing -->
-          <div class="user-video-placeholder" *ngIf="!screenSharing || !screenStream">
+          <!-- Show user webcam when not screen sharing but camera is enabled -->
+          <video #userVideo 
+                *ngIf="!screenSharing && cameraEnabled && userStream" 
+                [srcObject]="userStream" 
+                autoplay 
+                muted
+                class="user-video">
+          </video>
+          
+          <!-- Show user placeholder when camera is off -->
+          <div class="user-video-placeholder" *ngIf="(!cameraEnabled || !userStream) && !screenSharing">
             <i class="fas fa-user"></i>
           </div>
           
-          <!-- Show appropriate label based on screen sharing state -->
+          <!-- Video label -->
           <div class="video-label" [class.sharing]="screenSharing">
             <span>{{ screenSharing ? 'Your Screen' : 'You' }}</span>
             <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
@@ -100,15 +152,11 @@
             <i class="fas fa-hand-paper"></i>
             <span>Hand Raised</span>
           </div>
-
-
         </div>
       </div>
-
-
     </div>
     
-    <!-- Replace the chat sidebar section with this corrected version -->
+    <!-- Chat Sidebar -->
     <div class="chat-sidebar">
       <div class="chat-header">
         <h3>Live Chat</h3>
@@ -146,12 +194,9 @@
         </button>
       </div>
     </div>
-
-
   </div>
 
-    <!-- Add this at the end of your component, just before the closing </div> of .live-session-container -->
-  <!-- Leave Confirmation Modal -->
+  <!-- Leave Confirmation Modal (only in live view) -->
   <div class="leave-confirmation-overlay" *ngIf="showLeaveConfirmation">
     <div class="leave-confirmation-dialog">
       <div class="leave-dialog-header">
@@ -167,6 +212,134 @@
         </button>
         <button class="confirm-btn" (click)="confirmLeave(true)">
           <i class="fas fa-check"></i> Leave Session
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal (outside both views so it's accessible from either) -->
+<div class="feedback-modal-overlay" *ngIf="showFeedbackModal">
+  <div class="feedback-modal">
+    <div class="feedback-modal-header">
+      <h2>Session Feedback</h2>
+      <button class="close-btn" (click)="closeFeedbackModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="feedback-modal-content">
+      <div class="feedback-summary" *ngIf="sessionFeedback.length > 0">
+        <div class="average-rating">
+          <span class="rating-label">Average Rating</span>
+          <div class="stars">
+            <span class="rating-value">{{ averageRating.toFixed(1) }}</span>
+            <i *ngFor="let star of getRatingArray(averageRating)" 
+               class="fas" [ngClass]="star === 1 ? 'fa-star' : 'fa-star-o'"></i>
+          </div>
+          <span class="rating-count">({{ sessionFeedback.length }} ratings)</span>
+        </div>
+      </div>
+      
+      <div class="feedback-list">
+        <div *ngIf="sessionFeedback.length === 0" class="no-feedback">
+          <i class="fas fa-comment-slash"></i>
+          <p>No feedback has been submitted for this session.</p>
+        </div>
+        
+        <div class="feedback-item" *ngFor="let feedback of sessionFeedback">
+          <div class="feedback-header">
+            <div class="feedback-rating">
+              <i *ngFor="let star of getRatingArray(feedback.rating)" 
+                 class="fas" [ngClass]="star === 1 ? 'fa-star' : 'fa-star-o'"></i>
+            </div>
+            <div class="feedback-id">Feedback #{{ feedback.idFeedback }}</div>
+          </div>
+          
+          <div class="feedback-content">
+            <p>{{ feedback.contentFeedback }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add this at the end of your file, after the feedback modal -->
+<div class="email-reminder-overlay" *ngIf="showEmailModal">
+  <div class="email-reminder-modal">
+    <div class="email-reminder-header">
+      <h2>Set Email Reminder</h2>
+      <button class="close-btn" (click)="closeEmailModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="email-reminder-content">
+      <p>Enter your email to receive a reminder about this session:</p>
+      <div class="input-group">
+        <input 
+          type="email" 
+          [(ngModel)]="reminderEmail" 
+          placeholder="Your email address"
+          class="email-input">
+      </div>
+      
+      <div class="status-message" *ngIf="emailStatus">
+        <div [class]="emailStatus.success ? 'success-message' : 'error-message'">
+          <i class="fas" [ngClass]="emailStatus.success ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+          <span>{{ emailStatus.message }}</span>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeEmailModal()">Cancel</button>
+        <button 
+          class="send-btn" 
+          [disabled]="!reminderEmail || sendingEmail" 
+          (click)="sendReminderEmail()">
+          <span *ngIf="!sendingEmail">Send Reminder</span>
+          <span *ngIf="sendingEmail">Sending...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add this modal at the end of your file (after the email reminder modal) -->
+<div class="join-modal-overlay" *ngIf="showJoinModal">
+  <div class="join-modal">
+    <div class="join-modal-header">
+      <h2>Join When Available</h2>
+      <button class="close-btn" (click)="closeJoinModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="join-modal-content">
+      <p>Enter your email to get notified when this session becomes available:</p>
+      <div class="input-group">
+        <input 
+          type="email" 
+          [(ngModel)]="emailAddress" 
+          placeholder="Your email address"
+          class="email-input">
+      </div>
+      
+      <div class="status-message" *ngIf="emailStatus">
+        <div [class]="emailStatus.success ? 'success-message' : 'error-message'">
+          <i class="fas" [ngClass]="emailStatus.success ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+          <span>{{ emailStatus.message }}</span>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeJoinModal()">Cancel</button>
+        <button 
+          class="join-btn" 
+          [disabled]="!emailAddress || sendingEmail" 
+          (click)="sendSignupEmail()">
+          <span *ngIf="!sendingEmail">Sign Up</span>
+          <span *ngIf="sendingEmail">Sending...</span>
         </button>
       </div>
     </div>
