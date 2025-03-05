@@ -1,0 +1,435 @@
+/* Conteneur principal (style sombre) */
+.judge0-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 80px); /* Ajuste si besoin */
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Barre supérieure */
+  .judge0-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #3c3c3c;
+  }
+  
+  /* Sélecteur de langage */
+  .judge0-language-select {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    margin-right: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  
+  /* Bouton RUN CODE */
+  .judge0-run-button {
+    background-color: #007acc;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .judge0-run-button:hover {
+    background-color: #005f99;
+  }
+  
+  /* Zone principale : éditeur + I/O */
+  .judge0-main {
+    flex: 1;
+    display: flex;
+    height: 100%;
+  }
+  
+  /* Panel éditeur */
+  .judge0-editor-panel {
+    flex: 2;
+    border-right: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Textarea éditeur */
+  .judge0-editor {
+    flex: 1;
+    width: 100%;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 10px;
+  }
+  
+  /* Panel Input/Output */
+  .judge0-io-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #252526;
+  }
+  
+  /* Boîtes Input et Output */
+  .judge0-io-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  
+  .judge0-label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #ffffff;
+  }
+  
+  .judge0-io-input,
+  .judge0-io-output {
+    flex: 1;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    padding: 8px;
+    resize: none;
+  }
+  
+  .judge0-io-input {
+    outline: none;
+  }
+  
+  .judge0-io-output {
+    overflow: auto;
+  }
+  
+  /* Scrollbars sombres */
+  .judge0-editor::-webkit-scrollbar,
+  .judge0-io-input::-webkit-scrollbar,
+  .judge0-io-output::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2d2d2d;
+  }
+  .judge0-editor::-webkit-scrollbar-thumb,
+  .judge0-io-input::-webkit-scrollbar-thumb,
+  .judge0-io-output::-webkit-scrollbar-thumb {
+    background-color: #4d4d4d;
+  }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .judge0-main {
+      flex-direction: column;
+    }
+    .judge0-editor-panel {
+      border-right: none;
+      border-bottom: 1px solid #3c3c3c;
+      height: 50%;
+    }
+    .judge0-io-panel {
+      height: 50%;
+    }
+  }
+  .container {
+    background: #1e1e1e;
+    color: white;
+    font-family: "Courier New", monospace;
+    width: 80%;
+    margin: auto;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: #252526;
+  }
+  
+  select {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 5px;
+  }
+  
+  button {
+    background: #007acc;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .editor-body {
+    background: black;
+    padding: 10px;
+  }
+  
+  .code-area {
+    width: 100%;
+    height: 250px;
+    background: #252526;
+    color: #d4d4d4;
+    border: none;
+    font-family: monospace;
+    padding: 10px;
+  }
+  
+  .editor-output {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .input-output {
+    width: 48%;
+  }
+  
+  .input-area {
+    width: 100%;
+    height: 100px;
+    background: #252526;
+    color: white;
+    border: 1px solid #444;
+    padding: 5px;
+  }
+  
+  .output-area {
+    background: black;
+    color: #00ff00;
+    padding: 10px;
+    border-radius: 5px;
+    height: 100px;
+    overflow-y: auto;
+  }
+  
+.judge0-push-button {
+  background-color: #007acc;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.judge0-push-button:hover {
+  background-color: #005f99;
+}
+
+.judge0-push-button.disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.judge0-push-button.disabled:hover {
+  background-color: #cccccc;
+}
+:root {
+  --bg-dark: #1e1e1e;
+  --bg-medium: #252526;
+  --bg-light: #2d2d2d;
+  --text-primary: #d4d4d4;
+  --text-accent: #ffffff;
+  --primary-color: #007acc;
+  --success-color: #23d160;
+  --error-color: #ff3860;
+  --border-color: #3c3c3c;
+}
+
+* {
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.code-editor-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--bg-medium);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.language-selector label {
+  color: var(--text-accent);
+  font-weight: 600;
+}
+
+.language-selector select {
+  background-color: var(--bg-light);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+}
+
+.run-btn, .github-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.run-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.run-btn:hover {
+  background-color: #005f99;
+}
+
+.github-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.github-btn:hover {
+  background-color: #218838;
+}
+
+.run-btn:disabled, 
+.github-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.editor-content {
+  display: flex;
+  height: calc(100vh - 200px);
+}
+
+.code-section, .io-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--bg-medium);
+}
+
+.section-header h3 {
+  margin: 0;
+  color: var(--text-accent);
+}
+
+.code-textarea, .input-textarea, .output-textarea {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  border: none;
+  font-family: 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-size: 14px;
+  padding: 15px;
+  resize: none;
+  outline: none;
+}
+
+.output-textarea {
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+.status-indicator {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-indicator.success {
+  background-color: rgba(35, 209, 96, 0.2);
+  color: var(--success-color);
+}
+
+.status-indicator.error {
+  background-color: rgba(255, 56, 96, 0.2);
+  color: var(--error-color);
+}
+
+.status-indicator.running {
+  background-color: rgba(0, 122, 204, 0.2);
+  color: var(--primary-color);
+}
+
+.clear-btn {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background-color: var(--bg-light);
+}
+
+/* Scrollbar styles */
+.output-textarea::-webkit-scrollbar {
+  width: 10px;
+}
+
+.output-textarea::-webkit-scrollbar-track {
+  background: var(--bg-medium);
+}
+
+.output-textarea::-webkit-scrollbar-thumb {
+  background: var(--bg-light);
+  border-radius: 5px;
+}
+  

@@ -20,7 +20,14 @@ import { TeachereditprofileComponent } from './Teacher-Pages/teacherdashboard/te
 import { StudentslistComponent } from './Teacher-Pages/teacherdashboard/studentslist/studentslist.component';
 import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tutoringsessions/tutoringsessions.component';
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
-import { BackRoutingModule } from './backend/back-routing.module'; // Import the new module
+import { ProblemDetailComponent } from './Student-Pages/coding-game-student/problem-detail/problem-detail.component';
+import { CodeEditorComponent } from './Student-Pages/coding-game-student/code-editor/code-editor.component';
+import { ProblemListComponent } from './Student-Pages/coding-game-student/problem-list/problem-list.component';
+import { BlogListComponent } from './Student-Pages/Forum/Blog/blog-list/blog-list.component';
+import { ThreadListComponent } from './Student-Pages/Forum/Thread/thread-list/thread-list.component';
+import { EventListComponent } from './Student-Pages/Forum/Event/event-list/event-list.component';
+import { EventDetailComponent } from './Student-Pages/Forum/Event/event-detail/event-detail.component';
+import { ThreadAddComponent } from './Student-Pages/Forum/Thread/thread-add/thread-add.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -34,6 +41,18 @@ const routes: Routes = [
   { path: 'studentdashboard', component: MaindashboardComponent },
   { path: 'myplan', component: SubscriptionComponent },
   { path: 'editprofile', component: EditprofileComponent },
+  { path: 'coding-game', component: ProblemListComponent }, // Liste des problèmes
+  { path: 'coding-game/problems', component: ProblemListComponent },
+  { path: 'coding-game/problem-detail/:id', component: ProblemDetailComponent },
+  { path: 'coding-game/editor/:id', component: CodeEditorComponent },
+  { path: 'blog', component: BlogListComponent},
+  { path: 'thread', component: ThreadListComponent},
+  { path: 'new', component:ThreadAddComponent},
+  {path: 'event', component:EventListComponent },
+  {path: 'event/event-detail/:id', component:EventDetailComponent},
+
+
+
 
   // Courses
   { path: 'coursesdashboard', component: MycoursesComponent },

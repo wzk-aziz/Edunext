@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './Shared/header/header.component';
@@ -45,6 +45,29 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ProblemDetailComponent } from './backend/coding-game-admin/problems/problem-detail/problem-detail.component';
+import { ProblemFormComponent } from './backend/coding-game-admin/problems/problem-form/problem-form.component';
+import { ProblemsComponent } from './backend/coding-game-admin/problems/problems/problems.component';
+import { LanguageListComponent } from './backend/coding-game-admin/language/language-list/language-list.component';
+import { LanguageFormComponent } from './backend/coding-game-admin/language/language-form/language-form.component';
+import { LanguageDetailComponent } from './backend/coding-game-admin/language/language-detail/language-detail.component';
+import { CompilerListComponent } from './backend/coding-game-admin/compiler/compiler-list/compiler-list.component';
+import { CompilerFormComponent } from './backend/coding-game-admin/compiler/compiler-form/compiler-form.component';
+import { CompilerDetailComponent } from './backend/coding-game-admin/compiler/compiler-detail/compiler-detail.component';
+import { LayoutComponent } from './backend/coding-game-admin/layout/layout.component';
+import { CodeEditorComponent } from './Student-Pages/coding-game-student/code-editor/code-editor.component';
+import { ProblemListComponent } from './Student-Pages/coding-game-student/problem-list/problem-list.component';
+import { BlogListComponent } from './Student-Pages/Forum/Blog/blog-list/blog-list.component';
+import { EventDetailComponent } from './Student-Pages/Forum/Event/event-detail/event-detail.component';
+import { EventListComponent } from './Student-Pages/Forum/Event/event-list/event-list.component';
+import { ThreadAddComponent } from './Student-Pages/Forum/Thread/thread-add/thread-add.component';
+import { ThreadListComponent } from './Student-Pages/Forum/Thread/thread-list/thread-list.component';
+import { jsPDF } from 'jspdf';
 
 @NgModule({
   declarations: [
@@ -90,12 +113,37 @@ import { CoursesBackComponent } from './backend/courses/courses-back/courses-bac
     ClassComponent,
     StudentComponent,
     BackAppComponent,
-    CoursesBackComponent
-   
+    CoursesBackComponent,
+    ProblemsComponent,
+    ProblemFormComponent,
+    ProblemDetailComponent,
+    LanguageListComponent,
+    LanguageFormComponent,
+    LanguageDetailComponent,
+    CompilerListComponent,
+    CompilerFormComponent,
+    CompilerDetailComponent,
+    LayoutComponent,
+    ProblemListComponent,
+    CodeEditorComponent,
+    ProblemListComponent,
+    ProblemDetailComponent,
+    CodeEditorComponent,
+    BlogListComponent,
+    EventDetailComponent,
+    EventListComponent,
+    ThreadAddComponent,
+    ThreadListComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule, 
+    HttpClientModule,
+    RouterModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

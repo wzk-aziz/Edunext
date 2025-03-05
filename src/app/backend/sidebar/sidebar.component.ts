@@ -16,4 +16,10 @@ export class SidebarComponent {
 toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 }
+isCodingGameMenuOpen = false;
+
+toggleCodingGameMenu() {
+  this.isCodingGameMenuOpen = !this.isCodingGameMenuOpen;
+}
+
 }

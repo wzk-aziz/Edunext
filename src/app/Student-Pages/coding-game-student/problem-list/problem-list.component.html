@@ -1,0 +1,28 @@
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Available Problems</h2>
+    
+    <table class="table table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let problem of problems">
+          <td>{{ problem.title }}</td>
+          <td>{{ problem.description }}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-primary" (click)="viewProblem(problem.id)">View</button>
+              <button class="btn btn-success" (click)="launchProblem(problem.id)">Lancer</button>
+              <button class="btn btn-danger" (click)="generatePDF(problem)">
+                <i class="fas fa-file-pdf"></i> PDF
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

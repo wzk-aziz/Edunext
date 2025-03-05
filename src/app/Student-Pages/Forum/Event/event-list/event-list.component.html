@@ -1,0 +1,48 @@
+<!-- event-list.component.html -->
+<div class="events-container">
+  <div class="header-section">
+    <h1>Upcoming Events & Hackathons</h1>
+    <div class="search-filter">
+      <input 
+        type="text" 
+        placeholder="Search events..." 
+        [(ngModel)]="searchTerm" 
+        (input)="filterEvents()"
+        class="search-input"
+      >
+      <select [(ngModel)]="locationFilter" (change)="filterEvents()" class="location-filter">
+        <option value="">All Locations</option>
+        <option *ngFor="let location of uniqueLocations" [value]="location">{{ location }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="events-grid" *ngIf="filteredEvents.length > 0; else noEvents">
+    <div class="event-card" *ngFor="let event of filteredEvents">
+      <div class="event-header">
+        <h3>{{ event.eventTitle }}</h3>
+        <span class="event-participants" [ngClass]="{'almost-full': isAlmostFull(event)}">
+          {{ event.numberParticipants }}/{{ event.maxParticipants }}
+        </span>
+      </div>
+      <p class="event-description">{{ event.eventDescription }}</p>
+      <div class="event-details">
+        <div class="detail">
+          <i class="fa fa-calendar"></i>
+          <span>{{ event.eventDate | date:'fullDate' }}</span>
+        </div>
+        <div class="detail">
+          <i class="fa fa-map-marker"></i>
+          <span>{{ event.eventLocation }}</span>
+        </div>
+      </div>
+      <button class="view-details-btn" (click)="goToEventDetail(event.id)">View Details</button>
+    </div>
+  </div>
+  
+  <ng-template #noEvents>
+    <div class="no-events">
+      <p>No events match your search criteria.</p>
+    </div>
+  </ng-template>
+</div>

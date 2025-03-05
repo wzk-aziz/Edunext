@@ -1,0 +1,15 @@
+<div class="container">
+    <h2>{{ isEditMode ? 'Edit Language' : 'Add New Language' }}</h2>
+    <form (ngSubmit)="saveLanguage()">
+        <label>Name:</label>
+        <input type="text" [(ngModel)]="language.name" name="name" required>
+
+        <label>Version:</label>
+        <input type="text" [(ngModel)]="language.version" name="version" required>
+
+        <button type="submit" class="save-btn">Save</button>
+        <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+        <button class="btn btn-secondary" (click)="backToList()">Back to List</button>
+
+    </form>
+</div>
