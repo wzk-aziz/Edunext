@@ -1,0 +1,208 @@
+<body>
+  <main>
+    <section class="p-0 d-flex align-items-center position-relative overflow-hidden">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Left Section with light blue background -->
+          <div class="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-primary bg-opacity-10 vh-lg-100" >
+            <div class="p-3 p-lg-5 text-center">
+              <h2 class="fw-bold">Welcome to our largest community</h2>
+              <p class="mb-0 h6 fw-light">Let's learn something new today!</p>
+              <img src="/assets/images/element/02.svg" class="mt-5" alt="Illustration" style="max-width: 100%; height: auto;" />
+              <div class="d-sm-flex mt-5 align-items-center justify-content-center">
+                <ul class="avatar-group mb-2 mb-sm-0">
+                  <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt="avatar" /></li>
+                  <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt="avatar" /></li>
+                  <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar" /></li>
+                  <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="avatar" /></li>
+                </ul>
+                <p class="mb-0 h6 fw-light ms-0 ms-sm-3">4k+ Students joined us, now it's your turn.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Section: Registration Form with Background -->
+          <div class="col-12 col-lg-6 m-auto p-4 rounded" style="background-color: #E6E6FA;">
+            <div class="row my-3">
+              <div class="col-sm-10 col-xl-8 m-auto">
+                <h2 class="mb-2">Sign up for your account!</h2>
+                <p class="lead mb-2">Nice to see you! Please sign up with your account.</p>
+
+                <div class="container" *ngIf="!authResponse.mfaEnabled" style="background-color: rgb(255, 255, 255);">
+                  <div class="success-message-panel" *ngIf="message">
+                    <div class="success-icon">&#10004;</div>
+                    <div class="success-message">{{ message }}</div>
+                  </div>
+                  <form (ngSubmit)="registerUser()" #registerForm="ngForm"   >
+                    <!-- First Name -->
+                    <div class="form-group position-relative">
+                      <label for="firstname">First name</label>
+                      <input id="firstname" 
+                             name="firstname" 
+                             required 
+                             type="text" 
+                             [(ngModel)]="registerRequest.firstname" 
+                             #firstname="ngModel" 
+                             pattern="[a-zA-Z ]*"
+                             minlength="2"
+                             placeholder="Enter your first name"
+                             [ngClass]="{'is-valid': firstname.valid && firstname.touched, 'is-invalid': firstname.invalid && firstname.touched}">
+
+                      <div *ngIf="firstname.invalid && firstname.touched" class="alert alert-danger">
+                        <div *ngIf="firstname.errors?.['required']">First name is required.</div>
+                        <div *ngIf="firstname.errors?.['pattern']">First name should only contain letters.</div>
+                        <div *ngIf="firstname.errors?.['minlength']">First name should be at least 2 characters.</div>
+                      </div>
+                      <div *ngIf="firstname.valid && firstname.touched" class="valid-feedback">
+                        <i class="bi bi-check-circle-fill"></i>
+                      </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="form-group position-relative">
+                      <label for="lastname">Last name</label>
+                      <input id="lastname" 
+                             name="lastname" 
+                             required 
+                             type="text" 
+                             [(ngModel)]="registerRequest.lastname" 
+                             #lastname="ngModel" 
+                             pattern="[a-zA-Z ]*"
+                             minlength="2"
+                             placeholder="Enter your last name"
+                             [ngClass]="{'is-valid': lastname.valid && lastname.touched, 'is-invalid': lastname.invalid && lastname.touched}">
+
+                      <div *ngIf="lastname.invalid && lastname.touched" class="alert alert-danger">
+                        <div *ngIf="lastname.errors?.['required']">Last name is required.</div>
+                        <div *ngIf="lastname.errors?.['pattern']">Last name should only contain letters.</div>
+                        <div *ngIf="lastname.errors?.['minlength']">Last name should be at least 2 characters.</div>
+                      </div>
+                      <div *ngIf="lastname.valid && lastname.touched" class="valid-feedback">
+                        <i class="bi bi-check-circle-fill"></i>
+                      </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group position-relative">
+                      <label for="email">Email</label>
+                      <input id="email" 
+                             name="email" 
+                             required 
+                             type="email" 
+                             [(ngModel)]="registerRequest.email" 
+                             #email="ngModel" 
+                             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                             placeholder="Enter your email"
+                             [ngClass]="{'is-valid': email.valid && email.touched, 'is-invalid': email.invalid && email.touched}">
+
+                      <div *ngIf="email.invalid && email.touched" class="alert alert-danger">
+                        <div *ngIf="email.errors?.['required']">Email is required.</div>
+                        <div *ngIf="email.errors?.['pattern']">Please enter a valid email address.</div>
+                      </div>
+                      <div *ngIf="email.valid && email.touched" class="valid-feedback">
+                        <i class="bi bi-check-circle-fill"></i>
+                      </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group position-relative">
+                      <label for="password">Password</label>
+                      <input id="password" 
+                             name="password" 
+                             required 
+                             type="password" 
+                             [(ngModel)]="registerRequest.password" 
+                             #password="ngModel" 
+                             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                             minlength="8"
+                             placeholder="Enter your password"
+                             [ngClass]="{'is-valid': password.valid && password.touched, 'is-invalid': password.invalid && password.touched}">
+
+                      <div *ngIf="password.invalid && password.touched" class="alert alert-danger">
+                        <div *ngIf="password.errors?.['required']">Password is required.</div>
+                        <div *ngIf="password.errors?.['minlength']">Password must be at least 8 characters long.</div>
+                        <div *ngIf="password.errors?.['pattern']">
+                          Password must contain:
+                          <ul>
+                            <li>At least one uppercase letter</li>
+                            <li>At least one lowercase letter</li>
+                            <li>At least one number</li>
+                            <li>At least one special character (@$!%*?&)</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div *ngIf="password.valid && password.touched" class="valid-feedback">
+                        <i class="bi bi-check-circle-fill"></i>
+                      </div>
+                    </div>
+
+                    <input type="file" (change)="onFileSelected($event)">
+
+
+                    <!-- Role -->
+                    <div class="form-group position-relative">
+                      <label for="role">Role</label>
+                      <select id="role" 
+                              name="role" 
+                              required 
+                              [(ngModel)]="registerRequest.role" 
+                              #role="ngModel"
+                              [ngClass]="{'is-valid': role.valid && role.touched, 'is-invalid': role.invalid && role.touched}">
+                        <option value="" disabled selected>Select a role</option>
+                        <option value="LEARNER">Learner</option>
+                        <option value="TEACHER">Teacher</option>
+                      </select>
+                      <div *ngIf="role.invalid && role.touched" class="alert alert-danger">
+                        Please select a role.
+                      </div>
+                    </div>
+
+                    <!-- 2FA -->
+                    <div class="form-group">
+                      <input id="mfaEnabled" 
+                             name="mfaEnabled" 
+                             type="checkbox" 
+                             [(ngModel)]="registerRequest.mfaEnabled">
+                      <label for="mfaEnabled">Enable 2FA (Two-Factor Authentication)</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">Register</button>
+
+                    <a routerLink="/login" >Login</a>
+                    </form>
+                    </div> 
+
+                    <div class="container" *ngIf="authResponse.mfaEnabled">
+
+                      <div class="success-message-panel" *ngIf="message">
+                        <div class="success-icon">&#10004;</div>
+                        <div class="success-message">{{message}}</div>
+                      </div>
+                    
+                      <h2>Set Up Two-Factor Authentication</h2>
+                      <div class="qr-code">
+                        <img [src]="authResponse.secretImageUri" alt="QR Code">
+                      </div>
+                      <div class="form-group">
+                        <label for="validationCode">Enter 6 digits Validation Code Generated by the app</label>
+                        <input
+                          type="text"
+                          id="validationCode"
+                          name="validationCode"
+                          required
+                          [(ngModel)]="otpCode"
+                        >
+                      </div>
+                      <button
+                        type="button"
+                        (click)="verifyTfa()"
+                        [class.button-disabled]="otpCode.length < 6"
+                      >Verify code</button>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+    </section>
+  </main>
+</body>

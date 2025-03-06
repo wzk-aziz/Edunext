@@ -8,6 +8,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EventService {
+  createEvent(eventData: any): Observable<any> {
+    throw new Error('Method not implemented.');
+  }
   private apiUrl = `${environment.forumApiUrl}/api/events`;
 
   constructor(private http: HttpClient) {}
@@ -23,4 +26,6 @@ export class EventService {
     return this.http.post(`${this.apiUrl}/${eventId}/reservations`, { studentEmail });
   }
   
+  
+
 }

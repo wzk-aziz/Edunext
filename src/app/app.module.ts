@@ -68,6 +68,13 @@ import { EventListComponent } from './Student-Pages/Forum/Event/event-list/event
 import { ThreadAddComponent } from './Student-Pages/Forum/Thread/thread-add/thread-add.component';
 import { ThreadListComponent } from './Student-Pages/Forum/Thread/thread-list/thread-list.component';
 import { jsPDF } from 'jspdf';
+import { ThreadListAdminComponent } from './backend/forum/threads/thread-list-admin/thread-list-admin.component';
+import { EventListAdminComponent } from './backend/forum/events/event-list-admin/event-list-admin.component';
+import { BlogListAdminComponent } from './backend/forum/blogs/blog-list-admin/blog-list-admin.component';
+import { BlogAddComponent } from './backend/forum/blogs/blog-add/blog-add.component';
+import { EventAddComponent } from './backend/forum/events/event-add/event-add.component';
+import { LoginComponent } from './Shared/login/login.component';
+import { EventUpdateComponent } from './backend/forum/events/event-update/event-update.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +140,14 @@ import { jsPDF } from 'jspdf';
     EventDetailComponent,
     EventListComponent,
     ThreadAddComponent,
-    ThreadListComponent
+    ThreadListComponent,
+    ThreadListAdminComponent,
+    EventListAdminComponent,
+    BlogListAdminComponent,
+    BlogAddComponent,
+    EventAddComponent,
+    LoginComponent,
+    EventUpdateComponent
   ],
   imports: [
     BrowserModule,

@@ -21,5 +21,10 @@ isCodingGameMenuOpen = false;
 toggleCodingGameMenu() {
   this.isCodingGameMenuOpen = !this.isCodingGameMenuOpen;
 }
+isForumMenuOpen = false;
+
+toggleForumMenu(): void {
+  this.isForumMenuOpen = !this.isForumMenuOpen;
+}
 
 }

@@ -86,7 +86,32 @@
                         <li><a class="ms-link" routerLink="/backoffice/compilers"><span>Manage Compilers</span></a></li>
                     </ul>
                 </li>
-                                
+                <li class="collapsed">
+                    <a class="m-link" (click)="toggleForumMenu()" role="button">
+                      <i class="icofont-ui-chat"></i>
+                      <span>Forum</span>
+                      <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isForumMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isForumMenuOpen}" id="menu-Forum">
+                      <li>
+                        <a class="ms-link" routerLink="/backoffice/threads">
+                          <span>Manage Threads</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="ms-link" routerLink="/backoffice/blogs">
+                          <span>Manage Blogs</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="ms-link" routerLink="/backoffice/events">
+                          <span>Manage Events</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  
+                       
             </ul>
             <!-- Theme: Switch Theme -->
             <ul class="list-unstyled mb-0">

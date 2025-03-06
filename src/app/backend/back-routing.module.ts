@@ -25,6 +25,11 @@ import { CompilerListComponent } from './coding-game-admin/compiler/compiler-lis
 import { CompilerFormComponent } from './coding-game-admin/compiler/compiler-form/compiler-form.component';
 import { CompilerDetailComponent } from './coding-game-admin/compiler/compiler-detail/compiler-detail.component';
 import { LayoutComponent } from './coding-game-admin/layout/layout.component';
+import { ThreadListAdminComponent } from './forum/threads/thread-list-admin/thread-list-admin.component';
+import { BlogListAdminComponent } from './forum/blogs/blog-list-admin/blog-list-admin.component';
+import { EventListAdminComponent } from './forum/events/event-list-admin/event-list-admin.component';
+import { BlogAddComponent } from './forum/blogs/blog-add/blog-add.component';
+import { EventUpdateComponent } from './forum/events/event-update/event-update.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -45,6 +50,13 @@ const routes: Routes = [
         { path: 'compilers/new', component: CompilerFormComponent },
         { path: 'compilers/edit/:id', component: CompilerFormComponent },
         { path: 'compilers/view/:id', component: CompilerDetailComponent },
+        { path: 'threads', component: ThreadListAdminComponent },
+        { path: 'blogs', component: BlogListAdminComponent },
+        { path: 'events', component: EventListAdminComponent },
+        { path: 'blogs/add', component: BlogAddComponent },
+        { path: 'event/add', component: EventComponent },
+        { path: 'event/update', component: EventUpdateComponent }
+
       ]
     },
 

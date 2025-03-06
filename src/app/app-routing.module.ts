@@ -28,6 +28,7 @@ import { ThreadListComponent } from './Student-Pages/Forum/Thread/thread-list/th
 import { EventListComponent } from './Student-Pages/Forum/Event/event-list/event-list.component';
 import { EventDetailComponent } from './Student-Pages/Forum/Event/event-detail/event-detail.component';
 import { ThreadAddComponent } from './Student-Pages/Forum/Thread/thread-add/thread-add.component';
+import { LoginComponent } from './Shared/login/login.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -35,6 +36,7 @@ const routes: Routes = [
   
   // Student Routes
   { path: 'studenthome', component: LandigpageComponent },
+  { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'pricing', component: PacksComponent },

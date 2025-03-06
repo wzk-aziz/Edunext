@@ -1,7 +1,7 @@
 <div class="threads-container">
   <div class="threads-header">
     <h1>Liste des Threads</h1>
-    <p class="subtitle">Connect with other students and share your knowledge</p>
+    <p class="subtitle">Partagez vos pensées avec la communauté</p>
   </div>
 
   <!-- Barre de recherche et filtres -->
@@ -10,54 +10,49 @@
       <i class="fa fa-search"></i>
       <input 
         type="text" 
-        placeholder="Search threads..." 
+        placeholder="Rechercher un thread..." 
         [(ngModel)]="searchTerm" 
         (input)="filterThreads()"
       >
     </div>
 
     <div class="filter-options">
-      <div class="hashtag-filter">
-        <div class="active-tags">
-          <div class="tag" *ngFor="let tag of selectedTags" (click)="removeTag(tag)">
-            #{{tag}} <i class="fa fa-times"></i>
-          </div>
+      <div class="dropdown">
+        <div class="dropdown-toggle">
+          Filtrer par tag
+          <i class="fa fa-chevron-down"></i>
         </div>
-        <div class="dropdown">
-          <button class="dropdown-toggle">
-            <i class="fa fa-hashtag"></i> Tags
-            <i class="fa fa-chevron-down"></i>
-          </button>
-          <div class="dropdown-menu">
-            <div 
-              *ngFor="let tag of availableTags" 
-              class="dropdown-item" 
-              (click)="addTag(tag)"
-              [class.selected]="selectedTags.includes(tag)">
-              #{{tag}}
-            </div>
+        <div class="dropdown-menu">
+          <div 
+            *ngFor="let tag of availableTags" 
+            class="dropdown-item" 
+            [class.selected]="selectedTags.includes(tag)"
+            (click)="addTag(tag)"
+          >
+            #{{tag}}
           </div>
         </div>
       </div>
-
-      <div class="sort-options">
-        <div class="dropdown">
-          <button class="dropdown-toggle">
-            <i class="fa fa-sort"></i> Sort By
-            <i class="fa fa-chevron-down"></i>
-          </button>
-          <div class="dropdown-menu">
-            <div class="dropdown-item" (click)="sortThreads('newest')">Newest First</div>
-            <div class="dropdown-item" (click)="sortThreads('oldest')">Oldest First</div>
-            <div class="dropdown-item" (click)="sortThreads('popular')">Most Popular</div>
-            <div class="dropdown-item" (click)="sortThreads('active')">Recently Active</div>
+      <div class="dropdown">
+        <div class="dropdown-toggle">
+          Trier par
+          <i class="fa fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu">
+          <div 
+            *ngFor="let option of sortOptions" 
+            class="dropdown-item" 
+            [class.selected]="selectedSort === option.value"
+            (click)="sortThreads(option.value)"
+          >
+            {{option.label}}
           </div>
         </div>
       </div>
 
       <!-- Bouton pour créer un nouveau thread -->
       <button class="create-thread-btn" routerLink="/new">
-        <i class="fa fa-plus"></i> New Thread
+        <i class="fa fa-plus"></i> Nouveau Thread
       </button>
     </div>
   </div>
@@ -67,18 +62,48 @@
     <div class="thread-card" *ngFor="let thread of getCurrentPageThreads()">
       <div class="thread-header">
         <h3 class="thread-title" [routerLink]="['/thread', thread.id]">{{thread.threadTitle}}</h3>
-        <div class="thread-stats">
-          <span class="reactions">
-            <i class="fa fa-thumbs-up"></i> {{getReactionsCount(thread, 'LIKE')}}
-          </span>
-          <span class="comments">
-            <i class="fa fa-comment"></i> {{getReactionsCount(thread, 'COMMENT')}}
-          </span>
+        <div class="thread-actions">
+          <button class="action-button edit" title="Modifier">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="action-button delete" title="Supprimer" (click)="deleteThread(thread.id!)">
+            <i class="fa fa-trash"></i>
+          </button>
         </div>
       </div>
 
       <div class="thread-content">
         <p>{{getThreadPreview(thread.threadContent)}}</p>
+      </div>
+
+      <!-- Section de tags -->
+      <div class="thread-tags">
+        <span class="tag" *ngFor="let tag of extractTags(thread.threadContent)" [class]="tag">
+          {{tag}}
+        </span>
+      </div>
+
+      <!-- Affichage des compteurs de réactions (style Facebook) -->
+      <div class="reaction-counters" *ngIf="getReactionCount(thread.id || 0, 'LIKE') > 0 || getReactionCount(thread.id || 0, 'LOVE') > 0 || getReactionCount(thread.id || 0, 'HAHA') > 0">
+        <div class="reaction-icons">
+          <span class="reaction-icon" *ngIf="getReactionCount(thread.id || 0, 'LIKE') > 0">
+            <i class="fa fa-thumbs-up" style="color: #4267B2;"></i>
+          </span>
+          <span class="reaction-icon" *ngIf="getReactionCount(thread.id || 0, 'LOVE') > 0">
+            <i class="fa fa-heart" style="color: #E91E63;"></i>
+          </span>
+          <span class="reaction-icon" *ngIf="getReactionCount(thread.id || 0, 'HAHA') > 0">
+            <i class="fa fa-laugh" style="color: #FFC107;"></i>
+          </span>
+        </div>
+        <span class="reaction-count">
+          {{ getReactionCount(thread.id || 0, 'LIKE') + getReactionCount(thread.id || 0, 'LOVE') + getReactionCount(thread.id || 0, 'HAHA') }}
+        </span>
+      </div>
+
+      <!-- Compteur de commentaires -->
+      <div class="comment-counter" *ngIf="getReactionCount(thread.id || 0, 'COMMENT') > 0" (click)="toggleCommentBox(thread)">
+        {{ getReactionCount(thread.id || 0, 'COMMENT') }} commentaire{{ getReactionCount(thread.id || 0, 'COMMENT') > 1 ? 's' : '' }}
       </div>
 
       <!-- Barre de réactions multiples (J'aime, J'adore, Haha) -->
@@ -87,40 +112,51 @@
               class="reaction-option"
               [class.active]="hasReacted(thread.id || 0, reactionOption.type)"
               [style.background-color]="hasReacted(thread.id || 0, reactionOption.type) ? reactionOption.color : '#f5f5f5'"
+              [style.color]="hasReacted(thread.id || 0, reactionOption.type) ? 'white' : 'inherit'"
               (click)="toggleReaction(thread.id || 0, reactionOption.type)">
           <i class="fa" [ngClass]="reactionOption.icon"></i>
           <span>{{ reactionOption.label }}</span>
+          <span class="counter" *ngIf="getReactionCount(thread.id || 0, reactionOption.type) > 0">
+            {{ getReactionCount(thread.id || 0, reactionOption.type) }}
+          </span>
         </div>
         <button class="comment-toggle-btn" (click)="toggleCommentBox(thread)">
           <i class="fa fa-comment"></i> Comment
         </button>
       </div>
 
-      <!-- Section de tags -->
-      <div class="thread-tags">
-        <span class="tag" *ngFor="let tag of extractTags(thread.threadContent)">
-          #{{tag}}
-        </span>
-      </div>
-
       <!-- Section de commentaires (affichage et ajout) -->
       <div class="comment-section" *ngIf="showCommentBox[thread.id || 0]">
         <!-- Liste des commentaires existants -->
         <div class="existing-comments" *ngIf="getThreadComments(thread).length > 0">
-          <h4>Commentaires</h4>
+          <h4>Commentaires ({{ getReactionCount(thread.id || 0, 'COMMENT') }})</h4>
           <div class="single-comment"
                 *ngFor="let reaction of getThreadComments(thread)">
-            <p class="comment-author">{{ reaction.studentEmail }}</p>
+            <div class="comment-header">
+              <div class="comment-avatar">
+                <i class="fa fa-user-circle"></i>
+              </div>
+              <p class="comment-author">{{ reaction.studentEmail }}</p>
+            </div>
             <p class="comment-content">{{ reaction.reactionContent }}</p>
+            <div class="comment-actions">
+              <span class="comment-like">J'aime</span>
+              <span class="comment-reply">Répondre</span>
+            </div>
           </div>
         </div>
         
         <!-- Formulaire pour ajouter un nouveau commentaire -->
         <div class="comment-form">
-          <textarea [(ngModel)]="newCommentContent[thread.id || 0]"
-                    placeholder="Votre commentaire..."></textarea>
-          <button (click)="addComment(thread.id || 0)">
-            Publier
+          <div class="comment-input-container">
+            <div class="comment-avatar">
+              <i class="fa fa-user-circle"></i>
+            </div>
+            <textarea [(ngModel)]="newCommentContent[thread.id || 0]"
+                      placeholder="Écrivez un commentaire..."></textarea>
+          </div>
+          <button (click)="addComment(thread.id || 0)" [disabled]="!newCommentContent[thread.id || 0]">
+            <i class="fa fa-paper-plane"></i> Publier
           </button>
         </div>
       </div>

@@ -1,29 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { Thread } from '../../models/thread.model';
-import { ThreadService } from '../thread.service';
-import { ReactionService } from '../reaction.service';
-import { Reaction } from '../../models/reaction.model';
+import { Thread } from 'src/app/Student-Pages/Forum/models/thread.model';
+import { ThreadService } from 'src/app/Student-Pages/Forum/Thread/thread.service';
+import { ReactionService } from 'src/app/Student-Pages/Forum/Thread/reaction.service';
+import { Reaction } from 'src/app/Student-Pages/Forum/models/reaction.model';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-thread-list',
-  templateUrl: './thread-list.component.html',
-  styleUrls: ['./thread-list.component.scss']
+  selector: 'app-thread-list-admin',
+  templateUrl: './thread-list-admin.component.html',
+  styleUrls: ['./thread-list-admin.component.css']
 })
-export class ThreadListComponent implements OnInit {
+export class ThreadListAdminComponent implements OnInit {
   threads: Thread[] = [];
   filteredThreads: Thread[] = [];
   searchTerm: string = '';
   
-  // État UI
+  // UI state
   showCommentBox: { [key: number]: boolean } = {};
-  newCommentContent: { [key: number]: string } = {};
   loadingReactions: { [key: number]: boolean } = {};
   
   // Pagination
   currentPage = 1;
   pageSize = 5;
   
-  // Filtres et tri
+  // Filters and sorting
   selectedTags: string[] = [];
   availableTags: string[] = ['angular', 'spring', 'java', 'typescript', 'javascript', 'html', 'css'];
   selectedSort = 'newest';
@@ -34,15 +35,14 @@ export class ThreadListComponent implements OnInit {
     { value: 'mostLiked', label: 'Plus aimés' }
   ];
   
-  // Types de réactions disponibles
+  // Reaction types
   reactionTypes = [
     { type: 'LIKE', label: "J'aime", icon: 'fa-thumbs-up', color: '#4267B2' },
     { type: 'LOVE', label: "J'adore", icon: 'fa-heart', color: '#E91E63' },
     { type: 'HAHA', label: 'Haha', icon: 'fa-laugh', color: '#FFC107' }
   ];
   
-  userReactions: { [threadId: number]: { [reactionType: string]: number } } = {};
-  // Compteurs de réactions
+  // Reaction counters
   reactionCounts: { [threadId: number]: { [reactionType: string]: number } } = {};
 
   constructor(
@@ -52,12 +52,6 @@ export class ThreadListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadThreads();
-    
-    // S'abonner aux changements de réactions
-    this.reactionService.reactions$.subscribe(() => {
-      this.loadUserReactions();
-      this.loadReactionCounts();
-    });
   }
 
   loadThreads(): void {
@@ -65,52 +59,43 @@ export class ThreadListComponent implements OnInit {
       threads => {
         this.threads = threads;
         this.filterThreads();
-        this.loadUserReactions();
         this.loadReactionCounts();
       },
       error => console.error('Erreur lors du chargement des threads:', error)
     );
   }
   
-  loadUserReactions(): void {
-    this.threads.forEach(thread => {
-      if (!thread.id) return;
-      
-      this.reactionTypes.forEach(reaction => {
-        this.reactionService.hasUserReactedWithType(thread.id!, reaction.type).subscribe(
-          hasReacted => {
-            if (hasReacted) {
-              this.reactionService.getUserReactionId(thread.id!, reaction.type).subscribe(
-                reactionId => {
-                  if (!this.userReactions[thread.id!]) {
-                    this.userReactions[thread.id!] = {};
-                  }
-                  this.userReactions[thread.id!][reaction.type] = reactionId;
-                }
-              );
-            }
-          }
-        );
-      });
-    });
-  }
-  
   loadReactionCounts(): void {
     this.threads.forEach(thread => {
       if (!thread.id) return;
       
-      // Initialiser le compteur pour ce thread
+      // Initialize counter for this thread
       if (!this.reactionCounts[thread.id]) {
         this.reactionCounts[thread.id] = {};
       }
       
-     
+      // Load reaction counts for each reaction type
+      this.reactionTypes.forEach(reaction => {
+        this.reactionService.getReactionCountByType(thread.id!, reaction.type).subscribe(
+          (count: number) => {
+            this.reactionCounts[thread.id!][reaction.type] = count;
+          },
+          (error: any) => console.error(`Erreur lors du chargement des décomptes de réactions:`, error)
+        );
+      });
       
+      // Load comment counts
+      this.reactionService.getCommentCountByThreadId(thread.id!).subscribe(
+        (count: number) => {
+          this.reactionCounts[thread.id!]['COMMENT'] = count;
+        },
+        (error: any) => console.error(`Erreur lors du chargement des décomptes de commentaires:`, error)
+      );
     });
   }
 
   filterThreads(): void {
-    // Filtrer par terme de recherche
+    // Filter by search term
     let filtered = this.threads;
     
     if (this.searchTerm) {
@@ -121,7 +106,7 @@ export class ThreadListComponent implements OnInit {
       );
     }
     
-    // Filtrer par tags sélectionnés
+    // Filter by selected tags
     if (this.selectedTags.length > 0) {
       filtered = filtered.filter(thread => {
         return this.selectedTags.some(tag => 
@@ -130,7 +115,7 @@ export class ThreadListComponent implements OnInit {
       });
     }
     
-    // Appliquer le tri
+    // Apply sorting
     this.applySorting(filtered);
     
     this.filteredThreads = filtered;
@@ -175,53 +160,12 @@ export class ThreadListComponent implements OnInit {
     this.filterThreads();
   }
   
-  // Gestion des réactions
-  hasReacted(threadId: number, reactionType: string): boolean {
-    return !!(this.userReactions[threadId] && this.userReactions[threadId][reactionType]);
-  }
-  
+  // Get reaction count for a thread
   getReactionCount(threadId: number, reactionType: string): number {
     return this.reactionCounts[threadId]?.[reactionType] || 0;
   }
   
-  toggleReaction(threadId: number, reactionType: string): void {
-    if (this.hasReacted(threadId, reactionType)) {
-      // Supprimer la réaction
-      const reactionId = this.userReactions[threadId][reactionType];
-      this.reactionService.deleteReaction(reactionId).subscribe(
-        () => {
-          delete this.userReactions[threadId][reactionType];
-          // Décrémenter le compteur
-          if (this.reactionCounts[threadId] && this.reactionCounts[threadId][reactionType] > 0) {
-            this.reactionCounts[threadId][reactionType]--;
-          }
-        },
-        error => console.error(`Erreur lors de la suppression de la réaction:`, error)
-      );
-    } else {
-      // Ajouter la réaction
-      this.reactionService.addReaction(threadId, reactionType).subscribe(
-        newReaction => {
-          if (!this.userReactions[threadId]) {
-            this.userReactions[threadId] = {};
-          }
-          this.userReactions[threadId][reactionType] = newReaction.id!;
-          
-          // Incrémenter le compteur
-          if (!this.reactionCounts[threadId]) {
-            this.reactionCounts[threadId] = {};
-          }
-          if (!this.reactionCounts[threadId][reactionType]) {
-            this.reactionCounts[threadId][reactionType] = 0;
-          }
-          this.reactionCounts[threadId][reactionType]++;
-        },
-        error => console.error(`Erreur lors de l'ajout de la réaction:`, error)
-      );
-    }
-  }
-  
-  // Gestion des commentaires
+  // Comments management
   toggleCommentBox(thread: Thread): void {
     if (!thread.id) return;
     this.showCommentBox[thread.id] = !this.showCommentBox[thread.id];
@@ -238,35 +182,6 @@ export class ThreadListComponent implements OnInit {
         error => console.error('Erreur lors du chargement des réactions:', error)
       );
     }
-  }
-  
-  addComment(threadId: number): void {
-    if (!this.newCommentContent[threadId] || this.newCommentContent[threadId].trim() === '') {
-      return;
-    }
-    
-    this.reactionService.addComment(threadId, this.newCommentContent[threadId]).subscribe(
-      newComment => {
-        const thread = this.threads.find(t => t.id === threadId);
-        if (thread) {
-          if (!thread.reactions) {
-            thread.reactions = [];
-          }
-          thread.reactions.push(newComment);
-          
-          // Mettre à jour le compteur de commentaires
-          if (!this.reactionCounts[threadId]) {
-            this.reactionCounts[threadId] = {};
-          }
-          if (!this.reactionCounts[threadId]['COMMENT']) {
-            this.reactionCounts[threadId]['COMMENT'] = 0;
-          }
-          this.reactionCounts[threadId]['COMMENT']++;
-        }
-        this.newCommentContent[threadId] = '';
-      },
-      error => console.error('Erreur lors de l\'ajout du commentaire:', error)
-    );
   }
   
   getThreadComments(thread: Thread): Reaction[] {
@@ -290,7 +205,7 @@ export class ThreadListComponent implements OnInit {
     }
   }
   
-  // Utilitaires
+  // Utilities
   getThreadPreview(content: string): string {
     if (!content) return '';
     return content.length > 150 ? content.substring(0, 150) + '...' : content;
@@ -308,12 +223,14 @@ export class ThreadListComponent implements OnInit {
   }
 
   deleteThread(threadId: number): void {
-    this.threadService.deleteThread(threadId).subscribe(
-      () => {
-        this.threads = this.threads.filter(thread => thread.id !== threadId);
-        this.filterThreads();
-      },
-      error => console.error('Erreur lors de la suppression du thread:', error)
-    );
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce thread ? Cette action est irréversible.')) {
+      this.threadService.deleteThread(threadId).subscribe(
+        () => {
+          this.threads = this.threads.filter(thread => thread.id !== threadId);
+          this.filterThreads();
+        },
+        error => console.error('Erreur lors de la suppression du thread:', error)
+      );
+    }
   }
 }
