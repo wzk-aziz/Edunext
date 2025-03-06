@@ -50,7 +50,7 @@ export class PdfExportService {
         footer: (currentPage: any, pageCount: any) => {
           return {
             columns: [
-              { text: 'EduNext © 2023', alignment: 'left', margin: [40, 0, 0, 0], fontSize: 8 },
+              { text: 'EduNext © 2024', alignment: 'left', margin: [40, 0, 0, 0], fontSize: 8 },
               { text: `Page ${currentPage} of ${pageCount}`, alignment: 'right', margin: [0, 0, 40, 0], fontSize: 8 }
             ],
             margin: [40, 20, 40, 40]

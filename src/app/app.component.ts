@@ -27,7 +27,8 @@ export class AppComponent {
           '/teachereditprofile',
           '/studentlist',
           '/Tutoringsessions',
-          '/emptyteacher'
+          '/emptyteacher',
+          
         ];
         this.isTeacherRoute = teacherRoutes.some(route => event.url.startsWith(route));
       }

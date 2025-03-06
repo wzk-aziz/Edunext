@@ -213,6 +213,9 @@ onPriceRangeChange(): void {
 }
 
 onInstructorChange(): void {
+  // Convert selectedInstructor to a number to ensure proper comparison
+  this.selectedInstructor = +this.selectedInstructor;
+  console.log('Selected instructor ID:', this.selectedInstructor, 'type:', typeof this.selectedInstructor);
   this.filterPrograms();
 }
 

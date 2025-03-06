@@ -280,16 +280,7 @@
         <p>{{ feedbackError }}</p>
       </div>
 
-        <!-- Add these debug buttons -->
-  <div class="debug-actions">
-    <button class="debug-btn" (click)="testSessionFeedbackEndpoints()">
-      <i class="fas fa-tools"></i> Test API Endpoints
-    </button>
-    
-    <button class="show-mock-btn" (click)="showMockFeedback()">
-      <i class="fas fa-vial"></i> Show Sample Feedback
-    </button>
-  </div>
+
       
       <!-- Feedback Content -->
       <div class="feedback-content" *ngIf="currentFeedback && !loadingFeedback && !feedbackError">
