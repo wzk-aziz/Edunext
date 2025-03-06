@@ -76,7 +76,12 @@ public class AuthenticationService {
 
         // Fetch user from repository
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        // Vérifier si l'utilisateur est banni
+        if (user.isBanned()) {
+            throw new RuntimeException("Votre compte est banni. Contactez l'administrateur.");
+        }
 
         // Check if MFA is enabled
         if (user.isMfaEnabled()) {
@@ -88,18 +93,18 @@ public class AuthenticationService {
                     .build();
         }
 
-        // Generate JWT and refresh tokens
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        // Générer un token si l'utilisateur n'est pas banni et MFA désactivé
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        // Return response with role
         return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
+                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
-                .role(user.getRole().name())  // Add role to response
+                .role(user.getRole().name())
                 .build();
     }
+
 
 
 

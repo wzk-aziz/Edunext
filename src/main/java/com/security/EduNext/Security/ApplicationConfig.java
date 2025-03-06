@@ -1,7 +1,12 @@
 package com.security.EduNext.Security;
 
 
+import com.security.EduNext.Auth.AuthenticationService;
+import com.security.EduNext.Auth.RegisterRequest;
+import com.security.EduNext.Entities.Role;
+import com.security.EduNext.Entities.User;
 import com.security.EduNext.Repositories.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.security.EduNext.Entities.Role.ADMIN;
 
 
 @Configuration
@@ -44,9 +50,32 @@ public class ApplicationConfig {
     }
 
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(
+            AuthenticationService service,
+            UserRepository userRepository
+    ) {
+        return args -> {
+            if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
+                var admin = RegisterRequest.builder()
+                        .firstname("Admin")
+                        .lastname("Admin")
+                        .email("admin@gmail.com")
+                        .password("admin") // Idéalement, hacher ce mot de passe
+                        .role(ADMIN)
+                        .build();
+                System.out.println("Admin token: " + service.register(admin).getAccessToken());
+            } else {
+                System.out.println("Admin already exists.");
+            }
+        };
+    }
+
+
+
 }

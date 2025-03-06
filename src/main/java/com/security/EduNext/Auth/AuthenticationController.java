@@ -12,12 +12,16 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -27,7 +31,6 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
     private final UserRepository userRepository;
-
 
 
     @Value("${file.upload-dir}")
@@ -115,6 +118,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(imageUrl);
     }
 
+    @GetMapping("/user")
+    public Map<String, Object> getUser(@AuthenticationPrincipal OAuth2User principal) {
+        return Collections.singletonMap("name", principal.getAttribute("name"));
+    }
+
 
 
 
@@ -151,6 +159,7 @@ public class AuthenticationController {
     public ResponseEntity<String> hello() {
         return  ResponseEntity.ok("hello from social medias");
     }
+
 
 
 

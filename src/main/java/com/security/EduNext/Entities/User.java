@@ -51,6 +51,12 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Token> tokens;
 
+    @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
+
+    private boolean banned = false; // Ajout du champ banned
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -87,7 +93,7 @@ public class User implements UserDetails {
         return password;
     }
 
-    public User(Integer id, String firstname, String lastname, String email, String password, boolean mfaEnabled, String secret, String image, Role role, List<Token> tokens) {
+    public User(Integer id, String firstname, String lastname, String email, String password, boolean mfaEnabled, String secret, String image, Role role, List<Token> tokens, ForgotPassword forgotPassword, boolean banned) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -95,8 +101,10 @@ public class User implements UserDetails {
         this.password = password;
         this.mfaEnabled = mfaEnabled;
         this.secret = secret;
-        this.Image = image;
+        Image = image;
         this.role = role;
         this.tokens = tokens;
+        this.forgotPassword = forgotPassword;
+        this.banned = banned;
     }
 }

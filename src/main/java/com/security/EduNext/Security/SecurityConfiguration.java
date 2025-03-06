@@ -2,6 +2,10 @@ package com.security.EduNext.Security;
 
 
 
+import org.springframework.boot.CommandLineRunner;  // Correct import
+import com.security.EduNext.Entities.Role;
+import com.security.EduNext.Entities.User;
+import com.security.EduNext.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
@@ -30,12 +35,12 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
-   /* @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**").permitAll()  // Permet l'accès à ces routes
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/forgotPassword/**").permitAll()  // Permet l'accès à ces routes
                         .anyRequest().authenticated()  // Toute autre requête nécessite une authentification
                 )
                 .sessionManagement(session -> session
@@ -50,14 +55,14 @@ public class SecurityConfiguration {
                 );
 
         return http.build();
-    }*/
+    }
 
-    @Bean
+  /*  @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**").permitAll()  // Permet l'accès à ces routes
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**" ,"/api/v1/auth/request-password-reset").permitAll()// Permet l'accès à ces routes
                         .anyRequest().authenticated()  // Toute autre requête nécessite une authentification
                 )
                 .sessionManagement(session -> session
@@ -80,7 +85,15 @@ public class SecurityConfiguration {
                         )
                 );
         return http.build();  // Appelez build une seule fois à la fin
-    }
+    }*/
+
+    //Role of admin is in ApplicationConfig class
+
+
+
+
+
+
 
 
 

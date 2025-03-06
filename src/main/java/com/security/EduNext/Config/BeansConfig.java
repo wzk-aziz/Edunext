@@ -39,4 +39,7 @@ public class BeansConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);  // Use the source here
     }
+
+
+
 }

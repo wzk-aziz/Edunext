@@ -32,15 +32,18 @@ public class UserService {
         return userRepository.findByRole(role);
     }
 
-    public boolean deleteUserById(Integer userId) {
+    public void banUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        user.setBanned(true);
+        userRepository.save(user);
+    }
 
-        tokenRepository.deleteByUserId(userId);
-
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
-            return true;
-        }
-        return false;
+    public void unbanUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        user.setBanned(false);
+        userRepository.save(user);
     }
 
 

@@ -1,5 +1,6 @@
 package com.security.EduNext.Controllers;
 
+import com.security.EduNext.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import com.security.EduNext.Auth.AuthenticationService;
@@ -26,6 +27,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     private final AuthenticationService authenticationService;
 
 
@@ -44,26 +47,24 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-  /*  @GetMapping("/{role}")
-    public ResponseEntity<List<User>> getUsersByRole(@PathVariable Role role) {
-        List<User> users = userService.getUsersByRole(role);
-        return ResponseEntity.ok(users); // Renvoie les utilisateurs filtrés par rôle
-    }*/
 
     @GetMapping
     public ResponseEntity<String> sayHello() {
         return ResponseEntity.ok("Hello from secured endpoint!"); // Endpoint de test
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
-        boolean deleted = userService.deleteUserById(userId);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/ban/{id}")
+    public ResponseEntity<String> banUser(@PathVariable Integer id) {
+        userService.banUser(id);
+        return ResponseEntity.ok("Utilisateur banni avec succès");
     }
+
+    @PutMapping("/unban/{id}")
+    public ResponseEntity<String> unbanUser(@PathVariable Integer id) {
+        userService.unbanUser(id);
+        return ResponseEntity.ok("Utilisateur débanni avec succès");
+    }
+
 
     @PutMapping("/update/{id}")
     public User updateUser(@PathVariable Integer id, @RequestBody UpdateUserRequest request) {
