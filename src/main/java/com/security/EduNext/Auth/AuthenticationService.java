@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import com.security.EduNext.Services.EmailService;
+import jakarta.mail.MessagingException;
 
 
 @Service
@@ -31,8 +33,10 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TwoFactorAuthenticationService tfaService;
+    private final EmailService emailService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+
+  /*  public AuthenticationResponse register(RegisterRequest request) {
 
         if (repository.existsByEmail(request.getEmail())){
             throw new RuntimeException("Email already exists");
@@ -63,7 +67,48 @@ public class AuthenticationService {
                 .mfaEnabled(user.isMfaEnabled())
                 .build();
     }
+*/
 
+    public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
+                .mfaEnabled(request.isMfaEnabled())
+                .Image(request.getImage())
+                .build();
+
+        if (request.isMfaEnabled()) {
+            String secret = tfaService.generateNewSecret();
+            user.setSecret(secret);
+
+            try {
+                // Generate a 6-digit code from the secret
+                String code = tfaService.generateCurrentCode(secret);
+                emailService.sendMfaCode(user.getEmail(), code);
+            } catch (MessagingException e) {
+                throw new RuntimeException("Failed to send verification email", e);
+            }
+        }
+
+        var savedUser = repository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        saveUserToken(savedUser, jwtToken);
+
+        return AuthenticationResponse.builder()
+                .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .mfaEnabled(user.isMfaEnabled())
+                .build();
+    }
 
     public AuthenticationResponse authenticate(AuthenticateRequest request) {
         // Authenticate the user
@@ -102,6 +147,7 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
                 .role(user.getRole().name())
+
                 .build();
     }
 
@@ -173,6 +219,10 @@ public class AuthenticationService {
                 .mfaEnabled(user.isMfaEnabled())
                 .build();
     }
+
+
+
+
 
 
 }

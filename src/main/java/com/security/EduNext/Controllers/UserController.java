@@ -1,24 +1,18 @@
 package com.security.EduNext.Controllers;
 
 import com.security.EduNext.Repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import com.security.EduNext.Auth.AuthenticationService;
 import com.security.EduNext.Auth.UpdateUserRequest;
 import com.security.EduNext.Entities.Role;
 import com.security.EduNext.Entities.User;
 import com.security.EduNext.Services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -71,6 +65,21 @@ public class UserController {
         // Vous pouvez ici valider ou transformer la requête si nécessaire
         return userService.updateUser(request, id);
     }
+
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<User> getUserProfile(@PathVariable Integer id) {
+        Optional<User> user = userService.getUserById(id);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+    }
+
+
 
 
 }

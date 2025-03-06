@@ -1,6 +1,7 @@
 package com.security.EduNext.Tfa;
 
 import dev.samstevens.totp.code.*;
+import dev.samstevens.totp.exceptions.CodeGenerationException;
 import dev.samstevens.totp.exceptions.QrGenerationException;
 import dev.samstevens.totp.exceptions.TimeProviderException;
 import dev.samstevens.totp.qr.QrData;
@@ -52,8 +53,22 @@ public class TwoFactorAuthenticationService {
         return verifier.isValidCode(secret, code);
     }
 
-    public boolean isOtpNotValid(String secret, String code){
+    public boolean isOtpNotValid(String secret, String code) {
         return !this.isOtpValid(secret, code);
     }
 
+    public String generateCurrentCode(String secret) {
+        TimeProvider timeProvider = new SystemTimeProvider();
+        CodeGenerator codeGenerator = new DefaultCodeGenerator();
+        try {
+            long currentTime = timeProvider.getTime();
+            return codeGenerator.generate(secret, currentTime);
+        } catch (CodeGenerationException e) {
+            log.error("Error generating 2FA code", e);
+            throw new RuntimeException("Failed to generate 2FA code", e);
+        } catch (TimeProviderException e) {
+            log.error("Error getting current time", e);
+            throw new RuntimeException("Failed to get current time", e);
+        }
+    }
 }

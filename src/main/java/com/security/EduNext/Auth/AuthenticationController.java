@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
     private final UserRepository userRepository;
+
 
 
     @Value("${file.upload-dir}")
@@ -160,6 +162,14 @@ public class AuthenticationController {
         return  ResponseEntity.ok("hello from social medias");
     }
 
+
+    @GetMapping("/redirect")
+    public ResponseEntity<AuthenticationResponse> handleOAuth2Redirect(@RequestParam String token) {
+        return ResponseEntity.ok(AuthenticationResponse.builder()
+                .accessToken(token)
+                .mfaEnabled(false)
+                .build());
+    }
 
 
 
