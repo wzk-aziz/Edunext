@@ -11,6 +11,16 @@ import { ProblemService } from 'src/app/backend/coding-game-admin/problems/probl
 })
 export class ProblemListComponent implements OnInit {
   problems: any[] = [];
+  filteredProblems: any[] = [];
+  
+  // Pagination properties
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalItems: number = 0;
+  
+  // Filter properties
+  selectedDifficulty: string = '';
+  difficulties: string[] = ['Easy', 'Medium', 'Hard'];
   
   constructor(
     private problemService: ProblemService,
@@ -24,7 +34,48 @@ export class ProblemListComponent implements OnInit {
   loadProblems(): void {
     this.problemService.getAll().subscribe((data) => {
       this.problems = data;
+      this.applyFilters();
     });
+  }
+  
+  applyFilters(): void {
+    // Apply difficulty filter if selected
+    if (this.selectedDifficulty) {
+      this.filteredProblems = this.problems.filter(problem => 
+        problem.difficulty === this.selectedDifficulty
+      );
+    } else {
+      this.filteredProblems = [...this.problems];
+    }
+    
+    // Update pagination
+    this.totalItems = this.filteredProblems.length;
+  }
+  
+  onDifficultyChange(difficulty: string): void {
+    this.selectedDifficulty = difficulty;
+    this.currentPage = 1; // Reset to first page when filter changes
+    this.applyFilters();
+  }
+  
+  resetFilters(): void {
+    this.selectedDifficulty = '';
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+  
+  // Pagination methods
+  changePage(page: number): void {
+    this.currentPage = page;
+  }
+  
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+  
+  get paginatedProblems(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.filteredProblems.slice(startIndex, startIndex + this.pageSize);
   }
   
   viewProblem(id: number): void {
