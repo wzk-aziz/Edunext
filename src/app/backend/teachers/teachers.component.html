@@ -196,7 +196,7 @@
                   <th>Email</th>
                   <th>Rôle</th>
                   <th>2FA</th>
-                  <th>Actions</th>
+                  <th style="min-width: 200px">Actions</th> <!-- Added min-width -->
                 </tr>
               </thead>
               <tbody>
@@ -208,8 +208,8 @@
                   <td>{{ user.email_address }}</td>
                   <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
                   <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
-                  <td>
-                    <td>
+                  <td class="action-column"> <!-- Added class for styling -->
+                   
                       <button 
                         *ngIf="!user.banned" 
                         (click)="banOrUnbanUser(user)" 
@@ -223,7 +223,8 @@
                         Unban
                       </button>
                     <span class="btn-space"></span>
-                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                  </td>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                 
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -272,8 +273,7 @@
                   <td>{{ user.email_address }}</td>
                   <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
                   <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
-                  <td>
-                    <td>
+                  <td class="action-column"> <!-- Added class for styling -->
                       <button 
                         *ngIf="!user.banned" 
                         (click)="banOrUnbanUser(user)" 
@@ -337,8 +337,7 @@
                   <td>{{ user.email_address }}</td>
                   <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
                   <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
-                  <td>
-                    <td>
+                  <td class="action-column"> <!-- Added class for styling -->
                       <button 
                         *ngIf="!user.banned" 
                         (click)="banOrUnbanUser(user)" 
@@ -378,12 +377,44 @@
                 </a>
               </li>
             </c-pagination>
-
+            <h2 class="title">Liste des utilisateurs</h2>
             <div class="stats-container">
-              <h3>Statistiques des Utilisateurs</h3>
-              <p>Total des utilisateurs : {{ totalUsers }}</p>
-              <p>Nombre de Teachers : {{ totalTeachers }} ({{ percentageTeachers }}%)</p>
-              <p>Nombre de Learners : {{ totalLearners }} ({{ percentageLearners }}%)</p>
+              <div class="row">
+                <!-- Total Users Card -->
+                <div class="col-md-4">
+                  <div class="stat-card total-users">
+                    <div class="stat-card-body">
+                      <i class="icofont-users-alt-4"></i>
+                      <h4>Total Users</h4>
+                      <h2>{{ totalUsers }}</h2>
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Teachers Card -->
+                <div class="col-md-4">
+                  <div class="stat-card teachers">
+                    <div class="stat-card-body">
+                      <i class="icofont-teacher"></i>
+                      <h4>Teachers</h4>
+                      <h2>{{ totalTeachers }}</h2>
+                      <p>{{ percentageTeachers }}% of total users</p>
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Learners Card -->
+                <div class="col-md-4">
+                  <div class="stat-card learners">
+                    <div class="stat-card-body">
+                      <i class="icofont-graduate"></i>
+                      <h4>Learners</h4>
+                      <h2>{{ totalLearners }}</h2>
+                      <p>{{ percentageLearners }}% of total users</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             
           </div>

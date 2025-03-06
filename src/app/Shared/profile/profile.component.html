@@ -1,0 +1,29 @@
+<div class="profile-container">
+  <h2>Profile</h2>
+  <form (ngSubmit)="updateProfile()">
+    <div>
+      <label for="firstname">First Name:</label>
+      <input id="firstname" [(ngModel)]="userProfile.firstname" name="firstname" required>
+    </div>
+    <div>
+      <label for="lastname">Last Name:</label>
+      <input id="lastname" [(ngModel)]="userProfile.lastname" name="lastname" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input id="email" [(ngModel)]="userProfile.email" name="email" type="email" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input id="password" [(ngModel)]="userProfile.password" name="password" type="password" required>
+    </div>
+    <div>
+      <label for="mfaEnabled">MFA Enabled:</label>
+      <input id="mfaEnabled" [(ngModel)]="userProfile.mfaEnabled" name="mfaEnabled" type="checkbox">
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    <button type="submit">Update Profile</button>
+  </form>
+</div>

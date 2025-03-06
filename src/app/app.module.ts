@@ -57,14 +57,13 @@ import { MatlabModule } from './matlab/matlab.module';
 import { MatTableModule } from '@angular/material/table';
 import { UpdateUserComponent } from './Shared/update/update.component';
 import { UsersComponent } from './backend/users/users.component';
-import { VerifyComponent } from './Shared/verify/verify.component';
 //import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 //import { GoogleLoginProvider} from 'angularx-social-login';
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
-
-
-
+import { UserStatsComponent } from './backend/user-stats/user-stats.component';
+import { ProfileComponent } from './Shared/profile/profile.component';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
@@ -116,7 +115,8 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
     ListTeachersComponent,
     UpdateUserComponent,
     UsersComponent,
-    VerifyComponent
+    UserStatsComponent,
+    ProfileComponent,
    
   ],
   imports: [
@@ -134,6 +134,8 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
     MatPaginatorModule,
     MatlabModule,
     SocialLoginModule,
+    RecaptchaModule,
+    ReactiveFormsModule
 
   ],
   providers: [

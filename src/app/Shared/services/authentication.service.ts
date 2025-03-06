@@ -20,6 +20,8 @@ export class AuthenticationService {
   private apiUrl: string = 'http://localhost:8050/api/v1/auth/logout'; 
 
 
+
+
   constructor(
     private http: HttpClient, private router: Router
   ) { }
@@ -57,6 +59,8 @@ export class AuthenticationService {
       })
     );
   }
+
+ 
   
   
   
@@ -99,9 +103,14 @@ export class AuthenticationService {
     return this.http.post<AuthenticationResponse>(`${this.baseUrl}/auth/google`, googleAuthRequest);
   }
 
+  getUserId(): number {
+    // Logic to get the user ID, e.g., from a token or session
+    return 1; // Replace with actual logic
+  }
 
 
-  
+
+
 
   
 }

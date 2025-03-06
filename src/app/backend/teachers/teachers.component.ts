@@ -94,24 +94,7 @@ export class TeachersComponent implements OnInit {
     }
   }
 
-  getRoleBasedStatistics(): void {
-    const nonAdminUsers = this.allUsers.filter(user => user.role !== 'Admin');
-    const bannedUsers = nonAdminUsers.filter(user => user.banned);
-    const nonBannedUsers = nonAdminUsers.filter(user => !user.banned);
-
-    const bannedTeachers = bannedUsers.filter(user => user.role === 'Teacher').length;
-    const bannedLearners = bannedUsers.filter(user => user.role === 'Learner').length;
-
-    const nonBannedTeachers = nonBannedUsers.filter(user => user.role === 'Teacher').length;
-    const nonBannedLearners = nonBannedUsers.filter(user => user.role === 'Learner').length;
-
-    console.log('Total Banned Users:', bannedUsers.length);
-    console.log('Total Non-Banned Users:', nonBannedUsers.length);
-    console.log('Banned Teachers:', bannedTeachers);
-    console.log('Banned Learners:', bannedLearners);
-    console.log('Non-Banned Teachers:', nonBannedTeachers);
-    console.log('Non-Banned Learners:', nonBannedLearners);
-  }
+  
 
   onSearchByName(): void {
     if (this.searchQuery.trim() === '') {

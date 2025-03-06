@@ -55,45 +55,44 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  // Add this method inside the LoginComponent class
-private handleGoogleLogin(user: SocialUser): void {
-  console.log('Handling Google login for user:', user);
-  
-  const googleAuthRequest = {
-    token: user.idToken,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    photoUrl: user.photoUrl
-  };
+  private handleGoogleLogin(user: SocialUser): void {
+    console.log('Handling Google login for user:', user);
+    
+    const googleAuthRequest = {
+      token: user.idToken,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      photoUrl: user.photoUrl
+    };
 
-  this.authService.googleLogin(googleAuthRequest).subscribe({
-    next: (response) => {
-      if (response.accessToken) {
-        localStorage.setItem('token', response.accessToken);
-        
-        const userRole = response.role?.toUpperCase();
-        switch(userRole) {
-          case 'ADMIN':
-            this.router.navigate(['backoffice']);
-            break;
-          case 'TEACHER':
-            this.router.navigate(['listTeachers']);
-            break;
-          case 'LEARNER':
-            this.router.navigate(['studenthome']);
-            break;
-          default:
-            this.router.navigate(['main']);
+    this.authService.googleLogin(googleAuthRequest).subscribe({
+      next: (response) => {
+        if (response.accessToken) {
+          localStorage.setItem('token', response.accessToken);
+          
+          const userRole = response.role?.toUpperCase();
+          switch(userRole) {
+            case 'ADMIN':
+              this.router.navigate(['backoffice']);
+              break;
+            case 'TEACHER':
+              this.router.navigate(['listTeachers']);
+              break;
+            case 'LEARNER':
+              this.router.navigate(['studenthome']);
+              break;
+            default:
+              this.router.navigate(['main']);
+          }
         }
+      },
+      error: (err) => {
+        console.error('Google login error:', err);
+        this.errorMessage = 'Google authentication failed';
       }
-    },
-    error: (err) => {
-      console.error('Google login error:', err);
-      this.errorMessage = 'Google authentication failed';
-    }
-  });
-}
+    });
+  }
 
   verifyCode() {
     if (!this.otpCode) {

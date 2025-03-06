@@ -84,7 +84,7 @@ export class UpdateUserComponent implements OnInit {
               this.router.navigate(['/Teachers'])
                 .then(() => console.log('Navigation successful'))
                 .catch(err => console.error('Navigation failed:', err));
-            }, 1000);
+            }, 2000);
           },
           error: (err) => {
             console.error('Error updating user', err);

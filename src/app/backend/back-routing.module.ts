@@ -17,6 +17,7 @@ import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
 import { TeachersComponent } from './teachers/teachers.component';
 import { UsersComponent } from './users/users.component';
+import { UserStatsComponent } from './user-stats/user-stats.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -36,6 +37,7 @@ const routes: Routes = [
     { path: 'Marketplace', component: MarketplaceComponent },
     {path:'courses',component:CoursesBackComponent},
     { path: 'users', component: UsersComponent },
+    { path: 'user-stats', component:UserStatsComponent},
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

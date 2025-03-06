@@ -26,6 +26,8 @@ import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.comp
 import { UpdateUserComponent } from './Shared/update/update.component';
 import { TeachersComponent } from './backend/teachers/teachers.component';
 import { UsersComponent } from './backend/users/users.component'
+import { UserStatsComponent } from './backend/user-stats/user-stats.component';
+import { ProfileComponent } from './Shared/profile/profile.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -33,6 +35,8 @@ const routes: Routes = [
 
   // Users
   { path: 'users', component: UsersComponent },
+  { path: 'user-stats', component:UserStatsComponent},
+  { path: 'profile', component:ProfileComponent},
   
   // Student Routes
   { path: 'studenthome', component: LandigpageComponent },
@@ -72,7 +76,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
 
   // Wildcard Routes
-  { path: '**', redirectTo: 'studenthome', pathMatch: 'full' }
+  { path: '**', redirectTo: 'studenthome', pathMatch: 'full' },
 ];
 
 @NgModule({
