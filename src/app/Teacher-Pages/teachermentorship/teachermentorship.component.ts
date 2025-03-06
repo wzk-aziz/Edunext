@@ -327,12 +327,14 @@ getFormValidationErrors(): any {
 
   downloadProgramsAsPDF(): void {
     try {
+      console.log('Starting PDF download with', this.filteredPrograms.length, 'programs');
+      
       if (this.filteredPrograms.length === 0) {
         this.showStatusMessage('error', 'No programs to export! Create some programs first.');
         return;
       }
       
-      this.showStatusMessage('success', 'Generating PDF...');
+      this.showStatusMessage('success', 'Generating PDF... Check your popup blocker if you don\'t see the PDF.');
       
       // Call the PDF service to generate and download the PDF
       this.pdfService.generateMentorshipProgramsPDF(
@@ -341,7 +343,7 @@ getFormValidationErrors(): any {
       );
     } catch (error) {
       console.error('Error generating PDF:', error);
-      this.showStatusMessage('error', 'Failed to generate PDF. Please try again.');
+      this.showStatusMessage('error', 'Failed to generate PDF. Please check console for details.');
     }
   }
   

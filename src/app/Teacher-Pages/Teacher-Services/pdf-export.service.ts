@@ -20,153 +20,163 @@ export class PdfExportService {
   }
   
   generateMentorshipProgramsPDF(programs: MentorshipProgram[], instructorName: string): void {
-    // Current date for the PDF
-    const currentDate = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    // Define the PDF document definition with proper types
-    const documentDefinition: any = {
-      pageSize: 'A4',
-      pageMargins: [40, 60, 40, 60],
+    try {
+      console.log("Generating PDF for", programs.length, "programs");
       
-      header: {
-        columns: [
+      // Current date for the PDF
+      const currentDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      // Define the PDF document definition with proper types
+      const documentDefinition: any = {
+        pageSize: 'A4',
+        pageMargins: [40, 60, 40, 60],
+        
+        header: {
+          columns: [
+            {
+              text: 'EduNext Learning Platform',
+              alignment: 'right',
+              margin: [0, 20, 40, 0],
+              fontSize: 14,
+              color: '#5e35b1'
+            }
+          ]
+        },
+        
+        footer: (currentPage: any, pageCount: any) => {
+          return {
+            columns: [
+              { text: 'EduNext © 2023', alignment: 'left', margin: [40, 0, 0, 0], fontSize: 8 },
+              { text: `Page ${currentPage} of ${pageCount}`, alignment: 'right', margin: [0, 0, 40, 0], fontSize: 8 }
+            ],
+            margin: [40, 20, 40, 40]
+          };
+        },
+        
+        content: [
           {
-            image: this.getLogo(),
-            width: 50,
-            margin: [40, 20, 0, 0]
+            text: 'Mentorship Programs Report',
+            style: 'header'
           },
           {
-            text: 'EduNext Learning Platform',
-            alignment: 'right',
-            margin: [0, 20, 40, 0],
-            fontSize: 14,
-            color: '#5e35b1'
+            text: `Instructor: ${instructorName}`,
+            style: 'subheader'
+          },
+          {
+            text: `Generated on: ${currentDate}`,
+            style: 'date'
+          },
+          {
+            text: `Total Programs: ${programs.length}`,
+            style: 'stats'
+          },
+          {
+            text: 'Program Details',
+            style: 'sectionHeader',
+            margin: [0, 20, 0, 10]
           }
-        ]
-      },
-      
-      footer: (currentPage: any, pageCount: any) => {
-        return {
-          columns: [
-            { text: 'EduNext © 2023', alignment: 'left', margin: [40, 0, 0, 0], fontSize: 8 },
-            { text: `Page ${currentPage} of ${pageCount}`, alignment: 'right', margin: [0, 0, 40, 0], fontSize: 8 }
-          ],
-          margin: [40, 20, 40, 40]
-        };
-      },
-      
-      content: [
-        {
-          text: 'Mentorship Programs Report',
-          style: 'header'
-        },
-        {
-          text: `Instructor: ${instructorName}`,
-          style: 'subheader'
-        },
-        {
-          text: `Generated on: ${currentDate}`,
-          style: 'date'
-        },
-        {
-          text: `Total Programs: ${programs.length}`,
-          style: 'stats'
-        },
-        {
-          text: 'Program Details',
-          style: 'sectionHeader',
-          margin: [0, 20, 0, 10]
-        }
-      ],
-      
-      styles: {
-        header: {
-          fontSize: 24,
-          bold: true,
-          color: '#5e35b1',
-          margin: [0, 20, 0, 10]
-        },
-        subheader: {
-          fontSize: 16,
-          color: '#333',
-          margin: [0, 0, 0, 5]
-        },
-        date: {
-          fontSize: 12,
-          color: '#555',
-          margin: [0, 0, 0, 15]
-        },
-        stats: {
-          fontSize: 14,
-          color: '#333',
-          margin: [0, 5, 0, 5]
-        },
-        sectionHeader: {
-          fontSize: 18,
-          bold: true,
-          color: '#5e35b1',
-          margin: [0, 15, 0, 10]
-        },
-        programCard: {
-          margin: [0, 0, 0, 15],
-          padding: 10,
-          fillColor: '#f9f9f9'
-        },
-        programName: {
-          fontSize: 16,
-          bold: true,
-          color: '#333'
-        },
-        subject: {
-          fontSize: 14,
-          color: '#5e35b1',
-          italics: true
-        },
-        price: {
-          fontSize: 14,
-          bold: true,
-          color: '#5e35b1'
-        },
-        dates: {
-          fontSize: 12,
-          color: '#555'
-        },
-        description: {
-          fontSize: 12,
-          color: '#333',
-          margin: [0, 5, 0, 0]
-        }
-      }
-    };
-    
-    // Add each program as a styled box
-    programs.forEach((program, index) => {
-      const startDate = program.programStartDate ? 
-        new Date(program.programStartDate).toLocaleDateString() : 'Not specified';
-      const endDate = program.programEndDate ? 
-        new Date(program.programEndDate).toLocaleDateString() : 'Not specified';
-      
-      const programDetails = {
-        stack: [
-          { text: program.programName || 'Unnamed Program', style: 'programName' },
-          { text: `Subject: ${program.programSubject || 'Not specified'}`, style: 'subject', margin: [0, 5, 0, 0] },
-          { text: `Price: $${(program.programPrice || 0).toFixed(2)}`, style: 'price', margin: [0, 5, 0, 0] },
-          { text: `Duration: ${startDate} - ${endDate}`, style: 'dates', margin: [0, 5, 0, 0] },
-          { text: `Description: ${program.programDescription || 'No description provided.'}`, style: 'description', margin: [0, 10, 0, 0] }
         ],
-        style: 'programCard',
-        margin: [0, (index > 0) ? 20 : 0, 0, 0]
+        
+        styles: {
+          header: {
+            fontSize: 24,
+            bold: true,
+            color: '#5e35b1',
+            margin: [0, 20, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            color: '#333',
+            margin: [0, 0, 0, 5]
+          },
+          date: {
+            fontSize: 12,
+            color: '#555',
+            margin: [0, 0, 0, 15]
+          },
+          stats: {
+            fontSize: 14,
+            color: '#333',
+            margin: [0, 5, 0, 5]
+          },
+          sectionHeader: {
+            fontSize: 18,
+            bold: true,
+            color: '#5e35b1',
+            margin: [0, 15, 0, 10]
+          },
+          programCard: {
+            margin: [0, 0, 0, 15],
+            padding: 10,
+            fillColor: '#f9f9f9'
+          },
+          programName: {
+            fontSize: 16,
+            bold: true,
+            color: '#333'
+          },
+          subject: {
+            fontSize: 14,
+            color: '#5e35b1',
+            italics: true
+          },
+          price: {
+            fontSize: 14,
+            bold: true,
+            color: '#5e35b1'
+          },
+          dates: {
+            fontSize: 12,
+            color: '#555'
+          },
+          description: {
+            fontSize: 12,
+            color: '#333',
+            margin: [0, 5, 0, 0]
+          }
+        }
       };
       
-      documentDefinition.content.push(programDetails);
-    });
-    
-    // Generate and download the PDF
-    pdfMake.createPdf(documentDefinition).download('Mentorship_Programs.pdf');
+      // Add each program as a styled box
+      programs.forEach((program, index) => {
+        const startDate = program.programStartDate ? 
+          new Date(program.programStartDate).toLocaleDateString() : 'Not specified';
+        const endDate = program.programEndDate ? 
+          new Date(program.programEndDate).toLocaleDateString() : 'Not specified';
+        
+        documentDefinition.content.push({
+          stack: [
+            { text: program.programName || 'Unnamed Program', style: 'programName' },
+            { text: `Subject: ${program.programSubject || 'Not specified'}`, style: 'subject', margin: [0, 5, 0, 0] },
+            { text: `Price: $${(program.programPrice || 0).toFixed(2)}`, style: 'price', margin: [0, 5, 0, 0] },
+            { text: `Duration: ${startDate} - ${endDate}`, style: 'dates', margin: [0, 5, 0, 0] },
+            { text: `Description: ${program.programDescription || 'No description provided.'}`, style: 'description', margin: [0, 10, 0, 0] }
+          ],
+          style: 'programCard',
+          margin: [0, (index > 0) ? 20 : 0, 0, 0]
+        });
+      });
+      
+      console.log("PDF definition created, attempting to generate PDF");
+      
+      // Try both download and open methods
+      try {
+        // First try download
+        pdfMake.createPdf(documentDefinition).download('Mentorship_Programs.pdf');
+        console.log("PDF download initiated");
+      } catch (err) {
+        console.error("Download failed, trying open method", err);
+        // If download fails, try opening in new window
+        pdfMake.createPdf(documentDefinition).open();
+      }
+    } catch (error) {
+      console.error("Error in PDF generation:", error);
+      throw error; // Re-throw so component can catch it
+    }
   }
   
   // Base64 encoded small logo for header
