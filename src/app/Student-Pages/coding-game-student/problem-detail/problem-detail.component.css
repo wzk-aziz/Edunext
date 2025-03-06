@@ -1,87 +1,248 @@
-/* Conteneur principal */
+/* Main container */
 .container {
-    max-width: 700px;
+    max-width: 800px;
     margin: auto;
-    padding: 25px;
+    padding: 30px;
     background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.08);
-}
-
-/* Titre principal */
-.problem-title {
-    font-size: 1.8rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Problem header section */
+  .problem-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .problem-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .problem-difficulty {
+    font-size: 0.9rem;
     font-weight: 600;
-    color: #333;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-/* Carte du problème */
-.problem-card {
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .difficulty-easy {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .difficulty-medium {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .difficulty-hard {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  /* Problem card */
+  .problem-card {
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     background-color: #f8f9fa;
-}
-
-/* En-tête de la carte */
-.card-header {
-    background: #007bff;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .problem-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card header */
+  .card-header {
+    background: linear-gradient(135deg, #0062cc, #007bff);
     color: white;
     font-size: 1.2rem;
-    font-weight: bold;
-    text-align: center;
-    padding: 12px;
-    border-radius: 8px 8px 0 0;
-}
-
-/* Corps de la carte */
-.card-body {
-    padding: 15px;
-}
-
-/* Description */
-.description {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 10px;
-    line-height: 1.4;
-}
-
-/* Bloc Expected Output */
-.expected-output {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #155724;
-    background: #f1f8f4;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 16px 20px;
+    border-bottom: none;
+  }
+  
+  .card-header h4 {
+    font-weight: 700;
+  }
+  
+  /* Card body */
+  .card-body {
+    padding: 25px;
+  }
+  
+  /* Problem sections */
+  .problem-section {
+    margin-bottom: 20px;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0062cc;
+    margin-bottom: 15px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-}
-
-/* Texte de l'expected output */
-.expected-output span {
-    color: #28a745;
-    font-weight: bold;
-}
-
-/* Bouton Lancer Problème */
-.launch-btn {
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 12px 20px;
+  }
+  
+  /* Description */
+  .description {
+    font-size: 1.1rem;
+    color: #495057;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  
+  /* Examples section */
+  .example-box {
+    background-color: #f1f3f5;
+    border-radius: 8px;
+    padding: 5px;
+    margin-top: 10px;
+  }
+  
+  .example-item {
+    padding: 15px;
     border-radius: 6px;
-    background: #28a745;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .example-header {
+    font-weight: 600;
+    color: #0062cc;
+    margin-bottom: 10px;
+  }
+  
+  .example-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .input-box, .output-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .input-box .label, .output-box .label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 60px;
+  }
+  
+  .input-box .value, .output-box .value {
+    background-color: #f8f9fa;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #e83e8c;
+  }
+  
+  /* Expected output */
+  .expected-output {
+    background-color: #f1f8f4;
+    border-left: 4px solid #28a745;
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 1.1rem;
+  }
+  
+  .expected-output code {
+    color: #28a745;
+    background: none;
+    font-weight: 500;
+    font-family: 'Courier New', monospace;
+  }
+  
+  /* Constraints list */
+  .constraints-list {
+    padding-left: 20px;
+  }
+  
+  .constraints-list li {
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Action container */
+  .action-container {
+    margin-top: 30px;
+  }
+  
+  /* Back button */
+  .back-btn {
+    font-size: 0.95rem;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+  }
+  
+  .back-btn:hover {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  /* Launch button */
+  .launch-btn {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 12px 25px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #218838, #28a745);
     color: white;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-/* Effet hover sur le bouton */
-.launch-btn:hover {
-    background: #218838;
-    transform: translateY(-1px);
-}
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
+  }
+  
+  .launch-btn:hover {
+    background: linear-gradient(135deg, #1e7e34, #28a745);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(40, 167, 69, 0.3);
+  }
+  
+  .launch-btn:active {
+    transform: translateY(0);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+    
+    .problem-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .problem-title {
+      font-size: 1.8rem;
+    }
+    
+    .action-container .d-flex {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .back-btn, .launch-btn {
+      width: 100%;
+    }
+  }

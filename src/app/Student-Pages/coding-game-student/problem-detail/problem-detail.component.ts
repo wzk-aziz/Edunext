@@ -19,7 +19,17 @@ export class ProblemDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loadProblem();
   }
-
+  getDifficultyClass(difficulty: string): string {
+    difficulty = (difficulty || '').toLowerCase();
+    
+    if (difficulty === 'easy') {
+      return 'difficulty-easy';
+    } else if (difficulty === 'hard') {
+      return 'difficulty-hard';
+    } else {
+      return 'difficulty-medium'; // Default
+    }
+  }
   loadProblem(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
