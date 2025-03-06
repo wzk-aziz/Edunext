@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -56,6 +56,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatlabModule } from './matlab/matlab.module';
 import { MatTableModule } from '@angular/material/table';
 import { UpdateUserComponent } from './Shared/update/update.component';
+import { UsersComponent } from './backend/users/users.component';
+import { VerifyComponent } from './Shared/verify/verify.component';
+//import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+//import { GoogleLoginProvider} from 'angularx-social-login';
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+
+
 
 
 @NgModule({
@@ -106,7 +114,9 @@ import { UpdateUserComponent } from './Shared/update/update.component';
     LoginComponent,
     RegisterComponent,
     ListTeachersComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    UsersComponent,
+    VerifyComponent
    
   ],
   imports: [
@@ -123,11 +133,26 @@ import { UpdateUserComponent } from './Shared/update/update.component';
     GridModule,
     MatPaginatorModule,
     MatlabModule,
+    SocialLoginModule,
 
   ],
   providers: [
     HttpClient,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('376223933550-gedvfpvklutlp3cqi7frmoa5u33kvgvk.apps.googleusercontent.com')
+          },
+
+        ]
+      } as SocialAuthServiceConfig,
+    }
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Add this line
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -190,6 +190,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Image</th>
                   <th>Prénom</th>
                   <th>Nom</th>
                   <th>Email</th>
@@ -201,16 +202,28 @@
               <tbody>
                 <tr *ngFor="let user of filteredUsers.slice((currentPageAll - 1) * 3, currentPageAll * 3)">
                   <td>{{ user.id }}</td>
+                  <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
                   <td>{{ user.first_name }}</td>
                   <td>{{ user.last_name }}</td>
                   <td>{{ user.email_address }}</td>
                   <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
                   <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
                   <td>
-                    <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
+                    <td>
+                      <button 
+                        *ngIf="!user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-danger">
+                        Ban
+                      </button>
+                      <button 
+                        *ngIf="user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-success">
+                        Unban
+                      </button>
                     <span class="btn-space"></span>
-                    <a [routerLink]="['/update', user.id]" class="btn btn-primary action-btn">Modifier</a>
-                  </td>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                  </td>
                 </tr>
               </tbody>
             </table>
@@ -241,6 +254,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Image</th>
                   <th>Prénom</th>
                   <th>Nom</th>
                   <th>Email</th>
@@ -252,15 +266,28 @@
               <tbody>
                 <tr *ngFor="let user of filteredTeachers.slice((currentPageTeachers - 1) * 3, currentPageTeachers * 3)">
                   <td>{{ user.id }}</td>
+                  <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
                   <td>{{ user.first_name }}</td>
                   <td>{{ user.last_name }}</td>
                   <td>{{ user.email_address }}</td>
                   <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
                   <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
                   <td>
-                    <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
-                    <span class="btn-space"></span>
-                    <a [routerLink]="['/update', user.id]" class="btn btn-primary action-btn">Modifier</a>
+                    <td>
+                      <button 
+                        *ngIf="!user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-danger">
+                        Ban
+                      </button>
+                      <button 
+                        *ngIf="user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-success">
+                        Unban
+                    </button>
+                  <span class="btn-space"></span>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                 
                   </td>
                 </tr>
               </tbody>
@@ -292,6 +319,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Image</th>
                   <th>Prénom</th>
                   <th>Nom</th>
                   <th>Email</th>
@@ -303,15 +331,28 @@
               <tbody>
                 <tr *ngFor="let user of filteredLearners.slice((currentPageLearners - 1) * 3, currentPageLearners * 3)">
                   <td>{{ user.id }}</td>
+                  <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
                   <td>{{ user.first_name }}</td>
                   <td>{{ user.last_name }}</td>
                   <td>{{ user.email_address }}</td>
                   <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
                   <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
                   <td>
-                    <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
+                    <td>
+                      <button 
+                        *ngIf="!user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-danger">
+                        Ban
+                      </button>
+                      <button 
+                        *ngIf="user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-success">
+                        Unban
+                      </button>
                     <span class="btn-space"></span>
-                    <a [routerLink]="['/update', user.id]" class="btn btn-primary action-btn">Modifier</a>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                  
                   </td>
                   
                 </tr>
@@ -337,6 +378,14 @@
                 </a>
               </li>
             </c-pagination>
+
+            <div class="stats-container">
+              <h3>Statistiques des Utilisateurs</h3>
+              <p>Total des utilisateurs : {{ totalUsers }}</p>
+              <p>Nombre de Teachers : {{ totalTeachers }} ({{ percentageTeachers }}%)</p>
+              <p>Nombre de Learners : {{ totalLearners }} ({{ percentageLearners }}%)</p>
+            </div>
+            
           </div>
 
         <!-- Body: Header -->

@@ -14,6 +14,8 @@ export class UpdateUserComponent implements OnInit {
   userForm!: FormGroup;
   userId!: number;
   user: User | null = null;
+  showSuccess: boolean = false;
+  updating: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -59,7 +61,7 @@ export class UpdateUserComponent implements OnInit {
           email: this.user.email_address,
           password: '', // Don't prefill password, user should enter new one
           mfaEnabled: this.user.mfaEnabled,
-          role: this.user.roles,
+          role: this.user.role,
         });
       }
     }
@@ -69,17 +71,29 @@ export class UpdateUserComponent implements OnInit {
   // Submit the form to update user
   updateUser(): void {
     if (this.userForm.valid) {
-      this.userService
-        .updateUser(this.userId, this.userForm.value)
+      this.updating = true;
+      this.userService.updateUser(this.userId, this.userForm.value)
         .subscribe({
           next: (updatedUser) => {
             console.log('User updated successfully', updatedUser);
-            this.router.navigate(['/list-teachers', updatedUser.id]); // Redirect to profile or any other page
+            this.showSuccess = true;
+            this.updating = false;
+            
+            // Wait for 1 second before redirecting
+            setTimeout(() => {
+              this.router.navigate(['/Teachers'])
+                .then(() => console.log('Navigation successful'))
+                .catch(err => console.error('Navigation failed:', err));
+            }, 1000);
           },
           error: (err) => {
             console.error('Error updating user', err);
+            this.updating = false;
+            // Handle error here (show error message)
           },
         });
     }
   }
+
+
 }

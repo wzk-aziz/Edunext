@@ -22,13 +22,17 @@ import { TutoringsessionsComponent } from './Teacher-Pages/teacherdashboard/tuto
 import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/emptypageteacher.component';
 import { BackRoutingModule } from './backend/back-routing.module'; // Import the new module
 import { authGuard } from './Shared/services/auth/auth.guard';
-import { TeachersComponent } from './backend/teachers/teachers.component';
 import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
 import { UpdateUserComponent } from './Shared/update/update.component';
+import { TeachersComponent } from './backend/teachers/teachers.component';
+import { UsersComponent } from './backend/users/users.component'
 
 const routes: Routes = [
   // Main Landing Page
   { path: 'main', component: MainhomepageComponent, canActivate: [authGuard] },
+
+  // Users
+  { path: 'users', component: UsersComponent },
   
   // Student Routes
   { path: 'studenthome', component: LandigpageComponent },
@@ -58,8 +62,8 @@ const routes: Routes = [
   { path: 'teachereditprofile', component: TeachereditprofileComponent },
   { path: 'studentlist', component: StudentslistComponent },
   { path: 'Tutoringsessions', component: TutoringsessionsComponent },
-  { path: 'Teachers', component: TeachersComponent},
   { path: 'listTeachers', component: ListTeachersComponent},
+  { path : 'Teachers', component: TeachersComponent},
 
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },

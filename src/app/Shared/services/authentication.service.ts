@@ -95,6 +95,10 @@ export class AuthenticationService {
 
   }
 
+  googleLogin(googleAuthRequest: any): Observable<AuthenticationResponse> {
+    return this.http.post<AuthenticationResponse>(`${this.baseUrl}/auth/google`, googleAuthRequest);
+  }
+
 
 
   

@@ -40,8 +40,13 @@ export class UserService {
     return this.http.put<User>(`${this.apiUrl}/update/${id}`, userData);
   }
 
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+  banUser(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/ban/${id}`, {});
   }
+  
+  unbanUser(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/unban/${id}`, {});
+  }
+  
 
 }

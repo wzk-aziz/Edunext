@@ -107,12 +107,7 @@ export class ListTeachersComponent implements OnInit {
     this.currentPageLearners = page;
   }
 
-  // Delete user by ID
-  deleteUser(userId: number) {
-    this.userService.deleteUser(userId).subscribe(() => {
-      this.loadUsers(); // Reload users after deletion
-    });
-  }
+
 
   getUserImage(fileName: string): string {
     return this.userService.getUserImage(fileName);

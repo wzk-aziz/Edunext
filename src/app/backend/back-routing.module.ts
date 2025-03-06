@@ -16,6 +16,7 @@ import { EventComponent } from './event/event.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
 import { TeachersComponent } from './teachers/teachers.component';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -23,7 +24,7 @@ const routes: Routes = [
     { path: 'Admin', component: Sidebar2Component },
     { path: 'Student', component: StudentComponent },
     { path: 'Class', component: ClassComponent },
-    { path: 'Teachers', component: TeachersComponent },
+    { path : 'teachers', component: TeachersComponent},
     { path: 'video_class', component: VideoClassComponent },
     { path: 'chat', component: ChatComponent },
     { path: 'reviews', component: ReviewsComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
     { path: 'Event', component: EventComponent },
     { path: 'Marketplace', component: MarketplaceComponent },
     {path:'courses',component:CoursesBackComponent},
+    { path: 'users', component: UsersComponent },
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

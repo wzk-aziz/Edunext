@@ -39,7 +39,6 @@
         <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
         <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
         <td>
-          <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
           <span class="btn-space"></span>
           <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
         </td>
@@ -92,7 +91,6 @@
         <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
         <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
         <td>
-          <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
           <span class="btn-space"></span>
           <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
         </td>
@@ -145,7 +143,6 @@
         <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
         <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
         <td>
-          <button (click)="deleteUser(user.id)" class="btn btn-danger action-btn">Supprimer</button>
           <span class="btn-space"></span>
           <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
         </td>

@@ -20,7 +20,7 @@ export class AppComponent {
         const isAuthRoute = authRoutes.some(route => event.url === route);
 
         // Check the current route
-        const isSignUpOrSignInPageOrMainOrBackOffice = event.url.includes('/register') || event.url.includes('/login') || event.url.includes('/main') || event.url.includes('/backoffice');
+        const isSignUpOrSignInPageOrMainOrBackOffice = event.url.includes('/register') || event.url.includes('/login') || event.url.includes('/main') || event.url.includes('/backoffice') || event.url.includes('/update') ;
         this.showHeader = !isSignUpOrSignInPageOrMainOrBackOffice;
         this.showFooter = !isSignUpOrSignInPageOrMainOrBackOffice;
 
