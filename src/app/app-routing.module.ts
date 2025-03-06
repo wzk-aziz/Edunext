@@ -34,6 +34,7 @@ import { TeacherDashboardComponent } from './Teacher-Pages/teacher-dashboard/tea
 
 import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-layout.component';
 
+import { TeacherSessionReviewComponent } from './Teacher-Pages/teacher-session-review/teacher-session-review.component';
 
 
 const routes: Routes = [
@@ -78,7 +79,10 @@ const routes: Routes = [
 
   { path: 'student-tutoring', component: StudentTutoringComponent },
 
-  //Teacher 
+
+    // In app-routing.module.ts, inside the 'teacher' path children array
+  { path: 'live-session/:id', component: TeacherSessionReviewComponent },
+
   // Teacher Routes under layout component
   {
     path: 'teacher',
@@ -93,6 +97,8 @@ const routes: Routes = [
       { path: 'students', component: StudentslistComponent },
       { path: 'tutoring-sessions', component: TutoringsessionsComponent },
       { path: 'empty', component: EmptypageteacherComponent },
+      { path: 'session-review/:id', component: TeacherSessionReviewComponent },
+
       // Add other teacher pages here
     ]
   },

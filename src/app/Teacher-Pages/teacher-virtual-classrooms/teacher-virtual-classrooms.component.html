@@ -200,12 +200,12 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-  <!-- Create Session Button -->
+  <!-- Create Session Button
   <div class="create-session-container">
     <button class="create-session-btn" data-bs-toggle="modal" data-bs-target="#createSessionModal">
       <i class="fas fa-plus"></i> Create New Session
     </button>
-  </div>
+  </div>  -->
   
   <!-- Loading indicator -->
   <div class="loading-container" *ngIf="loading">
@@ -233,16 +233,7 @@
   <!-- GRID VIEW: Sessions grid -->
   <div class="sessions-grid" *ngIf="!loading && !error && filteredSessions.length > 0 && viewMode === 'grid'">
     <div class="session-card" *ngFor="let session of filteredSessions" [attr.data-status]="session.status">
-      <!-- Session status badge -->
-      <div class="session-status" [ngClass]="{
-        'live': session.status === 'ongoing',
-        'upcoming': session.status === 'scheduled',
-        'completed': session.status === 'completed'
-      }">
-        {{ session.status === 'ongoing' ? 'LIVE NOW' : 
-           session.status === 'scheduled' ? 'UPCOMING' : 'COMPLETED' }}
-      </div>
-      
+
       <div class="session-content">
         <h2 class="session-title">{{ session.titleSession }}</h2>
         <p class="session-subject">{{ getSubjectDisplay(session.sessionSubject) }}</p>
@@ -276,13 +267,23 @@
         
  <!-- In grid view session card - update the session-menu-button to a dropdown -->
  <div class="session-actions">
-  <a [href]="session.zoomLink || '#'" target="_blank" class="join-btn" 
+  <!-- For ongoing or scheduled sessions - External link -->
+  <!-- Remove conditional display based on status and use a single button for all sessions -->
+  <a [routerLink]="['/teacher/session-review', session.idSession]"
+     class="join-btn" 
      [ngClass]="{'join-live': session.status === 'ongoing', 
-                'join-upcoming': session.status === 'scheduled', 
+                'join-upcoming': session.status === 'scheduled',
                 'join-completed': session.status === 'completed'}">
     <i class="fas fa-video me-2"></i>
-    {{ session.status === 'ongoing' ? 'Start Session' : 
+    {{ session.status === 'ongoing' ? 'Join Session' : 
        session.status === 'scheduled' ? 'Prepare Session' : 'Review Session' }}
+  </a>
+  
+  <!-- For completed sessions - Angular router link -->
+  <a *ngIf="session.status === 'completed'"
+     [routerLink]="['/teacher/session-review', session.idSession]"
+     class="join-btn join-completed">
+    <i class="fas fa-clipboard-list me-2"></i> Review Session
   </a>
   
   <!-- Replace the menu button with these action buttons -->
@@ -310,7 +311,7 @@
           <th>Title & Subject</th>
           <th>Date & Time</th>
           <th>Students</th>
-          <th>Status</th>
+          <th></th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -348,9 +349,20 @@
           <td>
 <!-- In list view - update the action buttons -->
 <div class="table-actions">
-  <a [href]="session.zoomLink || '#'" target="_blank" class="table-action-btn primary">
+  <a *ngIf="session.status === 'ongoing' || session.status === 'scheduled'"
+     [href]="session.zoomLink || '#'" 
+     target="_blank" 
+     class="table-action-btn primary">
     <i class="fas fa-video"></i>
   </a>
+  
+  <!-- For completed sessions - Angular router link -->
+  <a *ngIf="session.status === 'completed'"
+     [routerLink]="['/teacher/session-review', session.idSession]"
+     class="table-action-btn primary">
+    <i class="fas fa-clipboard-list"></i>
+  </a>
+
   <button class="table-action-btn secondary" (click)="editSession(session)">
     <i class="fas fa-edit"></i>
   </button>
