@@ -19,6 +19,6 @@ export class HeaderteacherComponent {
   onMentorshipProgramsClick(event: Event): void {
     event.preventDefault();
     console.log('Mentorship Programs clicked');
-    this.router.navigate(['/teacher/mentorship-programs']); // Create this component later
+    this.router.navigate(['/teacher/mentorship']); // Create this component later
   }
 }

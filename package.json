@@ -25,6 +25,7 @@
     "@types/bootstrap": "^5.2.10",
     "bootstrap": "^5.3.3",
     "canvas-confetti": "^1.9.3",
+    "pdfmake": "^0.2.18",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

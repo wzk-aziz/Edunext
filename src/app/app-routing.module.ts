@@ -36,6 +36,9 @@ import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-l
 
 import { TeacherSessionReviewComponent } from './Teacher-Pages/teacher-session-review/teacher-session-review.component';
 
+import { TeacherMentorshipComponent } from './Teacher-Pages/teachermentorship/teachermentorship.component';
+
+
 
 const routes: Routes = [
   // Main Landing Page
@@ -92,6 +95,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: TeacherDashboardComponent },
       { path: 'virtual-classrooms', component: TeacherVirtualClassroomsComponent },
+      { path: 'mentorship', component: TeacherMentorshipComponent },
       { path: 'courses', component: TeachercoursesComponent },
       { path: 'edit-profile', component: TeachereditprofileComponent },
       { path: 'students', component: StudentslistComponent },

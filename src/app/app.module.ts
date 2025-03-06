@@ -83,6 +83,7 @@ import { TeacherVirtualClassroomsComponent } from './Teacher-Pages/teacher-virtu
 import { TeacherDashboardComponent } from './Teacher-Pages/teacher-dashboard/teacher-dashboard.component';
 import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-layout.component';
 import { TeacherSessionReviewComponent } from './Teacher-Pages/teacher-session-review/teacher-session-review.component';
+import { TeacherMentorshipComponent } from './Teacher-Pages/teachermentorship/teachermentorship.component';
 
 @NgModule({
   declarations: [
@@ -145,6 +146,7 @@ import { TeacherSessionReviewComponent } from './Teacher-Pages/teacher-session-r
     TeacherDashboardComponent,
     TeacherLayoutComponent,
     TeacherSessionReviewComponent,
+    TeacherMentorshipComponent,
 
   ],
   imports: [

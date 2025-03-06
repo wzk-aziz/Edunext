@@ -366,7 +366,7 @@
         <div class="average-rating">
           <span class="rating-label">Average Rating</span>
           <div class="stars">
-            <span class="rating-value">{{ averageRating?.toFixed(1) }}</span>
+            <span class="rating-value">{{ averageRating.toFixed(1) }}</span>
             <i *ngFor="let star of [1,2,3,4,5]" 
                class="fas" [ngClass]="star <= averageRating ? 'fa-star' : 'fa-star-o'"></i>
           </div>
