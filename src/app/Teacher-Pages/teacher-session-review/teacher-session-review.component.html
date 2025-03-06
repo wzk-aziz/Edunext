@@ -1,32 +1,72 @@
-<!-- Loading State -->
+<!-- Loading State - Visible for both modes -->
 <div class="loading-overlay" *ngIf="loading">
   <div class="spinner"></div>
-  <p>Loading session data...</p>
+  <p>Loading session...</p>
 </div>
 
-<!-- Error State -->
+<!-- Error State - Visible for both modes -->
 <div class="error-overlay" *ngIf="error">
   <div class="error-message">
     <i class="fas fa-exclamation-circle"></i>
-    <h3>Data Loading Error</h3>
+    <h3>Connection Error</h3>
     <p>{{ error }}</p>
-    
-    <!--<button class="primary-btn" (click)="loadSessionDetails()">Try Again</button>    -->
-    
+    <button class="primary-btn" (click)="loadSessionDetails(currentSessionId)">Try Again</button>
     <button class="secondary-btn" routerLink="/teacher/virtual-classrooms">Back to Sessions</button>
   </div>
 </div>
 
-<!-- LIVE SESSION VIEW (Main View) -->
-<div class="live-session-container" *ngIf="!loading && !error">
+<!-- COMPLETED SESSION VIEW (Teacher Analytics) -->
+<div class="completed-session-overlay" *ngIf="isSessionPast && !loading && !error && !videoAvailable">
+  <div class="completed-header">
+    <h1>{{ session?.titleSession }}</h1>
+    <div class="session-meta">
+      <div class="instructor-info">
+        <i class="fas fa-user-tie"></i>
+        <span>Instructor: You</span>
+      </div>
+      <div class="session-date">
+        <i class="far fa-calendar-alt"></i>
+        <span>{{ formatDate(session?.startTime) }}</span>
+      </div>
+      <div class="session-status">
+        <i class="fas fa-check-circle"></i>
+        <span>Session Completed</span>
+        <button class="feedback-btn" (click)="showFeedbackModal()">
+          <i class="fas fa-comments"></i> View Feedback
+        </button>
+        <button class="reminder-btn" (click)="sendFollowUp()">
+          <i class="fas fa-paper-plane"></i> Follow Up
+        </button>
+      </div>
+    </div>
+    
+    <!-- Add Upload Recording Button for completed sessions -->
+    <div class="upload-section">
+      <button class="primary-btn" (click)="uploadRecording()">
+        <i class="fas fa-cloud-upload-alt"></i> Upload Recording
+      </button>
+      <button class="secondary-btn" (click)="downloadReport()">
+        <i class="fas fa-download"></i> Download Report
+      </button>
+    </div>
+    
+    <div class="back-button">
+      <button class="primary-btn" routerLink="/teacher/virtual-classrooms">
+        <i class="fas fa-arrow-left"></i> Back to Sessions
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE SESSION VIEW -->
+<div class="live-session-container" *ngIf="(isSessionActive || videoAvailable) && !loading && !error">
   <!-- Session Header -->
   <header class="session-header">
     <div class="session-info">
       <h1>{{ session?.titleSession }}</h1>
-      <p>{{ getDurationDisplay() }} · {{ formatDate(session?.startTime) }}</p>
+      <p>{{ formatDate(session?.startTime) }}</p>
     </div>
     <div class="session-actions">
-      <!-- Video controls -->
       <button class="control-btn" [class.disabled]="!cameraEnabled" (click)="toggleCamera()">
         <i class="fas" [ngClass]="cameraEnabled ? 'fa-video' : 'fa-video-slash'"></i>
       </button>
@@ -39,13 +79,13 @@
         <i class="fas fa-desktop"></i>
       </button>
       
-      <!-- Teacher-specific controls -->
-      <button class="control-btn" [class.active]="currentTab === 'analytics'" (click)="toggleAnalyticsPane()">
+      <!-- Teacher-specific control for analytics -->
+      <button class="control-btn" [class.active]="showAnalytics" (click)="toggleAnalyticsPane()">
         <i class="fas fa-chart-bar"></i>
       </button>
       
-      <button class="leave-btn" routerLink="/teacher/virtual-classrooms">
-        <i class="fas fa-arrow-left"></i> Back to Sessions
+      <button class="leave-btn" (click)="leaveSession()">
+        <i class="fas fa-phone-slash"></i> End Session
       </button>
     </div>
   </header>
@@ -54,68 +94,77 @@
   <div class="main-content">
     <!-- Video Area -->
     <div class="video-area" [ngClass]="{'with-sidebar': showAnalytics}">
-      <!-- Main Video Display -->
-      <div class="video-container main-video">
-        <div class="video-player">
-          <!-- Video element with controls -->
-          <video controls autoplay class="live-video-player" *ngIf="videoAvailable">
-            <source [src]="videoSource" type="video/mp4">
-            Your browser does not support HTML5 video.
+      <!-- Main Video Display (Teacher's Stream) -->
+      <div class="video-container compact-video">
+        <h3 class="session-title">{{ session?.titleSession }}</h3>
+        <!-- In the compact-video container, add this after teacher-video-preview -->
+        <div class="screen-share-container" *ngIf="screenSharing && screenStream">
+          <video #screenVideo
+                 [srcObject]="screenStream"
+                 autoplay
+                 class="screen-share-video">
           </video>
+          <div class="sharing-indicator">
+            <i class="fas fa-desktop"></i> Screen sharing active
+          </div>
+        </div>
         
-          <!-- Fallback when no video available -->
-          <div class="video-placeholder" *ngIf="!videoAvailable">
-            <i class="fas fa-video-slash"></i>
-            <p>Recording not available or ended</p>
-            <button class="upload-btn" (click)="uploadRecording()">
-              <i class="fas fa-cloud-upload-alt"></i> Upload Recording
-            </button>
+        <div class="recording-info">
+          <div class="status-indicator">
+            <i class="fas fa-circle recording-icon"></i>
+            <span></span>
+          </div>
+          <div class="recording-time">{{ formatDate(session?.startTime) }}</div>
+        </div>
+        
+        <!-- Camera preview -->
+        <div class="teacher-video-preview">
+          <!-- Show teacher webcam when camera is enabled -->
+          <video #userVideo 
+                 *ngIf="cameraEnabled && userStream" 
+                 [srcObject]="userStream" 
+                 autoplay 
+                 muted
+                 playsinline
+                 class="user-video">
+          </video>
+          
+          <!-- Show user placeholder when camera is off -->
+          <div class="user-video-placeholder" *ngIf="!cameraEnabled || !userStream">
+            <i class="fas fa-user-tie"></i>
           </div>
           
-          <div class="video-controls-overlay">
-            <div class="video-title">
-              <h3>{{ session?.titleSession }}</h3>
-              <p>{{ formatDate(session?.startTime) }}</p>
-            </div>
-            <div class="video-actions">
-              <button class="video-action-btn" (click)="toggleMic()">
-                <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
-              </button>
-              <button class="video-action-btn" (click)="toggleCamera()">
-                <i class="fas" [ngClass]="cameraEnabled ? 'fa-video' : 'fa-video-slash'"></i>
-              </button>
-              <button class="video-action-btn" (click)="toggleScreenShare()">
-                <i class="fas fa-desktop"></i>
-              </button>
-              <button class="video-action-btn" (click)="toggleParticipantsPanel()">
-                <i class="fas fa-users"></i>
-              </button>
-              <button class="video-action-btn exit" routerLink="/teacher/virtual-classrooms">
-                <i class="fas fa-phone-slash"></i>
-              </button>
-            </div>
+          <!-- Video controls -->
+          <div class="video-controls">
+            <button class="video-control-btn" [class.active]="micEnabled" (click)="toggleMic()">
+              <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
+            </button>
+            
+            <button class="video-control-btn" [class.active]="cameraEnabled" (click)="toggleCamera()">
+              <i class="fas" [ngClass]="cameraEnabled ? 'fa-video' : 'fa-video-slash'"></i>
+            </button>
+            
+            <button class="video-control-btn" [class.active]="screenSharing" (click)="toggleScreenShare()">
+              <i class="fas fa-desktop"></i>
+            </button>
+            
+            <button class="video-control-btn danger" (click)="leaveSession()">
+              <i class="fas fa-phone-slash"></i>
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Teacher Preview Video -->
-      <div class="video-container teacher-video">
+      <!-- Teacher Video Preview -->
+      <div class="video-container student-video">
         <div class="video-frame">
-          <!-- Show screen share when active -->
-          <video #screenVideo 
-                *ngIf="screenSharing && screenStream" 
-                [srcObject]="screenStream" 
-                autoplay 
-                class="screen-share-video">
-          </video>
-          
-          <!-- Show user webcam when not screen sharing but camera is enabled -->
+          <!-- Show teacher webcam when not screen sharing but camera is enabled -->
           <video #userVideo 
-                *ngIf="!screenSharing && cameraEnabled && userStream" 
-                [srcObject]="userStream" 
-                autoplay 
-                muted
-                class="user-video">
+                 *ngIf="!screenSharing && cameraEnabled && userStream" 
+                 [srcObject]="userStream" 
+                 autoplay 
+                 muted
+                 class="user-video">
           </video>
           
           <!-- Show user placeholder when camera is off -->
@@ -131,122 +180,20 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Students Grid (conditionally visible) -->
-      <div class="students-video-grid" *ngIf="showParticipants">
-        <div class="students-header">
-          <h3>Students ({{ attendanceRate }}% attending)</h3>
-          <button class="close-btn" (click)="toggleParticipantsPanel()">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        
-        <div class="participants-grid">
-          <div class="participant-video" *ngFor="let student of students.slice(0, 6)">
-            <div class="video-frame">
-              <div class="user-video-placeholder">
-                <div class="student-avatar">{{ student.name.charAt(0) }}</div>
-              </div>
-              <div class="video-label">
-                <span>{{ student.name }}</span>
-                <i class="fas fa-microphone-slash"></i>
-                <i *ngIf="student.handRaised" class="fas fa-hand-paper raise-hand-icon"></i>
-              </div>
+      <div class="participants-grid" *ngIf="showParticipants">
+        <div class="participant-video" *ngFor="let student of students.slice(0, 6)">
+          <div class="video-frame">
+            <div class="user-video-placeholder">
+              <div class="student-avatar">{{ student.name.charAt(0) }}</div>
+            </div>
+            <div class="video-label">
+              <span>{{ student.name }}</span>
+              <i class="fas" [ngClass]="student.isMuted ? 'fa-microphone-slash' : 'fa-microphone'"></i>
+              <i *ngIf="student.handRaised" class="fas fa-hand-paper raise-hand-icon"></i>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Chat Sidebar -->
-    <div class="chat-sidebar">
-      <div class="chat-header">
-        <h3>Session Chat</h3>
-        <div class="chat-controls">
-          <span class="online-indicator">
-            <span class="dot"></span> {{ students.length }} students
-          </span>
-          <button class="chat-action-btn" (click)="downloadChatLog()">
-            <i class="fas fa-download"></i>
-          </button>
-        </div>
-      </div>
-      
-      <div class="messages-container" #messagesContainer>
-        <div class="date-divider">
-          <span>{{ formatDate(session?.startTime) }}</span>
-        </div>
-        
-        <div class="message" 
-             *ngFor="let message of chatMessages" 
-             [ngClass]="{
-               'teacher-message': message.sender === session?.instructorName,
-               'system-message': message.sender === 'System'
-             }">
-          <div class="message-header">
-            <strong [ngClass]="{'instructor': message.sender === session?.instructorName}">
-              {{ message.sender }}
-              <span *ngIf="message.sender === session?.instructorName">(you)</span>
-            </strong>
-            <span class="message-time">{{ message.time }}</span>
-          </div>
-          <div class="message-content">
-            {{ message.content }}
-          </div>
-        </div>
-        
-        <div class="no-messages" *ngIf="chatMessages.length === 0">
-          <i class="fas fa-comments"></i>
-          <p>No messages were sent during this session.</p>
-        </div>
-      </div>
-      
-      <div class="message-input">
-        <input 
-          type="text" 
-          [(ngModel)]="newMessage" 
-          placeholder="Type your message..." 
-          (keyup.enter)="sendMessage()"
-        >
-        <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
-      
-      <!-- Student Questions Section -->
-      <div class="questions-section">
-        <div class="questions-header">
-          <h3>Student Questions</h3>
-          <span class="questions-count">{{ studentQuestions.length }} questions</span>
-        </div>
-        
-        <div class="questions-list" *ngIf="studentQuestions.length > 0">
-          <div class="question-item" *ngFor="let question of studentQuestions">
-            <div class="question-header">
-              <div class="student-info">
-                <div class="student-avatar">{{ question.student.charAt(0) }}</div>
-                <span>{{ question.student }}</span>
-              </div>
-              <span class="question-time">{{ question.time }}</span>
-            </div>
-            <div class="question-content">
-              {{ question.content }}
-            </div>
-            <div class="question-answer" *ngIf="question.answered">
-              <div class="answer-label">Your Answer:</div>
-              <div class="answer-content">{{ question.answer }}</div>
-            </div>
-            <div class="question-actions" *ngIf="!question.answered">
-              <button class="question-action-btn" (click)="answerQuestion(question)">
-                <i class="fas fa-reply"></i> Answer
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="no-questions" *ngIf="studentQuestions.length === 0">
-          <i class="fas fa-question-circle"></i>
-          <p>No questions were asked during this session.</p>
         </div>
       </div>
     </div>
@@ -305,33 +252,195 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    
+    <!-- Chat Sidebar -->
+    <!-- Replace chat sidebar section with this updated version -->
+    <div class="chat-sidebar" *ngIf="!showAnalytics">
+      <div class="chat-header">
+        <h3>Session Chat</h3>
+        <div class="chat-controls">
+          <span class="online-indicator">
+            <span class="dot"></span> {{ students.length }} students
+          </span>
+          <button class="chat-action-btn" (click)="downloadChatLog()">
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Add this wrapper div with messages-container class -->
+      <div class="messages-wrapper">
+        <div class="messages-container" #messagesContainer>
+          <div class="message" 
+               *ngFor="let message of chatMessages" 
+               [ngClass]="{
+                 'my-message': message.sender === 'Ahmed Kaabi (You)',
+                 'system-message': message.isSystem
+               }">
+            <div class="message-header">
+              <strong>{{ message.sender }}</strong>
+              <span class="message-time">{{ message.time }}</span>
+            </div>
+            <div class="message-content">
+              {{ message.content }}
+              
+              <!-- File attachment -->
+              <div class="file-attachment" *ngIf="message.file">
+                <i class="fas" [ngClass]="message.file.icon"></i>
+                <div class="file-info">
+                  <div class="file-name">{{ message.file.name }}</div>
+                  <div class="file-size">{{ formatFileSize(message.file.size) }}</div>
+                </div>
+                <a [href]="message.file.url" download="{{ message.file.name }}" target="_blank">
+                  <i class="fas fa-download download-btn"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="message-input">
+        <button class="attach-btn" (click)="triggerFileUpload()">
+          <i class="fas fa-paperclip"></i>
+        </button>
+        <input 
+          type="text" 
+          [(ngModel)]="newMessage" 
+          placeholder="Type your message..." 
+          (keyup.enter)="sendMessage()"
+        >
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim() && !selectedFile">
+          <i class="fas fa-paper-plane"></i>
+        </button>
         
-        <div class="analytics-actions">
-          <button class="action-btn" (click)="sendFollowUp()">
-            <i class="fas fa-paper-plane"></i> Follow-up
-          </button>
-          <button class="action-btn" (click)="downloadReport()">
-            <i class="fas fa-file-download"></i> Report
-          </button>
-          <button class="action-btn" (click)="showFeedbackModal()">
-            <i class="fas fa-comments"></i> Feedback
-          </button>
+        <!-- Hidden file input -->
+        <input 
+          type="file"
+          #fileInput
+          style="display: none"
+          (change)="onFileSelected($event)"
+          accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png"
+        >
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Leave Confirmation Modal -->
+  <div class="leave-confirmation-overlay" *ngIf="showLeaveConfirmation">
+    <div class="leave-confirmation-dialog">
+      <div class="leave-dialog-header">
+        <i class="fas fa-sign-out-alt"></i>
+        <h3>End Session?</h3>
+      </div>
+      <div class="leave-dialog-content">
+        <p>Are you sure you want to end this session for all participants?</p>
+      </div>
+      <div class="leave-dialog-actions">
+        <button class="cancel-btn" (click)="confirmLeave(false)">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="confirm-btn" (click)="confirmLeave(true)">
+          <i class="fas fa-check"></i> End Session
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div class="feedback-modal-overlay" *ngIf="showFeedbackModalFlag">
+  <div class="feedback-modal">
+    <div class="feedback-modal-header">
+      <h2>Session Feedback</h2>
+      <button class="close-btn" (click)="closeFeedbackModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="feedback-modal-content">
+      <div class="feedback-summary" *ngIf="sessionFeedback.length > 0">
+        <div class="average-rating">
+          <span class="rating-label">Average Rating</span>
+          <div class="stars">
+            <span class="rating-value">{{ averageRating?.toFixed(1) }}</span>
+            <i *ngFor="let star of [1,2,3,4,5]" 
+               class="fas" [ngClass]="star <= averageRating ? 'fa-star' : 'fa-star-o'"></i>
+          </div>
+          <span class="rating-count">({{ sessionFeedback.length }} ratings)</span>
+        </div>
+      </div>
+      
+      <div class="feedback-list">
+        <div *ngIf="sessionFeedback.length === 0" class="no-feedback">
+          <i class="fas fa-comment-slash"></i>
+          <p>No feedback has been submitted for this session.</p>
+        </div>
+        
+        <div class="feedback-item" *ngFor="let feedback of sessionFeedback">
+          <div class="feedback-header">
+            <div class="feedback-rating">
+              <i *ngFor="let star of [1,2,3,4,5]" 
+                 class="fas" [ngClass]="star <= feedback.rating ? 'fa-star' : 'fa-star-o'"></i>
+            </div>
+            <div class="feedback-id">Feedback #{{ feedback.id }}</div>
+          </div>
+          
+          <div class="feedback-content">
+            <p>{{ feedback.content }}</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Keep all your existing modals -->
-<!-- Feedback Modal -->
-<div class="feedback-modal-overlay" *ngIf="showFeedbackModal">
-  <!-- Existing feedback modal content -->
-</div>
-
 <!-- Follow-up Modal -->
 <div class="followup-modal-overlay" *ngIf="showFollowupModal">
-  <!-- Existing followup modal content -->
+  <div class="email-reminder-modal">
+    <div class="email-reminder-header">
+      <h2>Follow Up with Students</h2>
+      <button class="close-btn" (click)="closeFollowupModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="email-reminder-content">
+      <p>Send a follow-up message to all students from this session:</p>
+      
+      <div class="input-group">
+        <label for="followupSubject">Subject:</label>
+        <input 
+          type="text" 
+          id="followupSubject"
+          [(ngModel)]="followupSubject" 
+          placeholder="Follow-up subject"
+          class="email-input">
+      </div>
+      
+      <div class="input-group">
+        <label for="followupMessage">Message:</label>
+        <textarea 
+          id="followupMessage"
+          [(ngModel)]="followupMessage" 
+          placeholder="Write your message here..."
+          class="email-input" 
+          rows="5"></textarea>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeFollowupModal()">Cancel</button>
+        <button class="send-btn" (click)="sendFollowupMessage()">
+          Send to All Students
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
 <!-- Session Time Popup -->
 <div class="session-time-popup-overlay" *ngIf="showSessionTimePopup">
   <div class="session-time-popup">
@@ -343,8 +452,7 @@
     </div>
     
     <div class="popup-content">
-      <div class="session-title">{{ session?.title }}</div>
-      
+      <div class="session-title">{{ session?.titleSession }}</div>      
       <div class="session-time-info">
         <div class="time-detail">
           <i class="fas fa-calendar-day"></i>

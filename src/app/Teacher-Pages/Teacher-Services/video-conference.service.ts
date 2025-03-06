@@ -19,6 +19,13 @@ export interface ChatMessage {
   content: string;
   isTeacher?: boolean;
   isSystem?: boolean;
+  file?: {
+    name: string;
+    type: string;
+    size: number;
+    url: string;
+    icon: string;
+  };
 }
 
 export interface SessionInfo {
@@ -72,7 +79,7 @@ export class VideoConferenceService {
         duration: 60,
         status: 'ongoing',
         instructorId: 1,
-        instructorName: 'John Doe',
+        instructorName: 'Ahmed Kaabi',
         enrolledStudents: 25
       };
       this.sessionSubject.next(mockSession);
@@ -83,7 +90,7 @@ export class VideoConferenceService {
       // Teacher is always participant 1
       const teacher: Participant = {
         id: 1,
-        name: 'John Doe',
+        name: 'Ahmed Kaabi',
         isTeacher: true,
         isMuted: false,
         hasCamera: true,
@@ -140,12 +147,21 @@ export class VideoConferenceService {
     }
     
     try {
+      // Try with more specific constraints for better compatibility
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: "user"
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true
+        }
       });
       
       this.userStream = stream;
+      console.log('User media stream obtained successfully');
       
       // Update participant status
       if (this.localParticipant) {
@@ -157,8 +173,21 @@ export class VideoConferenceService {
       
       return stream;
     } catch (error) {
-      console.error('Error getting user media', error);
-      throw error;
+      console.error('Error getting user media:', error);
+      
+      // Try again with less demanding constraints if first attempt failed
+      try {
+        const fallbackStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+        
+        this.userStream = fallbackStream;
+        return fallbackStream;
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError);
+        throw fallbackError;
+      }
     }
   }
 
@@ -291,50 +320,66 @@ export class VideoConferenceService {
   }
 
   // Mock data methods for testing UI
+  // Replace the entire loadMockMessages method with this:
   public loadMockMessages(): void {
-    const isTeacher = this.localParticipant?.isTeacher || false;
-    
+    // Only show instructor and system messages - no student messages
     const messages: ChatMessage[] = [
       {
-        sender: isTeacher ? 'John Doe (You)' : 'John Doe',
+        sender: 'Ahmed Kaabi (You)',
         time: '10:00',
-        content: 'Welcome everyone to our session on Angular Development!',
+        content: 'Welcome to the session! ',
         isTeacher: true
       },
-      {
-        sender: 'Student 1',
-        time: '10:05',
-        content: 'Looking forward to learning more about components'
-      },
-      {
-        sender: 'Student 2',
-        time: '10:07',
-        content: 'Will we cover dependency injection today?'
-      },
-      {
-        sender: isTeacher ? 'John Doe (You)' : 'John Doe',
-        time: '10:08',
-        content: 'Yes, dependency injection is a core topic for today\'s session.',
-        isTeacher: true
-      },
-      {
-        sender: 'System',
-        time: '10:10',
-        content: 'Student 3 joined the session',
-        isSystem: true
-      },
-      {
-        sender: 'Student 3',
-        time: '10:10',
-        content: 'Sorry I\'m late!'
-      },
-      {
-        sender: 'Student 5',
-        time: '10:15',
-        content: 'Could you explain dependency injection again?'
-      }
+
+
+
+
     ];
     
     this.messagesSubject.next(messages);
   }
+
+  public sendFileMessage(file: File): void {
+    if (!this.localParticipant) return;
+    
+    // Generate a local URL for the file
+    const url = URL.createObjectURL(file);
+    
+    // Determine the file icon based on its type
+    let icon = 'fa-file';
+    if (file.type.includes('pdf')) {
+      icon = 'fa-file-pdf';
+    } else if (file.type.includes('word') || file.type.includes('doc')) {
+      icon = 'fa-file-word';
+    } else if (file.type.includes('powerpoint') || file.type.includes('presentation')) {
+      icon = 'fa-file-powerpoint';
+    } else if (file.type.includes('image')) {
+      icon = 'fa-file-image';
+    } else if (file.type.includes('text')) {
+      icon = 'fa-file-alt';
+    }
+    
+    const message: ChatMessage = {
+      sender: this.localParticipant.name,
+      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+      content: `Shared a file: ${file.name}`,
+      isTeacher: this.localParticipant.isTeacher,
+      file: {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: url,
+        icon: icon
+      }
+    };
+    
+    const messages = this.messagesSubject.getValue();
+    this.messagesSubject.next([...messages, message]);
+  }
+
+
+
+
+
+
 }
