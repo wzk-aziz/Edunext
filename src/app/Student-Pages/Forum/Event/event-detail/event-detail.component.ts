@@ -108,7 +108,7 @@ export class EventDetailComponent implements OnInit {
     this.map = L.map('event-map').setView([this.event.latitude, this.event.longitude], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© maps'
+      attribution: 'googleCloud©maps'
     }).addTo(this.map);
 
     L.marker([this.event.latitude, this.event.longitude])
