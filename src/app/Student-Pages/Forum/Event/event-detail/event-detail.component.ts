@@ -101,27 +101,39 @@ export class EventDetailComponent implements OnInit {
 
   // Initialisation de la carte Leaflet
   private initMap(): void {
+    // Coordonnées 
+    const tunisiaCoords = [36.8065, 10.1815]; 
+    this.event.latitude = tunisiaCoords[0];
+    this.event.longitude = tunisiaCoords[1];
+  
+    // Vérification de l’élément DOM pour la carte
     if (!document.getElementById('event-map')) {
       console.error('Map container not found');
       return;
     }
-    this.map = L.map('event-map').setView([this.event.latitude, this.event.longitude], 13);
-
+  
+    // 1) Désactive l’affichage de l’attribution par défaut (logo Leaflet, etc.)
+    this.map = L.map('event-map', {
+      attributionControl: false
+    }).setView([this.event.latitude, this.event.longitude], 13);
+  
+    // 2) Supprime/vides la propriété "attribution"
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'googleCloud©maps'
+      attribution: ''
     }).addTo(this.map);
-
+  
+    // Ajout du marqueur
     L.marker([this.event.latitude, this.event.longitude])
       .addTo(this.map)
       .bindPopup(this.event.eventTitle || 'Event Location')
       .openPopup();
-
-    // Fix d’affichage
+  
+    // Corrige l’affichage de la carte
     setTimeout(() => {
       this.map.invalidateSize();
     }, 100);
   }
-
+  
   // Récupérer les réservations depuis le service
   getReservations(eventId: number): void {
     this.reservationService.getReservationsByEvent(eventId).subscribe(
