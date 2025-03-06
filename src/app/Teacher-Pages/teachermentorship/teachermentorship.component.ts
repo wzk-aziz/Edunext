@@ -326,86 +326,98 @@ getFormValidationErrors(): any {
 
 
   downloadProgramsAsPDF(): void {
-    // Use the filtered programs so it matches what the user is currently viewing
-    this.pdfService.generateMentorshipProgramsPDF(this.filteredPrograms, this.currentInstructorName);
-    this.showStatusMessage('success', 'PDF generated successfully!');
+    try {
+      if (this.filteredPrograms.length === 0) {
+        this.showStatusMessage('error', 'No programs to export! Create some programs first.');
+        return;
+      }
+      
+      this.showStatusMessage('success', 'Generating PDF...');
+      
+      // Call the PDF service to generate and download the PDF
+      this.pdfService.generateMentorshipProgramsPDF(
+        this.filteredPrograms,
+        this.currentInstructorName
+      );
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      this.showStatusMessage('error', 'Failed to generate PDF. Please try again.');
+    }
   }
+  
 
     // Program status methods
-  getProgramStatus(program: MentorshipProgram): string {
-    const now = new Date().getTime();
-    const startDate = new Date(program.programStartDate || '').getTime();
-    const endDate = new Date(program.programEndDate || '').getTime();
-    
-    if (now < startDate) {
-      return 'upcoming';
-    } else if (now > endDate) {
-      return 'completed';
-    } else {
-      return 'active';
-    }
-  }
-  
-  getProgramStatusIcon(program: MentorshipProgram): string {
-    const status = this.getProgramStatus(program);
-    
-    switch (status) {
-      case 'upcoming': return 'fa-clock';
-      case 'active': return 'fa-play-circle';
-      case 'completed': return 'fa-check-circle';
-      default: return 'fa-info-circle';
-    }
-  }
-  
-  getProgramStatusText(program: MentorshipProgram): string {
-    const status = this.getProgramStatus(program);
-    
-    switch (status) {
-      case 'upcoming': return 'Upcoming';
-      case 'active': return 'Active';
-      case 'completed': return 'Completed';
-      default: return 'Unknown';
-    }
-  }
-  
-  getDurationProgress(program: MentorshipProgram): number {
-    if (!program.programStartDate || !program.programEndDate) {
-      return 0;
-    }
-    
-    const now = new Date().getTime();
-    const startDate = new Date(program.programStartDate).getTime();
-    const endDate = new Date(program.programEndDate).getTime();
-    
-    // If hasn't started yet
-    if (now < startDate) return 0;
-    
-    // If already ended
-    if (now > endDate) return 100;
-    
-    // Calculate progress percentage
-    const totalDuration = endDate - startDate;
-    const elapsed = now - startDate;
-    
-    return Math.round((elapsed / totalDuration) * 100);
-  }
-
-    // In a real app these would come from the backend
-  getTotalStudents(): number {
-    // Placeholder - in a real app this would come from real enrollment data
-    // For now, just generate a number based on number of programs
-    return this.mentorshipPrograms.length > 0 ? 
-      this.mentorshipPrograms.length * 5 + Math.floor(Math.random() * 10) : 0;
-  }
-  
-  getAveragePrice(): number {
-    if (this.filteredPrograms.length === 0) return 0;
-    
-    const totalPrice = this.filteredPrograms.reduce((sum, program) => 
-      sum + (program.programPrice || 0), 0);
+    getProgramStatus(program: MentorshipProgram): string {
+      const now = new Date().getTime();
+      const startDate = new Date(program.programStartDate || '').getTime();
+      const endDate = new Date(program.programEndDate || '').getTime();
       
-    return totalPrice / this.filteredPrograms.length;
-  }
+      if (now < startDate) {
+        return 'upcoming';
+      } else if (now > endDate) {
+        return 'completed';
+      } else {
+        return 'active';
+      }
+    }
+    
+    getProgramStatusIcon(program: MentorshipProgram): string {
+      const status = this.getProgramStatus(program);
+      
+      switch (status) {
+        case 'upcoming': return 'fa-clock';
+        case 'active': return 'fa-play-circle';
+        case 'completed': return 'fa-check-circle';
+        default: return 'fa-info-circle';
+      }
+    }
+    
+    getProgramStatusText(program: MentorshipProgram): string {
+      const status = this.getProgramStatus(program);
+      
+      switch (status) {
+        case 'upcoming': return 'Upcoming';
+        case 'active': return 'Active';
+        case 'completed': return 'Completed';
+        default: return 'Unknown';
+      }
+    }
+    
+    getDurationProgress(program: MentorshipProgram): number {
+      if (!program.programStartDate || !program.programEndDate) {
+        return 0;
+      }
+      
+      const now = new Date().getTime();
+      const startDate = new Date(program.programStartDate).getTime();
+      const endDate = new Date(program.programEndDate).getTime();
+      
+      // If hasn't started yet
+      if (now < startDate) return 0;
+      
+      // If already ended
+      if (now > endDate) return 100;
+      
+      // Calculate progress percentage
+      const totalDuration = endDate - startDate;
+      const elapsed = now - startDate;
+      
+      return Math.round((elapsed / totalDuration) * 100);
+    }
+    
+    getTotalStudents(): number {
+      // This is a placeholder implementation. In a real application, 
+      // this would come from actual enrollment data.
+      return this.filteredPrograms.length * 5 + Math.floor(Math.random() * 10);
+    }
+    
+    getAveragePrice(): number {
+      if (this.filteredPrograms.length === 0) return 0;
+      
+      const sum = this.filteredPrograms.reduce((total, program) => 
+        total + (program.programPrice || 0), 0);
+      return sum / this.filteredPrograms.length;
+    }
 
     viewProgramDetails(program: MentorshipProgram): void {
     // In a real app, this might navigate to a detailed view

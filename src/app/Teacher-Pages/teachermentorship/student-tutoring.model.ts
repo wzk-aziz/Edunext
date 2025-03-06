@@ -1,4 +1,4 @@
-export interface studnettutoring {
+export interface studenttutoring {
   idMentorshipProgram: number;
   programName: string;
   programDescription: string;

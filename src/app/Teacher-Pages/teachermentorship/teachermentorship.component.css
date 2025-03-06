@@ -523,10 +523,9 @@
 
 /* Programs List Layout */
 .programs-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
+  max-width: 900px; /* Reduce from full width to 900px */
+  margin: 0 auto; /* Center the list on the page */
+  padding: 0 20px; /* Add some padding on small screens */
 }
 
 .program-item {
@@ -1306,4 +1305,122 @@
 
 .view-btn:hover {
   background-color: #138496;
+}
+
+/* Make program items narrower and centered */
+.programs-list {
+  max-width: 900px; /* Reduce from full width to 900px */
+  margin: 0 auto; /* Center the list on the page */
+  padding: 0 20px; /* Add some padding on small screens */
+}
+
+.program-item {
+  width: 100%; /* Take full width of the container */
+  max-width: 900px; /* Maximum width for each item */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Make the program content layout more compact */
+.program-content {
+  padding: 20px; /* Reduce padding from 25px to 20px */
+  gap: 15px; /* Reduce gap from 25px to 15px */
+}
+
+/* Give program-info a max-width to prevent stretching */
+.program-info {
+  flex: 1;
+  max-width: 700px; /* Prevent stretching too wide */
+}
+
+/* Make program description more compact */
+.program-description {
+  max-height: 4.5em; /* Show about 3 lines of text */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+}
+
+/* Make buttons in actions column slightly narrower */
+.program-actions {
+  min-width: 100px; /* Reduce from 120px */
+}
+
+/* Add this to your CSS to make all sections the same width */
+.mentorship-programs-container {
+  max-width: 940px; /* Slightly larger to account for padding */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Update mentorship header styles */
+.mentorship-header {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Update filters section */
+.filters-section {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Update sorting section */
+.sorting-section {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Update action bar */
+.action-bar {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Update status message */
+.status-message {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Make stats cards more responsive */
+.stats-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 200px; /* Ensure cards don't get too small */
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    min-width: 100%; /* On small screens, make cards full width */
+    margin-bottom: 15px;
+  }
+}
+/* Make the filters section more compact and match the style of program items */
+.filters-section {
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+/* Make the action bar align with the filter section */
+.action-bar {
+  padding: 0;
+  margin-bottom: 20px;
 }
