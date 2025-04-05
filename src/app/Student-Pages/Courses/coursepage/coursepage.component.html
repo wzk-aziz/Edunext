@@ -22,8 +22,9 @@
     <!-- Main Content: Lecture Player/Reader -->
     <div class="col-md-9 lecture-player">
       <div *ngIf="currentLecture; else noLectureSelected">
-        <!-- If both video and PDF are available, show a toggle button group -->
-        <div *ngIf="currentLecture.videoData && currentLecture.pdfData; else singleView">
+
+        <!-- Toggle between video/pdf if both exist -->
+        <div *ngIf="currentLecture.videoPath && currentLecture.pdfPath; else singleView">
           <div class="btn-group mb-3">
             <button type="button" class="btn btn-outline-primary" 
                     [class.active]="viewMode === 'video'" 
@@ -36,6 +37,7 @@
               PDF
             </button>
           </div>
+
           <div *ngIf="viewMode === 'video'">
             <div class="video-player mb-3">
               <video controls width="100%" class="rounded">
@@ -44,15 +46,17 @@
               </video>
             </div>
           </div>
+
           <div *ngIf="viewMode === 'pdf'">
             <div class="pdf-viewer mb-3">
               <iframe [src]="getPdfUrl()" width="100%" height="500px" style="border:none;" class="rounded"></iframe>
             </div>
           </div>
         </div>
+
         <!-- Single view when only one type of content is available -->
         <ng-template #singleView>
-          <div *ngIf="currentLecture.videoData; else pdfOnly">
+          <div *ngIf="currentLecture.videoPath; else pdfOnly">
             <div class="video-player mb-3">
               <video controls width="100%" class="rounded">
                 <source [src]="getVideoUrl()" [type]="currentLecture?.videoType || 'video/mp4'">
@@ -61,14 +65,37 @@
             </div>
           </div>
           <ng-template #pdfOnly>
-            <div *ngIf="currentLecture.pdfData">
+            <div *ngIf="currentLecture.pdfPath">	
               <div class="pdf-viewer mb-3">
                 <iframe [src]="getPdfUrl()" width="100%" height="500px" style="border:none;" class="rounded"></iframe>
               </div>
             </div>
           </ng-template>
         </ng-template>
-        
+
+        <!-- 📝 Take Notes Button & Panel (Always visible for selected lecture) -->
+        <div class="text-end mb-3">
+          <button class="btn btn-outline-secondary" (click)="toggleNotePanel()">
+            📝 {{ notePanelOpen ? 'Close Notes' : 'Take Notes' }}
+          </button>
+        </div>
+
+        <div *ngIf="notePanelOpen"
+             class="notes-popup"
+             cdkDrag
+             cdkDragBoundary="body">
+          <div class="notes-header d-flex justify-content-between align-items-center">
+            <strong>My Notes for {{ currentLecture?.lectureTitle }}</strong>
+            <button class="btn-close" (click)="toggleNotePanel()"></button>
+          </div>
+
+           <!-- ✅ Saved indicator -->
+  <div *ngIf="showSavedMessage" class="saved-indicator">
+    ✅ Saved
+  </div>
+          <textarea [(ngModel)]="lectureNotes" (input)="onNoteChange()"></textarea>
+        </div>
+
         <!-- Start/Enroll Button -->
         <div class="text-center mt-4">
           <button class="btn btn-success btn-lg px-4" (click)="enrollCourse()">
@@ -76,6 +103,8 @@
           </button>
         </div>
       </div>
+
+      <!-- No lecture selected -->
       <ng-template #noLectureSelected>
         <div class="text-center p-4">
           <p class="fs-5 text-muted">No lecture selected. Please choose one from the list.</p>

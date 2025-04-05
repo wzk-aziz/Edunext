@@ -1,0 +1,51 @@
+<div class="whiteboard-controls mb-2">
+        <input type="color" [(ngModel)]="color" *ngIf="mode !== 'eraser'" />
+        <input type="range" min="10" max="48" [(ngModel)]="fontSize" />
+        <select [(ngModel)]="fontFamily">
+          <option value="Arial">Arial</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      
+        <button (click)="mode='cursor'" [class.active]="mode==='cursor'">🖱 Cursor</button>
+        <button (click)="mode='pen'" [class.active]="mode==='pen'">✏️ Pen</button>
+        <button (click)="mode='eraser'" [class.active]="mode==='eraser'">🧽 Eraser</button>
+        <button (click)="mode='text'" [class.active]="mode==='text'">🅰️ Text</button>
+      
+        <button (click)="clearCanvas()">Clear</button>
+        <button (click)="saveImage()">Save</button>
+      </div>
+      
+      <div class="whiteboard-wrapper position-relative">
+        <canvas #canvas
+                width="1000"
+                height="600"
+                class="border rounded shadow"
+                (click)="handleCanvasClick($event)"
+                (mousedown)="startDrawing($event)"
+                (mouseup)="stopDrawing()"
+                (mouseleave)="stopDrawing()"
+                (mousemove)="draw($event)">
+        </canvas>
+      
+        <div *ngFor="let textBox of textBoxes; let i = index"
+        class="text-box"
+        [style.left.px]="textBox.x"
+        [style.top.px]="textBox.y"
+        cdkDrag
+        (cdkDragEnded)="onDragEnd($event, i)"
+        cdkDragBoundary=".whiteboard-wrapper">
+      
+          <textarea [(ngModel)]="textBox.text"
+                    (input)="liveRenderTextBox(i)"
+                    (contextmenu)="onRightClick($event, i)"
+                    [style.fontSize.px]="textBox.fontSize"
+                    [style.fontFamily]="textBox.fontFamily"
+                    placeholder="Type here...">
+          </textarea>
+      
+          <button class="lock-btn" (click)="lockTextBox(i)">🔒 Lock</button>
+        </div>
+      </div>
+      

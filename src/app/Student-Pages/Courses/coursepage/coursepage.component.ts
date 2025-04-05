@@ -16,7 +16,10 @@ export class CoursepageComponent implements OnInit {
   lectures: Lecture[] = [];
   currentLecture?: Lecture;
   viewMode: string = 'video'; // default mode
-
+  lectureNotes: string = '';
+  notePanelOpen: boolean = false;
+  showSavedMessage: boolean = false;
+  savedTimeout: any;
   constructor(
     private lectureService: LectureService,
     private courseService: CourseService,
@@ -63,19 +66,43 @@ export class CoursepageComponent implements OnInit {
   }
 
   getVideoUrl(): SafeResourceUrl {
-    if (!this.currentLecture?.videoData) return '';
-    const dataUrl = `data:${this.currentLecture.videoType};base64,${this.currentLecture.videoData}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
+    return this.currentLecture?.videoPath
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(this.currentLecture.videoPath)
+      : '';
   }
-
+  
   getPdfUrl(): SafeResourceUrl {
-    if (!this.currentLecture?.pdfData) return '';
-    const dataUrl = `data:application/pdf;base64,${this.currentLecture.pdfData}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
+    return this.currentLecture?.pdfPath
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(this.currentLecture.pdfPath)
+      : '';
   }
+  
+ 
 
   enrollCourse(): void {
     // Navigate to the course player or enrollment page
     this.router.navigate(['/course-player', this.course.id]);
+  }
+
+  getNoteStorageKey(): string {
+    return `notes_student_1_lecture_${this.currentLecture?.id}`;
+  }
+  
+  toggleNotePanel(): void {
+    this.notePanelOpen = !this.notePanelOpen;
+    if (this.notePanelOpen) {
+      const saved = localStorage.getItem(this.getNoteStorageKey());
+      this.lectureNotes = saved || '';
+    }
+  }
+  
+  onNoteChange(): void {
+    localStorage.setItem(this.getNoteStorageKey(), this.lectureNotes);
+  
+    this.showSavedMessage = true;
+    if (this.savedTimeout) clearTimeout(this.savedTimeout);
+    this.savedTimeout = setTimeout(() => {
+      this.showSavedMessage = false;
+    }, 2000); // Hide after 2 seconds
   }
 }

@@ -54,21 +54,36 @@ export class ViewlectureComponent implements OnInit {
     return this.lecturesByCourse[course.id!] || [];
   }
 
-  downloadFile(fileData: string | undefined, fileName: string | undefined): void {
-    if (!fileData || !fileName) {
-      this.globalAlertService.showAlert('Invalid file data or file name!', 'Download Error');
+
+  downloadFile(filePath: string | undefined): void {
+    if (!filePath) {
+      this.globalAlertService.showAlert('Invalid file path!', 'Download Error');
       return;
     }
   
-    const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
-    const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    window.open(filePath, '_blank'); // Open as HTTP
   }
+  
+
+
+
+
+  // Uncomment if you want to download files instead of opening them directly
+  // downloadFile(fileData: string | undefined, fileName: string | undefined): void {
+  //   if (!fileData || !fileName) {
+  //     this.globalAlertService.showAlert('Invalid file data or file name!', 'Download Error');
+  //     return;
+  //   }
+  
+  //   const byteArray = new Uint8Array(atob(fileData).split('').map(char => char.charCodeAt(0)));
+  //   const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+  //   const url = window.URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = fileName;
+  //   a.click();
+  //   window.URL.revokeObjectURL(url);
+  // }
 
   // Handle delete of a lecture using the global alert's confirm method
   deleteLecture(lectureId: number | undefined): void {

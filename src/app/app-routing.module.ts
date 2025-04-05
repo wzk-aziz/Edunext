@@ -24,6 +24,7 @@ import { BackRoutingModule } from './backend/back-routing.module'; // Import the
 import { StudentQuizzesComponent } from './Student-Pages/Courses/Quiz/student-quizzes/student-quizzes.component';
 import { TakeQuizComponent } from './Student-Pages/Courses/Quiz/take-quiz/take-quiz.component';
 import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/quiz-results.component';
+import { LectureWhiteboardComponent } from './Student-Pages/Courses/whiteboard/lecture-whiteboard/lecture-whiteboard.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'courselist', component: CourseslistComponent },
   { path: 'coursedetail/:id', component: CoursedetailComponent },
   {path: 'coursepage/:id', component: CoursepageComponent},
+  {path:'whiteboard',component:LectureWhiteboardComponent},
 //quizes
 { path: 'student-quizzes', component: StudentQuizzesComponent },
 { path: 'take-quiz/:quizId', component: TakeQuizComponent },

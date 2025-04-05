@@ -63,6 +63,9 @@ import { ViewquestionsComponent } from './backend/courses/Quiz/viewquestions/vie
 import { StudentQuizzesComponent } from './Student-Pages/Courses/Quiz/student-quizzes/student-quizzes.component';
 import { TakeQuizComponent } from './Student-Pages/Courses/Quiz/take-quiz/take-quiz.component';
 import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/quiz-results.component';
+import { LectureWhiteboardComponent } from './Student-Pages/Courses/whiteboard/lecture-whiteboard/lecture-whiteboard.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 
 @NgModule({
@@ -123,6 +126,7 @@ import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/
     StudentQuizzesComponent,
     TakeQuizComponent,
     QuizResultsComponent,
+    LectureWhiteboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,7 +137,7 @@ import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/
     NgxPaginationModule,
     FormsModule,
     CommonModule,
-   
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

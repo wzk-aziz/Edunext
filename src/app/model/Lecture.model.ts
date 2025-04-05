@@ -4,10 +4,11 @@ export interface Lecture {
     lectureDescription: string;
     lectureOrder: number;
     // File-related fields for the lecture
-    pdfData?: string;
+    pdfPath?: string;
     pdfName?: string;
     pdfType?: string;
-    videoData?: string;
+  
+    videoPath?: string;
     videoName?: string;
     videoType?: string;
     // Relation to course: store just the course ID

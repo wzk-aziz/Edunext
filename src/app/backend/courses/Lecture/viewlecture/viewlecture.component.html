@@ -294,16 +294,18 @@
                         </button>
                       </div>
                       <div>
-                        <ng-container *ngIf="lecture.pdfData">
-                          <button class="btn btn-outline-primary btn-sm me-1" (click)="downloadFile(lecture.pdfData, lecture.pdfName)">
+                        <ng-container *ngIf="lecture.pdfPath">
+                          <button class="btn btn-outline-primary btn-sm me-1" (click)="downloadFile(lecture.pdfPath)">
                             <i class="fas fa-file-pdf"></i> PDF
                           </button>
                         </ng-container>
-                        <ng-container *ngIf="lecture.videoData">
-                          <button class="btn btn-outline-primary btn-sm" (click)="downloadFile(lecture.videoData, lecture.videoName)">
+                        
+                        <ng-container *ngIf="lecture.videoPath">
+                          <button class="btn btn-outline-primary btn-sm" (click)="downloadFile(lecture.videoPath)">
                             <i class="fas fa-video"></i> Video
                           </button>
                         </ng-container>
+                        
                       </div>
                     </div>
                   </div>
