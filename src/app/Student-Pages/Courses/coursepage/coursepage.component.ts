@@ -68,7 +68,17 @@ export class CoursepageComponent implements OnInit {
 
   selectLecture(lecture: Lecture): void {
     this.currentLecture = lecture;
+  
+    // Automatically decide view mode for progress tracking to work
+    if (lecture.videoPath && lecture.pdfPath) {
+      this.viewMode = 'video'; // default to video first
+    } else if (lecture.videoPath) {
+      this.viewMode = 'video';
+    } else if (lecture.pdfPath) {
+      this.viewMode = 'pdf';
+    }
   }
+  
 
   getVideoUrl(): SafeResourceUrl {
     return this.currentLecture?.videoPath
@@ -112,10 +122,11 @@ export class CoursepageComponent implements OnInit {
     if (!this.currentLecture) return;
   
     const video = this.videoPlayer.nativeElement;
-    const percent = Math.floor((video.currentTime / video.duration) * 100);
+    const rawPercent = Math.floor((video.currentTime / video.duration) * 100);
+    const percent = Math.min(rawPercent, 99);
   
     const key = `lecture_video_progress_${this.currentLecture.id}`;
-    const prev = parseInt(localStorage.getItem(key) || '0');
+    const prev = parseInt(localStorage.getItem(key) || '0', 10);
   
     const maxProgress = Math.max(percent, prev);
     localStorage.setItem(key, maxProgress.toString());
@@ -126,33 +137,39 @@ export class CoursepageComponent implements OnInit {
   getLectureProgress(lectureId: number | undefined): number {
     if (!lectureId) return 0;
   
-    const videoProgress = parseInt(localStorage.getItem(`lecture_video_progress_${lectureId}`) || '0');
-    const pdfProgress = parseInt(localStorage.getItem(`lecture_pdf_progress_${lectureId}`) || '0');
+    const videoProgress = parseInt(localStorage.getItem(`lecture_video_progress_${lectureId}`) || '0', 10);
+    const pdfProgress = parseInt(localStorage.getItem(`lecture_pdf_progress_${lectureId}`) || '0', 10);
   
     const hasVideo = !!this.lectures.find(l => l.id === lectureId)?.videoPath;
     const hasPdf = !!this.lectures.find(l => l.id === lectureId)?.pdfPath;
   
+    let progress = 0;
+  
     if (hasVideo && hasPdf) {
-      return Math.floor((videoProgress + pdfProgress) / 2);
+      progress = Math.floor((videoProgress + pdfProgress) / 2);
     } else if (hasVideo) {
-      return videoProgress;
+      progress = videoProgress;
     } else if (hasPdf) {
-      return pdfProgress;
-    } else {
-      return 0;
+      progress = pdfProgress;
     }
+  
+    return progress >= 99 ? 100 : progress;
   }
+  
   
 
 
   onPdfScroll(percent: number): void {
     if (!this.currentLecture) return;
   
+    const capped = Math.min(percent, 99); // cap at 99
     const key = `lecture_pdf_progress_${this.currentLecture.id}`;
-    const prev = parseInt(localStorage.getItem(key) || '0');
-    const maxProgress = Math.max(percent, prev);
+    const prev = parseInt(localStorage.getItem(key) || '0', 10);
+  
+    const maxProgress = Math.max(capped, prev);
     localStorage.setItem(key, maxProgress.toString());
   }
+  
   
 
 

@@ -108,3 +108,13 @@
     color: transparent;
     font-size: 0;
   }
+  .completed {
+    background-color: #e6ffe6 !important;
+    border-left: 4px solid #28a745;
+  }
+  
+  .lecture-item.completed {
+    background-color: #e6ffee !important;
+    border-left: 4px solid #28a745;
+  }
+  
