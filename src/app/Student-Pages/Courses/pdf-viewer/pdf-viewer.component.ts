@@ -1,7 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as pdfjsLib from 'pdfjs-dist';
-import { Lecture } from 'src/app/model/Lecture.model';
 (pdfjsLib as any).GlobalWorkerOptions.workerSrc = '/assets/pdf.worker.js';
+
+
 
 @Component({
   selector: 'app-pdf-viewer',
@@ -13,43 +14,38 @@ export class PdfViewerComponent implements OnChanges {
   @Input() lectureId: number = 0;
   @Output() scrollProgress = new EventEmitter<number>();
   @ViewChild('pdfContainer', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
-  loading = true;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pdfUrl'] && this.pdfUrl) {
-      this.loadPdf(
-        
-      );
+      this.loadPdf();
     }
   }
 
-  
-
   async loadPdf(): Promise<void> {
-    this.loading = true; // ✅ Start loading spinner
-  
     const container = this.containerRef.nativeElement;
-    container.innerHTML = '';
-  
+    container.innerHTML = ''; // Clear previous pages
+
     const loadingTask = pdfjsLib.getDocument(this.pdfUrl);
     const pdf = await loadingTask.promise;
-  
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
+
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber);
       const viewport = page.getViewport({ scale: 1.2 });
-  
+
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d')!;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-  
-      await page.render({ canvasContext: context, viewport }).promise;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+
       container.appendChild(canvas);
+      await page.render(renderContext).promise;
     }
-  
-    this.loading = false; // ✅ Done loading spinner
   }
-  
 
   onScroll(): void {
     const container = this.containerRef.nativeElement;
@@ -57,6 +53,7 @@ export class PdfViewerComponent implements OnChanges {
     const scrollHeight = container.scrollHeight - container.clientHeight;
     const percent = Math.floor((scrollTop / scrollHeight) * 100);
 
-    this.scrollProgress.emit(percent); // 💥 Emits actual scroll %
+    localStorage.setItem(`lecture_pdf_progress_${this.lectureId}`, percent.toString());
+    this.scrollProgress.emit(percent);
   }
 }

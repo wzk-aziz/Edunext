@@ -65,10 +65,12 @@
           <div *ngIf="viewMode === 'pdf'">
             <div class="pdf-viewer mb-3">
               <app-pdf-viewer 
-                [pdfUrl]="currentLecture?.pdfPath || ''"
-                [lectureId]="currentLecture?.id || 0"
-                (scrollProgress)="onPdfScroll($event)">
-              </app-pdf-viewer>
+              [pdfUrl]="currentLecture?.pdfPath || ''" 
+              [lectureId]="currentLecture?.id || 0"
+              (scrollProgress)="onPdfScroll($event)">
+            </app-pdf-viewer>
+            
+            
             </div>
           </div>
           
@@ -94,10 +96,11 @@
             <div *ngIf="viewMode === 'pdf'">
               <div class="pdf-viewer mb-3">
                 <app-pdf-viewer 
-                  [pdfUrl]="currentLecture?.pdfPath || ''"
-                  [lectureId]="currentLecture?.id || 0"
-                  (scrollProgress)="onPdfScroll($event)">
-                </app-pdf-viewer>
+  [pdfUrl]="currentLecture?.pdfPath || ''" 
+  [lectureId]="currentLecture?.id || 0"
+  (scrollProgress)="onPdfScroll($event)">
+</app-pdf-viewer>
+
               </div>
             </div>
             
