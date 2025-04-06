@@ -8,13 +8,22 @@
           *ngFor="let lecture of lectures" 
           (click)="selectLecture(lecture)" 
           [class.active]="lecture.id === currentLecture?.id" 
-          class="list-group-item d-flex align-items-center justify-content-between lecture-item"
+          class="list-group-item d-flex flex-column lecture-item"
           style="cursor: pointer;">
-          <div>
-            <i class="fas fa-play text-primary me-2"></i>
-            <span>{{ lecture.lectureOrder }}. {{ lecture.lectureTitle }}</span>
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <div>
+              <i class="fas fa-play text-primary me-2"></i>
+              <span>{{ lecture.lectureOrder }}. {{ lecture.lectureTitle }}</span>
+            </div>
+            <span class="badge bg-secondary">{{ lecture.lectureOrder }}</span>
           </div>
-          <span class="badge bg-secondary">{{ lecture.lectureOrder }}</span>
+
+          <!-- ✅ Combined Progress Bar -->
+          <div class="progress-container mt-2">
+            <div class="progress-bar" [style.width.%]="getLectureProgress(lecture.id)">
+              {{ getLectureProgress(lecture.id) }}%
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -23,7 +32,7 @@
     <div class="col-md-9 lecture-player">
       <div *ngIf="currentLecture; else noLectureSelected">
 
-        <!-- Toggle between video/pdf if both exist -->
+        <!-- If both video and PDF are available, show a toggle button group -->
         <div *ngIf="currentLecture.videoPath && currentLecture.pdfPath; else singleView">
           <div class="btn-group mb-3">
             <button type="button" class="btn btn-outline-primary" 
@@ -40,7 +49,13 @@
 
           <div *ngIf="viewMode === 'video'">
             <div class="video-player mb-3">
-              <video controls width="100%" class="rounded">
+              <video #videoPlayer
+                     controls 
+                     controlsList="nodownload noplaybackrate"
+                     oncontextmenu="return false;"
+                     width="100%" 
+                     class="rounded"
+                     (timeupdate)="onVideoTimeUpdate()">
                 <source [src]="getVideoUrl()" [type]="currentLecture?.videoType || 'video/mp4'">
                 Your browser does not support the video tag.
               </video>
@@ -49,31 +64,47 @@
 
           <div *ngIf="viewMode === 'pdf'">
             <div class="pdf-viewer mb-3">
-              <iframe [src]="getPdfUrl()" width="100%" height="500px" style="border:none;" class="rounded"></iframe>
+              <app-pdf-viewer 
+                [pdfUrl]="currentLecture?.pdfPath || ''"
+                [lectureId]="currentLecture?.id || 0"
+                (scrollProgress)="onPdfScroll($event)">
+              </app-pdf-viewer>
             </div>
           </div>
+          
         </div>
 
         <!-- Single view when only one type of content is available -->
         <ng-template #singleView>
           <div *ngIf="currentLecture.videoPath; else pdfOnly">
             <div class="video-player mb-3">
-              <video controls width="100%" class="rounded">
+              <video #videoPlayer
+                     controls 
+                     controlsList="nodownload noplaybackrate"
+                     oncontextmenu="return false;"
+                     width="100%" 
+                     class="rounded"
+                     (timeupdate)="onVideoTimeUpdate()">
                 <source [src]="getVideoUrl()" [type]="currentLecture?.videoType || 'video/mp4'">
                 Your browser does not support the video tag.
               </video>
             </div>
           </div>
           <ng-template #pdfOnly>
-            <div *ngIf="currentLecture.pdfPath">	
+            <div *ngIf="viewMode === 'pdf'">
               <div class="pdf-viewer mb-3">
-                <iframe [src]="getPdfUrl()" width="100%" height="500px" style="border:none;" class="rounded"></iframe>
+                <app-pdf-viewer 
+                  [pdfUrl]="currentLecture?.pdfPath || ''"
+                  [lectureId]="currentLecture?.id || 0"
+                  (scrollProgress)="onPdfScroll($event)">
+                </app-pdf-viewer>
               </div>
             </div>
+            
           </ng-template>
         </ng-template>
 
-        <!-- 📝 Take Notes Button & Panel (Always visible for selected lecture) -->
+        <!-- 📝 Take Notes Button & Panel -->
         <div class="text-end mb-3">
           <button class="btn btn-outline-secondary" (click)="toggleNotePanel()">
             📝 {{ notePanelOpen ? 'Close Notes' : 'Take Notes' }}
@@ -89,10 +120,11 @@
             <button class="btn-close" (click)="toggleNotePanel()"></button>
           </div>
 
-           <!-- ✅ Saved indicator -->
-  <div *ngIf="showSavedMessage" class="saved-indicator">
-    ✅ Saved
-  </div>
+          <!-- ✅ Saved indicator -->
+          <div *ngIf="showSavedMessage" class="saved-indicator">
+            ✅ Saved
+          </div>
+
           <textarea [(ngModel)]="lectureNotes" (input)="onNoteChange()"></textarea>
         </div>
 

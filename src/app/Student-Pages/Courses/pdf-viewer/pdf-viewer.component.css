@@ -1,0 +1,14 @@
+.pdf-container {
+  height: 500px;
+  overflow-y: scroll;
+  padding: 10px;
+  background: white;
+}
+canvas {
+  display: block;
+  margin: 10px auto;
+}
+.pdf-loading {
+  text-align: center;
+  padding: 20px;
+}

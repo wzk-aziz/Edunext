@@ -65,6 +65,7 @@ import { TakeQuizComponent } from './Student-Pages/Courses/Quiz/take-quiz/take-q
 import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/quiz-results.component';
 import { LectureWhiteboardComponent } from './Student-Pages/Courses/whiteboard/lecture-whiteboard/lecture-whiteboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PdfViewerComponent } from './Student-Pages/Courses/pdf-viewer/pdf-viewer.component';
 
 
 
@@ -127,6 +128,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     TakeQuizComponent,
     QuizResultsComponent,
     LectureWhiteboardComponent,
+    PdfViewerComponent,
   ],
   imports: [
     BrowserModule,
