@@ -21,4 +21,21 @@ canvas {
   background-color: rgba(255, 255, 255, 0.8);
   inset: 0;
 }
+.bookmark-list {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  background-color: #fff;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.bookmark-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
+input.form-control-sm {
+  height: auto;
+  font-size: 0.85rem;
+}

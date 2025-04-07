@@ -27,6 +27,8 @@ export class PdfViewerComponent implements OnChanges {
   pdf!: PDFDocumentProxy;
   pages: number[] = [];
   loading: boolean = false;
+  bookmarks: { id: number, scrollTop: number, label: string }[] = [];
+  editingBookmarkId: number | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pdfUrl'] && this.pdfUrl) {
@@ -43,6 +45,7 @@ export class PdfViewerComponent implements OnChanges {
       this.pdf = await loadingTask.promise;
 
       this.pages = Array.from({ length: this.pdf.numPages }, (_, i) => i + 1);
+      this.loadBookmarks(); // Load bookmarks after rendering
 
       for (let i = 1; i <= this.pdf.numPages; i++) {
         const page = await this.pdf.getPage(i);
@@ -88,5 +91,46 @@ export class PdfViewerComponent implements OnChanges {
     localStorage.setItem(`lecture_pdf_scroll_${this.lectureId}`, scrollTop.toString());
 
     this.scrollProgress.emit(percent);
+    
   }
+
+  addBookmark(): void {
+    const scrollTop = this.containerRef.nativeElement.scrollTop;
+    const label = `Bookmark ${this.bookmarks.length + 1}`;
+    const bookmark = { id: Date.now(), scrollTop, label };
+  
+    this.bookmarks.push(bookmark);
+    this.saveBookmarks();
+  }
+  
+  goToBookmark(scrollTop: number): void {
+    this.containerRef.nativeElement.scrollTop = scrollTop;
+  }
+  
+  removeBookmark(id: number): void {
+    this.bookmarks = this.bookmarks.filter(b => b.id !== id);
+    this.saveBookmarks();
+  }
+  
+  private saveBookmarks(): void {
+    const key = `lecture_pdf_bookmarks_${this.lectureId}`;
+    localStorage.setItem(key, JSON.stringify(this.bookmarks));
+  }
+  
+  private loadBookmarks(): void {
+    const key = `lecture_pdf_bookmarks_${this.lectureId}`;
+    const data = localStorage.getItem(key);
+    this.bookmarks = data ? JSON.parse(data) : [];
+  }
+
+  startEditing(id: number): void {
+    this.editingBookmarkId = id;
+  }
+  
+  finishEditing(bookmark: any, newLabel: string): void {
+    bookmark.label = newLabel.trim() || bookmark.label;
+    this.editingBookmarkId = null;
+    this.saveBookmarks();
+  }
+  
 }
