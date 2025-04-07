@@ -69,14 +69,22 @@ export class CoursepageComponent implements OnInit {
   selectLecture(lecture: Lecture): void {
     this.currentLecture = lecture;
   
-    // Automatically decide view mode for progress tracking to work
     if (lecture.videoPath && lecture.pdfPath) {
-      this.viewMode = 'video'; // default to video first
+      this.viewMode = 'video';
     } else if (lecture.videoPath) {
       this.viewMode = 'video';
     } else if (lecture.pdfPath) {
       this.viewMode = 'pdf';
     }
+  
+    // Resume from last watched time if video
+    setTimeout(() => {
+      if (this.viewMode === 'video' && this.videoPlayer) {
+        const video = this.videoPlayer.nativeElement;
+        const savedTime = parseFloat(localStorage.getItem(`lecture_video_time_${lecture.id}`) || '0');
+        video.currentTime = savedTime;
+      }
+    }, 100); // slight delay to ensure player is ready
   }
   
 
@@ -122,12 +130,15 @@ export class CoursepageComponent implements OnInit {
     if (!this.currentLecture) return;
   
     const video = this.videoPlayer.nativeElement;
+  
+    // Save current time
+    localStorage.setItem(`lecture_video_time_${this.currentLecture.id}`, video.currentTime.toString());
+  
     const rawPercent = Math.floor((video.currentTime / video.duration) * 100);
     const percent = Math.min(rawPercent, 99);
   
     const key = `lecture_video_progress_${this.currentLecture.id}`;
     const prev = parseInt(localStorage.getItem(key) || '0', 10);
-  
     const maxProgress = Math.max(percent, prev);
     localStorage.setItem(key, maxProgress.toString());
   }
