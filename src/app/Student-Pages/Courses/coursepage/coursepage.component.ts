@@ -173,13 +173,22 @@ export class CoursepageComponent implements OnInit {
   onPdfScroll(percent: number): void {
     if (!this.currentLecture) return;
   
-    const capped = Math.min(percent, 99); // cap at 99
-    const key = `lecture_pdf_progress_${this.currentLecture.id}`;
-    const prev = parseInt(localStorage.getItem(key) || '0', 10);
-  
+    const capped = Math.min(percent, 99); // cap at 99%
+    const progressKey = `lecture_pdf_progress_${this.currentLecture.id}`;
+    const prev = parseInt(localStorage.getItem(progressKey) || '0', 10);
     const maxProgress = Math.max(capped, prev);
-    localStorage.setItem(key, maxProgress.toString());
+  
+    // Save max progress
+    localStorage.setItem(progressKey, maxProgress.toString());
+  
+    // Save scroll position too (for resume functionality)
+    const scrollKey = `lecture_pdf_scroll_${this.currentLecture.id}`;
+    const scrollElement = document.querySelector('.pdf-container') as HTMLElement;
+    if (scrollElement) {
+      localStorage.setItem(scrollKey, scrollElement.scrollTop.toString());
+    }
   }
+  
   
   
 
