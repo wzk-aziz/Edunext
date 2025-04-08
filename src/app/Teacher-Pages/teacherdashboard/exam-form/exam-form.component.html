@@ -1,85 +1,119 @@
 <main>
-  <section class="bg-dark align-items-center d-flex" style="background:url(/assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
+    <section class="bg-dark align-items-center d-flex" style="background:url(/assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
       <div class="container">
-          <div class="row">
-              <div class="col-12">
-                  <h1 class="text-white">Create l'examen</h1>
-                  <div class="d-flex">
-                      <nav aria-label="breadcrumb">
-                          <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
-                              <li class="breadcrumb-item"><a routerLink="/studenthome">Accueil</a></li>
-                              <li class="breadcrumb-item"><a routerLink="/examlist">Examens</a></li>
-                              <li class="breadcrumb-item active" aria-current="page">Modifier</li>
-                          </ol>
-                      </nav>
-                  </div>
-              </div>
+        <div class="row">
+          <div class="col-12">
+            <h1 class="text-white">Create Exam</h1>
+            <div class="d-flex">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
+                  <li class="breadcrumb-item"><a routerLink="/studenthome">Home</a></li>
+                  <li class="breadcrumb-item"><a routerLink="/examlist">Exams</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                </ol>
+              </nav>
+            </div>
           </div>
+        </div>
       </div>
-  </section>
+    </section>
+    
+    <section class="pb-0 py-sm-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card shadow p-4">
+              <h2 class="text-center mb-4">Create Exam</h2>
+              <form #examForm="ngForm" (ngSubmit)="onSubmit()">
+               
   
-  <section class="pb-0 py-sm-5">
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-lg-8">
-                  <div class="card shadow p-4">
-                      <h2 class="text-center mb-4">Create l'examen</h2>
-                      <form #examForm="ngForm" (ngSubmit)="onSubmit()">
-                          <div class="mb-3">
-                              <label for="title" class="form-label">Titre :</label>
-                              <input id="title" type="text" class="form-control" [(ngModel)]="exam.examTitle" name="title" required #title="ngModel">
-                              <div *ngIf="title.invalid && title.touched" class="text-danger">Le titre est requis.</div>
-                          </div>
+                <!-- Champ pour le Titre -->
+                <div class="mb-3">
+                  <label for="title" class="form-label">Titre :</label>
+                  <input id="title" type="text" class="form-control" [(ngModel)]="exam.examTitle" name="title" required #title="ngModel">
+                  <div *ngIf="title.invalid && title.touched" class="text-danger">Title is required.</div>
+                </div>
+  
+                <!-- Champ pour la Description -->
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description :</label>
+                  <textarea id="description" class="form-control" [(ngModel)]="exam.examDescription" name="description"></textarea>
+                </div>
+  
+                <!-- Champ pour la Durée -->
+                <div class="mb-3">
+                  <label for="duration" class="form-label">Duration (min) :</label>
+                  <input id="duration" type="number" class="form-control" [(ngModel)]="exam.examDuration" name="duration" required min="1" #duration="ngModel">
+                  <div *ngIf="duration.invalid && duration.touched" class="text-danger">Duration must be greater than 0.</div>
+                </div>
+  
+                <!-- Champ pour les Marks Totals -->
+                <div class="mb-3">
+                  <label for="totalMarks" class="form-label">Total Marks:</label>
+                  <input id="totalMarks" type="number" class="form-control" [(ngModel)]="exam.totalMarks" name="totalMarks" required min="1" #totalMarks="ngModel">
+                  <div *ngIf="totalMarks.invalid && totalMarks.touched" class="text-danger">Total marks are required.</div>
+                </div>
+  
+                <!-- Champ pour le Passing Score -->
+                <div class="mb-3">
+                  <label for="passingScore" class="form-label">Passing Score :</label>
+                  <input id="passingScore" type="number" class="form-control" [(ngModel)]="exam.passingScore" name="passingScore" required min="1" #passingScore="ngModel">
+                  <div *ngIf="passingScore.invalid && passingScore.touched" class="text-danger">Passing score is required.</div>
+                </div>
+  
+                <!-- Champ pour la Date Prévue -->
+                <div class="mb-3">
+                  <label for="scheduledDate" class="form-label">Scheduled Date :</label>
+                  <input id="scheduledDate" type="datetime-local" class="form-control" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required #scheduledDate="ngModel">
+                  <div *ngIf="scheduledDate.invalid && scheduledDate.touched" class="text-danger">Date is required.</div>
+                </div>
+  
+                <!-- Questions -->
+            <!-- Section Questions -->
+<h4 class="mt-4">Questions</h4>
+<div *ngFor="let question of exam.questions; let i = index" class="border p-3 mb-3 rounded">
+  
+  <!-- Champ Question -->
+  <div class="mb-3">
+    <label for="questionText{{i}}" class="form-label">Question {{ i + 1 }}</label>
+    <input id="questionText{{i}}" class="form-control" [(ngModel)]="question.questionText" name="questionText{{i}}" required #questionText="ngModel">
+    <div *ngIf="questionText.invalid && questionText.touched" class="text-danger">Question  is required.</div>
+  </div>
 
-                          <div class="mb-3">
-                              <label for="description" class="form-label">Description :</label>
-                              <textarea id="description" class="form-control" [(ngModel)]="exam.examDescription" name="description"></textarea>
-                          </div>
+  <!-- Champ Options de Réponse -->
+  <div class="mb-3">
+    <label for="answerOptions{{i}}" class="form-label">Answer Options :</label>
+    <input id="answerOptions{{i}}" class="form-control" [(ngModel)]="question.answerOptions" name="answerOptions{{i}}[0]" required #answerOption0="ngModel">
+    <div *ngIf="answerOption0.invalid && answerOption0.touched" class="text-danger">Answer Options is required .</div>
+  </div>
+  
+  <!-- Champ Réponse Correcte -->
+  <div class="mb-3">
+    <label for="correctAnswer{{i}}" class="form-label"> Correcte Answer :</label>
+    <input id="correctAnswer{{i}}" class="form-control" [(ngModel)]="question.correctAnswer" name="correctAnswer{{i}}" required #correctAnswer="ngModel">
+    <div *ngIf="correctAnswer.invalid && correctAnswer.touched" class="text-danger">Correcte Answer  is required .</div>
+  </div>
 
-                          <div class="mb-3">
-                              <label for="duration" class="form-label">Durée (min) :</label>
-                              <input id="duration" type="number" class="form-control" [(ngModel)]="exam.examDuration" name="duration" required min="1" #duration="ngModel">
-                              <div *ngIf="duration.invalid && duration.touched" class="text-danger">La durée doit être supérieure à 0.</div>
-                          </div>
+</div>
 
-                          <div class="mb-3">
-                              <label for="scheduledDate" class="form-label">Date prévue :</label>
-                              <input id="scheduledDate" type="datetime-local" class="form-control" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required #scheduledDate="ngModel">
-                              <div *ngIf="scheduledDate.invalid && scheduledDate.touched" class="text-danger">La date est requise.</div>
-                          </div>
+<button type="button" class="btn btn-success mb-3" (click)="addQuestion()">
+  <i class="fas fa-plus"></i> Add Question
+</button>
 
-                          <h4 class="mt-4">Questions</h4>
-                          <div *ngFor="let question of exam.questions; let i = index" class="border p-3 mb-3 rounded">
-                              <div class="mb-3">
-                                  <label for="questionText{{i}}" class="form-label">Question {{ i + 1 }}</label>
-                                  <input id="questionText{{i}}" class="form-control" [(ngModel)]="question.questionText" name="questionText{{i}}" required #questionText="ngModel">
-                                  <div *ngIf="questionText.invalid && questionText.touched" class="text-danger">La question est requise.</div>
-                              </div>
-
-                              <div class="mb-3">
-                                  <label for="answerOptions{{i}}" class="form-label">Réponse correcte :</label>
-                                  <input id="answerOptions{{i}}" class="form-control" [(ngModel)]="question.answerOptions" name="correctAnswer{{i}}" required #correctAnswer="ngModel">
-                                  <div *ngIf="correctAnswer.invalid && correctAnswer.touched" class="text-danger">La réponse est requise.</div>
-                              </div>
-                          </div>
-                          
-                          <button type="button" class="btn btn-success mb-3" (click)="addQuestion()">
-                              <i class="fas fa-plus"></i> Ajouter Question
-                          </button>
-                          
-                          <div class="text-center mt-4">
-                              <button type="submit" class="btn btn-primary me-2" [disabled]="examForm.invalid">
-                                  <i class="fas fa-save"></i> Modifier
-                              </button>
-                              <button type="button" class="btn btn-secondary" routerLink="/examlist">
-                                  <i class="fas fa-times"></i> Annuler
-                              </button>
-                          </div>
-                      </form>
-                  </div>
-              </div>
+  
+                <div class="text-center mt-4">
+                  <button type="submit" class="btn btn-primary me-2" [disabled]="examForm.invalid">
+                    <i class="fas fa-save"></i> Save
+                  </button>
+                  <button type="button" class="btn btn-secondary" routerLink="/examlist">
+                    <i class="fas fa-times"></i> Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
+        </div>
       </div>
-  </section>
-</main>
-
+    </section>
+  </main>
+  

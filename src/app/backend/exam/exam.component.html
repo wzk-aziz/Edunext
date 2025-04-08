@@ -73,8 +73,28 @@
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+                <li class="collapsed">
+                  <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+                      <i class="icofont-certificate"></i>
+                      <span>Certificates</span>
+                      <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+                  </a>
+                  <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+                      <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of Certificates</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a></li>
+                  </ul>
+              </li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleExamMenu()" role="button">
+                    <i class="icofont-paper text-light"></i>
+                    <span>Exam</span>
+                    <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isExamMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+                    <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+                    <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+                </ul>
+            </li>
                 <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
@@ -108,7 +128,7 @@
 
         <div class="main px-lg-4 px-md-4">
 
-            <h2 class="mb-4 fw-bold">Liste des examens</h2>
+            <h2 class="mb-4 fw-bold">Exam List</h2>
           
             <!-- Champ de recherche -->
             <div class="mb-3">
@@ -116,7 +136,7 @@
                 type="text" 
                 class="form-control" 
                 [(ngModel)]="searchTerm" 
-                placeholder="Rechercher un examen par titre"
+                placeholder="Search exam by titre"
                 (input)="onSearchChange()" 
               />
             </div>
@@ -163,11 +183,11 @@
           
                     <!-- Boutons d'actions -->
                     <div class="d-flex align-items-center justify-content-between">
-                      <button class="btn btn-warning btn-sm" (click)="editExam(exam.idExam!)">
-                        <i class="fas fa-edit"></i> Modifier
+                      <button class="btn btn-warning" (click)="editExam(exam.idExam!)">
+                        <i class="fas fa-edit"></i> Edit
                       </button>
                       <button class="btn btn-danger btn-sm" (click)="deleteExam(exam.idExam!)">
-                        <i class="fas fa-trash-alt"></i> Supprimer
+                        <i class="fas fa-trash-alt"></i> Delete
                       </button>
                     </div>
                   </div>
@@ -178,10 +198,10 @@
             <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
               <button class="btn btn-secondary me-2" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
-                Précédent
+                Previous
               </button>
               <button class="btn btn-secondary" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
-                Suivant
+                Next
               </button>
             </div>
           </div>

@@ -3,13 +3,13 @@
       <div class="container">
           <div class="row">
               <div class="col-12">
-                  <h1 class="text-white">Modifier l'examen</h1>
+                  <h1 class="text-white">Edit exam</h1>
                   <div class="d-flex">
                       <nav aria-label="breadcrumb">
                           <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
-                              <li class="breadcrumb-item"><a routerLink="/studenthome">Accueil</a></li>
-                              <li class="breadcrumb-item"><a routerLink="/exams">Examens</a></li>
-                              <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+                              <li class="breadcrumb-item"><a routerLink="/studenthome">Home</a></li>
+                              <li class="breadcrumb-item"><a routerLink="/exams">Exams</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Edit</li>
                           </ol>
                       </nav>
                   </div>
@@ -23,7 +23,7 @@
           <div class="row justify-content-center">
               <div class="col-lg-8">
                   <div class="card shadow p-4">
-                      <h2 class="text-center mb-4">Modifier l'examen</h2>
+                      <h2 class="text-center mb-4">Edit exam</h2>
                       <form (ngSubmit)="onSubmit()">
                           <div class="mb-3">
                               <label for="title" class="form-label">Titre :</label>
@@ -36,12 +36,12 @@
                           </div>
 
                           <div class="mb-3">
-                              <label for="duration" class="form-label">Durée (min) :</label>
+                              <label for="duration" class="form-label">Duration(min) :</label>
                               <input id="duration" type="number" class="form-control" [(ngModel)]="exam.examDuration" name="duration" required>
                           </div>
 
                           <div class="mb-3">
-                              <label for="scheduledDate" class="form-label">Date prévue :</label>
+                              <label for="scheduledDate" class="form-label">Scheduled Date :</label>
                               <input id="scheduledDate" type="datetime-local" class="form-control" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required>
                           </div>
 
@@ -58,7 +58,7 @@
                               </div>
 
                               <div class="mb-3">
-                                  <label for="answerOptions{{i}}" class="form-label">Options (séparées par des `;`)</label>
+                                  <label for="answerOptions{{i}}" class="form-label">Options (separated by ` |`)</label>
                                   <input 
                                       id="answerOptions{{i}}" 
                                       class="form-control" 
@@ -66,14 +66,23 @@
                                       name="answerOptions{{i}}" 
                                       (change)="onQuestionUpdate(question)">
                               </div>
+                              <div class="mb-3">
+                                <label for="correctAnswer{{i}}" class="form-label">correct Answer</label>
+                                <input 
+                                    id="correctAnswer{{i}}" 
+                                    class="form-control" 
+                                    [(ngModel)]="question.correctAnswer" 
+                                    name="correctAnswer{{i}}" 
+                                    (change)="onQuestionUpdate(question)">
+                            </div>
                           </div>
 
                           <div class="text-center mt-4">
                               <button type="submit" class="btn btn-primary me-2">
-                                  <i class="fas fa-save"></i> Modifier
+                                  <i class="fas fa-save"></i> Edit
                               </button>
                               <button type="button" class="btn btn-secondary" routerLink="/examlist">
-                                  <i class="fas fa-times"></i> Annuler
+                                  <i class="fas fa-times"></i> Cancel
                               </button>
                           </div>
                       </form>

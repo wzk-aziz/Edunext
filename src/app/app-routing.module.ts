@@ -29,6 +29,9 @@ import { CertifadmineditComponent } from './backend/certifadminedit/certifadmine
 import { CertificateComponent } from './Teacher-Pages/teacherdashboard/certificate/certificate.component';
 import { ExamstudentComponent } from './Student-Pages/exam/examstudent/examstudent.component';
 import { ExamstudentsubmitComponent } from './Student-Pages/exam/examstudentsubmit/examstudentsubmit.component';
+import { LoginComponent } from './Shared/login/login.component';
+import { CertificateListComponentComponent } from './Student-Pages/exam/certificate-list-component/certificate-list-component.component';
+import { ExamResultComponent } from './Student-Pages/exam/exam-result/exam-result.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -36,6 +39,7 @@ const routes: Routes = [
   
   // Student Routes
   { path: 'studenthome', component: LandigpageComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'pricing', component: PacksComponent },
@@ -44,6 +48,8 @@ const routes: Routes = [
   { path: 'editprofile', component: EditprofileComponent },
   { path: 'examstudent', component: ExamstudentComponent },
   { path: 'exam/:id', component: ExamstudentsubmitComponent },
+  { path: 'certificatet', component: CertificateListComponentComponent },
+  { path: 'result', component: ExamResultComponent },
   // Courses
   { path: 'coursesdashboard', component: MycoursesComponent },
   { path: 'courselist', component: CourseslistComponent },
@@ -66,13 +72,13 @@ const routes: Routes = [
   { path: 'editaxam/:idExam',component:ExamEditComponent},
   { path: 'Tutoringsessions', component: TutoringsessionsComponent },
   { path: 'backoffice/Exam/editexama/:idExam',component:ExamadmineditComponent},
-  { path:'certificate-listcomponent',component:CertifadmineditComponent},
+  { path:'certificate-listcomponent/:id',component:CertifadmineditComponent},
 
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },
 
   // Default Route
-  { path: '', redirectTo: 'main', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 
   // Wildcard Routes
   { path: '**', redirectTo: 'studenthome', pathMatch: 'full' }

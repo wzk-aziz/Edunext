@@ -73,8 +73,28 @@
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+                <li class="collapsed">
+                  <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+                      <i class="icofont-certificate"></i>
+                      <span>Certificates</span>
+                      <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+                  </a>
+                  <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+                      <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of Certificates</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a></li>
+                  </ul>
+              </li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleExamMenu()" role="button">
+                    <i class="icofont-paper text-light"></i>
+                    <span>Exam</span>
+                    <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isExamMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+                    <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+                    <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+                </ul>
+            </li>
                 <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
@@ -107,17 +127,19 @@
     <div class="main px-lg-4 px-md-4">
 
         
-        <h2 class="mb-4 fw-bold">Liste des certificats</h2>
+        <h2 class="mb-4 fw-bold">List of certificates</h2>
 
 <!-- Champ de recherche -->
-<div class="mb-3">
-  <input 
-    type="text" 
-    class="form-control" 
-    [(ngModel)]="searchTerm" 
-    placeholder="Rechercher un certificat par titre ou nom" 
-    (input)="onSearchChange()" 
-  />
+<div class="row g-3 align-items-center mb-4">
+  <div class="mb-3">
+    <input 
+      type="text" 
+      class="form-control" 
+      [(ngModel)]="searchTerm" 
+      placeholder="Search certificates by titre or name" 
+      (input)="onSearchChange()" 
+    />
+  </div>
 </div>
 
 <!-- Liste des certificats sous forme de cartes -->
@@ -127,16 +149,16 @@
       <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
           <div class="lesson_name">
-            <h6 class="mb-0 fw-bold fs-6 mb-2">{{ cert.title }}</h6>
+            <h6 class="mb-0 fw-bold fs-6 mb-2">{{ cert.certificateTitle }}</h6>
           </div>
         </div>
 
         <div class="d-flex align-items-center">
           <div >
-            recipientName :
+            recipient Name :
           </div>
           <div class="flex-fill ms-2 text-truncate">
-            <div>{{ cert.recipientName }}</div>
+            <div>{{ cert.userFullName }}</div>
           </div>
         </div>
 
@@ -146,7 +168,7 @@
           <div class="col-6">
             <div class="d-flex align-items-center">
               <i class="icofont-calendar"></i>
-              <span class="ms-2">{{ cert.issueDate }}</span>
+              <span class="ms-2">{{ cert.issuedDate }}</span>
             </div>
           </div>
         </div>
@@ -155,14 +177,14 @@
 
         <!-- Boutons d'actions -->
         <div class="d-flex align-items-center justify-content-between">
-          <button class="btn btn-warning btn-sm" (click)="updateCertificate(cert)">
-            <i class="fas fa-edit"></i> Modifier
-          </button>
+            <button class="btn btn-warning" (click)="navigateToUpdatePage(cert.id!)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
           <button class="btn btn-danger btn-sm" (click)="deleteCertificate(cert.id!)">
-            <i class="fas fa-trash-alt"></i> Supprimer
+            <i class="fas fa-trash-alt"></i> Delete
           </button>
-          <button class="btn btn-primary btn-sm" (click)="downloadCertificate(cert.id!)">
-            <i class="fas fa-download"></i> Télécharger PDF
+          <button class="btn btn-primary btn-sm"  (click)="generatePDF(cert)">
+            <i class="fas fa-download"></i> Download PDF
           </button>
         </div>
       </div>
@@ -173,10 +195,10 @@
 <!-- Pagination -->
 <div class="d-flex justify-content-center mt-4">
   <button class="btn btn-secondary me-2" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
-    Précédent
+    Previous
   </button>
   <button class="btn btn-secondary" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
-    Suivant
+    Next
   </button>
 </div>
 
@@ -185,191 +207,18 @@
 <!-- Formulaire de modification -->
 <div *ngIf="selectedCertificate">
   <h3>Modifier Certificat</h3>
-  <label>Issue Date: <input [(ngModel)]="selectedCertificate.issueDate"></label>
-  <label>Recipient Name: <input [(ngModel)]="selectedCertificate.recipientName"></label>
-  <label>Title: <input [(ngModel)]="selectedCertificate.title"></label>
+  <label>Issue Date: <input [(ngModel)]="selectedCertificate.issuedDate"></label>
+  <label>Recipient Name: <input [(ngModel)]="selectedCertificate.userFullName"></label>
+  <label>Title: <input [(ngModel)]="selectedCertificate.certificateTitle"></label>
   <button (click)="saveCertificate()">Enregistrer</button>
 </div>
 
         <!-- Body: Body -->
         
 
-        <!-- Modal Members-->
-        <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title  fw-bold" id="addUserLabel">Invite Friend's</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="inviteby_email">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Members Invite" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <button class="btn btn-dark" type="button" id="button-addon2">Members Invite</button>
-                        </div>
-                    </div>
-                    <div class="members_list">
-                        <h6 class="fw-bold ">Members of e-Learn</h6>
-                        <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
-                            <li class="list-group-item py-3 text-center text-md-start">
-                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                                    <div class="no-thumbnail mb-2 mb-md-0">
-                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
-                                    </div>
-                                    <div class="flex-fill ms-3 text-truncate">
-                                        <h6 class="mb-0  fw-bold">Rachel Carr(you)</h6>
-                                        <span class="text-muted">rachel.carr.com</span>
-                                    </div>
-                                    <div class="members-action">
-                                        <span class="members-role ">Admin</span>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="icofont-ui-settings  fs-6"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
-                                              <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item py-3 text-center text-md-start">
-                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                                    <div class="no-thumbnail mb-2 mb-md-0">
-                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                                    </div>
-                                    <div class="flex-fill ms-3 text-truncate">
-                                        <h6 class="mb-0  fw-bold">Lucas Baker<a href="#" class="link-secondary ms-2">(Resend invitation)</a></h6>
-                                        <span class="text-muted">lucas.baker.com</span>
-                                    </div>
-                                    <div class="members-action">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Members
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li>
-                                                  <a class="dropdown-item" href="#">
-                                                    <i class="icofont-check-circled"></i>
-                                                        Member
-                                                    <span>Can view, edit, delete, comment on and save files</span>
-                                                   </a>
-                                                   
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fs-6 p-2 me-1"></i>
-                                                            Admin
-                                                        <span>Member, but can invite and manage team members</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="icofont-ui-settings  fs-6"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Delete Member</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item py-3 text-center text-md-start">
-                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                                    <div class="no-thumbnail mb-2 mb-md-0">
-                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
-                                    </div>
-                                    <div class="flex-fill ms-3 text-truncate">
-                                        <h6 class="mb-0  fw-bold">Una Coleman</h6>
-                                        <span class="text-muted">una.coleman.com</span>
-                                    </div>
-                                    <div class="members-action">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Members
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li>
-                                                  <a class="dropdown-item" href="#">
-                                                    <i class="icofont-check-circled"></i>
-                                                        Member
-                                                    <span>Can view, edit, delete, comment on and save files</span>
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fs-6 p-2 me-1"></i>
-                                                            Admin
-                                                        <span>Member, but can invite and manage team members</span>
-                                                       </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="icofont-ui-settings  fs-6"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Suspend member</a></li>
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-not-allowed fs-6 me-2"></i>Delete Member</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
 
-        <!-- Modal ReshedualModal-->
-        <div class="modal fade" id="reshedualModal" tabindex="-1"  aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title  fw-bold" id="reshedualModalLabel"> Reschedule request</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">e Name</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput75" placeholder="Explain what the request is for">
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Description (optional)</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea78" rows="3" placeholder="Add any extra details about the request"></textarea>
-                    </div>
-                    <div class="deadline-form ">
-                        <form>
-                            <div class="row">
-                              <div class="col">
-                                <label for="datepicker" class="form-label">Reschedule Date</label>
-                                <input type="date" class="form-control" id="datepickerded">
-                              </div>
-                              <div class="col">
-                                <label for="timepicker" class="form-label">Reschedule Time</label>
-                                <input type="time" class="form-control" id="timepickerded">
-                              </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Reschedule</button>
-                </div>
-            </div>
-            </div>
-         </div>
+
+         
     </div>
 
 </div>

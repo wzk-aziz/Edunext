@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { exam } from 'src/app/models/exam';
 import { Question } from 'src/app/models/Question';
 import { ExamService } from 'src/app/Services/exam_service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-exam-form',
@@ -19,17 +20,26 @@ export class ExamFormComponent implements OnInit{
     scheduledDate: new Date().toISOString(),
    questions: []
   };
-
-  constructor(private examService: ExamService,private router :Router) {}
+  successMessage: string = '';  // Variable pour le message de succès
+  errorMessage: string = ''; 
+  constructor(private examService: ExamService,private router :Router, private snackbar: MatSnackBar) {}
 
   ngOnInit(): void {}
 
   onSubmit(): void {
-    this.examService.createExam(this.exam).subscribe(() => {
-      alert('Examen créé avec succès !');
-      this.router.navigate(['/examlist']); 
+    this.examService.createExam(this.exam).subscribe({
+      next: () => {
+        this.snackbar.open('Examen créé avec succès !', 'Fermer', { duration: 5000 });
+        setTimeout(() => {
+          this.router.navigate(['/examlist']);
+        }, 2000);
+      },
+      error: () => {
+        this.snackbar.open('Une erreur est survenue lors de la création de l\'examen.', 'Fermer', { duration: 5000 });
+      }
     });
   }
+  
   addQuestion() {
     this.exam.questions?.push({ questionText: '', answerOptions: '' });
   }

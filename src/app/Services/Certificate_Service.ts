@@ -9,9 +9,17 @@ import { Certificate } from '../models/Certificate';
 })
 export class CertificateService {
 
-  private apiUrl = 'http://localhost:9090/api/certificates';
+  private apiUrl = 'http://localhost:8050/api/certificates';
+  private apiUrl1 = 'http://localhost:8050/api/certificates';
+
 
   constructor(private http: HttpClient) {}
+
+  getCertificatesByUser(userId: number): Observable<Certificate[]> {
+    return this.http.get<Certificate[]>(`${this.apiUrl1}/user/${userId}`, {
+      withCredentials: true  // Permet l'envoi des cookies (si nécessaire)
+    });
+  }
 
   updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {
     return this.http.put<Certificate>(`${this.apiUrl}/${id}`, certificate);
@@ -49,10 +57,16 @@ export class CertificateService {
  // getCertificates(): Observable<Certificate[]> {
   //  return this.http.get<Certificate[]>(this.apiUrl);
 //  }
+getCertificateById(id: number): Observable<Certificate> {
+  return this.http.get<Certificate>(`${this.apiUrl}/certificates/${id}`);
+}
+  getCertificate(id: number): Observable<Certificate> {
+    return this.http.get<Certificate>(`${this.apiUrl}/${id}`);
+  }
 
-  //getCertificate(id: number): Observable<Certificate> {
-    //return this.http.get<Certificate>(`${this.apiUrl}/${id}`);
-  //}
+getTop10Certificates(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/top10`);
+}
 
   //createCertificate(certificate: Certificate): Observable<Certificate> {
   //  return this.http.post<Certificate>(this.apiUrl, certificate);

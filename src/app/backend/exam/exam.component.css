@@ -40,16 +40,14 @@ table {
   button {
     padding: 8px 12px;
     margin: 0 5px;
-    background-color: #4CAF50; /* Vert */
-    color: white;
+
+    
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
   
-  button:hover {
-    background-color: #45a049; /* Couleur de survol */
-  }
+
   
   /* Style général pour l'en-tête de la page */
   h2 {
@@ -66,7 +64,7 @@ table {
   
   /* Bouton Modifier (vert avec une icône) */
   button.edit {
-    background-color: #4caf50; /* Vert */
+  
     color: white;
     padding: 0.5rem 1rem;
     border: none;
@@ -78,9 +76,6 @@ table {
     justify-content: center;
   }
   
-  button.edit:hover {
-    background-color: #45a049;
-  }
   
   button.edit i {
     margin-right: 0.5rem;

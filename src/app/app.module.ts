@@ -55,12 +55,25 @@ import { ExamadmineditComponent } from './backend/examadminedit/examadminedit.co
 import { ExamstudentComponent } from './Student-Pages/exam/examstudent/examstudent.component';
 import { ExamstudentdetailsComponent } from './Student-Pages/exam/examstudentdetails/examstudentdetails.component';
 import { ExamstudentsubmitComponent } from './Student-Pages/exam/examstudentsubmit/examstudentsubmit.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoginComponent } from './Shared/login/login.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Certificattop10Component } from './backend/certificattop10/certificattop10.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { CertificateListComponentComponent } from './Student-Pages/exam/certificate-list-component/certificate-list-component.component';
+import { Examstop10Component } from './backend/examstop10/examstop10.component';
+import { ExamResultComponent } from './Student-Pages/exam/exam-result/exam-result.component';
+
+
+export function tokenGetter() {
+  return localStorage.getItem("token");
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -113,7 +126,13 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ExamadmineditComponent,
     ExamstudentComponent,
     ExamstudentdetailsComponent,
-    ExamstudentsubmitComponent
+    ExamstudentsubmitComponent,
+    LoginComponent,
+    Certificattop10Component,
+    CertificateListComponentComponent,
+    Examstop10Component,
+    ExamResultComponent,
+    
    
   ],
   imports: [
@@ -125,10 +144,23 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatPaginatorModule,
     MatSortModule,
     BrowserAnimationsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    
+    MatSnackBarModule ,
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:8050"], // Remplace par ton domaine
+        disallowedRoutes: ["localhost:8050/api/v1/auth"] // Facultatif
+      }
+    })
+    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

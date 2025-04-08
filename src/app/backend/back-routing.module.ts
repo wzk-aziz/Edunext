@@ -15,6 +15,8 @@ import { DonationComponent } from './donation/donation.component';
 import { EventComponent } from './event/event.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
+import { Certificattop10Component } from './certificattop10/certificattop10.component';
+import { Examstop10Component } from './examstop10/examstop10.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -27,11 +29,13 @@ const routes: Routes = [
     { path: 'reviews', component: ReviewsComponent },
     { path: 'Exam', component: ExamComponent },
     { path: 'Certificat', component: CertificateComponent },
+    { path:'top5',component:Certificattop10Component},
     { path: 'CodingGame', component: CodingGameComponent },
     { path: 'Donation', component: DonationComponent },
     { path: 'Event', component: EventComponent },
     { path: 'Marketplace', component: MarketplaceComponent },
     {path:'courses',component:CoursesBackComponent},
+    {path:'top10',component:Examstop10Component},
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

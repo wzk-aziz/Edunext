@@ -1,4 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { FormGroup, Validators,FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Certificate } from 'src/app/models/Certificate';
 import { CertificateService } from 'src/app/Services/Certificate_Service';
 
@@ -8,48 +10,90 @@ import { CertificateService } from 'src/app/Services/Certificate_Service';
   styleUrls: ['./certifadminedit.component.css']
 })
 export class CertifadmineditComponent implements OnChanges {
-  @Input() idExam!: number;
-  certificates: Certificate[] = [];
-  newCertificate: Certificate = {
-    title: '',
-    recipientName: '',
-    issueDate: new Date().toISOString().split('T')[0],
-    idExam: 0 // On initialise à 0 et on le met à jour plus tard
-  };
+  isCertificatMenuOpen =false;
+  isMenuOpen = false;
+  searchTerm: string="";
+    certificate: Certificate = {};
+    isLoading = true;
+    certificateForm!: FormGroup; 
 
-  constructor(private certificateService: CertificateService) {}
+    isExamMenuOpen=false;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['idExam'] && this.idExam) {
-      console.log('idExam received:', this.idExam);
-      this.loadCertificates();
-      this.newCertificate.idExam = this.idExam; // Mettre à jour l'ID
+    toggleExamMenu() {
+      this.isExamMenuOpen = !this.isExamMenuOpen;
+    }
+    toggleCertificatMenu() {
+      this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+      }
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  isTeacherMenuOpen = false;
+
+toggleTeacherMenu() {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
+}
+  
+    constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+      private certificateService: CertificateService,
+      private fb: FormBuilder
+    ) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    throw new Error('Method not implemented.');
+  }
+  
+    ngOnInit(): void {
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+      this.loadCertificate(id);
+
+      
+        this.certificateForm = this.fb.group({
+          title: ['', Validators.required],
+          recipientName: ['', Validators.required],
+          issueDate: ['', Validators.required]
+        });
+      
+    }
+  
+    loadCertificate(id: number): void {
+      this.isLoading = true;
+      this.certificateService.getCertificateById(id).subscribe({
+        next: (data) => {
+          this.certificate = data;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading certificate:', err);
+          this.isLoading = false;
+        }
+      });
+    }
+  
+    saveCertificate(): void {
+      if (this.certificate && this.certificate.id) {
+        const updateData = {
+          certificateTitle: this.certificate.certificateTitle, 
+          userFullName: this.certificate.userFullName, 
+          issuedDate: this.certificate.issuedDate
+        };
+    
+        this.certificateService.updateCertificate(this.certificate.id, updateData)
+          .subscribe({
+            next: () => {
+              console.log("✅ Certificat mis à jour avec succès !");
+              this.router.navigate(['/backoffice/Certificat']);
+            },
+            error: (err) => {
+              console.error("❌ Erreur lors de l'update :", err);
+            }
+          });
+      }
+    }
+    
+  
+    cancel(): void {
+      this.router.navigate(['/backoffice/Certificat']);
     }
   }
-
-  // Charger les certificats pour un examen spécifique
-  loadCertificates() {
-    console.log('Fetching certificates for exam ID:', this.idExam);
-    this.certificateService.getCertificatesByExam(this.idExam).subscribe({
-      next: (data) => {
-        console.log('Received certificates:', data); // Vérifier les données reçues
-        this.certificates = data;
-      },
-      error: (err) => console.error('Error loading certificates:', err) // Gérer les erreurs
-    });
-  }
-
-  // Créer un nouveau certificat
-  onCreate() {
-    this.certificateService.createCertificate(this.idExam, this.newCertificate)
-      .subscribe(() => {
-        this.loadCertificates();  // Recharger les certificats
-        this.newCertificate = { 
-          title: '', 
-          recipientName: '', 
-          issueDate: new Date().toISOString().split('T')[0],
-          idExam: this.idExam
-        };
-      });
-  }
-}

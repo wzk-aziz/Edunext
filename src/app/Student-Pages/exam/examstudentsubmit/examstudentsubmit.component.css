@@ -1,65 +1,219 @@
+/* Styles existants */
 .exam-container {
-    max-width: 700px;
-    margin: auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.question-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.question-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.question-text {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.option {
+  margin-bottom: 10px;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.option-label:hover {
+  background-color: #f0f0f0;
+}
+
+.option-label input {
+  margin-right: 10px;
+}
+
+.btn-submit {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.btn-submit:hover {
+  background-color: #388E3C;
+}
+
+.score-display {
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.score-pass {
+  background-color: #DFF2BF;
+  color: #4F8A10;
+}
+
+.score-fail {
+  background-color: #FFD2D2;
+  color: #D8000C;
+}
+
+.timer {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 10px 0 20px;
+}
+
+.timer span {
+  font-weight: bold;
+}
+
+.timer-container {
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.timer-bar {
+  height: 100%;
+  transition: width 1s linear, background-color 1s;
+}
+
+/* Nouveaux styles pour les avertissements et états désactivés */
+.warning-container {
+  background-color: #fff6f6;
+  border-left: 4px solid #d01919;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin: 15px 0;
+  color: #9f3a38;
+}
+
+.warning-message {
+  margin: 8px 0;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.btn-disabled {
+  background-color: #cccccc !important;
+  cursor: not-allowed !important;
+}
+
+.timer-stopped {
+  color: #d01919;
+}
+
+.timer-blocked {
+  font-weight: bold;
+  color: #d01919;
+  margin-left: 10px;
+}
+
+.option-label.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f3f3f3;
+}
+
+.disabled input {
+  cursor: not-allowed;
+}
+
+.no-exam {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Style amélioré pour le message d'erreur */
+.error-message {
+  display: flex;
+  align-items: center;
+  background-color: #f8d7da;  /* Fond rouge clair */
+  color: #721c24;             /* Texte rouge foncé */
+  border: 1px solid #f5c6cb;  /* Bordure rose pâle */
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  animation: fadeIn 0.5s ease-in-out; /* Animation pour apparition */
+}
+
+.error-icon {
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.error-text p {
+  margin: 0;
+  font-weight: bold;
+  color: #721c24;
+}
+
+/* Animation pour faire apparaître le message d'erreur */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .question-card {
-    background: #fff;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .question-title {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .question-text {
-    margin-bottom: 10px;
-  }
-  
-  .option {
-    margin: 5px 0;
-  }
-  
-  .option-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 5px;
-    transition: background 0.3s;
-  }
-  
-  .option-label:hover {
-    background: rgba(0, 123, 255, 0.1);
-    border-radius: 5px;
-  }
-  
-  input[type="radio"]:checked + label {
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  .btn-submit {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .btn-submit:hover {
-    background: #0056b3;
-  }
-  
+}
+
+/* Style pour le bouton de fermeture */
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #721c24;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.close-btn:hover {
+  color: #f5c6cb; /* Changer la couleur au survol */
+}
+

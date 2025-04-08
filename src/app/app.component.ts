@@ -16,7 +16,7 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // Check the current route
-        const isSignUpOrSignInPageOrMainOrBackOffice = event.url.includes('/signup') || event.url.includes('/signin') || event.url.includes('/main') || event.url.includes('/backoffice');
+        const isSignUpOrSignInPageOrMainOrBackOffice = event.url.includes('/login') || event.url.includes('/signin') || event.url.includes('/main') || event.url.includes('/backoffice');
         this.showHeader = !isSignUpOrSignInPageOrMainOrBackOffice;
         this.showFooter = !isSignUpOrSignInPageOrMainOrBackOffice;
 

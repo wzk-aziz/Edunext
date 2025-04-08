@@ -11,7 +11,16 @@ import { ExamService } from 'src/app/Services/exam_service';
 })
 export class ExamadmineditComponent {
   exam: exam = new exam();
+  isCertificatMenuOpen = false;
+  isExamMenuOpen=false;
 
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+
+toggleCertificatMenu() {
+  this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
   constructor(
     private examService: ExamService,
     private route: ActivatedRoute,
@@ -66,5 +75,17 @@ export class ExamadmineditComponent {
 
   onQuestionUpdate(question: Question) {
     this.examService.updateQuestion(question.id!, question).subscribe();
+  }
+  isMenuOpen = false;
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  isTeacherMenuOpen = false;
+  toggleTeacherMenu() {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
+  }
+  cancel(): void {
+    this.router.navigate(['/backoffice/Exam']);
   }
 }

@@ -4,12 +4,12 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h1 class="text-white">Liste des Examens</h1>
+          <h1 class="text-white">Exams List</h1>
           <div class="d-flex">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
-                <li class="breadcrumb-item"><a routerLink="/studenthome">Accueil</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Examens</li>
+                <li class="breadcrumb-item"><a routerLink="/studenthome">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Exams</li>
               </ol>
             </nav>
           </div>
@@ -24,7 +24,7 @@
     <div class="container">
       <div class="row g-3 align-items-center mb-4">
         <div class="col-md-6">
-          <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Rechercher un examen par titre" (input)="onSearchChange()" />
+          <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Search exam by title" (input)="onSearchChange()" />
         </div>
       </div>
 
@@ -45,10 +45,10 @@
                       <div class="d-sm-flex justify-content-sm-between align-items-center">
                         <div>
                           <button class="btn btn-primary me-2" (click)="editExam(exam.idExam!)">
-                            <i class="fas fa-edit"></i> Modifier
+                            <i class="fas fa-edit"></i> Edit
                           </button>
                           <button class="btn btn-danger" (click)="deleteExam(exam.idExam!)">
-                            <i class="fas fa-trash-alt"></i> Supprimer
+                            <i class="fas fa-trash-alt"></i> Delete
                           </button>
                         </div>
                       </div>
@@ -59,17 +59,25 @@
             </div>
           </div>
 
-          <!-- Pagination controls -->
-          <button 
-          (click)="onPageChange(currentPage - 1)" 
-          [disabled]="currentPage === 1">
-          Previous
-        </button>
-        <button 
-          (click)="onPageChange(currentPage + 1)" 
-          [disabled]="currentPage === totalPages">
-          Next
-        </button>
+          <div class="col-12">
+            <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+              <ul class="pagination pagination-primary-soft rounded mb-0">
+                <li class="page-item mb-0" [class.disabled]="currentPage === 1">
+                  <a class="page-link" (click)="changePage(currentPage - 1)" tabindex="-1">
+                    <i class="fas fa-angle-double-left"></i>
+                  </a>
+                </li>
+                <li *ngFor="let page of getPages()" class="page-item mb-0" [class.active]="page === currentPage">
+                  <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item mb-0" [class.disabled]="currentPage === totalPages">
+                  <a class="page-link" (click)="changePage(currentPage + 1)">
+                    <i class="fas fa-angle-double-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         
 
         </div>

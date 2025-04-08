@@ -15,6 +15,16 @@ export class ExamComponent {
   currentPage = 1; // Default page number
   itemsPerPage = 5;
 
+  isCertificatMenuOpen = false;
+
+  isExamMenuOpen=false;
+
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+  toggleCertificatMenu() {
+    this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+  }
   // Getter to calculate the exams for the current page
   get paginatedExams() {
     const start = (this.currentPage - 1) * this.itemsPerPage;

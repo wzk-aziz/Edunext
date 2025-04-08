@@ -13,32 +13,55 @@ export class ExamListComponent implements OnInit {
   searchTerm: string = '';  // Variable pour le terme de recherche
   currentPage = 1; // Default page number
   itemsPerPage = 5;
+  totalPages: number = 0;
+paginatedExams: any[] = [];
+constructor(private examService: ExamService, private router: Router) {}
+
+ngOnInit(): void {
+  this.loadExams();  // Charger tous les examens au début
+  this.updatePaginatedExams();
+}
+  // Méthode pour changer la page
+changePage(page: number) {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+    this.updatePaginatedExams();
+  }
+}
+// Générer les numéros de pages dynamiquement
+getPages(): number[] {
+  this.totalPages = Math.ceil(this.exams.length / this.itemsPerPage);
+  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+}
+
+// Mettre à jour la liste des examens affichés
+updatePaginatedExams() {
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  this.paginatedExams = this.exams.slice(startIndex, endIndex);
+}
 
   // Getter to calculate the exams for the current page
-  get paginatedExams() {
-    const start = (this.currentPage - 1) * this.itemsPerPage;
-    return this.exams.slice(start, start + this.itemsPerPage);
-  }
+  //get paginatedExams() {
+   // const start = (this.currentPage - 1) * this.itemsPerPage;
+   // return this.exams.slice(start, start + this.itemsPerPage);
+  //}
 
   // Getter to calculate the total number of pages
-  get totalPages() {
-    return Math.ceil(this.exams.length / this.itemsPerPage);
-  }
+  //get totalPages() {
+   // return Math.ceil(this.exams.length / this.itemsPerPage);
+  //}
 
   // Method to handle page changes
-  onPageChange(page: number): void {
-    if (page < 1) {
-      page = 1;  // Prevent going below page 1
-    } else if (page > this.totalPages) {
-      page = this.totalPages;  // Prevent going above the last page
-    }
-    this.currentPage = page;
-  }
-  constructor(private examService: ExamService, private router: Router) {}
-
-  ngOnInit(): void {
-    this.loadExams();  // Charger tous les examens au début
-  }
+ // onPageChange(page: number): void {
+   // if (page < 1) {
+     // page = 1;  // Prevent going below page 1
+  //  } else if (page > this.totalPages) {
+    //  page = this.totalPages;  // Prevent going above the last page
+    //}
+   // this.currentPage = page;
+  //}
+ 
 
   // Méthode pour charger tous les examens ou effectuer la recherche
   loadExams(): void {
@@ -46,11 +69,13 @@ export class ExamListComponent implements OnInit {
       // Si le champ de recherche est vide, on charge tous les examens
       this.examService.getAllExams().subscribe((data) => {
         this.exams = data;
+        this.updatePaginatedExams();
       });
     } else {
       // Sinon, on filtre les examens selon le titre
       this.examService.searchExams(this.searchTerm).subscribe((data) => {
         this.exams = data;
+        this.updatePaginatedExams();
       });
     }
   }
