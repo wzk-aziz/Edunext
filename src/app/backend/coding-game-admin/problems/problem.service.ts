@@ -28,6 +28,10 @@ export class ProblemService {
     return this.http.post<Problem>(this.apiUrl, problem);
   }
 
+  getProblemById(id: number): Observable<Problem> {
+    return this.http.get<Problem>(`${this.apiUrl}/${id}`);
+  }
+
   update(id: number, problem: Problem): Observable<Problem> {
     return this.http.put<Problem>(`${this.apiUrl}/${id}`, problem);
   }

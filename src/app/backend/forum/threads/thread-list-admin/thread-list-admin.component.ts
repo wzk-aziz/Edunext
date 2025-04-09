@@ -186,7 +186,7 @@ export class ThreadListAdminComponent implements OnInit {
   
   getThreadComments(thread: Thread): Reaction[] {
     if (!thread.reactions) return [];
-    return thread.reactions.filter(r => r.reactionType === 'COMMENT');
+    return thread.reactions.filter(r => r.type === 'COMMENT');
   }
   
   // Pagination

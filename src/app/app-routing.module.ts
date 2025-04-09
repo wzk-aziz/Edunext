@@ -29,6 +29,7 @@ import { EventListComponent } from './Student-Pages/Forum/Event/event-list/event
 import { EventDetailComponent } from './Student-Pages/Forum/Event/event-detail/event-detail.component';
 import { ThreadAddComponent } from './Student-Pages/Forum/Thread/thread-add/thread-add.component';
 import { LoginComponent } from './Shared/login/login.component';
+import { SubmissionFormComponent } from './Student-Pages/coding-game-student/submission-form/submission-form.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'coding-game/problems', component: ProblemListComponent },
   { path: 'coding-game/problem-detail/:id', component: ProblemDetailComponent },
   { path: 'coding-game/editor/:id', component: CodeEditorComponent },
+  { path: 'coding-game/submit/:id', component: SubmissionFormComponent },
   { path: 'blog', component: BlogListComponent},
   { path: 'thread', component: ThreadListComponent},
   { path: 'new', component:ThreadAddComponent},

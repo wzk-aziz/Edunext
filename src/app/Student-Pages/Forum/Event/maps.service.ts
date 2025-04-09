@@ -33,4 +33,17 @@ export class MapsService {
 
     return this.http.post(this.apiUrl, body, { headers });
   }
+  getReservationsByEvent(eventId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/events/${eventId}/reservations`);
+  }
+
+  reserveTicket(eventId: number, email: string): Observable<any> {
+    // Create a proper reservation object as expected by the backend
+    const reservation = {
+      studentEmail: email,
+      reservationDate: new Date()
+    };
+    
+    return this.http.post<any>(`${this.apiUrl}/events/${eventId}/reservations`, reservation);
+  }
 }

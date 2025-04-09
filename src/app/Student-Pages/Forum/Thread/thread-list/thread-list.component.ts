@@ -35,11 +35,12 @@ export class ThreadListComponent implements OnInit {
   ];
   
   // Types de réactions disponibles
-  reactionTypes = [
-    { type: 'LIKE', label: "J'aime", icon: 'fa-thumbs-up', color: '#4267B2' },
-    { type: 'LOVE', label: "J'adore", icon: 'fa-heart', color: '#E91E63' },
-    { type: 'HAHA', label: 'Haha', icon: 'fa-laugh', color: '#FFC107' }
-  ];
+ // Dans Angular, vos types doivent correspondre exactement aux noms des énumérations dans Spring
+reactionTypes = [
+  { type: 'LIKE', label: "J'aime", icon: 'fa-thumbs-up', color: '#4267B2' },
+  { type: 'LOVE', label: "J'adore", icon: 'fa-heart', color: '#E91E63' },
+  { type: 'HAHA', label: 'Haha', icon: 'fa-laugh', color: '#FFC107' }
+];
   
   userReactions: { [threadId: number]: { [reactionType: string]: number } } = {};
   // Compteurs de réactions
@@ -104,8 +105,23 @@ export class ThreadListComponent implements OnInit {
         this.reactionCounts[thread.id] = {};
       }
       
-     
+      // Charger le nombre de chaque type de réaction
+      this.reactionTypes.forEach(reaction => {
+        this.reactionService.getReactionCountByType(thread.id!, reaction.type).subscribe(
+          count => {
+            this.reactionCounts[thread.id!][reaction.type] = count;
+          },
+          error => console.error(`Erreur lors du chargement du nombre de réactions ${reaction.type}:`, error)
+        );
+      });
       
+      // Charger le nombre de commentaires
+      this.reactionService.getCommentCountByThreadId(thread.id).subscribe(
+        count => {
+          this.reactionCounts[thread.id!]['COMMENT'] = count;
+        },
+        error => console.error('Erreur lors du chargement du nombre de commentaires:', error)
+      );
     });
   }
 
@@ -240,38 +256,41 @@ export class ThreadListComponent implements OnInit {
     }
   }
   
-  addComment(threadId: number): void {
-    if (!this.newCommentContent[threadId] || this.newCommentContent[threadId].trim() === '') {
-      return;
-    }
-    
-    this.reactionService.addComment(threadId, this.newCommentContent[threadId]).subscribe(
-      newComment => {
+// Add to thread-list-admin.component.ts
+
+addComment(threadId: number): void {
+  if (!this.newCommentContent[threadId]) return;
+  
+  this.loadingReactions[threadId] = true;
+  this.reactionService.addComment(threadId, this.newCommentContent[threadId])
+    .subscribe(
+      comment => {
+        // Update the thread's reactions
         const thread = this.threads.find(t => t.id === threadId);
         if (thread) {
-          if (!thread.reactions) {
-            thread.reactions = [];
-          }
-          thread.reactions.push(newComment);
+          if (!thread.reactions) thread.reactions = [];
+          thread.reactions.push(comment);
           
-          // Mettre à jour le compteur de commentaires
-          if (!this.reactionCounts[threadId]) {
-            this.reactionCounts[threadId] = {};
-          }
-          if (!this.reactionCounts[threadId]['COMMENT']) {
-            this.reactionCounts[threadId]['COMMENT'] = 0;
-          }
+          // Update reaction counts
+          if (!this.reactionCounts[threadId]) this.reactionCounts[threadId] = {};
+          if (!this.reactionCounts[threadId]['COMMENT']) this.reactionCounts[threadId]['COMMENT'] = 0;
           this.reactionCounts[threadId]['COMMENT']++;
         }
+        
+        // Clear the input
         this.newCommentContent[threadId] = '';
+        this.loadingReactions[threadId] = false;
       },
-      error => console.error('Erreur lors de l\'ajout du commentaire:', error)
+      error => {
+        console.error('Erreur lors de l\'ajout du commentaire:', error);
+        this.loadingReactions[threadId] = false;
+      }
     );
-  }
+}
   
   getThreadComments(thread: Thread): Reaction[] {
     if (!thread.reactions) return [];
-    return thread.reactions.filter(r => r.reactionType === 'COMMENT');
+    return thread.reactions.filter(r => r.type === 'COMMENT');
   }
   
   // Pagination

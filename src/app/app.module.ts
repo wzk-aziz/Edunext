@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-
+import { NgChartsModule } from 'ng2-charts';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxSpinnerModule } from 'ngx-spinner';
+// Loading spinner
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -75,6 +78,10 @@ import { BlogAddComponent } from './backend/forum/blogs/blog-add/blog-add.compon
 import { EventAddComponent } from './backend/forum/events/event-add/event-add.component';
 import { LoginComponent } from './Shared/login/login.component';
 import { EventUpdateComponent } from './backend/forum/events/event-update/event-update.component';
+import { SubmissionFormComponent } from './Student-Pages/coding-game-student/submission-form/submission-form.component';
+import { SubmissionStatsComponent } from './backend/coding-game-admin/submission-stats/submission-stats.component';
+import { StatisticsDashboardComponent } from './backend/coding-game-admin/statistics-dashboard/statistics-dashboard.component';
+import { SubmissionLeaderboardComponent } from './backend/coding-game-admin/submission-leaderboard/submission-leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -147,7 +154,11 @@ import { EventUpdateComponent } from './backend/forum/events/event-update/event-
     BlogAddComponent,
     EventAddComponent,
     LoginComponent,
-    EventUpdateComponent
+    EventUpdateComponent,
+    SubmissionFormComponent,
+    SubmissionStatsComponent,
+    StatisticsDashboardComponent,
+    SubmissionLeaderboardComponent
   ],
   imports: [
     BrowserModule,
@@ -157,7 +168,10 @@ import { EventUpdateComponent } from './backend/forum/events/event-update/event-
     CommonModule, 
     HttpClientModule,
     RouterModule,
-    
+    NgChartsModule,
+    NgxSpinnerModule,
+    FontAwesomeModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

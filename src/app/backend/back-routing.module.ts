@@ -30,6 +30,8 @@ import { BlogListAdminComponent } from './forum/blogs/blog-list-admin/blog-list-
 import { EventListAdminComponent } from './forum/events/event-list-admin/event-list-admin.component';
 import { BlogAddComponent } from './forum/blogs/blog-add/blog-add.component';
 import { EventUpdateComponent } from './forum/events/event-update/event-update.component';
+import { SubmissionStatsComponent } from './coding-game-admin/submission-stats/submission-stats.component';
+import { SubmissionLeaderboardComponent } from './coding-game-admin/submission-leaderboard/submission-leaderboard.component';
 
 const routes: Routes = [
   { path: '', component: BackAppComponent, children: [
@@ -38,6 +40,7 @@ const routes: Routes = [
       path: '', 
       component: LayoutComponent, 
       children: [
+        { path: 'submissions/stats', component: SubmissionLeaderboardComponent },  
         { path: 'problems', component: ProblemsComponent },
         { path: 'problems/new', component: ProblemFormComponent },
         { path: 'problems/edit/:id', component: ProblemFormComponent },
@@ -55,8 +58,7 @@ const routes: Routes = [
         { path: 'events', component: EventListAdminComponent },
         { path: 'blogs/add', component: BlogAddComponent },
         { path: 'event/add', component: EventComponent },
-        { path: 'event/update', component: EventUpdateComponent }
-
+        { path: 'event/update', component: EventUpdateComponent },
       ]
     },
 

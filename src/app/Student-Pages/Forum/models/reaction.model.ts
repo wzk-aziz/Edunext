@@ -2,9 +2,10 @@ import { Thread } from './thread.model';
 import { Forum } from './forum.model';
 
 export interface Reaction {
-  id: number | null;
-  reactionType: 'LIKE' | 'LOVE' | 'HAHA' | 'COMMENT';
-  reactionContent: string; // <-- Doit être un string si toujours présent
+  id?: number;
+  threadId: number;
   studentEmail: string;
-  thread?: Thread;
+  type: string; // Not 'reactionType'
+  content?: string; // For comments  // Pour le contenu des commentaires
+  timestamp?: Date;
 }

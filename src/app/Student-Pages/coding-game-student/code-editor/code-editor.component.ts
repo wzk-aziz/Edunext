@@ -2,6 +2,8 @@ import { Component, Input, ElementRef, HostListener, OnInit, ViewChild } from '@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Problem } from 'src/app/backend/coding-game-admin/models/problem.model';
 import { GitService } from './git.service';
+import { ActivatedRoute } from '@angular/router';
+import { ProblemService } from 'src/app/backend/coding-game-admin/problems/problem.service';
 
 @Component({
   selector: 'app-code-editor',
@@ -9,7 +11,8 @@ import { GitService } from './git.service';
   styleUrls: ['./code-editor.component.css']
 })
 export class CodeEditorComponent implements OnInit {
-  @Input() problem!: Problem; 
+  
+  @Input() problem!: Problem;
   @ViewChild('codeEditor') codeEditorElement!: ElementRef;
   
   languages = [
@@ -56,16 +59,51 @@ export class CodeEditorComponent implements OnInit {
   });
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private gitService: GitService,
-    private el: ElementRef
+    private el: ElementRef,
+    private route: ActivatedRoute,
+    private problemService: ProblemService
   ) {}
 
   ngOnInit(): void {
-    console.log('Problem received by editor:', this.problem);
+    const problemId = +this.route.snapshot.paramMap.get('id')!;
+    this.problemService.getProblemById(problemId).subscribe({
+      next: (data) => {
+        this.problem = data;
+        console.log("✅ Problème chargé :", this.problem);
+      },
+      error: (err) => {
+        console.error('❌ Problème non trouvé', err);
+      }
+    });
+
     this.setupAntiCheatingListeners();
     this.startCodeMonitoring();
   }
+
+  submitCode(): void {
+    console.log("📌 Git Link value:", this.gitLink); // 👈 pour test
+  
+    const submission = {
+      code: this.sourceCode,
+      gitLink: this.gitLink, // doit contenir la valeur ici
+      problem: { id: this.problem.id },
+      student: { id: 1 },
+    };
+  
+    this.output = '⏳ Submitting...';
+  
+    this.http.post('http://localhost:8088/submissions/submit', submission)
+      .subscribe({
+        next: () => this.output = '✅ Code submitted successfully!',
+        error: (err) => {
+          this.output = '❌ Submission failed.';
+          console.error(err);
+        }
+      });
+  }
+  
 
   // Enhanced anti-cheating detection system
   private setupAntiCheatingListeners(): void {
@@ -519,4 +557,8 @@ export class CodeEditorComponent implements OnInit {
         break;
     }
   }
+  gitLink: string = '';
+
+
+  
 }
