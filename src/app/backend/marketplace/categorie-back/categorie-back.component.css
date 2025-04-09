@@ -84,3 +84,16 @@
     color: #888;
     margin-top: 20px;
 }
+
+
+.left-button {
+  align-self: flex-start; /* S'assurer que le bouton est bien à gauche */
+}
+.vertical-container {
+  display: flex;
+  flex-direction: column; /* Affichage vertical */
+  align-items: flex-start; /* Aligner les éléments à gauche */
+  width: fit-content; /* Ajuster la largeur au contenu */
+}
+
+

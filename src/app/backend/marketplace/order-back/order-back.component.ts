@@ -1,50 +1,100 @@
-import { Component } from '@angular/core';
-import {MarketplaceService} from "../../../Student-Pages/Marketplace/services/marketplace.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { Component, OnInit } from '@angular/core';
+import { MarketplaceService } from "../../../Student-Pages/Marketplace/services/marketplace.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { FormControl, FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-order-back',
   templateUrl: './order-back.component.html',
   styleUrls: ['./order-back.component.css']
 })
-export class OrderBackComponent {
-  orders: any;
-  constructor(private marketplaceService: MarketplaceService,
-              private matSnackBar: MatSnackBar) { }
+export class OrderBackComponent implements OnInit {
+  orders: any[] = [];
+  paginatedOrders: any[] = [];
+  isLoading: boolean = false;
+  error: string = '';
+  pageSize: number = 8;
+  currentPage: number = 1;
+  totalPages: number = 1;
+  searchOrderForm!: FormGroup;
+  isMenuOpen = false;
+  isTeacherMenuOpen = false;
+
+  constructor(private marketplaceService: MarketplaceService, private matSnackBar: MatSnackBar) { }
 
   ngOnInit() {
+    this.searchOrderForm = new FormGroup({
+      search: new FormControl('')
+    });
     this.getPlacedOrders();
   }
 
   getPlacedOrders() {
-    this.marketplaceService.getPlacedOrders().subscribe(res => {
-          this.orders = res;
-        }, error => {
-          console.error('Error fetching placed orders:', error);
-          this.matSnackBar.open('Error fetching placed orders', 'Close', {
-            duration: 3000,
-            panelClass: 'snackbar-error'
-          });
-        }
-    );
+    this.isLoading = true;
+    this.marketplaceService.getPlacedOrders().subscribe({
+      next: (res) => {
+        this.orders = res;
+        this.updatePagination();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.error = 'Erreur lors du chargement des commandes';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.orders.length / this.pageSize);
+    this.changePage(1);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.paginatedOrders = this.orders.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  getPages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  onSearchChange(): void {
+    const searchValue = this.searchOrderForm.get('search')?.value.trim().toLowerCase();
+    if (!searchValue) {
+      this.getPlacedOrders();
+      return;
+    }
+    this.paginatedOrders = this.orders.filter(order => order.id.toString().includes(searchValue));
   }
 
   changeOrderStatus(orderId: number, status: string) {
-    this.marketplaceService.changeOrderStatus(orderId, status).subscribe(res => {
-      if (res.id != null) {
-        this.matSnackBar.open("order Status changed Successfully!! ", "Close", { duration: 5000 });
-        this.getPlacedOrders();
-      } else {
-        this.matSnackBar.open("something went wrong", "Close", { duration: 5000 });
+    this.marketplaceService.changeOrderStatus(orderId, status).subscribe({
+      next: (res) => {
+        if (res.id != null) {
+          this.matSnackBar.open("Statut de la commande mis à jour!", "Fermer", { duration: 5000 });
+          this.getPlacedOrders();
+        } else {
+          this.matSnackBar.open("Une erreur s'est produite", "Fermer", { duration: 5000 });
+        }
       }
-    })
+    });
   }
-  isMenuOpen = false;
+
+  getStatusClass(status: string) {
+    switch (status) {
+      case 'Shipped': return 'status-shipped';
+      case 'Delivered': return 'status-delivered';
+      case 'Pending': return 'status-pending';
+      case 'Cancelled': return 'status-cancelled';
+      default: return '';
+    }
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
-  isTeacherMenuOpen = false;
 
   toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;

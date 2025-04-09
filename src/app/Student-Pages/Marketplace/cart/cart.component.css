@@ -109,3 +109,64 @@
   color: #666;
   margin-top: 10px;
 }
+/* Coupon Section */
+.coupon-section {
+  background-color: #f1f8ff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.coupon-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.coupon-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #3f51b5;
+}
+
+/* Coupon Input Field */
+.coupon-input-container {
+  margin-bottom: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.coupon-input {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Apply Coupon Button */
+.apply-coupon-btn {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 0;
+  margin-top: 15px;
+  background-color: #3f51b5;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.apply-coupon-btn:hover {
+  background-color: #303f9f;
+}
+
+.apply-coupon-btn:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+}
+
+/* Error Message */
+.mat-error {
+  color: #d32f2f;
+  font-size: 0.875rem;
+}

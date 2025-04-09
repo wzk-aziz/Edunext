@@ -24,6 +24,9 @@ export class ListProduitComponent implements OnInit {
   categories: any[] = [];
   totalProducts: number = 0;
   selectedSort: string = 'name'; // Default sort option
+  filteredProducts: any[] = [];
+  allProducts: any[] = [];
+
 
   constructor(
     private marketplaceService: MarketplaceService,
@@ -34,6 +37,7 @@ export class ListProduitComponent implements OnInit {
 
   ngOnInit() {
     this.getCategories();  // Récupérer les catégories au démarrage
+    this.loadWishlist();   // Charger l'état de la wishlist depuis le backend ou autre source persistante
     this.getAllProducts();
     this.searchProductForm = this.fb.group({
       title: [null, [Validators.required]],
@@ -44,25 +48,80 @@ export class ListProduitComponent implements OnInit {
     });
   }
 
-  // Récupérer les catégories
-  getCategories(): void {
-    this.marketplaceService.getAllCategories().subscribe((res: any[]) => {
-      this.categories = res;
+  downloadPdf(productId: number): void {
+    this.marketplaceService.downloadProductPdf(productId).subscribe(
+      (response: Blob) => {
+        // Créez un lien pour télécharger le fichier PDF
+        const blob = response;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `product_${productId}.pdf`; // Nom du fichier PDF à télécharger
+        a.click();
+        window.URL.revokeObjectURL(url); // Libère la ressource
+      },
+      (error) => {
+        console.error('Erreur lors du téléchargement du PDF', error);
+      }
+    );
+  }
+  loadWishlist(): void {
+    // Charger la wishlist depuis le service (qui combine localStorage et backend)
+    this.marketplaceService.getWishlist().subscribe({
+      next: (wishlist: number[]) => {
+        this.wishlist = new Set(wishlist);  // Charger les produits dans la wishlist
+        console.log("Wishlist chargée", this.wishlist);
+      },
+      error: (err) => {
+        console.error("Erreur lors du chargement de la wishlist :", err);
+        // En cas d'erreur, on peut toujours essayer de récupérer depuis localStorage
+        const localWishlist = localStorage.getItem('user_wishlist_items');
+        if (localWishlist) {
+          this.wishlist = new Set(JSON.parse(localWishlist));
+        }
+      }
     });
   }
 
-  // Récupérer tous les produits
-  getAllProducts(): void {
-    this.marketplaceService.getAllProducts().subscribe(res => {
-      this.products = res.map((element: any) => ({
-        ...element,
-        processedImg: 'data:image/jpeg;base64,' + element.byteImg,
-      }));
-      this.totalProducts = this.products.length; // Stocke le nombre total de produits
-      this.totalPages = Math.ceil(this.products.length / this.pageSize);
-      this.updatePaginatedProducts();
+  isInWishlist(productId: number): boolean {
+    return this.wishlist.has(productId);
+  }
+
+
+  // Récupérer les catégories
+  // Récupérer les catégories depuis l'API
+  getCategories(): void {
+    this.marketplaceService.getAllCategories().subscribe({
+      next: (res: any[]) => {
+        console.log("Catégories reçues :", res);
+        this.categories = res;
+      },
+      error: (err) => console.error("Erreur lors de la récupération des catégories :", err)
     });
   }
+
+  // Récupérer tous les produits depuis l'API
+  getAllProducts(): void {
+    this.marketplaceService.getAllProducts().subscribe({
+      next: (res: any[]) => {
+        // Traitez chaque produit
+        this.products = res.map((element: any) => ({
+          ...element,
+          processedImg: 'data:image/jpeg;base64,' + element.byteImg,
+        }));
+        this.allProducts = this.products;
+        this.totalProducts = this.products.length;
+        this.totalPages = Math.ceil(this.products.length / this.pageSize);
+        this.updatePaginatedProducts();
+        console.log("Produits reçus :", this.products);
+      },
+      error: (err) => console.error("Erreur lors de la récupération des produits :", err)
+    });
+  }
+
+
+  // Récupérer tous les produits
+
 
   // Mettre à jour les produits à afficher pour la page courante
   updatePaginatedProducts(): void {
@@ -70,6 +129,37 @@ export class ListProduitComponent implements OnInit {
     const endIndex = startIndex + this.pageSize;
     this.paginatedProducts = this.products.slice(startIndex, endIndex);
   }
+
+
+  toggleWishlist(productId: number): void {
+    if (this.wishlist.has(productId)) {
+      this.marketplaceService.deleteFromWishlist(productId).subscribe({
+        next: () => {
+          this.wishlist.delete(productId);
+          this.snackbar.open('Produit retiré de la wishlist', 'Fermer', { duration: 3000 });
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression de la wishlist :', error);
+          this.snackbar.open('Erreur lors de la suppression de la wishlist', 'Fermer', { duration: 3000 });
+        }
+      });
+    } else {
+      const wishlistDto = { productId };
+      this.marketplaceService.addProductToWishlist(wishlistDto).subscribe({
+        next: () => {
+          this.wishlist.add(productId);  // Mise à jour de l'état local
+          this.snackbar.open('Produit ajouté à la wishlist', 'Fermer', { duration: 3000 });
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'ajout à la wishlist :', error);
+          this.snackbar.open('Erreur lors de l\'ajout à la wishlist', 'Fermer', { duration: 3000 });
+        }
+      });
+    }
+  }
+
+
+
 
   // Changer de page
   changePage(page: number): void {
@@ -86,60 +176,50 @@ export class ListProduitComponent implements OnInit {
     }
     return pages;
   }
+  // Filtrer les produits selon la catégorie sélectionnée
+  filterProductsByCategory(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedCategory = target.value;
+
+    // Si une catégorie est sélectionnée, appliquez le filtre
+    this.applyCategoryFilter(selectedCategory);
+  }
+
+
+  applyCategoryFilter(selectedCategory: string): void {
+    if (selectedCategory) {
+      // Filtrage des produits en fonction de categoryName, et non de category
+      this.products = this.allProducts.filter(
+        product => product.categoryName === selectedCategory
+      );
+    } else {
+      // Si aucune catégorie n'est sélectionnée, affichez tous les produits
+      this.products = this.allProducts;
+    }
+
+    // Mettez à jour le nombre de produits et la pagination
+    this.totalProducts = this.products.length;
+    this.totalPages = Math.ceil(this.products.length / this.pageSize);
+    this.currentPage = 1;
+    this.updatePaginatedProducts();
+  }
+
 
   addToCart(productId: number): void {
     const addProductInCartDto = { productId };
-    this.marketplaceService.addToCart(addProductInCartDto).subscribe(response => {
-      console.log('Produit ajouté au panier', response);
+    this.marketplaceService.addToCart(addProductInCartDto).subscribe({
+      next: (response) => {
+        console.log('Produit ajouté au panier', response);
+        this.snackbar.open('Produit ajouté au panier avec succès!', 'Fermer', { duration: 5000 });
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'ajout du produit au panier', error);
+        this.snackbar.open('Erreur lors de l\'ajout du produit au panier', 'Fermer', { duration: 5000 });
+      }
     });
   }
 
 
-    // Ajouter ou retirer un produit de la wishlist
-    addToWishlist(productId: number): void {
-        if (this.wishlist.has(productId)) {
-            // Si le produit est déjà dans la wishlist, le retirer
-            this.marketplaceService.deleteFromWishlist(productId).subscribe(
-                (res) => {
-                    if (res.success) { // Assurez-vous que la réponse contient un champ 'success' ou similaire
-                        this.wishlist.delete(productId); // Supprimer localement le produit
-                        this.snackbar.open('Product removed from wishlist', 'Close', { duration: 5000 });
-                    } else {
-                        // Si la suppression échoue côté serveur
-                        this.snackbar.open('Failed to remove product from wishlist', 'Close', { duration: 5000 });
-                    }
-                },
-                (error) => {
-                    console.error('Error removing from wishlist:', error);
-                    this.snackbar.open('Error removing from wishlist', 'Close', { duration: 5000 });
-                }
-            );
-        } else {
-            // Si le produit n'est pas dans la wishlist, l'ajouter
-            const wishListDto = { productId };
-            this.marketplaceService.addProductToWishlist(wishListDto).subscribe(
-                (res) => {
-                    if (res.id != null) {  // Assurez-vous que la réponse contient un champ 'id'
-                        this.wishlist.add(productId);  // Ajouter le produit dans la wishlist localement
-                        this.snackbar.open('Product added to wishlist successfully!', 'Close', { duration: 5000 });
-                    } else {
-                        // Si l'ajout échoue côté serveur
-                        this.snackbar.open('Failed to add product to wishlist', 'Close', { duration: 5000 });
-                    }
-                },
-                (error) => {
-                    console.error('Error adding to wishlist:', error);
-                    this.snackbar.open('Error adding to wishlist', 'Close', { duration: 5000 });
-                }
-            );
-        }
-    }
-
-
-    // Méthode pour vérifier si le produit est dans la wishlist
-    isInWishlist(productId: number): boolean {
-        return this.wishlist.has(productId);
-    }
 
 
 
@@ -160,35 +240,9 @@ export class ListProduitComponent implements OnInit {
     });
   }
 
-  // Appliquer les filtres
-    applyFilters(): void {
-        const filters = this.filterForm.value;  // Récupère les valeurs du formulaire de filtres
-
-        const category = filters.category || '';
-        const sortBy = filters.sortBy || 'name';
-
-        console.log('Filters applied:', { category, sortBy }); // Affiche les valeurs dans la console
-
-        this.marketplaceService.getAllProductsByName({ category, sortBy }).subscribe(res => {
-            if (res && res.length > 0) {
-                this.products = res.map((element: any) => ({
-                    ...element,
-                    processedImg: 'data:image/jpeg;base64,' + element.byteImg,
-                }));
-                this.totalPages = Math.ceil(this.products.length / this.pageSize);
-                this.updatePaginatedProducts();  // Mettre à jour les produits à afficher pour la page courante
-            } else {
-                this.products = [];
-                this.totalPages = 1;
-                this.updatePaginatedProducts();
-                this.snackbar.open('Aucun produit trouvé avec ces critères.', 'Fermer', { duration: 3000 });
-            }
-        });
-    }
 
 
-
-    // Fonction d'appel en temps réel pour la recherche
+  // Fonction d'appel en temps réel pour la recherche
   onSearchChange(): void {
     const searchValue = this.searchProductForm.get('title')?.value.trim().toLowerCase();
     if (searchValue === '') {

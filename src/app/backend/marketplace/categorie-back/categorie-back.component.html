@@ -56,17 +56,7 @@
                     </ul>
                 </li>
 
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleMenu()" role="button">
-                        <i class="icofont-certificate"></i>
-                        <span>Courses</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/courses"><span>Courses</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/purchase"><span>Course Purchase</span></a></li>
-                    </ul>
-                </li>
+
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li class="collapsed">
                     <a class="m-link" (click)="toggleMenu()" role="button">
@@ -75,9 +65,11 @@
                         <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
                     </a>
                     <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace dashboard</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
                         <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a></li>
                         <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
                     </ul>
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
@@ -113,153 +105,7 @@
     <!-- main body area -->
     <div class="main px-lg-4 px-md-4">
 
-        <!-- Body: Header -->
-        <div class="header">
-            <nav class="navbar py-4">
-                <div class="container-xxl">
 
-                    <!-- header rightbar icon -->
-                    <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-                        <div class="d-flex">
-                            <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
-                                <i class="icofont-info-square fs-5"></i>
-                            </a>
-                            <div class="avatar-list avatar-list-stacked px-3">
-                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
-                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
-                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar4.jpg" alt="">
-                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
-                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
-                                <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal" data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
-                            </div>
-                        </div>
-                        <div class="dropdown notifications zindex-popover">
-                            <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="icofont-alarm fs-5"></i>
-                                <span class="pulse-ring"></span>
-                            </a>
-                            <div id="NotificationsDiv" class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
-                                <div class="card border-0 w380">
-                                    <div class="card-header border-0 p-3">
-                                        <h5 class="mb-0 font-weight-light d-flex justify-content-between">
-                                            <span>Notifications</span>
-                                            <span class="badge text-white">14</span>
-                                        </h5>
-                                    </div>
-                                    <div class="tab-content card-body">
-                                        <div class="tab-pane fade show active">
-                                            <ul class="list-unstyled list mb-0">
-                                                <li class="py-2 mb-1 border-bottom">
-                                                    <a href="javascript:void(0);" class="d-flex">
-                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
-                                                        <div class="flex-fill ms-2">
-                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Molly Cornish</span> <small>2MIN</small></p>
-                                                            <span class="">Added  2021-02-19 e-Learn links_no_expiration_report.csv <span class="badge bg-success">Review</span></span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="py-2 mb-1 border-bottom">
-                                                    <a href="javascript:void(0);" class="d-flex">
-                                                        <div class="avatar rounded-circle no-thumbnail">DF</div>
-                                                        <div class="flex-fill ms-2">
-                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane Fisher</span> <small>13MIN</small></p>
-                                                            <span class="">Server added Get Started with e-Learn.pdf</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="py-2 mb-1 border-bottom">
-                                                    <a href="javascript:void(0);" class="d-flex">
-                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                                                        <div class="flex-fill ms-2">
-                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea Gill</span> <small>1HR</small></p>
-                                                            <span class="">Server added Document.docx</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="py-2 mb-1 border-bottom">
-                                                    <a href="javascript:void(0);" class="d-flex">
-                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar5.jpg" alt="">
-                                                        <div class="flex-fill ms-2">
-                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane Fisher</span> <small>13MIN</small></p>
-                                                            <span class="">Add folder on Server</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="py-2 mb-1 border-bottom">
-                                                    <a href="javascript:void(0);" class="d-flex">
-                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar6.jpg" alt="">
-                                                        <div class="flex-fill ms-2">
-                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea Gill</span> <small>1HR</small></p>
-                                                            <span class="">Delete folder on Server</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="py-2">
-                                                    <a href="javascript:void(0);" class="d-flex">
-                                                        <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
-                                                        <div class="flex-fill ms-2">
-                                                            <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
-                                                            <span class="">The generated Lorem Ipsum</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
-                            <div class="u-info me-2">
-                                <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Molly Cornish</span></p>
-                                <small>Student Profile</small>
-                            </div>
-                            <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                <img class="avatar lg rounded-circle img-thumbnail" src="/assetsback/images/profile_av.png" alt="profile">
-                            </a>
-                            <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
-                                <div class="card border-0 w280">
-                                    <div class="card-body pb-0">
-                                        <div class="d-flex py-1">
-                                            <img class="avatar rounded-circle" src="/assetsback/images/profile_av.png" alt="profile">
-                                            <div class="flex-fill ms-3">
-                                                <p class="mb-0"><span class="font-weight-bold">Molly Cornish</span></p>
-                                                <small class="">molly.cornish.com</small>
-                                            </div>
-                                        </div>
-                                        <div><hr class="dropdown-divider border-dark"></div>
-                                    </div>
-                                    <div class="list-group m-2 ">
-                                        <a routerLink="/backoffice/Student" class="list-group-item list-group-item-action border-0 "><i class="icofont-graduate-alt fs-6 me-3"></i>Student Profile</a>
-                                        <a routerLink="/backoffice/video_class" class="list-group-item list-group-item-action border-0 "><i class="icofont-black-board fs-6 me-3"></i>Video Class</a>
-                                        <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-6 me-3"></i>Signout</a>
-                                        <div><hr class="dropdown-divider border-dark"></div>
-                                        <a href="ui-elements/auth-signup.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- menu toggler -->
-                    <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
-                        <span class="fa fa-bars"></span>
-                    </button>
-
-                    <!-- main menu Search-->
-                    <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
-                        <div class="input-group flex-nowrap input-group-lg">
-                            <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
-                            <input type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
-                            <button type="button" class="input-group-text add-member-top" id="addon-wrappingone" data-bs-toggle="modal" data-bs-target="#addUser"><i class="fa fa-plus"></i></button>
-                        </div>
-                    </div>
-
-                </div>
-            </nav>
-        </div>
         <!-- Chargement des catégories -->
         <div *ngIf="isLoading" class="loading-message">
             Chargement des catégories...
@@ -270,38 +116,78 @@
             {{ error }}
         </div>
 
-        <!-- Bouton pour ajouter une nouvelle catégorie -->
-        <button class="add-button" (click)="goToAddCategorie()">Add Category</button>
 
-        <!-- Tableau des catégories -->
-        <table *ngIf="!isLoading && categories.length > 0" class="category-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom de la catégorie</th>
-                <th>Actions</th> <!-- Ajouter une colonne pour les actions -->
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let category of categories">
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td> <!-- Assurez-vous que l'objet catégorie a les bonnes propriétés -->
-                <td>
-                    <!-- Boutons pour éditer et supprimer -->
-                    <button class="btn-delete" (click)="deleteCategory(category.id)">Delete</button>
-                  <button class="btn btn-warning" (click)="editCategory(category.id)">Update</button>
+      <div class="vertical-container">
+        <button class="add-button left-button" (click)="goToAddCategorie()">Add Category</button>
 
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <!-- Message si aucune catégorie n'est trouvée -->
-        <div *ngIf="!isLoading && categories.length === 0" class="no-categories">
-            Aucune catégorie trouvée.
-        </div>
+        <form [formGroup]="searchCategoryForm" class="search-form">
+          <input formControlName="name"
+                 type="text"
+                 placeholder="Search a category..."
+                 class="form-control search-input"
+                 (input)="onSearchChange()">
+        </form>
+      </div>
 
 
+
+      <!-- Tableau des catégories -->
+      <table *ngIf="!isLoading && paginatedCategories.length > 0" class="category-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category Name</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let category of paginatedCategories">
+          <td>{{ category.id }}</td>
+          <td>{{ category.name }}</td>
+          <td>
+            <button class="btn btn-warning " (click)="editCategory(category.id)">Update</button>
+            <button class="btn-delete ms-2" (click)="deleteCategory(category.id)">Delete</button>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Message si aucune catégorie n'est trouvée -->
+      <div *ngIf="!isLoading && paginatedCategories.length === 0" class="no-categories">
+        No categories found.
+      </div>
+
+      <!-- Pagination -->
+      <div class="col-12">
+        <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+          <ul class="pagination pagination-primary-soft rounded mb-0">
+            <li class="page-item mb-0" [class.disabled]="currentPage === 1">
+              <a class="page-link" (click)="changePage(currentPage - 1)" tabindex="-1">
+                <i class="fas fa-angle-double-left"></i>
+              </a>
+            </li>
+            <li *ngFor="let page of getPages()" class="page-item mb-0" [class.active]="page === currentPage">
+              <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item mb-0" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" (click)="changePage(currentPage + 1)">
+                <i class="fas fa-angle-double-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Chargement des catégories -->
+      <div *ngIf="isLoading" class="loading-indicator">
+        Chargement des catégories...
+      </div>
+
+      <!-- Affichage des erreurs -->
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
 
     </div>
 </div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MarketplaceService } from "../../../Student-Pages/Marketplace/services/marketplace.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-product-back',
@@ -12,6 +12,13 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class ProductBackComponent implements OnInit {
   products: any[] = [];
   searchProductForm!: FormGroup;
+  categories: any[] = [];
+  totalProducts: number = 0;
+  pageSize: number = 4; // Nombre de produits par page
+  totalPages: number = 1;
+  paginatedProducts: any[] = [];
+  currentPage: number = 1;
+  allProducts: any[] = [];
 
   constructor(
     private marketplaceService: MarketplaceService,
@@ -21,23 +28,52 @@ export class ProductBackComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getCategories();
     this.getProducts();
     this.searchProductForm = this.fb.group({
-      title: [null,[Validators.required]]
-    })
+      title: [null, [Validators.required]],
+    });
   }
 
-  /**
-   * Récupère la liste des produits
-   */
+  getCategories(): void {
+    this.marketplaceService.getAllCategories().subscribe({
+      next: (res: any[]) => {
+        console.log("Catégories reçues :", res);
+        this.categories = res;
+      },
+      error: (err) => console.error("Erreur lors de la récupération des catégories :", err)
+    });
+  }
+
+  downloadPdf(productId: number): void {
+    this.marketplaceService.downloadProductPdf(productId).subscribe(
+      (response: Blob) => {
+        // Créez un lien pour télécharger le fichier PDF
+        const blob = response;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `product_${productId}.pdf`; // Nom du fichier PDF à télécharger
+        a.click();
+        window.URL.revokeObjectURL(url); // Libère la ressource
+      },
+      (error) => {
+        console.error('Erreur lors du téléchargement du PDF', error);
+      }
+    );
+  }
   getProducts(): void {
     this.marketplaceService.getAllProducts().subscribe(
       (data: any[]) => {
-        this.products = data.map((element: any) => ({
+        this.allProducts = data.map((element: any) => ({
           ...element,
           processedImg: 'data:image/jpeg;base64,' + element.byteImg
         }));
-        console.log('Produits récupérés:', this.products);
+        this.products = [...this.allProducts];  // Réinitialiser les produits
+        this.totalProducts = this.products.length;
+        this.totalPages = Math.ceil(this.products.length / this.pageSize);
+        this.updatePaginatedProducts();
+        console.log("Produits reçus :", this.products);
       },
       (error) => {
         console.error('Erreur lors de la récupération des produits', error);
@@ -45,21 +81,21 @@ export class ProductBackComponent implements OnInit {
     );
   }
 
-  /**
-   * Redirige vers la page d'édition du produit
-   */
+  updatePaginatedProducts(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedProducts = this.products.slice(startIndex, endIndex);
+  }
+
   editProduct(productId: number): void {
     this.router.navigate(['/backoffice/edit-product', productId]);
   }
 
-  /**
-   * Supprime un produit et met à jour la liste après suppression
-   */
   deleteProduct(productId: number): void {
     this.marketplaceService.deleteProduct(productId).subscribe(
       () => {
         this.snackbar.open('Produit supprimé avec succès', 'Fermer', { duration: 2000 });
-        this.getProducts(); // Rafraîchit la liste après suppression
+        this.getProducts();
       },
       (error) => {
         console.error('Erreur lors de la suppression', error);
@@ -67,31 +103,79 @@ export class ProductBackComponent implements OnInit {
     );
   }
 
-  /**
-   * Redirige vers la page d'ajout d'un nouveau produit
-   */
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updatePaginatedProducts();
+  }
+
+  getPages(): number[] {
+    const pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  filterProductsByCategory(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedCategory = target.value;
+    this.applyCategoryFilter(selectedCategory);
+  }
+
+  applyCategoryFilter(selectedCategory: string): void {
+    if (selectedCategory) {
+      this.products = this.allProducts.filter(
+        product => product.categoryName === selectedCategory
+      );
+    } else {
+      this.products = [...this.allProducts];
+    }
+    this.totalProducts = this.products.length;
+    this.totalPages = Math.ceil(this.products.length / this.pageSize);
+    this.currentPage = 1;  // Réinitialiser la page à 1
+    this.updatePaginatedProducts();
+  }
+
   goToAddProduct(): void {
     this.router.navigate(['/backoffice/add-product']);
   }
+
+  onSearchChange(): void {
+    const searchValue = this.searchProductForm.get('title')?.value.trim().toLowerCase();
+    if (searchValue === '') {
+      this.getProducts();
+    } else {
+      this.searchProducts();
+    }
+  }
+
+  searchProducts(): void {
+    const query = this.searchProductForm.value.title;
+    if (!query) {
+      this.snackbar.open('Veuillez entrer un mot-clé pour la recherche.', 'Fermer', { duration: 3000 });
+      return;
+    }
+    this.marketplaceService.searchProducts(query).subscribe((res) => {
+      this.allProducts = res.map((element: any) => ({
+        ...element,
+        processedImg: 'data:image/jpeg;base64,' + element.byteImg,
+      }));
+      this.products = [...this.allProducts];
+      this.totalPages = Math.ceil(this.products.length / this.pageSize);
+      this.updatePaginatedProducts();
+    });
+  }
+
   isMenuOpen = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
+
   isTeacherMenuOpen = false;
 
   toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
-  }
-  showSubMenu = false;
-  submitForm(){
-    this.products = [];
-    const title= this.searchProductForm.get('title')!.value;
-    this.marketplaceService.getAllProductsByName(title).subscribe(res => {
-      res.forEach((element:any) => {
-        element.processedImg = 'data:image/jpeg;base64,' + element.byteImg;
-        this.products.push(element);
-      });
-    })
   }
 }

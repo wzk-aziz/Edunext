@@ -15,8 +15,12 @@ export class AppComponent {
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+
+        const authRoutes = ['/register', '/login'];
+        const isAuthRoute = authRoutes.some(route => event.url === route);
+
         // Check the current route
-        const isSignUpOrSignInPageOrMainOrBackOffice = event.url.includes('/signup') || event.url.includes('/signin') || event.url.includes('/main') || event.url.includes('/backoffice');
+        const isSignUpOrSignInPageOrMainOrBackOffice = event.url.includes('/register') || event.url.includes('/login') || event.url.includes('/main') || event.url.includes('/backoffice') || event.url.includes('/update') ;
         this.showHeader = !isSignUpOrSignInPageOrMainOrBackOffice;
         this.showFooter = !isSignUpOrSignInPageOrMainOrBackOffice;
 

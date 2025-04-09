@@ -36,7 +36,7 @@ export class PostCouponComponent {
           this.snackBar.open('Coupon Posted Successfully !','Close',{
             duration:5000
           });
-          this.router.navigateByUrl('admin/dashboard');
+          this.router.navigateByUrl('backoffice/coupon');
         }else{
           this.snackBar.open(res.message,'Close',{
             duration:5000,
@@ -47,5 +47,15 @@ export class PostCouponComponent {
     }else{
       this.couponForm.markAllAsTouched();
     }
+  }
+  isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  isTeacherMenuOpen = false;
+
+  toggleTeacherMenu() {
+    this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
   }
 }

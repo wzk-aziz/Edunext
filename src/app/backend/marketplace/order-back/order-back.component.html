@@ -56,17 +56,7 @@
                     </ul>
                 </li>
 
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleMenu()" role="button">
-                        <i class="icofont-certificate"></i>
-                        <span>Courses</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/courses"><span>Courses</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/purchase"><span>Course Purchase</span></a></li>
-                    </ul>
-                </li>
+
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li class="collapsed">
                     <a class="m-link" (click)="toggleMenu()" role="button">
@@ -75,9 +65,11 @@
                         <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
                     </a>
                     <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace dashboard</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
                         <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a></li>
                         <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
                     </ul>
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
@@ -261,75 +253,78 @@
             </nav>
         </div>
 
-        <div class="container">
-            <mat-card>
-                <mat-card-content>
-                    <table mat-table [dataSource]="orders" class="mat-elevation-z8">
+      <div class="container">
+        <mat-card>
+          <mat-card-content>
+            <table mat-table [dataSource]="paginatedOrders" class="mat-elevation-z8">
 
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef>Amount</th>
+                <td mat-cell *matCellDef="let order">{{order.amount}}</td>
+              </ng-container>
 
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let order">{{order.orderDescription}}</td>
+              </ng-container>
 
+              <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef>Address</th>
+                <td mat-cell *matCellDef="let order">{{order.address}}</td>
+              </ng-container>
 
-                        <ng-container matColumnDef="amount">
-                            <th mat-header-cell *matHeaderCellDef>Amount</th>
-                            <td mat-cell *matCellDef="let order">{{order.amount}}</td>
-                        </ng-container>
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let order">{{order.date | date: 'dd/MM/yyyy'}}</td>
+              </ng-container>
 
-                        <ng-container matColumnDef="description">
-                            <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let order">{{order.orderDescription}}</td>
-                        </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let order">
+                        <span [ngClass]="getStatusClass(order.orderStatus)">
+                            {{ order.orderStatus }}
+                        </span>
+                </td>
+              </ng-container>
 
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let order">
+                  <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Action</button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="changeOrderStatus(order.id, 'Shipped')">Shipped</button>
+                    <button mat-menu-item (click)="changeOrderStatus(order.id, 'Delivered')">Delivered</button>
+                  </mat-menu>
+                </td>
+              </ng-container>
 
-                        <ng-container matColumnDef="address">
-                            <th mat-header-cell *matHeaderCellDef>Address</th>
-                            <td mat-cell *matCellDef="let order">{{order.address}}</td>
-                        </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['amount', 'description', 'address', 'date', 'status', 'action']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['amount', 'description', 'address', 'date', 'status', 'action']"></tr>
+            </table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <!-- Pagination -->
+      <div class="col-12">
+        <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+          <ul class="pagination pagination-primary-soft rounded mb-0">
+            <li class="page-item mb-0" [class.disabled]="currentPage === 1">
+              <a class="page-link" (click)="changePage(currentPage - 1)" tabindex="-1">
+                <i class="fas fa-angle-double-left"></i>
+              </a>
+            </li>
+            <li *ngFor="let page of getPages()" class="page-item mb-0" [class.active]="page === currentPage">
+              <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item mb-0" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" (click)="changePage(currentPage + 1)">
+                <i class="fas fa-angle-double-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-
-                        <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef>Date</th>
-                            <td mat-cell *matCellDef="let order">{{order.date | date: 'dd/MM/yyyy'}}</td>
-                        </ng-container>
-
-
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef>Status</th>
-                            <td mat-cell *matCellDef="let order">{{order.orderStatus}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>Action</th>
-                            <td mat-cell *matCellDef="let order">
-                                <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Action</button>
-                                <mat-menu #menu="matMenu">
-                            <span>
-                                <span>
-                                    <button mat-menu-item
-                                            (click)="changeOrderStatus(order.id,'Shipped')">Shipped</button>
-                                </span>
-                                <span>
-                                    <button mat-menu-item
-                                            (click)="changeOrderStatus(order.id,'Delivered')">Delivered</button>
-                                </span>
-                            </span>
-                                </mat-menu>
-                            </td>
-                        </ng-container>
-
-                        <tr mat-header-row
-                            *matHeaderRowDef="['amount','description','address','date','status','action']">
-                        </tr>
-
-                        <tr mat-row
-                            *matRowDef="let row; columns: ['amount','description','address','date','status','action']">
-                        </tr>
-
-
-
-                    </table>
-                </mat-card-content>
-            </mat-card>
-        </div>
 
 
     </div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {catchError, Observable, throwError} from 'rxjs';
+import {loadStripe} from "@stripe/stripe-js";
 
 const BASIC_URL = "http://localhost:8087/";
 
@@ -8,12 +9,16 @@ const BASIC_URL = "http://localhost:8087/";
   providedIn: 'root'
 })
 export class MarketplaceService {
+  private stripePromise = loadStripe('pk_test_51QwtvpR88uyR8EQrqAq8qSIJ61ZsTAUtltcDU3EDqhVBgvQFVH08F5SUsngiPiu2AHTsx5feb7ejgLmfpNDQLiyN00hpHvt7Wk');
 
   constructor(private http: HttpClient) {
   }
 
   getAllProducts(): Observable<any> {
     return this.http.get(BASIC_URL + 'api/admin/products');
+  }
+  getOrderAnalytics(): Observable<any> {
+    return this.http.get(`${BASIC_URL}api/admin/order/analytics`);
   }
   addCoupon(couponDto: any): Observable<any> {
     return this.http.post(BASIC_URL + 'api/admin/coupons/creat', couponDto);
@@ -23,6 +28,19 @@ export class MarketplaceService {
     return this.http.get(BASIC_URL + `api/admin/search/${query}`);
   }
 
+  searchCategories(query: string): Observable<any> {
+    return this.http.get(BASIC_URL + `api/admin/categories/search`, {
+      params: { name: query }  // ou tout autre paramètre que vous voulez rechercher
+    });
+  }
+
+  isCouponUsed(id: number): Observable<boolean> {
+    return this.http.get<boolean>(BASIC_URL + `api/admin/coupons/isUsed/${id}`);
+  }
+
+  getCoupons(): Observable<any> {
+    return this.http.get(BASIC_URL + 'api/admin/coupons');
+  }
   // Récupérer les produits filtrés
 
     // marketplace.service.ts
@@ -37,8 +55,12 @@ export class MarketplaceService {
 
 
 
-    getCouponById(id: number): Observable<any> {
+  getCouponById(id: number): Observable<any> {
     return this.http.get(BASIC_URL + 'api/admin/coupons/' + id);
+  }
+
+  deleteCoupon(id: number): Observable<any> {
+    return this.http.delete(BASIC_URL + `api/admin/coupons/delete/${id}`);
   }
 
 
@@ -97,9 +119,10 @@ export class MarketplaceService {
     return this.http.get(BASIC_URL + `api/customer/product/${productId}`);
   }
 
-  addProductToWishlist(wishlistDto: any): Observable<any> {
-    return this.http.post(BASIC_URL + `api/customer/wishlist`, wishlistDto);
+  addProductToWishlist(wishlistDto: { productId: number }): Observable<any> {
+    return this.http.post(`${BASIC_URL}api/customer/wishlist`, wishlistDto);
   }
+
 
   deleteProduct(productId: number): Observable<any> {
     return this.http.delete(BASIC_URL + `api/admin/product/${productId}`);
@@ -119,9 +142,20 @@ export class MarketplaceService {
 
   updateProduct(productId:any, productDto: any): Observable<any> {
     return this.http.put(BASIC_URL + `api/admin/product/${productId}`, productDto);
-  }
-  addProduct(productDto: any): Observable<any> {
-    return this.http.post(BASIC_URL + 'api/admin/product', productDto);
+   }
+  // addProduct(productDto: any): Observable<any> {
+  //   const formData = new FormData();
+  //
+  //   // Ajouter les champs de productDto au FormData
+  //   Object.keys(productDto).forEach(key => {
+  //     formData.append(key, productDto[key]);
+  //   });
+  //
+  //   return this.http.post(BASIC_URL + 'api/admin/product', formData);
+  // }
+
+   addProduct(productDto: any): Observable<any> {
+     return this.http.post(BASIC_URL + 'api/admin/product', productDto);
   }
   getProductById(productId:number): Observable<any> {
     return this.http.get(BASIC_URL + `api/admin/product/${productId}`);
@@ -134,14 +168,27 @@ export class MarketplaceService {
     }
 
   getWishlist(): Observable<any> {
-    return this.http.get(BASIC_URL + `api/customer/wishlist`);
+    return this.http.get(BASIC_URL + 'api/customer/wishlist').pipe(
+      catchError(error => {
+        console.error('Error fetching wishlist', error);
+        return throwError(error); // ou un Observable vide
+      })
+    );
+  }
+
+  // Méthode pour télécharger le PDF d'un produit par ID
+  downloadProductPdf(productId: number): Observable<Blob> {
+    return this.http.get(`${BASIC_URL}api/admin/product/${productId}/pdf`, {
+      responseType: 'blob'  // Utilisez 'blob' pour télécharger des fichiers binaires comme un PDF
+    });
   }
   addProductToCart(addProductInCartDto: any): Observable<any> {
     return this.http.post(BASIC_URL + 'api/customer/cart', addProductInCartDto);
   }
   addToCart(addProductInCartDto: any): Observable<any> {
-    return this.http.post(BASIC_URL + 'api/customer/add', addProductInCartDto);
+    return this.http.post(BASIC_URL + 'api/customer/add', addProductInCartDto, { responseType: 'text' });
   }
+
 
 
   addCategory(categoryDto: any): Observable<any> {

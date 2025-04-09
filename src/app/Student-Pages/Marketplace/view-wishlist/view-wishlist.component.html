@@ -77,22 +77,32 @@
       <div class="row">
         <!-- Main content START -->
 
+        <div class="wishlist-container">
+          <h1 class="wishlist-title">My Wishlist</h1>
+          <div class="wishlist-list">
+            <mat-card *ngFor="let product of products" class="wishlist-card">
+              <div class="product-grid">
+                <!-- Image en côté -->
+                <div class="product-image">
+                  <img mat-card-image [src]="product.processedImg" *ngIf="product.processedImg" alt="{{product.productName}} Image">
+                </div>
 
-        <div class="center-container">
-          <div class="product-card" *ngFor="let product of products; let i = index">
-            <div class="product-image">
-              <img [src]="product.processedImg" *ngIf="product.processedImg" alt="{{product.productName}} Image" class="product-img">
-            </div>
-            <div class="product-details">
-              <h2 class="product-title">{{ product.productName }}</h2>
-              <p class="product-description">{{ product.productDescription }}</p>
-              <p class="product-price">{{ product.price | currency:'USD':true }}</p>
-              <!-- 🗑️ Bouton de suppression -->
-              <button class="btn btn-danger" (click)="removeFromWishlist(product.id)">Delete</button>
-
-            </div>
+                <!-- Données verticales -->
+                <div class="product-details">
+                  <h2 class="product-title">{{ product.productName }}</h2>
+                  <p class="product-description">{{ product.productDescription }}</p>
+                  <p class="price">{{ product.price | currency:'USD':true }}</p>
+                  <mat-card-actions class="card-actions">
+                    <button mat-raised-button color="warn" (click)="removeFromWishlist(product.productId)">
+                      Supprimer
+                    </button>
+                  </mat-card-actions>
+                </div>
+              </div>
+            </mat-card>
           </div>
         </div>
+
 
 
 

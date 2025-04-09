@@ -25,6 +25,11 @@ import {OrderBackComponent} from "./marketplace/order-back/order-back.component"
 import {EditCategoryComponent} from "./marketplace/edit-category/edit-category.component";
 import {DonationsListComponent} from "./donation/donations-list/donations-list.component";
 import {PostCouponComponent} from "./marketplace/post-coupon/post-coupon.component";
+import { TeachersComponent } from './teachers/teachers.component';
+import { UsersComponent } from './users/users.component';
+import { UserStatsComponent } from './user-stats/user-stats.component';
+import { CouponBackComponent } from './marketplace/coupon-back/coupon-back.component';
+import { OrderAnalyticsComponent } from './marketplace/order-analytics/order-analytics.component';
 
 
 const routes: Routes = [
@@ -33,6 +38,7 @@ const routes: Routes = [
     { path: 'Admin', component: Sidebar2Component },
     { path: 'Student', component: StudentComponent },
     { path: 'Class', component: ClassComponent },
+    { path : 'teachers', component: TeachersComponent},
     { path: 'video_class', component: VideoClassComponent },
     { path: 'chat', component: ChatComponent },
     { path: 'reviews', component: ReviewsComponent },
@@ -52,6 +58,11 @@ const routes: Routes = [
       { path: 'edit-product/:productId', component: EditProductComponent },
       { path: 'listDonnation', component: DonationsListComponent },
       { path: 'addCoupon', component: PostCouponComponent },
+    {path:'courses',component:CoursesBackComponent},
+    { path: 'users', component: UsersComponent },
+    { path: 'user-stats', component:UserStatsComponent},
+    { path: 'coupon', component: CouponBackComponent },
+    { path: 'analyse', component: OrderAnalyticsComponent },
     { path: '**', redirectTo: 'Admin' } // Wildcard route for back office
   ]}
 ];

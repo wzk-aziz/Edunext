@@ -30,17 +30,29 @@ export class CartComponent {
   }
 
   applyCoupon() {
-    this.marketplaceService.applyCoupon(this.couponForm.get(['code'])!.value).subscribe(res => {
-      this.snackBar.open("coupon applied successfully! ", 'Close', {
+    const couponCode = this.couponForm.get(['code'])!.value;
+
+    this.marketplaceService.applyCoupon(couponCode).subscribe(res => {
+      this.snackBar.open("Coupon applied successfully!", 'Close', {
         duration: 5000
       });
-      this.getCart();
+      this.getCart(); // Mettre à jour le panier après l'application du coupon
     }, error => {
-      this.snackBar.open(error.error, 'Close', {
-        duration: 500
-      })
-    })
+      // Vérifier si error.error est une chaîne et contient "expired"
+      if (typeof error.error === 'string' && error.error.includes("expired")) {
+        this.snackBar.open("Coupon expired. Please use a valid coupon.", 'Close', {
+          duration: 5000
+        });
+      } else {
+        // Si error.error n'est pas une chaîne, vérifier si c'est un objet ou autre
+        this.snackBar.open(error.error?.message || "An error occurred. Please try again.", 'Close', {
+          duration: 5000
+        });
+      }
+    });
   }
+
+
 
   getCart() {
     this.cartItems = [];
@@ -77,8 +89,19 @@ export class CartComponent {
     })
   }
 
-  placeOrder(){
-    this.dialog.open(PlaceOrderComponent);
+  placeOrder() {
+    // Calculate the total amount from cart items
+    let totalAmount = this.cartItems.reduce((total, item) => {
+      return total + (item.price * item.quantity);  // Assuming each item has 'price' and 'quantity'
+    }, 0);
+
+    // Open the PlaceOrderComponent dialog and pass the totalAmount
+    const dialogRef = this.dialog.open(PlaceOrderComponent, {
+      data: {
+        totalAmount: totalAmount  // Pass totalAmount to the PlaceOrderComponent
+      }
+    });
   }
+
 
 }

@@ -1,14 +1,10 @@
-<!-- Header START -->
-<header class="navbar-light navbar-sticky header-static">
+<header class="navbar-light navbar-sticky header-static" *ngIf="!isRegisterPage">
   <!-- Logo Nav START -->
   <nav class="navbar navbar-expand-xl">
     <div class="container-fluid px-3 px-xl-5">
       <!-- Logo START -->
       <a class="navbar-brand" href="index.html">
-        <img
-          class="light-mode-item navbar-brand-item"
-         />
-
+        <img class="light-mode-item navbar-brand-item" />
       </a>
       <!-- Logo END -->
 
@@ -165,4 +161,3 @@
   </nav>
   <!-- Logo Nav END -->
 </header>
-<!-- Header END -->

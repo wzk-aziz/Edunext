@@ -39,28 +39,6 @@
         <!-- Select option -->
         <div class="col-md-8">
           <div class="row g-3 align-items-center justify-content-md-end me-auto">
-
-            <!-- List and Grid icon -->
-            <div class="col-sm-4 col-xl-6 text-md-end d-none d-md-block">
-              <ul class="list-inline mb-0">
-                <!-- Grid icon -->
-                <li class="list-inline-item"><a href="course-grid.html" class="btn btn-outline-light mb-0 me-2"><i class="fas fa-fw fa-th-large"></i></a></li>
-                <!-- list icon -->
-                <li class="list-inline-item"><a href="course-list.html" class="btn btn-outline-light mb-0 me-2"><i class="fas fa-fw fa-list-ul"></i></a></li>
-              </ul>
-            </div>
-
-            <!-- Short by filter -->
-            <form class="col-md-4 bg-body shadow rounded p-1 input-borderless">
-              <select class="form-select js-choice z-index-9" aria-label=".form-select-sm">
-                <option value="">Sort by</option>
-                <option>Free</option>
-                <option>Newest</option>
-                <option>Most popular</option>
-                <option>Most Viewed</option>
-              </select>
-            </form>
-
             <!-- Advanced filter responsive toggler START -->
             <div class="col-4 d-xl-none text-md-end">
               <button class="btn btn-primary mb-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -68,7 +46,6 @@
               </button>
             </div>
             <!-- Advanced filter responsive toggler END -->
-
           </div>
         </div>
       </div>
@@ -78,31 +55,35 @@
         <!-- Main content START -->
         <div class="col-xl-9 col-xxl-8">
 
+          <!-- Filters and Search Section -->
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <!-- Search form -->
+            <form [formGroup]="searchProductForm" class="d-flex me-4">
+              <input formControlName="title"
+                     type="text"
+                     placeholder="Search for a product..."
+                     class="form-control search-input"
+                     (input)="onSearchChange()">
+            </form>
 
-
-          <form [formGroup]="searchProductForm">
-            <input formControlName="title" type="text" placeholder="Search for a product..." class="search-input" (input)="onSearchChange()">
-          </form>
-          <!-- Barre de recherche END -->
-
-          <div>
-            <form [formGroup]="filterForm" (ngSubmit)="applyFilters()">
-              <select formControlName="category" (change)="applyFilters()">
-                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-              </select>
-
-              <select formControlName="sortBy" (change)="applyFilters()">
-                <option value="name">Sort by Name</option>
-                <option value="price">Sort by Price</option>
-                <option value="rating">Sort by Rating</option>
+            <!-- Category filter form -->
+            <form class="col-md-4 bg-body shadow rounded p-2 input-borderless">
+              <select class="form-select js-choice z-index-9"
+                      (change)="filterProductsByCategory($event)"
+                      aria-label=".form-select-sm">
+                <option value="">All Categories</option>
+                <option *ngFor="let category of categories" [value]="category.name">
+                  {{ category.name }}
+                </option>
               </select>
             </form>
           </div>
-          <!-- Course list START -->
+
+
 
           <!-- Affichage des produits -->
           <div class="row g-4 mt-4">
-          <div *ngIf="paginatedProducts.length > 0; else noProducts">
+            <div *ngIf="paginatedProducts.length > 0; else noProducts">
               <div *ngFor="let product of paginatedProducts" class="col-12">
                 <div class="card shadow overflow-hidden p-2">
                   <div class="row g-0">
@@ -126,23 +107,17 @@
                           <span *ngIf="!product.isFree" class="bg-danger px-2 py-1 rounded-3">{{ product.price }}€</span>
                         </div>
                         <div class="mt-3 d-flex justify-content-between align-items-center">
-                          <!-- Boutons Add to Cart et Wishlist -->
-                          <a (click)="addToWishlist(product.id)" style="cursor:pointer;">
-                            <i [class.fas]="true"
-                               [class.fa-heart]="!isInWishlist(product.id)"
-                            [class.fa-heart-broken]="isInWishlist(product.id)"
-                            [class.text-danger]="isInWishlist(product.id)"
-                            [class.text-warning]="!isInWishlist(product.id)"
-                            class="fs-5">
-                            </i>
-                          </a>
+                          <button class="wishlist-btn" (click)="toggleWishlist(product.id)">
+                            <i class="fa-solid fa-heart" [ngClass]="{'wishlist-active': isInWishlist(product.id)}"></i>
+                          </button>
 
+
+                          <button class="btn btn-info" (click)="downloadPdf(product.id)">pdf</button>
                           <button (click)="addToCart(product.id)" class="btn px-3 py-1 d-flex align-items-center gap-2 position-relative" style="background-color: #78a93c; color: white; border: none; transition: all 0.5s ease-in-out; border-radius: 8px; font-size: 14px;">
                             <i class="fas fa-shopping-cart"></i>
                             <span>Add to Cart</span>
                           </button>
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -175,14 +150,24 @@
             </nav>
           </div>
 
-
-
-
         </div>
         <!-- Main content END -->
 
         <!-- Right sidebar START -->
         <div class="col-lg-3 col-xxl-4 pt-5 pt-lg-0">
+          <!-- Promotional Banner Section -->
+          <div class="card mb-4">
+            <img src="/assets/backend/images/gallery/1.jpg" class="card-img-top" alt="Promo Banner">
+            <div class="card-body text-center">
+              <h5 class="card-title">Exclusive Sale</h5>
+              <p class="card-text">Get up to 50% off on select products!</p>
+              <a href="/sale" class="btn btn-danger">Shop Now</a>
+            </div>
+
+          </div>
+
+          <!-- Promotional Banner END -->
+
           <!-- Responsive offcanvas body START -->
           <nav class="navbar navbar-light navbar-expand-xl mx-0">
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -192,16 +177,17 @@
               </div>
               <div class="offcanvas-body p-3 p-xl-0">
                 <form>
+                  <!-- Filter options -->
                 </form><!-- Form End -->
               </div>
-
-
             </div>
           </nav>
           <!-- Responsive offcanvas body END -->
         </div>
         <!-- Right sidebar END -->
 
-      </div><!-- Row END -->
+      </div>
     </div>
   </section>
+
+</main>

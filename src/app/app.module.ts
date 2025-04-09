@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './Shared/header/header.component';
 import { FooterComponent } from './Shared/footer/footer.component';
-import { SignupComponent } from './Shared/signup/signup.component';
-import { SigninComponent } from './Shared/signin/signin.component';
+import { RegisterComponent } from './Shared/register/register.component';
+import { LoginComponent } from './Shared/login/login.component';
 import { LandigpageComponent } from './Student-Pages/landigpage/landigpage.component';
 import { PacksComponent } from './Student-Pages/packs/packs.component';
 import { MainhomepageComponent } from './Shared/mainhomepage/mainhomepage.component';
@@ -45,41 +44,57 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
+import { BackRoutingModule } from './backend/back-routing.module';
+import { authGuard } from './Shared/services/auth/auth.guard';
+import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
+import { UpdateUserComponent } from './Shared/update/update.component';
+import { UsersComponent } from './backend/users/users.component';
+import { UserStatsComponent } from './backend/user-stats/user-stats.component';
+import { ProfileComponent } from './Shared/profile/profile.component';
+import { MatIconModule } from '@angular/material/icon';  // Add this import
+import { MatSelectModule } from '@angular/material/select';
+import { HttpClient, HttpClientModule } from '@angular/common/http';  // Add this import
+// Import GoogleLoginProvider
+import { SocialAuthServiceConfig, GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { ListProduitComponent } from './Student-Pages/Marketplace/list-produit/list-produit.component';
 import { CartComponent } from './Student-Pages/Marketplace/cart/cart.component';
-import {HttpClientModule} from "@angular/common/http";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { PlaceOrderComponent } from './Student-Pages/Marketplace/place-order/place-order.component';
 import { MyOrderComponent } from './Student-Pages/Marketplace/my-order/my-order.component';
 import { ReviewOrderedProductComponent } from './Student-Pages/Marketplace/review-ordered-product/review-ordered-product.component';
 import { ViewOrderedProductsComponent } from './Student-Pages/Marketplace/view-ordered-products/view-ordered-products.component';
 import { ViewProductsdetailComponent } from './Student-Pages/Marketplace/view-productsdetail/view-productsdetail.component';
 import { ViewWishlistComponent } from './Student-Pages/Marketplace/view-wishlist/view-wishlist.component';
-import { MatButtonModule } from '@angular/material/button';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { MatDialogModule } from '@angular/material/dialog';
-import {CommonModule} from "@angular/common";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatCardModule} from "@angular/material/card";
+import { ProductBackComponent } from './backend/marketplace/product-back/product-back.component';
 import { OrderBackComponent } from './backend/marketplace/order-back/order-back.component';
 import { CategorieBackComponent } from './backend/marketplace/categorie-back/categorie-back.component';
 import { CouponBackComponent } from './backend/marketplace/coupon-back/coupon-back.component';
-import {ProductBackComponent} from "./backend/marketplace/product-back/product-back.component";
 import { ProductFormComponent } from './backend/marketplace/product-form/product-form.component';
-import {MatSelectModule} from "@angular/material/select";
-import {MatIconModule} from "@angular/material/icon";
-import { EditProductComponent } from './backend/marketplace/edit-product/edit-product.component';
 import { CategorieFormComponent } from './backend/marketplace/categorie-form/categorie-form.component';
-import {MatTableModule} from "@angular/material/table";
-import {MatMenuModule} from "@angular/material/menu";
+import { EditProductComponent } from './backend/marketplace/edit-product/edit-product.component';
 import { EditCategoryComponent } from './backend/marketplace/edit-category/edit-category.component';
 import { DonationComponentComponent } from './Student-Pages/Donnation/donation-component/donation-component.component';
 import { DonationsListComponent } from './backend/donation/donations-list/donations-list.component';
 import { PostCouponComponent } from './backend/marketplace/post-coupon/post-coupon.component';
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { MatNativeDateModule } from '@angular/material/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { OrderAnalyticsComponent } from './backend/marketplace/order-analytics/order-analytics.component';
+
+
+
+
+
 
 
 
@@ -88,8 +103,8 @@ import {MatNativeDateModule} from "@angular/material/core";
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    SignupComponent,
-    SigninComponent,
+    RegisterComponent,
+    LoginComponent,
     LandigpageComponent,
     PacksComponent,
     MainhomepageComponent,
@@ -128,6 +143,11 @@ import {MatNativeDateModule} from "@angular/material/core";
     StudentComponent,
     BackAppComponent,
     CoursesBackComponent,
+    ListTeachersComponent,
+    UpdateUserComponent,
+    UsersComponent,
+    UserStatsComponent,
+    ProfileComponent,
     ListProduitComponent,
     CartComponent,
     PlaceOrderComponent,
@@ -147,12 +167,27 @@ import {MatNativeDateModule} from "@angular/material/core";
     DonationComponentComponent,
     DonationsListComponent,
     PostCouponComponent,
-
-
-
-
+    SidebarComponent,
+    OrderAnalyticsComponent
+  
   ],
   imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BackRoutingModule,
+    MatIconModule,
+    MatSelectModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    RecaptchaFormsModule,
+    MatDialogModule,
     MatIconModule,
     MatSelectModule,
     BrowserModule,
@@ -161,23 +196,26 @@ import {MatNativeDateModule} from "@angular/material/core";
     MatSnackBarModule,
     MatButtonModule,
     BrowserAnimationsModule,
-    MatDialogModule,
     CommonModule,
-    ReactiveFormsModule,  // <-- Ajoutez ReactiveFormsModule
-    MatFormFieldModule,   // <-- Ajoutez MatFormFieldModule
-    MatInputModule,       // <-- Ajoutez MatInputModule      // <-- Ajoutez MatButtonModule
     MatCardModule,
-    MatTableModule,
-    MatMenuModule,
-    FormsModule,
-    MatDatepickerModule,
-    MatNativeDateModule
-
-    // Ajoutez ce module pour utiliser mat-card, mat-card-title, etc.
-
-
+    MatNativeDateModule,
   ],
-  providers: [],
+  providers: [
+    HttpClient,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('376223933550-gedvfpvklutlp3cqi7frmoa5u33kvgvk.apps.googleusercontent.com')
+          },
+        ]
+      } as SocialAuthServiceConfig,
+    }
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

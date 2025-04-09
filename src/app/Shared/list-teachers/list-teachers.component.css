@@ -1,0 +1,170 @@
+
+    .container {
+        max-width: 90%;
+        margin: auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #FF8C00;
+    }
+
+    h3 {
+        color: #FF8C00;
+        margin-top: 20px;
+    }
+
+    /* TABLEAU */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* EN-TÊTE SOMBRE */
+    .table thead {
+        background-color: #134374;
+        color: white;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* EFFET ZÉBRA */
+    .table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    /* EFFET HOVER */
+    .table tbody tr:hover {
+        background-color: #d6d6d6;
+        cursor: pointer;
+    }
+
+    /* BOUTONS */
+    .btn {
+        padding: 8px 12px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        border-radius: 4px;
+    }
+
+    .btn-danger {
+      background-color: #f42633;
+      color: white;
+      padding: 10px 16px; /* Taille légèrement plus grande */
+      border: none;
+      border-radius: 12px; /* Bords arrondis */
+      font-size: 14px;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-danger:hover {
+      background-color: #ec182d;
+      transform: scale(1.05); /* Effet léger au survol */
+  }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    /* MESSAGE SI VIDE */
+    p {
+        text-align: center;
+        font-style: italic;
+        color: #666;
+    }
+
+
+    /* Styles pour les boutons */
+.action-btn {
+  padding: 10px 16px; /* Taille légèrement plus grande */
+  border: none;
+  border-radius: 8px; /* Coins arrondis */
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Couleur et effet pour le bouton Delete */
+.btn-danger {
+  background-color: #ff0000;
+  color: white;
+}
+.btn-danger:hover {
+  background-color: #FF4500;
+  transform: scale(1.05);
+}
+
+/* Couleur et effet pour le bouton Update */
+.btn-warning {
+  background-color: #65b2ff;
+  color: rgb(255, 255, 255);
+}
+.btn-warning:hover {
+  background-color: #00CED1;
+  transform: scale(1.05);
+}
+
+/* Espacement entre les boutons */
+.btn-space {
+  display: inline-block;
+  width: 10px;
+}
+
+
+/* Ajuster l'espacement entre les colonnes */
+.table th, .table td {
+  padding: 12px 20px; /* Augmente légèrement l'espacement horizontal */
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Ajustement spécifique pour la colonne "Actions" */
+.table td:last-child, .table th:last-child {
+  text-align: center; /* Centrer les boutons */
+  width: 220px; /* Ajuste la largeur pour bien espacer les boutons */
+  white-space: nowrap; /* Empêche le passage à la ligne */
+}
+
+/* Espacement entre les boutons dans la colonne Actions */
+.table td .btn {
+  margin-right: 8px; /* Ajoute un petit espace entre les boutons */
+}
+
+.user-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Makes the image round */
+}
+.user-image {
+  width: 100px;  /* Adjust this value as needed */
+  height: 100px; /* Adjust this value as needed */
+  object-fit: cover;
+  border-radius: 50%; /* This will make the image circular */
+}
+
+.user-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+

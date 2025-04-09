@@ -56,17 +56,7 @@
                     </ul>
                 </li>
 
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleMenu()" role="button">
-                        <i class="icofont-certificate"></i>
-                        <span>Courses</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/courses"><span>Courses</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/purchase"><span>Course Purchase</span></a></li>
-                    </ul>
-                </li>
+
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li class="collapsed">
                     <a class="m-link" (click)="toggleMenu()" role="button">
@@ -75,9 +65,12 @@
                         <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
                     </a>
                     <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace dashboard</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
                         <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a></li>
                         <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
+
                     </ul>
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
@@ -318,8 +311,16 @@
                         This Input is required
                     </mat-error>
                 </mat-form-field>
+              <div class="file-upload-container">
+                <label for="pdfFile" class="btn btn-primary file-upload-btn">
+                  <i class="fas fa-upload"></i> Upload PDF
+                </label>
+                <input id="pdfFile" type="file" (change)="onPdfFileSelected($event)" accept=".pdf" class="d-none" />
+                <p *ngIf="selectedPdfFile" class="mt-2 text-muted">Selected PDF: {{ selectedPdfFile.name }}</p>
+              </div>
 
-                <!-- Submit Button -->
+
+              <!-- Submit Button -->
                 <button mat-raised-button color="primary" type="submit" class="submit-button">Add Product</button>
             </form>
         </div>
