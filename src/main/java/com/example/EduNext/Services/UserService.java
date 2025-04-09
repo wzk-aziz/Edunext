@@ -1,10 +1,10 @@
-package com.security.EduNext.Services;
+package com.example.EduNext.Services;
 
-import com.security.EduNext.Auth.UpdateUserRequest;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Entities.Role;  // Make sure to import the Role enum
-import com.security.EduNext.Repositories.TokenRepository;
-import com.security.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Auth.UpdateUserRequest;
+import com.example.EduNext.Entities.User;
+import com.example.EduNext.Entities.Role;  // Make sure to import the Role enum
+import com.example.EduNext.Repositories.TokenRepository;
+import com.example.EduNext.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

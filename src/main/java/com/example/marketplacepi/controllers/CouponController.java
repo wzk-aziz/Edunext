@@ -1,5 +1,6 @@
 package com.example.marketplacepi.controllers;
 
+import com.example.marketplacepi.dto.CouponDto;
 import com.example.marketplacepi.exceptions.ValidationException;
 import com.example.marketplacepi.models.Coupon;
 import com.example.marketplacepi.services.AdminCouponService;
@@ -20,15 +21,17 @@ public class CouponController {
 	private final AdminCouponService adminCouponService;
 
 	@PostMapping("/creat")
-	public ResponseEntity<?> createCoupon(@RequestBody Coupon coupon) {
-		log.info("Received request to create coupon with code: {}", coupon.getCode());
-		if (coupon.getCode() == null) {
+	public ResponseEntity<?> createCoupon(@RequestBody CouponDto couponDto) {
+		log.info("Received request to create coupon with code: {}", couponDto.getCode());
+
+		if (couponDto.getCode() == null || couponDto.getCode().trim().isEmpty()) {
 			log.warn("Coupon code is empty");
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("codeEmpty");
 		}
+
 		try {
-			log.info("Creating coupon: {}", coupon);
-			Coupon createdCoupon = adminCouponService.createCoupon(coupon);
+			log.info("Creating coupon: {}", couponDto);
+			CouponDto createdCoupon = adminCouponService.createCoupon(couponDto);
 			log.info("Coupon created with ID: {}", createdCoupon.getId());
 			return ResponseEntity.ok(createdCoupon);
 		} catch (ValidationException e) {
@@ -36,6 +39,7 @@ public class CouponController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
 
 
 	@GetMapping

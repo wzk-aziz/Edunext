@@ -41,4 +41,7 @@ public class OrderDto {
 	private String couponName;
 	
 	private String couponCode;
+
+    public OrderDto(String message) {
+    }
 }

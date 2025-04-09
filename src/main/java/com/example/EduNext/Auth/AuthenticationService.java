@@ -1,13 +1,14 @@
-package com.security.EduNext.Auth;
+package com.example.EduNext.Auth;
 
+import com.example.EduNext.Entities.Token;
+import com.example.EduNext.Repositories.TokenRepository;
+import com.example.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Security.JwtService;
+import com.example.EduNext.Services.EmailService;
+import com.example.EduNext.Tfa.TwoFactorAuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.security.EduNext.Security.JwtService;
-import com.security.EduNext.Entities.Token;
-import com.security.EduNext.Entities.TokenType;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Repositories.TokenRepository;
-import com.security.EduNext.Repositories.UserRepository;
-import com.security.EduNext.Tfa.TwoFactorAuthenticationService;
+import com.example.EduNext.Entities.TokenType;
+import com.example.EduNext.Entities.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
-import com.security.EduNext.Services.EmailService;
+
 import jakarta.mail.MessagingException;
 
 

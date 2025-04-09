@@ -1,4 +1,4 @@
-package com.security.EduNext.Auth;
+package com.example.EduNext.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

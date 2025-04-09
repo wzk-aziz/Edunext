@@ -1,4 +1,4 @@
-package com.security.EduNext.Entities;
+package com.example.EduNext.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

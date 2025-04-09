@@ -59,19 +59,19 @@ public class WishlistServiceImpl implements WishlistService{
 		return wishlist.stream().map(Wishlist::getWishlistDto).collect(Collectors.toList());
 	}
 
-	public boolean removeProductFromWishlist(Long wishlistId) {
-		log.info("Deleting wishlist item with ID: {}", wishlistId);
-		Optional<Wishlist> wishlistItem = wishlistRepository.findById(wishlistId);
+	public boolean removeProductFromWishlist(Long productId) {
+		Optional<Wishlist> wishlistItem = wishlistRepository.findByProductId(productId);
 
 		if (wishlistItem.isPresent()) {
-			wishlistRepository.delete(wishlistItem.get());  // Supprimer l'élément de la wishlist
-			log.info("Product with ID {} removed from wishlist.", wishlistId);
+			wishlistRepository.delete(wishlistItem.get());
+			log.info("Product with ID {} removed from wishlist.", productId);
 			return true;
 		}
 
-		log.warn("Product with ID {} not found in wishlist.", wishlistId);
+		log.warn("Product with ID {} not found in wishlist.", productId);
 		return false;
 	}
+
 
 
 

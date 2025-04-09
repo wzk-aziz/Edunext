@@ -1,11 +1,7 @@
-package com.security.EduNext.Security;
+package com.example.EduNext.Security;
 
 
 
-import org.springframework.boot.CommandLineRunner;  // Correct import
-import com.security.EduNext.Entities.Role;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -40,7 +31,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/forgotPassword/**","/api/customer/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/forgotPassword/**","/api/customer/**","/api/admin/**","/api/admin/coupons/**","/api/donations/**","/api/payments/**").permitAll()
                         // .requestMatchers("/api/v1/wishlist/**").authenticated() "uniquement connecte"
                         // Permet l'accès à ces routes
                         .anyRequest().authenticated()  // Toute autre requête nécessite une authentification

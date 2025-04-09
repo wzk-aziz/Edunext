@@ -26,5 +26,11 @@ public class Coupon {
     private Long discount;
 
     private Date expirationDate;
+    private boolean oneTimeUse; // si vrai : utilisable qu'une seule fois
+
+    private int maxUsage;       // nombre max d’utilisations
+
+    private int usageCount;     // nombre actuel d’utilisations
+
 
 }

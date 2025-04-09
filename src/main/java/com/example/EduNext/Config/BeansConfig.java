@@ -1,4 +1,4 @@
-package com.security.EduNext.Config;
+package com.example.EduNext.Config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

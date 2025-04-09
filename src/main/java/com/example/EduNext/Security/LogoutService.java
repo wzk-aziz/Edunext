@@ -1,6 +1,6 @@
-package com.security.EduNext.Security;
+package com.example.EduNext.Security;
 
-import com.security.EduNext.Repositories.TokenRepository;
+import com.example.EduNext.Repositories.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

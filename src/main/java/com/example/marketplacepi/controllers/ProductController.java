@@ -2,17 +2,29 @@ package com.example.marketplacepi.controllers;
 
 import com.example.marketplacepi.dto.FAQDto;
 import com.example.marketplacepi.dto.ProductDto;
+import com.example.marketplacepi.models.Product;
 import com.example.marketplacepi.services.AdminProductService;
 import com.example.marketplacepi.services.FAQService;
+import org.springframework.core.io.UrlResource; // Ajout de l'import pour UrlResource
+
+import org.springframework.core.io.Resource;  // Assurez-vous que c'est cet import
+import org.springframework.core.io.UrlResource;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -24,12 +36,44 @@ public class ProductController {
 	private final FAQService faqService;
 
 	@PostMapping("/product")
-	public ResponseEntity<ProductDto> addProduct(@ModelAttribute ProductDto productDto) throws Exception {
+	public ResponseEntity<ProductDto> addProduct(@ModelAttribute ProductDto productDto,
+												 @RequestParam("pdf") MultipartFile pdfFile) throws Exception {
 		log.info("Received request to add a product with name: {}", productDto.getName());
+
+		// Ajout du fichier PDF dans le DTO et appel du service
+		productDto.setPdf(pdfFile);
+
 		ProductDto productDto1 = adminProductService.addProduct(productDto);
+
 		log.info("Product added with ID: {}", productDto1.getId());
 		return ResponseEntity.status(HttpStatus.CREATED).body(productDto1);
 	}
+
+	@GetMapping("/product/{productId}/pdf")
+	public ResponseEntity<Resource> downloadPdf(@PathVariable Long productId) throws IOException {
+		Optional<Product> productOptional = adminProductService.getProduit(productId);
+
+		if (!productOptional.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		Product product = productOptional.get();
+		String pdfPath = product.getPdfPath();
+
+		// Charge le fichier PDF
+		Path path = Paths.get(pdfPath);
+		Resource resource = new UrlResource(path.toUri());
+
+		if (resource.exists() || resource.isReadable()) {
+			return ResponseEntity.ok()
+					.contentType(MediaType.APPLICATION_PDF)
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + path.getFileName() + "\"")
+					.body(resource);
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 
 	@GetMapping("/products")
 	public ResponseEntity<List<ProductDto>> getAllProduct() {
@@ -102,4 +146,6 @@ public class ProductController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
+
 }

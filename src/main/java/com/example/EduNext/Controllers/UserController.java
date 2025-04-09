@@ -1,11 +1,11 @@
-package com.security.EduNext.Controllers;
+package com.example.EduNext.Controllers;
 
-import com.security.EduNext.Repositories.UserRepository;
-import com.security.EduNext.Auth.AuthenticationService;
-import com.security.EduNext.Auth.UpdateUserRequest;
-import com.security.EduNext.Entities.Role;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Services.UserService;
+import com.example.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Services.UserService;
+import com.example.EduNext.Auth.AuthenticationService;
+import com.example.EduNext.Auth.UpdateUserRequest;
+import com.example.EduNext.Entities.Role;
+import com.example.EduNext.Entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

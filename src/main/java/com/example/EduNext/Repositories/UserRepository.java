@@ -1,7 +1,7 @@
-package com.security.EduNext.Repositories;
+package com.example.EduNext.Repositories;
 
-import com.security.EduNext.Entities.Role;
-import com.security.EduNext.Entities.User;
+import com.example.EduNext.Entities.Role;
+import com.example.EduNext.Entities.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

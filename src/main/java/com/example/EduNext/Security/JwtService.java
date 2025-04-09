@@ -1,4 +1,4 @@
-package com.security.EduNext.Security;
+package com.example.EduNext.Security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

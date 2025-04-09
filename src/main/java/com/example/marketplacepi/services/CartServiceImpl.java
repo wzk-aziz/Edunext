@@ -127,9 +127,18 @@ public class CartServiceImpl implements CartService {
 		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
 		Coupon coupon = couponRepository.findByCode(code)
 				.orElseThrow(() -> new ValidationException("Coupon not found"));
+
+		// Vérifier si le coupon est expiré
 		if (couponIsExpired(coupon)) {
 			throw new ValidationException("Coupon is expired");
 		}
+
+		// Vérifier si le nombre d'utilisations du coupon a atteint la limite
+		if (coupon.getUsageCount() >= coupon.getMaxUsage()) {
+			throw new ValidationException("Coupon usage limit reached");
+		}
+
+		// Appliquer le coupon à la commande active
 		double discountAmount = ((coupon.getDiscount() / 100.0) * activeOrder.getTotalAmount());
 		double netAmount = activeOrder.getTotalAmount() - discountAmount;
 
@@ -137,9 +146,16 @@ public class CartServiceImpl implements CartService {
 		activeOrder.setDiscount((long) discountAmount);
 		activeOrder.setCoupon(coupon);
 
+		// Incrémente le nombre d’utilisations du coupon
+		coupon.setUsageCount(coupon.getUsageCount() + 1);
+		couponRepository.save(coupon);
+
 		orderRepository.save(activeOrder);
 		return activeOrder.getOrderDto();
 	}
+
+
+
 
 	public boolean couponIsExpired(Coupon coupon) {
 		Date currentDate = new Date();

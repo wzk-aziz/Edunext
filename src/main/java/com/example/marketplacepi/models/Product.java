@@ -39,6 +39,8 @@ public class Product {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Category category;
+    @Column(name = "pdf_path")  // Nouveau champ pour le PDF
+    private String pdfPath;
 
 
     //	TODO  : add mapstruct

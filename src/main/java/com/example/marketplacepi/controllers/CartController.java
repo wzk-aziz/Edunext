@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -22,9 +24,27 @@ public class CartController {
 	private final CartService cartService;
 
 	@PostMapping("/add")
-	public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto addProductInCartDto) {
-		return cartService.addProductToCart(addProductInCartDto);
+	public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto dto) {
+		try {
+			cartService.addProductToCart(dto); // on suppose que ce service gère tout
+
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "Produit ajouté avec succès");
+			response.put("status", "success");
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			Map<String, Object> error = new HashMap<>();
+			error.put("message", "Erreur lors de l'ajout du produit");
+			error.put("status", "error");
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+		}
 	}
+
 
 	// Obtenir les produits du panier
 	@GetMapping("/cart")
@@ -36,8 +56,14 @@ public class CartController {
 	// Appliquer un coupon au panier
 	@PostMapping("/apply-coupon/{code}")
 	public ResponseEntity<OrderDto> applyCoupon(@PathVariable String code) {
-		return ResponseEntity.ok(cartService.applyCoupon(code));
+		try {
+			OrderDto updatedOrder = cartService.applyCoupon(code);
+			return ResponseEntity.ok(updatedOrder);  // Réponse avec l'ordre mis à jour
+		} catch (ValidationException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new OrderDto(e.getMessage()));  // Message d'erreur
+		}
 	}
+
 
 	// Augmenter la quantité d'un produit
 	@PostMapping("/increase-quantity")

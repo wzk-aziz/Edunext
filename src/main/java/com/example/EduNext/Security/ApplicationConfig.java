@@ -1,11 +1,10 @@
-package com.security.EduNext.Security;
+package com.example.EduNext.Security;
 
 
-import com.security.EduNext.Auth.AuthenticationService;
-import com.security.EduNext.Auth.RegisterRequest;
-import com.security.EduNext.Entities.Role;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Entities.Role;
+import com.example.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Auth.AuthenticationService;
+import com.example.EduNext.Auth.RegisterRequest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static com.security.EduNext.Entities.Role.ADMIN;
 
 
 @Configuration
@@ -67,7 +64,7 @@ public class ApplicationConfig {
                         .lastname("Admin")
                         .email("admin@gmail.com")
                         .password("admin") // Idéalement, hacher ce mot de passe
-                        .role(ADMIN)
+                        .role(Role.ADMIN)
                         .build();
                 System.out.println("Admin token: " + service.register(admin).getAccessToken());
             } else {

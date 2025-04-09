@@ -15,4 +15,8 @@ public class CouponDto {
 	private Long discount;
 	
 	private Date expirationDate;
+
+	private boolean oneTimeUse; // <-- ajouté
+
+	private int maxUsage;
 }

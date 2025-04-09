@@ -1,12 +1,10 @@
-package com.security.EduNext.Auth;
+package com.example.EduNext.Auth;
 
-import com.security.EduNext.Entities.Role;
+import com.example.EduNext.Entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.awt.*;
 
 @Data
 @Builder

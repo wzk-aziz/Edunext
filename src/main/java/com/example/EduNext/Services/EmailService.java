@@ -1,4 +1,4 @@
-package com.security.EduNext.Services;
+package com.example.EduNext.Services;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

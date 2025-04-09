@@ -1,4 +1,4 @@
-package com.security.EduNext.Tfa;
+package com.example.EduNext.Tfa;
 
 import dev.samstevens.totp.code.*;
 import dev.samstevens.totp.exceptions.CodeGenerationException;

@@ -1,4 +1,4 @@
-package com.security.EduNext.Auth;
+package com.example.EduNext.Auth;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

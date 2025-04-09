@@ -1,4 +1,4 @@
-package com.security.EduNext.Entities;
+package com.example.EduNext.Entities;
 
 public enum Role {
     ADMIN,

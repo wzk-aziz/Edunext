@@ -1,9 +1,9 @@
-package com.security.EduNext.Auth;
+package com.example.EduNext.Auth;
 
+import com.example.EduNext.Repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.Resource;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Entities.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

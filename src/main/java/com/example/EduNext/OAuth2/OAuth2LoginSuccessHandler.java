@@ -1,9 +1,9 @@
-package com.security.EduNext.OAuth2;
+package com.example.EduNext.OAuth2;
 
-import com.security.EduNext.Entities.Role;
-import com.security.EduNext.Entities.User;
-import com.security.EduNext.Repositories.UserRepository;
-import com.security.EduNext.Security.JwtService;
+import com.example.EduNext.Entities.Role;
+import com.example.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Security.JwtService;
+import com.example.EduNext.Entities.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,6 +1,6 @@
-package com.security.EduNext.Repositories;
+package com.example.EduNext.Repositories;
 
-import com.security.EduNext.Entities.Token;
+import com.example.EduNext.Entities.Token;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
