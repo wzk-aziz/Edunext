@@ -154,11 +154,8 @@
               <td class="rank-col">{{ i + 1 }}</td>
               <td>
                 <div class="student-info">
-                  <div class="avatar">{{ (submission.student?.name?.substring(0, 1)) || '-' }}</div>
-                  <div>
-                    <span>{{ submission.student?.name || 'Student ' + submission.student?.id || '-' }}</span>
-                    <small *ngIf="submission.student?.email" class="student-email">{{ submission.student?.email }}</small>
-                  </div>
+                  <div class="avatar">{{ submission.student?.id || '-' }}</div>
+                  <span>{{ submission.student?.name || 'Student ' + submission.student?.id || 'Unknown' }}</span>
                 </div>
               </td>
               <td>Problem {{ submission.problem?.id || '-' }}</td>
@@ -177,16 +174,12 @@
                 </div>
               </td>
               <td class="actions-col">
-                <a *ngIf="submission.gitLink" class="view-btn" 
+                <a *ngIf="submission.gitLink" class="btn btn-sm btn-primary" 
                    [href]="submission.gitLink" target="_blank" 
-                   [title]="'View code on GitHub'">
-                  <i class="fas fa-code"></i> View Code
+                   title="View code on GitHub">
+                  <i class="fas fa-code"></i> View
                 </a>
-                <button *ngIf="submission.gitLink" class="analyze-btn" 
-                        [title]="'Analyze submission #' + (i + 1)">
-                  <i class="fas fa-chart-line"></i>
-                </button>
-                <span *ngIf="!submission.gitLink" class="no-actions">-</span>
+                <span *ngIf="!submission.gitLink">-</span>
               </td>
             </tr>
           </tbody>

@@ -40,8 +40,16 @@ export class SubmissionLeaderboardComponent implements OnInit, AfterViewInit, On
   }
   
   ngAfterViewInit(): void {
-    // Charts will be initialized after data is loaded
+    // Wait a bit to ensure DOM elements are ready
+    setTimeout(() => {
+      if (this.submissionsByProblem.length > 0 && this.bestScores.length > 0 && this.sortedSubmissions.length > 0) {
+        this.initializeCharts();
+      } else {
+        console.warn('Chart data not loaded yet in ngAfterViewInit');
+      }
+    }, 500);
   }
+  
   
   ngOnDestroy(): void {
     // Clean up charts to prevent memory leaks
@@ -60,14 +68,18 @@ export class SubmissionLeaderboardComponent implements OnInit, AfterViewInit, On
       this.loadAllSortedSubmissions()
     ]).then(() => {
       console.log('All data loaded successfully');
-      
       this.calculateStatistics();
       
-      // Add a small delay to ensure ViewChildren are ready
-      setTimeout(() => {
-        this.initializeCharts();
-        this.loading = false;
-      }, 100);
+      // Initialize charts after data is loaded
+      if (this.submissionsByProblem.length > 0 && this.bestScores.length > 0 && this.sortedSubmissions.length > 0) {
+        setTimeout(() => {
+          this.initializeCharts();
+        }, 500);
+      } else {
+        console.warn('One or more data sets is empty');
+      }
+      
+      this.loading = false;
     }).catch(error => {
       console.error('Error loading data:', error);
       this.errorMessage = 'Failed to load dashboard data. Please try again later.';
@@ -79,7 +91,20 @@ export class SubmissionLeaderboardComponent implements OnInit, AfterViewInit, On
     return new Promise((resolve, reject) => {
       this.submissionService.getSubmissionsPerProblem().subscribe({
         next: (data) => {
-          this.submissionsByProblem = data || [];
+          // Check if data is in expected format, if not transform it
+          if (data && Array.isArray(data)) {
+            if (data.length > 0 && !Array.isArray(data[0])) {
+              // Transform object format to array format if needed
+              this.submissionsByProblem = Object.entries(data).map(([key, value]) => [key, value]);
+            } else {
+              this.submissionsByProblem = data;
+            }
+          } else {
+            this.submissionsByProblem = [];
+            console.warn('Unexpected data format for submissions per problem', data);
+          }
+          
+          console.log('Submissions per problem loaded:', this.submissionsByProblem);
           resolve();
         },
         error: (error) => {
@@ -112,6 +137,23 @@ export class SubmissionLeaderboardComponent implements OnInit, AfterViewInit, On
       this.submissionService.getAllSubmissionsSorted().subscribe({
         next: (data) => {
           this.sortedSubmissions = data || [];
+          
+          // Additional processing to handle null student data
+          this.sortedSubmissions.forEach(submission => {
+            // If student is null, create a placeholder
+            if (!submission.student) {
+              submission.student = {
+                id: submission.studentId || 0,
+                name: `Student ${submission.studentId || 'Unknown'}`
+              };
+            }
+            
+            // Ensure student name is not null
+            if (submission.student && !submission.student.name) {
+              submission.student.name = `Student ${submission.student.id}`;
+            }
+          });
+          
           resolve();
         },
         error: (error) => {
@@ -122,7 +164,6 @@ export class SubmissionLeaderboardComponent implements OnInit, AfterViewInit, On
       });
     });
   }
-  
   calculateStatistics(): void {
     // Calculate total submissions
     this.totalSubmissions = this.sortedSubmissions.length;
