@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/reaction")
 @CrossOrigin(origins = "*")
 public class ReactionController {
 

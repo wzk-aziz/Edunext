@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/forum")
 @CrossOrigin(origins = "*")
 public class ForumController {
 

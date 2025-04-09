@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/event")
 @CrossOrigin(origins = "*")
 public class EventController {
 
