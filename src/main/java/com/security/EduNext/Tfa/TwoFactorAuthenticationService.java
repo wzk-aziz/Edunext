@@ -26,7 +26,7 @@ public class TwoFactorAuthenticationService {
 
     public String generateQrCodeImageUri(String secret) {
         QrData data = new QrData.Builder()
-                .label("Raed Codint 2FA")
+                .label("Raed Coding 2FA")
                 .secret(secret)
                 .issuer("Raed-Coding")
                 .algorithm(HashingAlgorithm.SHA1)

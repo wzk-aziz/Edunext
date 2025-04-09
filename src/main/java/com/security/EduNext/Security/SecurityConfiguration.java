@@ -105,5 +105,3 @@ public class SecurityConfiguration {
         return (request, response, authentication) -> SecurityContextHolder.clearContext();  // Efface le contexte de sécurité lors de la déconnexion
     }
 }
-
-

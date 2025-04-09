@@ -138,6 +138,9 @@ public class AuthenticationService {
                     .build();
         }
 
+        revokeAllUserTokens(user);
+
+
         // Générer un token si l'utilisateur n'est pas banni et MFA désactivé
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
