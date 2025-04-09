@@ -1,4 +1,5 @@
 package com.example.codinggame.entity;
+import com.example.EduNext.Entities.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +16,18 @@ public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private User student;
+    public User getStudent() {
+        return student;
+    }
+
+    public void setStudent(User student) {
+        this.student = student;
+    }
+
+
 
     @JsonProperty("code")
     @Column(columnDefinition = "TEXT")
@@ -39,9 +52,7 @@ public class Submission {
     private String gitLink;
 
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private User student; // si tu as une entité utilisateur
+
     @Column(name = "score")
     private int score;
 

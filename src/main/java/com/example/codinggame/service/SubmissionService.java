@@ -28,7 +28,6 @@ public class SubmissionService {
     }
 
     public Submission create(Submission submission) {
-        // Recharger le language si seul l’ID est fourni
         if (submission.getLanguage() != null && submission.getLanguage().getId() != null) {
             Language lang = languageRepository
                     .findById(submission.getLanguage().getId())
@@ -36,7 +35,6 @@ public class SubmissionService {
             submission.setLanguage(lang);
         }
 
-        // Recharger le problem si seul l’ID est fourni
         if (submission.getProblem() != null && submission.getProblem().getId() != null) {
             Problem prob = problemRepository
                     .findById(submission.getProblem().getId())
@@ -56,15 +54,12 @@ public class SubmissionService {
             return null;
         }
 
-        // On recharge pour conserver l’entité existante avant update
         Submission existing = submissionRepository.getReferenceById(id);
 
-        // Mettre à jour le code, status, output...
         existing.setCode(submission.getCode());
         existing.setStatus(submission.getStatus());
         existing.setOutput(submission.getOutput());
 
-        // Gérer la mise à jour du language (si voulu)
         if (submission.getLanguage() != null && submission.getLanguage().getId() != null) {
             Language lang = languageRepository
                     .findById(submission.getLanguage().getId())
@@ -74,7 +69,6 @@ public class SubmissionService {
             existing.setLanguage(null);
         }
 
-        // Gérer la mise à jour du problem (si voulu)
         if (submission.getProblem() != null && submission.getProblem().getId() != null) {
             Problem prob = problemRepository
                     .findById(submission.getProblem().getId())
@@ -95,7 +89,6 @@ public class SubmissionService {
         return submissionRepository.findAll();
     }
 
-    // Compare l'output de la submission à l'expectedOutput du problem
     public Submission evaluate(Long submissionId) {
         Submission submission = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new RuntimeException("Submission not found!"));
@@ -105,14 +98,12 @@ public class SubmissionService {
 
     public int calculateScore(Submission submission) {
         String code = submission.getCode();
-        // Logique simple (à améliorer plus tard)
         return (code != null && code.contains("return")) ? 100 : 50;
     }
 
     public Submission save(Submission submission) {
         return submissionRepository.save(submission);
     }
-
 
     private void evaluateSubmission(Submission submission) {
         if (submission.getProblem() == null) {
@@ -140,5 +131,9 @@ public class SubmissionService {
 
     public List<Submission> getAllSortedByScore() {
         return submissionRepository.findAllByOrderByScoreDesc();
+    }
+
+    public List<Submission> getSubmissionsByUserId(Long userId) {
+        return submissionRepository.findByStudentId(userId);
     }
 }

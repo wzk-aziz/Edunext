@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/submissions")
 public class SubmissionController {
 
-
     private final SubmissionService submissionService;
     private final SubmissionRepository submissionRepository;
 
@@ -50,44 +49,52 @@ public class SubmissionController {
     }
 
     /**
-     * Endpoint permettant d'évaluer explicitement la soumission
-     * en comparant output et expectedOutput.
+     * Évaluer la soumission (output vs expectedOutput)
      */
     @PutMapping("/{id}/evaluate")
     public Submission evaluate(@PathVariable Long id) {
         return submissionService.evaluate(id);
     }
 
+    /**
+     * Ajouter une soumission avec calcul automatique du score
+     */
     @PostMapping("/submit")
     public ResponseEntity<Submission> submitCode(@RequestBody Submission submission) {
         submission.setScore(submissionService.calculateScore(submission));
         Submission saved = submissionService.save(submission);
         return ResponseEntity.ok(saved);
     }
-    @GetMapping("/user/{userId}")
-    public List<Submission> getSubmissionsByUser(@PathVariable Long userId) {
-        return submissionRepository.findByStudentId(userId);
-    }
+
+    /**
+     * 📊 Nombre de soumissions par problème
+     */
     @GetMapping("/stats/by-problem")
     public List<Object[]> statsByProblem() {
-        List<Object[]> results = submissionService.getSubmissionsStatsByProblem();
-        System.out.println("Stats by problem: " + results.size() + " records found");
-        for (Object[] row : results) {
-            System.out.println("Problem ID: " + row[0] + ", Count: " + row[1]);
-        }
-        return results;
+        return submissionService.getSubmissionsStatsByProblem();
     }
 
+    /**
+     * 🏆 Meilleurs scores par utilisateur
+     */
     @GetMapping("/stats/best-scores")
     public List<Object[]> bestScores() {
         return submissionService.getBestScoresByStudent();
     }
 
+    /**
+     * 📈 Tous les scores triés du meilleur au moins bon
+     */
     @GetMapping("/stats/all-sorted")
     public List<Submission> sortedSubmissions() {
         return submissionService.getAllSortedByScore();
     }
 
-
-
+    /**
+     * 👤 Soumissions d’un utilisateur spécifique
+     */
+    @GetMapping("/user/{userId}")
+    public List<Submission> getSubmissionsByUser(@PathVariable Long userId) {
+        return submissionService.getSubmissionsByUserId(userId);
+    }
 }
