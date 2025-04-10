@@ -8,7 +8,7 @@ import { Reaction } from '../models/reaction.model';
   providedIn: 'root'
 })
 export class ReactionService {
-  private baseUrl = 'http://localhost:8087/api';
+  private baseUrl = 'http://localhost:8087/api/reaction';
   private currentUserEmail = 'amal.selmi@esprit.tn'; // Utilisateur local hardcodé
   
   // BehaviorSubject pour suivre les changements de réactions

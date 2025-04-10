@@ -7,7 +7,7 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ReservationService {
-  private apiUrl = 'http://localhost:8087/api'; // L'URL de ton backend Spring Boot
+  private apiUrl = 'http://localhost:8087/api/reservation'; // L'URL de ton backend Spring Boot
   
   constructor(private http: HttpClient) {}
   
