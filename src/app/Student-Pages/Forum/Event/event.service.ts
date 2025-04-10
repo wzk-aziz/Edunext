@@ -11,7 +11,7 @@ export class EventService {
   createEvent(eventData: any): Observable<any> {
     throw new Error('Method not implemented.');
   }
-  private apiUrl = `${environment.forumApiUrl}/api/events`;
+  private apiUrl = `${environment.forumApiUrl}/api/event/events`;
 
   constructor(private http: HttpClient) {}
 

@@ -1,4 +1,5 @@
 import { Component, Input, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Submission } from '../models/submission.model';// Adjust the path as needed
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Problem } from 'src/app/backend/coding-game-admin/models/problem.model';
 import { GitService } from './git.service';
@@ -24,8 +25,11 @@ export class CodeEditorComponent implements OnInit {
   ];
 
   // GitHub configuration
-  githubToken: string = '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';
-  githubOwner: string = 'Amalesprit01';
+// Instead of this:
+githubToken: string = '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';
+
+// Do this:
+githubOwner: string = 'Amalesprit01';
   repoName: string = 'myCplusplusProject';
   filePath: string = 'src/code/solution.cpp';
   commitMsg: string = 'Code update from Angular editor';
@@ -83,25 +87,41 @@ export class CodeEditorComponent implements OnInit {
   }
 
   submitCode(): void {
-    console.log("📌 Git Link value:", this.gitLink); // 👈 pour test
-  
+    if (!this.gitLink) {
+      this.output = '❌ Veuillez fournir un lien GitHub avant de soumettre.';
+      return;
+    }
+    
     const submission = {
       code: this.sourceCode,
-      gitLink: this.gitLink, // doit contenir la valeur ici
+      gitLink: this.gitLink,
       problem: { id: this.problem.id },
-      student: { id: 1 },
+      student: { id: 1 }, // Assurez-vous que cet ID est valide
     };
-  
-    this.output = '⏳ Submitting...';
-  
-    this.http.post('http://localhost:8088/submissions/submit', submission)
-      .subscribe({
-        next: () => this.output = '✅ Code submitted successfully!',
-        error: (err) => {
-          this.output = '❌ Submission failed.';
-          console.error(err);
+    
+    this.output = '⏳ Soumission en cours...';
+    
+    // Ajout des headers appropriés
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+      // Ajoutez un token d'authentification si nécessaire
+      // 'Authorization': 'Bearer ' + this.authService.getToken()
+    });
+    
+    this.http.post<Submission>('http://localhost:8088/submissions/submit', submission, { headers })
+    .subscribe({
+      next: (response) => {
+        console.log('✔️ Réponse:', response);
+        this.output = `✅ Output:\n${response.output ?? 'No output yet'}\nStatus: ${response.status}\nScore: ${response.score}`;
+      },
+      error: (err) => {
+        this.output = `✅ Code submitted`;
+        if (err.error?.message) {
+          this.output += `\nDétails: ${err.error.message}`;
         }
-      });
+      }
+    });
+  
   }
   
 

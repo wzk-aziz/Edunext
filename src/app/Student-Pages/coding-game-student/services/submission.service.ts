@@ -36,6 +36,7 @@ export class SubmissionService {
     return this.http.get<Submission[]>(`${this.apiUrl}/stats/all-sorted`)
       .pipe(catchError(this.handleError<Submission[]>('getAllSubmissionsSorted', [])));
   }
+  
 
   // Helper method to handle HTTP errors
   private handleError<T>(operation = 'operation', result?: T) {
