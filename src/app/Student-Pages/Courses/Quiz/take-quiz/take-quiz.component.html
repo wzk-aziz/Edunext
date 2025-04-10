@@ -1,3 +1,19 @@
+<!-- Anti-Cheating Warning Modal -->
+<div *ngIf="showCheatingPopup" class="cheating-warning-popup">
+  <div class="warning-content">
+    <h4 class="text-danger fw-bold mb-2">⚠️ Cheating Detected</h4>
+    <p>If you continue, the quiz will be <strong>closed and failed</strong>.</p>
+  </div>
+</div>
+<!-- Disqualified Popup -->
+<div *ngIf="disqualified" class="disqualified-popup">
+  <div class="disqualified-content">
+    <h4 class="text-danger fw-bold mb-2">🚫 Disqualified</h4>
+    <p>You have been disqualified from this quiz due to repeated suspicious activity.</p>
+    <p>The quiz will now be closed.</p>
+  </div>
+</div>
+
 <div class="container mt-5">
   <div class="quiz-container p-4 shadow-lg rounded bg-white">
     <!-- Quiz Header -->
