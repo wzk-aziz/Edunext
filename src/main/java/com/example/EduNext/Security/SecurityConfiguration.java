@@ -31,7 +31,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**","/api/exams/**" ,"/forgotPassword/**","/api/customer/**","/api/admin/**","/api/admin/coupons/**","/api/donations/**","/api/payments/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**","/api/exams/**" ,"/forgotPassword/**","/api/customer/**","/api/admin/**","/api/admin/coupons/**","/api/donations/**","/api/payments/**", "/compilers/**","/languages/**","/problems/**","/submissions/**").permitAll()
                         // .requestMatchers("/api/v1/wishlist/**").authenticated() "uniquement connecte"
                         // Permet l'accès à ces routes
                         .anyRequest().authenticated()  // Toute autre requête nécessite une authentification

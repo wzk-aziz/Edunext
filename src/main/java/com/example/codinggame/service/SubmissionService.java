@@ -42,8 +42,12 @@ public class SubmissionService {
             submission.setProblem(prob);
         }
 
+        evaluateSubmission(submission);
+        submission.setScore(calculateScore(submission));
+
         return submissionRepository.save(submission);
     }
+
 
     public Submission get(Long id) {
         return submissionRepository.findById(id).orElse(null);

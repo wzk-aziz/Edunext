@@ -1,7 +1,6 @@
 package com.example.codinggame.controller;
 
 import com.example.codinggame.entity.Submission;
-import com.example.codinggame.repository.SubmissionRepository;
 import com.example.codinggame.service.SubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,85 +13,71 @@ import java.util.List;
 public class SubmissionController {
 
     private final SubmissionService submissionService;
-    private final SubmissionRepository submissionRepository;
 
     @Autowired
-    public SubmissionController(SubmissionService submissionService,
-                                SubmissionRepository submissionRepository) {
+    public SubmissionController(SubmissionService submissionService) {
         this.submissionService = submissionService;
-        this.submissionRepository = submissionRepository;
     }
 
-    @PostMapping
-    public Submission create(@RequestBody Submission submission) {
-        return submissionService.create(submission);
+    // ✅ Créer une soumission (submit)
+    @PostMapping("/submit")
+    public ResponseEntity<Submission> submitCode(@RequestBody Submission submission) {
+        System.out.println("Received submission: " + submission);
+        System.out.println("Git link: " + submission.getGitLink());
+
+        Submission saved = submissionService.create(submission); // utilise bien `create` ici
+        return ResponseEntity.ok(saved);
     }
 
+    // 🔍 Obtenir une soumission par ID
     @GetMapping("/{id}")
     public Submission get(@PathVariable Long id) {
         return submissionService.get(id);
     }
 
+    // ✏️ Mettre à jour une soumission
     @PutMapping("/{id}")
     public Submission update(@PathVariable Long id, @RequestBody Submission submission) {
         return submissionService.update(id, submission);
     }
 
+    // ❌ Supprimer une soumission
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         submissionService.delete(id);
     }
 
+    // 📋 Liste des soumissions
     @GetMapping
     public List<Submission> list() {
         return submissionService.list();
     }
 
-    /**
-     * Évaluer la soumission (output vs expectedOutput)
-     */
+    // 🧪 Évaluer une soumission manuellement (pas nécessaire avec `create` mais utile parfois)
     @PutMapping("/{id}/evaluate")
     public Submission evaluate(@PathVariable Long id) {
         return submissionService.evaluate(id);
     }
 
-    /**
-     * Ajouter une soumission avec calcul automatique du score
-     */
-    @PostMapping("/submit")
-    public ResponseEntity<Submission> submitCode(@RequestBody Submission submission) {
-        submission.setScore(submissionService.calculateScore(submission));
-        Submission saved = submissionService.save(submission);
-        return ResponseEntity.ok(saved);
-    }
-
-    /**
-     * 📊 Nombre de soumissions par problème
-     */
+    // 📊 Statistique : Nombre de soumissions par problème
     @GetMapping("/stats/by-problem")
     public List<Object[]> statsByProblem() {
         return submissionService.getSubmissionsStatsByProblem();
     }
 
-    /**
-     * 🏆 Meilleurs scores par utilisateur
-     */
+    // 🏆 Statistique : Meilleurs scores par étudiant
     @GetMapping("/stats/best-scores")
     public List<Object[]> bestScores() {
         return submissionService.getBestScoresByStudent();
     }
 
-    /**
-     * 📈 Tous les scores triés du meilleur au moins bon
-     */
+    // 📈 Statistique : Toutes les soumissions triées par score
     @GetMapping("/stats/all-sorted")
-    public List<Submission> sortedSubmissions() {
-        return submissionService.getAllSortedByScore();
+    public ResponseEntity<List<Submission>> getAllSortedByScore() {
+        return ResponseEntity.ok(submissionService.getAllSortedByScore());
     }
 
-    /**
-     * 👤 Soumissions d’un utilisateur spécifique
-     */
+    // 👤 Soumissions d’un utilisateur spécifique
     @GetMapping("/user/{userId}")
     public List<Submission> getSubmissionsByUser(@PathVariable Long userId) {
         return submissionService.getSubmissionsByUserId(userId);
