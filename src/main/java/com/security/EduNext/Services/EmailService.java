@@ -3,6 +3,7 @@ package com.security.EduNext.Services;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,16 @@ public class EmailService {
         """, code);
 
         helper.setText(htmlContent, true);
+        mailSender.send(message);
+    }
+
+    public void sendPasswordResetEmail(String to, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Password Reset Request");
+        message.setText("To reset your password, click the link below:\n\n" +
+                "http://localhost:4200/reset-password?token=" + token);
+
         mailSender.send(message);
     }
 }

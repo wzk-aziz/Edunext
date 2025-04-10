@@ -81,6 +81,14 @@ public class UserController {
         }
     }
 
+    @GetMapping("/profile/me")
+    public ResponseEntity<User> getMyProfile() {
+        Integer userId = userService.getLoggedInUserId(); // Récupère l'ID de l'utilisateur connecté
+        Optional<User> user = userService.getUserById(userId);
+
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 
 
 

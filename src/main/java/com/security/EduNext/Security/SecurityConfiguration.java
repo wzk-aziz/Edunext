@@ -40,7 +40,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/forgotPassword/**").permitAll()  // Permet l'accès à ces routes
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/api/auth/**").permitAll()  // Permet l'accès à ces routes
                         .anyRequest().authenticated()  // Toute autre requête nécessite une authentification
                 )
                 .sessionManagement(session -> session

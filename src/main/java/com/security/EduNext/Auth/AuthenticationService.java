@@ -36,39 +36,6 @@ public class AuthenticationService {
     private final EmailService emailService;
 
 
-  /*  public AuthenticationResponse register(RegisterRequest request) {
-
-        if (repository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already exists");
-        }
-        var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                //.address(request.getAddress())
-                //.phonenumber(request.getPhonenumber())
-                .role(request.getRole())
-                .mfaEnabled(request.isMfaEnabled())
-                .Image(request.getImage()) // Ensure that this is set here
-                .build();
-        // if MFA enabled --> Generate Secret
-        if (request.isMfaEnabled()){
-            user.setSecret(tfaService.generateNewSecret());
-        }
-        var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .mfaEnabled(user.isMfaEnabled())
-                .build();
-    }
-*/
-
     public AuthenticationResponse register(RegisterRequest request) {
         if (repository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -144,6 +111,8 @@ public class AuthenticationService {
         // Générer un token si l'utilisateur n'est pas banni et MFA désactivé
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
+        saveUserToken(user, accessToken); // AJOUTE ÇA
+
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)

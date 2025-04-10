@@ -1,3 +1,4 @@
+
 package com.security.EduNext.Services;
 
 import com.security.EduNext.Auth.UpdateUserRequest;
@@ -108,13 +109,18 @@ public class UserService {
     }
 
     // Méthode pour obtenir l'ID de l'utilisateur connecté
-    private Integer getLoggedInUserId() {
-        // Implémentez ceci selon votre gestion de la session ou du token (par exemple JWT)
-        // Exemple pour Spring Security :
+
+    // Méthode pour obtenir l'ID de l'utilisateur connecté
+    public Integer getLoggedInUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return Integer.parseInt(userDetails.getUsername());  // Assurez-vous que l'ID de l'utilisateur est dans le username ou ailleurs
+
+        // If you're using JWT and storing email as subject
+        String email = authentication.getName(); // This gets the subject from JWT token
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getId();
     }
+
 
     // Méthode pour vérifier si l'utilisateur est un admin
     private boolean isAdmin(Integer userId) {
