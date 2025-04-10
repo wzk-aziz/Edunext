@@ -1,1 +1,433 @@
-<p>teachers works!</p>
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/classes.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:55:49 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>:: e-Learn:: Classes</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <!-- plugin css file  -->
+    <link rel="stylesheet" href="/assetsback/css/fullcalendar.min.css">
+
+    <!-- project css file  -->
+    <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+    
+    <!-- Google Code  -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-264428387-1');
+    </script>
+    
+</head>
+<body>
+
+<div id="elearn-layout" class="theme-purple">
+
+    <!-- sidebar -->
+    <div class="sidebar px-4 py-4 py-md-4  me-0">
+        <div class="d-flex flex-column h-100">
+            <a routerLink="/backoffice/Ad" class="mb-0 brand-icon">
+                <span class="logo-icon">
+                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                </span>
+                <span class="logo-text">e-Learn</span>
+            </a>
+            <!-- Menu: main ul   -->
+            <ul class="menu-list flex-grow-1 mt-3">
+                <li><a class="m-link" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+                <li><a class="m-link  active"  routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i> <span>Students</span></a></li>
+                <li class="collapsed">
+                    <a class="m-link" >
+                        <i class="icofont-teacher"></i>
+                        <span>Teachers</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" ></span>
+                    </a>
+                    <ul class="sub-menu collapse" >
+                        <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="collapsed">
+                    <a class="m-link">
+                        <i class="icofont-certificate"></i>
+                        <span>Courses</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" ></span>
+                    </a>
+                    <ul class="sub-menu collapse" >
+                        <li><a class="ms-link" routerLink="/backoffice/courses"><span>Courses</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/purchase"><span>Course Purchase</span></a></li>
+                    </ul>
+                </li>
+                <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
+            </ul>
+
+            <!-- Theme: Switch Theme -->
+
+            <!-- Menu: menu collepce btn -->
+
+        </div>
+    </div>
+
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
+        <div class="header">
+            <nav class="navbar py-4">
+                <div class="container-xxl">
+    
+                    <!-- header rightbar icon -->
+                    <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
+                        <div class="d-flex">
+                            <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
+                                <i class="icofont-info-square fs-5"></i>
+                            </a>
+                            <div class="avatar-list avatar-list-stacked px-3">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
+                                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                                <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal" data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
+                            </div>
+                        </div>
+                        <div class="dropdown notifications zindex-popover">
+                            <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="icofont-alarm fs-5"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                            <div id="NotificationsDiv" class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
+                                <div class="card border-0 w380">
+                                    <div class="card-header border-0 p-3">
+                                        <h5 class="mb-0 font-weight-light d-flex justify-content-between">
+                                            <span>Notifications</span>
+                                            <span class="badge text-white">14</span>
+                                        </h5>
+                                    </div>                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
+                            <div class="u-info me-2">
+                                <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Molly Cornish</span></p>
+                                <small>Student Profile</small>
+                            </div>
+                            <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                <img class="avatar lg rounded-circle img-thumbnail" src="/assetsback/images/profile_av.png" alt="profile">
+                            </a>
+                            <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                                <div class="card border-0 w280">
+                                    <div class="card-body pb-0">
+                                        <div class="d-flex py-1">
+                                            <img class="avatar rounded-circle" src="/assetsback/images/profile_av.png" alt="profile">
+                                            <div class="flex-fill ms-3">
+                                                <p class="mb-0"><span class="font-weight-bold">Molly Cornish</span></p>
+                                                <small class="">molly.cornish.com</small>
+                                            </div>
+                                        </div>
+                                        <div><hr class="dropdown-divider border-dark"></div>
+                                    </div>
+                                    <div class="list-group m-2 ">
+                                        <a routerLink="/Student" class="list-group-item list-group-item-action border-0 "><i class="icofont-graduate-alt fs-6 me-3"></i>Student Profile</a>
+                                        <a href="video-class.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-black-board fs-6 me-3"></i>Video Class</a>
+                                        <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-6 me-3"></i>Signout</a>
+                                        <div><hr class="dropdown-divider border-dark"></div>
+                                        <a href="ui-elements/auth-signup.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- menu toggler -->
+                    <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
+                        <span class="fa fa-bars"></span>
+                    </button>
+    
+                    <!-- main menu Search-->
+                    <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
+                        <div class="input-group flex-nowrap input-group-lg">
+                        </div>
+                    </div>
+    
+                </div>
+            </nav>
+        </div>
+
+        <div class="container">
+            <h2 class="title">Liste des utilisateurs</h2>
+          
+            <!-- Search by First Name Input -->
+            <div class="search-container">
+              <label for="searchInput" class="form-label">Search</label>
+              <input 
+                type="text" 
+                id="searchInput" 
+                class="form-control" 
+                placeholder="Search by first name" 
+                [(ngModel)]="searchQuery"
+                (input)="onSearchByName()"
+              />
+            </div>
+          
+            <!-- All Users Table -->
+            <h3>Tous les utilisateurs</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Image</th>
+                  <th>Prénom</th>
+                  <th>Nom</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>2FA</th>
+                  <th style="min-width: 200px">Actions</th> <!-- Added min-width -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of filteredUsers.slice((currentPageAll - 1) * 3, currentPageAll * 3)">
+                  <td>{{ user.id }}</td>
+                  <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
+                  <td>{{ user.first_name }}</td>
+                  <td>{{ user.last_name }}</td>
+                  <td>{{ user.email_address }}</td>
+                  <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
+                  <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+                  <td class="action-column"> <!-- Added class for styling -->
+                   
+                      <button 
+                        *ngIf="!user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-danger">
+                        Ban
+                      </button>
+                      <button 
+                        *ngIf="user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-success">
+                        Unban
+                      </button>
+                    <span class="btn-space"></span>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                 
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div *ngIf="filteredUsers.length === 0">
+              <p>Aucun utilisateur trouvé.</p>
+            </div>
+          
+            <!-- Pagination for All Users -->
+            <c-pagination aria-label="Page navigation example">
+              <li cPageItem [class.disabled]="currentPageAll === 1">
+                <a cPageLink aria-label="Previous" (click)="changePageAll(currentPageAll - 1)">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li cPageItem *ngFor="let page of [].constructor(totalPagesAll); let i = index">
+                <a cPageLink (click)="changePageAll(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li cPageItem [class.disabled]="currentPageAll === totalPagesAll">
+                <a cPageLink aria-label="Next" (click)="changePageAll(currentPageAll + 1)">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </c-pagination>
+          
+            <!-- Teachers Table -->
+            <h3>Enseignants</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Image</th>
+                  <th>Prénom</th>
+                  <th>Nom</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>2FA</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of filteredTeachers.slice((currentPageTeachers - 1) * 3, currentPageTeachers * 3)">
+                  <td>{{ user.id }}</td>
+                  <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
+                  <td>{{ user.first_name }}</td>
+                  <td>{{ user.last_name }}</td>
+                  <td>{{ user.email_address }}</td>
+                  <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
+                  <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+                  <td class="action-column"> <!-- Added class for styling -->
+                      <button 
+                        *ngIf="!user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-danger">
+                        Ban
+                      </button>
+                      <button 
+                        *ngIf="user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-success">
+                        Unban
+                    </button>
+                  <span class="btn-space"></span>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                 
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div *ngIf="filteredTeachers.length === 0">
+              <p>Aucun enseignant trouvé.</p>
+            </div>
+          
+            <!-- Pagination for Teachers -->
+            <c-pagination aria-label="Page navigation example">
+              <li cPageItem [class.disabled]="currentPageTeachers === 1">
+                <a cPageLink aria-label="Previous" (click)="changePageTeachers(currentPageTeachers - 1)">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li cPageItem *ngFor="let page of [].constructor(totalPagesTeachers); let i = index">
+                <a cPageLink (click)="changePageTeachers(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li cPageItem [class.disabled]="currentPageTeachers === totalPagesTeachers">
+                <a cPageLink aria-label="Next" (click)="changePageTeachers(currentPageTeachers + 1)">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </c-pagination>
+          
+            <!-- Learners Table -->
+            <h3>Apprenants</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Image</th>
+                  <th>Prénom</th>
+                  <th>Nom</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>2FA</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of filteredLearners.slice((currentPageLearners - 1) * 3, currentPageLearners * 3)">
+                  <td>{{ user.id }}</td>
+                  <td><img [src]="getUserImage(user.image)" alt="{{ user.first_name }} {{ user.last_name }}" alt="User image" class="user-image" /></td>
+                  <td>{{ user.first_name }}</td>
+                  <td>{{ user.last_name }}</td>
+                  <td>{{ user.email_address }}</td>
+                  <td>{{ user.authorities[0].authority || 'UNKNOWN' }}</td>
+                  <td>{{ user.mfaEnabled ? 'Oui' : 'Non' }}</td>
+                  <td class="action-column"> <!-- Added class for styling -->
+                      <button 
+                        *ngIf="!user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-danger">
+                        Ban
+                      </button>
+                      <button 
+                        *ngIf="user.banned" 
+                        (click)="banOrUnbanUser(user)" 
+                        class="btn btn-success">
+                        Unban
+                      </button>
+                    <span class="btn-space"></span>
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                  
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+            <div *ngIf="filteredLearners.length === 0">
+              <p>Aucun apprenant trouvé.</p>
+            </div>
+          
+            <!-- Pagination for Learners -->
+            <c-pagination aria-label="Page navigation example">
+              <li cPageItem [class.disabled]="currentPageLearners === 1">
+                <a cPageLink aria-label="Previous" (click)="changePageLearners(currentPageLearners - 1)">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li cPageItem *ngFor="let page of [].constructor(totalPagesLearners); let i = index">
+                <a cPageLink (click)="changePageLearners(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li cPageItem [class.disabled]="currentPageLearners === totalPagesLearners">
+                <a cPageLink aria-label="Next" (click)="changePageLearners(currentPageLearners + 1)">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </c-pagination>
+            <h2 class="title">Liste des utilisateurs</h2>
+            <div class="stats-container">
+              <div class="row">
+                <!-- Total Users Card -->
+                <div class="col-md-4">
+                  <div class="stat-card total-users">
+                    <div class="stat-card-body">
+                      <i class="icofont-users-alt-4"></i>
+                      <h4>Total Users</h4>
+                      <h2>{{ totalUsers }}</h2>
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Teachers Card -->
+                <div class="col-md-4">
+                  <div class="stat-card teachers">
+                    <div class="stat-card-body">
+                      <i class="icofont-teacher"></i>
+                      <h4>Teachers</h4>
+                      <h2>{{ totalTeachers }}</h2>
+                      <p>{{ percentageTeachers }}% of total users</p>
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Learners Card -->
+                <div class="col-md-4">
+                  <div class="stat-card learners">
+                    <div class="stat-card-body">
+                      <i class="icofont-graduate"></i>
+                      <h4>Learners</h4>
+                      <h2>{{ totalLearners }}</h2>
+                      <p>{{ percentageLearners }}% of total users</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+
+        <!-- Body: Header -->
+        
+
+        <!-- Body: Body -->
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

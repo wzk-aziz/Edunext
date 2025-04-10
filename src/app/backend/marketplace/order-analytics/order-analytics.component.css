@@ -1,0 +1,96 @@
+.analytics-dashboard {
+  padding: 20px;
+}
+
+.section-orders, .section-finances, .section-month {
+  margin-bottom: 30px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #fff; /* Texte en blanc pour contraster avec les couleurs de fond */
+}
+
+.stat-card i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 1.1rem;
+  color: #eee; /* Couleur du texte de description */
+}
+
+.stat-card h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* Palette de couleurs pour les cartes */
+.section-orders .stat-card {
+  background-color: #66bb6a; /* Vert pour les commandes */
+}
+
+.section-finances .stat-card {
+  background-color: #ab47bc; /* Violet pour les finances */
+}
+
+.section-month .stat-card {
+  background-color: #ff7043; /* Orange pour les statistiques mensuelles */
+}
+
+/* Amélioration de la couleur des bordures de l'icône */
+.stat-card .fas {
+  color: #fff;
+}
+
+/* Message de chargement */
+.loading-message {
+  text-align: center;
+  color: #888;
+  font-size: 18px;
+}
+
+/* Boutons de navigation */
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.nav-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: white;
+}
+
+.nav-btn:hover {
+  opacity: 0.8;
+}
+
+.products { background: #ff7043; }
+.categories { background: #29b6f6; }
+.orders { background: #66bb6a; }
+.coupons { background: #ab47bc; }
+
+.loading-message {
+  font-size: 18px;
+  color: #666;
+}

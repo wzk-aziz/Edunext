@@ -1,0 +1,9 @@
+<div class="filter-bar">
+  <label for="category-select">Filtrer par catégorie :</label>
+  <select id="category-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+    <option value="">Toutes les catégories</option>
+    <option *ngFor="let category of categories" [value]="category.name">
+      {{ category.name }}
+    </option>
+  </select>
+</div>

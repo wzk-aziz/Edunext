@@ -1,0 +1,51 @@
+<div class="stats-container">
+    <div *ngIf="loading" class="loading">
+      Loading statistics...
+    </div>
+  
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="!loading && !error" class="row">
+      <!-- Teachers Stats Card -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5>Teachers Statistics</h5>
+          </div>
+          <div class="card-body">
+            <p>Active Teachers: {{ teacherStats.notBanned }}</p>
+            <p>Banned Teachers: {{ teacherStats.banned }}</p>
+            <p>Ban Rate: {{ getPercentage(teacherStats.banned, teacherStats.banned + teacherStats.notBanned) }}</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Learners Stats Card -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h5>Learners Statistics</h5>
+          </div>
+          <div class="card-body">
+            <p>Active Learners: {{ learnerStats.notBanned }}</p>
+            <p>Banned Learners: {{ learnerStats.banned }}</p>
+            <p>Ban Rate: {{ getPercentage(learnerStats.banned, learnerStats.banned + learnerStats.notBanned) }}</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Chart -->
+      <div class="col-12 mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>User Distribution</h5>
+          </div>
+          <div class="card-body">
+            <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

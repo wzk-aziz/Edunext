@@ -1,0 +1,97 @@
+.container {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .add-button {
+    background-color:  #007bff; /* Rouge vif */
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 30px;
+    font-size: 16px;
+    text-transform: uppercase;
+  
+  }
+  
+  .add-button:hover {
+    background-color:  #0056b3;
+  }
+  
+  .coupon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .coupon-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    background-color: #fff;
+  }
+  
+  .coupon-card:hover {
+    transform: scale(1.05);
+  }
+  
+  mat-card-header {
+    background-color: #fff0ea; /* Fond rouge pâle */
+    border-bottom: 2px solid #9fff0ea; /* Bordure rouge clair */
+    padding: 15px;
+  }
+  
+  mat-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  
+  }
+  
+  mat-card-subtitle {
+    color: #721c24; /* Texte en rouge foncé */
+    font-size: 0.9rem;
+  }
+  
+  mat-card-subtitle .coupon-code {
+    color: #d9534f; /* Rouge vif pour le Coupon Code */
+    font-weight: bold;
+  }
+  
+  mat-card-content {
+    padding: 15px;
+  }
+  
+  mat-card-actions {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  mat-button {
+    font-weight: bold;
+  }
+  
+  button.mat-button[color="primary"]:hover {
+    background-color: #c12e2a; /* Rouge foncé */
+    color: white;
+  }
+  
+  button.mat-button[color="warn"]:hover {
+    background-color: #c12e2a; /* Rouge foncé */
+    color: white;
+  }
+  
+  button.mat-button[color="primary"] {
+    background-color: #d9534f; /* Rouge vif pour "Edit" */
+  }
+  
+  button.mat-button[color="warn"] {
+    background-color: #d9534f; /* Rouge vif pour "Delete" */
+  }
+  

@@ -10,15 +10,16 @@ import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { HttpParams } from '@angular/common/http';
-import { UserStatus } from 'src/app/models/UserStatus.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   
-  private baseUrl: string = 'http://localhost:8050/api/v1/auth';
-  private apiUrl: string = 'http://localhost:8050/api/v1/auth/logout'; 
+  private baseUrl: string = 'http://localhost:8088/api/v1/auth';
+  private apiUrl: string = 'http://localhost:8088/api/v1/auth/logout'; 
+
+
 
 
   constructor(
@@ -31,14 +32,7 @@ export class AuthenticationService {
     }
     return this.http.get<boolean>(`${this.baseUrl}/check-email?email=${email}`);
   }
-  // Add to authentication.service.ts
-  getUserStatus(email: string): Observable<UserStatus> {
-    return this.http.get<UserStatus>(`${this.apiUrl}/users/status/${email}`);
-  }
-
-  updateUserStatus(userStatus: UserStatus): Observable<UserStatus> {
-    return this.http.put<UserStatus>(`${this.apiUrl}/users/status`, userStatus);
-  }
+  
 
   registerWithFile(formData: FormData): Observable<AuthenticationResponse> {
     return this.http.post<AuthenticationResponse>(`${this.baseUrl}/register`, formData);
@@ -65,6 +59,8 @@ export class AuthenticationService {
       })
     );
   }
+
+ 
   
   
   
@@ -103,9 +99,18 @@ export class AuthenticationService {
 
   }
 
+  googleLogin(googleAuthRequest: any): Observable<AuthenticationResponse> {
+    return this.http.post<AuthenticationResponse>(`${this.baseUrl}/auth/google`, googleAuthRequest);
+  }
+
+  getUserId(): number {
+    // Logic to get the user ID, e.g., from a token or session
+    return 1; // Replace with actual logic
+  }
 
 
-  
+
+
 
   
 }

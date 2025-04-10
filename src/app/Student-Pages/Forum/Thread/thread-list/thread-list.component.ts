@@ -3,7 +3,8 @@ import { Thread } from '../../models/thread.model';
 import { ThreadService } from '../thread.service';
 import { ReactionService } from '../reaction.service';
 import { Reaction } from '../../models/reaction.model';
-
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-thread-list',
   templateUrl: './thread-list.component.html',

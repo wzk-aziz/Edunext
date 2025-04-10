@@ -1,0 +1,99 @@
+/* Chargement */
+.loading-message {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Erreurs */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Bouton Ajouter une catégorie */
+.add-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+/* Tableau des catégories */
+.category-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-table th,
+.category-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.category-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.category-table td {
+    background-color: #fff;
+}
+
+/* Bouton supprimer */
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+    background-color: #d32f2f;
+}
+
+/* Message Aucune catégorie trouvée */
+.no-categories {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+    margin-top: 20px;
+}
+
+
+.left-button {
+  align-self: flex-start; /* S'assurer que le bouton est bien à gauche */
+}
+.vertical-container {
+  display: flex;
+  flex-direction: column; /* Affichage vertical */
+  align-items: flex-start; /* Aligner les éléments à gauche */
+  width: fit-content; /* Ajuster la largeur au contenu */
+}
+
+

@@ -1,0 +1,51 @@
+.add-button {
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+.card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.ribbon span {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.card-body {
+  background-color: #f8f9fa;
+}
+
+.card-body h5 a {
+  color: #333;
+}
+
+.card-body h5 a:hover {
+  text-decoration: underline;
+}
+
+.btn-warning, .btn-danger {
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.btn-warning:hover {
+  background-color: #f0ad4e;
+}
+
+.btn-danger:hover {
+  background-color: #d9534f;
+}

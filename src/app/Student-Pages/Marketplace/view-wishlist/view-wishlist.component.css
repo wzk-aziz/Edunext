@@ -1,0 +1,128 @@
+/* Container global */
+.wishlist-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.wishlist-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.wishlist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacement entre les cartes */
+  align-items: center;
+}
+
+/* Carte produit */
+.wishlist-card {
+  display: flex;
+  flex-direction: row; /* Disposition horizontale de l'image et des détails */
+  width: 100%;
+  max-width: 800px; /* Limiter la largeur de la carte */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wishlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-grid {
+  display: flex;
+  flex-direction: row; /* Disposition horizontale de l'image et des données */
+  align-items: center;
+}
+
+.product-image img {
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px; /* Espacement entre l'image et les informations */
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column; /* Disposition verticale des informations */
+  padding: 15px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.product-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.product-description {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #16a085;
+  margin-bottom: 10px;
+}
+
+/* Actions */
+.card-actions {
+  padding: 10px 15px;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  font-size: 1rem;
+  padding: 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #e74c3c;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .wishlist-list {
+    align-items: center;
+  }
+
+  .wishlist-title {
+    font-size: 2rem;
+  }
+
+  .product-grid {
+    flex-direction: column; /* Empiler image et informations sur les petits écrans */
+    align-items: center;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .product-details {
+    width: 100%;
+  }
+}

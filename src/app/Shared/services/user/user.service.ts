@@ -3,12 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 
+export interface BanStats {
+  banned: number;
+  notBanned: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
   private apiUrl = 'http://localhost:8050/api/v1/users';
+  
 
 
   constructor(private http: HttpClient) { }
@@ -40,8 +46,38 @@ export class UserService {
     return this.http.put<User>(`${this.apiUrl}/update/${id}`, userData);
   }
 
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+  banUser(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/ban/${id}`, {});
   }
+  
+  unbanUser(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/unban/${id}`, {});
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
+  getBanStatsByRole(role: string): Observable<BanStats> {
+    return this.http.get<BanStats>(`${this.apiUrl}/stats/${role.toUpperCase()}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+
+  getUserProfile(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/profile/${userId}`);
+  }
+
+  // Mettre à jour le profil de l'utilisateur
+  updateUserProfile(userId: number, request: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${userId}`, request);
+  }
+
+  
+
+
+  
 
 }

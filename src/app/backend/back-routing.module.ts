@@ -1,6 +1,7 @@
-import { CoursesBackComponent } from './courses/courses-back/courses-back.component';
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { CoursesBackComponent } from './courses/courses-back/courses-back.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { Sidebar2Component } from './sidebar2/sidebar2.component';
 import { StudentComponent } from './sidebar/student/student.component';
@@ -15,6 +16,8 @@ import { DonationComponent } from './donation/donation.component';
 import { EventComponent } from './event/event.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { BackAppComponent } from './back-app/back-app.component';
+
+// Coding Game & Forum Admin
 import { ProblemsComponent } from './coding-game-admin/problems/problems/problems.component';
 import { ProblemFormComponent } from './coding-game-admin/problems/problem-form/problem-form.component';
 import { ProblemDetailComponent } from './coding-game-admin/problems/problem-detail/problem-detail.component';
@@ -33,49 +36,96 @@ import { EventUpdateComponent } from './forum/events/event-update/event-update.c
 import { SubmissionStatsComponent } from './coding-game-admin/submission-stats/submission-stats.component';
 import { SubmissionLeaderboardComponent } from './coding-game-admin/submission-leaderboard/submission-leaderboard.component';
 
+// Marketplace & Donation
+import { ProductBackComponent } from './marketplace/product-back/product-back.component';
+import { ProductFormComponent } from './marketplace/product-form/product-form.component';
+import { EditProductComponent } from './marketplace/edit-product/edit-product.component';
+import { CategorieFormComponent } from './marketplace/categorie-form/categorie-form.component';
+import { CategorieBackComponent } from './marketplace/categorie-back/categorie-back.component';
+import { OrderBackComponent } from './marketplace/order-back/order-back.component';
+import { EditCategoryComponent } from './marketplace/edit-category/edit-category.component';
+import { PostCouponComponent } from './marketplace/post-coupon/post-coupon.component';
+import { CouponBackComponent } from './marketplace/coupon-back/coupon-back.component';
+import { OrderAnalyticsComponent } from './marketplace/order-analytics/order-analytics.component';
+import { DonationsListComponent } from './donation/donations-list/donations-list.component';
+
+// Users
+import { UsersComponent } from './users/users.component';
+import { UserStatsComponent } from './user-stats/user-stats.component';
+
 const routes: Routes = [
-  { path: '', component: BackAppComponent, children: [
-    // Routes qui utilisent le layout avec le sidebar
-    { 
-      path: '', 
-      component: LayoutComponent, 
-      children: [
-        { path: 'submissions/stats', component: SubmissionLeaderboardComponent },  
-        { path: 'problems', component: ProblemsComponent },
-        { path: 'problems/new', component: ProblemFormComponent },
-        { path: 'problems/edit/:id', component: ProblemFormComponent },
-        { path: 'problems/view/:id', component: ProblemDetailComponent },
-        { path: 'languages', component: LanguageListComponent },
-        { path: 'languages/new', component: LanguageFormComponent },
-        { path: 'languages/edit/:id', component: LanguageFormComponent },
-        { path: 'languages/view/:id', component: LanguageDetailComponent },
-        { path: 'compilers', component: CompilerListComponent },
-        { path: 'compilers/new', component: CompilerFormComponent },
-        { path: 'compilers/edit/:id', component: CompilerFormComponent },
-        { path: 'compilers/view/:id', component: CompilerDetailComponent },
-        { path: 'threads', component: ThreadListAdminComponent },
-        { path: 'blogs', component: BlogListAdminComponent },
-        { path: 'events', component: EventListAdminComponent },
-        { path: 'blogs/add', component: BlogAddComponent },
-        { path: 'event/add', component: EventComponent },
-        { path: 'event/update', component: EventUpdateComponent },
-      ]
-    },
+  {
+    path: '',
+    component: BackAppComponent,
+    children: [
+      // Layout spécifique avec sidebar pour les admins
+      {
+        path: '',
+        component: LayoutComponent,
+        children: [
+          { path: 'submissions/stats', component: SubmissionLeaderboardComponent },
+          { path: 'problems', component: ProblemsComponent },
+          { path: 'problems/new', component: ProblemFormComponent },
+          { path: 'problems/edit/:id', component: ProblemFormComponent },
+          { path: 'problems/view/:id', component: ProblemDetailComponent },
+          { path: 'languages', component: LanguageListComponent },
+          { path: 'languages/new', component: LanguageFormComponent },
+          { path: 'languages/edit/:id', component: LanguageFormComponent },
+          { path: 'languages/view/:id', component: LanguageDetailComponent },
+          { path: 'compilers', component: CompilerListComponent },
+          { path: 'compilers/new', component: CompilerFormComponent },
+          { path: 'compilers/edit/:id', component: CompilerFormComponent },
+          { path: 'compilers/view/:id', component: CompilerDetailComponent },
+          { path: 'threads', component: ThreadListAdminComponent },
+          { path: 'blogs', component: BlogListAdminComponent },
+          { path: 'events', component: EventListAdminComponent },
+          { path: 'blogs/add', component: BlogAddComponent },
+          { path: 'event/add', component: EventComponent },
+          { path: 'event/update', component: EventUpdateComponent },
+        ],
+      },
 
-    // Routes sans le sidebar
-    { path: 'courses', component: CoursesBackComponent },
-    { path: 'chat', component: ChatComponent },
-    { path: 'reviews', component: ReviewsComponent },
-    { path: 'Exam', component: ExamComponent },
-    { path: 'Certificat', component: CertificateComponent },
-    { path: 'CodingGame', component: CodingGameComponent },
-    { path: 'Donation', component: DonationComponent },
-    { path: 'Event', component: EventComponent },
-    { path: 'Marketplace', component: MarketplaceComponent },
-    { path: '**', redirectTo: 'problems' }
-  ]}
+      // Autres routes
+      { path: 'Admin', component: SidebarComponent },
+      { path: 'Admin', component: Sidebar2Component },
+      { path: 'Student', component: StudentComponent },
+      { path: 'Class', component: ClassComponent },
+      { path: 'teachers', component: ClassComponent },
+      { path: 'video_class', component: VideoClassComponent },
+      { path: 'chat', component: ChatComponent },
+      { path: 'reviews', component: ReviewsComponent },
+      { path: 'Exam', component: ExamComponent },
+      { path: 'Certificat', component: CertificateComponent },
+      { path: 'CodingGame', component: CodingGameComponent },
+      { path: 'Donation', component: DonationComponent },
+      { path: 'Event', component: EventComponent },
+      { path: 'Marketplace', component: MarketplaceComponent },
+
+      // Marketplace spécifiques
+      { path: 'productBack', component: ProductBackComponent },
+      { path: 'add-product', component: ProductFormComponent },
+      { path: 'edit-product/:productId', component: EditProductComponent },
+      { path: 'categorieBack', component: CategorieBackComponent },
+      { path: 'edit-category/:categoryId', component: EditCategoryComponent },
+      { path: 'add-categorie', component: CategorieFormComponent },
+      { path: 'order', component: OrderBackComponent },
+      { path: 'addCoupon', component: PostCouponComponent },
+      { path: 'coupon', component: CouponBackComponent },
+      { path: 'analyse', component: OrderAnalyticsComponent },
+      { path: 'listDonnation', component: DonationsListComponent },
+
+      // Users
+      { path: 'users', component: UsersComponent },
+      { path: 'user-stats', component: UserStatsComponent },
+
+      // Cours
+      { path: 'courses', component: CoursesBackComponent },
+
+      // Wildcard
+      { path: '**', redirectTo: 'Admin' }
+    ]
+  }
 ];
-
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

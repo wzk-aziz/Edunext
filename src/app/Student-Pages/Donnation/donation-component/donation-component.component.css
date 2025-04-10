@@ -1,0 +1,12 @@
+.donation-container {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+}
+button {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}

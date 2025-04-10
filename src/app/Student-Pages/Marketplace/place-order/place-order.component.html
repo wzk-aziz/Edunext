@@ -1,0 +1,39 @@
+<div class="container">
+    <mat-card>
+      <mat-card-title>Place Order</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="orderForm" (ngSubmit)="placeOrder()">
+          <!-- Address Input -->
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="address" placeholder="Address" required>
+            <mat-error *ngIf="orderForm.get('address')?.invalid && orderForm.get('address')?.touched">
+              This Input is required !!
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Description Input -->
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="orderDescription" placeholder="Description">
+          </mat-form-field>
+  
+          <!-- Stripe Card Element -->
+          <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+          <mat-error *ngIf="cardError" class="stripe-error">
+            {{ cardError }}
+          </mat-error>
+  
+          <!-- Button Row -->
+          <div class="button-row">
+            <!-- Order Button -->
+            <button mat-raised-button color="primary" type="submit" [disabled]="orderForm.invalid" class="order-button">Order</button>
+            <!-- Close Button -->
+            <button mat-stroked-button color="warn" class="close-button" (click)="closeForm()">Close</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
