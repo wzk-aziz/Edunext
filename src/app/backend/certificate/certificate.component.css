@@ -69,6 +69,30 @@
   button:focus {
     outline: none;
   }
+  body.dark-mode {
+    background-color: rgb(151, 144, 144);
+    color: white; /* Ajustez également la couleur du texte */
+  }
+ 
+  /* Réduction de la sidebar */
+.sidebar-mini {
+  width: 80px; /* Largeur réduite */
+}
+
+/* Cacher le texte du logo lorsque la sidebar est réduite */
+.sidebar-mini .logo-text {
+  display: none;
+}
+
+/* Rotation de la flèche lorsque la sidebar est réduite */
+.sidebar-mini .icofont-bubble-right {
+  transform: rotate(180deg);
+}
+
+
+  
+
+  
  
 
   

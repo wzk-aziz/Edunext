@@ -180,6 +180,18 @@ getCertificateData(id: number): any {
     issueDate: new Date().toLocaleDateString(),  // Date d'émission
   };
 }
+isDarkMode = false;
+
+toggleDarkMode() {
+  this.isDarkMode = !this.isDarkMode;
+}
+// Variable pour savoir si la sidebar est réduite
+isSidebarMini = false;
+
+// Fonction pour basculer l'état de la sidebar
+toggleSidebar() {
+  this.isSidebarMini = !this.isSidebarMini;
+}
 
   
  // addCertificate(): void {

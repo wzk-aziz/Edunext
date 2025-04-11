@@ -28,12 +28,12 @@
     </script>
     
 </head>
-<body>
+<body [class.dark-mode]="isDarkMode">
 
-<div id="elearn-layout" class="theme-purple">
+<div id="elearn-layout" class="theme-purple" >
 
     <!-- sidebar -->
-    <div class="sidebar px-4 py-4 py-md-4  me-0">
+    <div class="sidebar px-4 py-4 py-md-4  me-0" [ngClass]="{'sidebar-mini': isSidebarMini}">
         <div class="d-flex flex-column h-100">
             <a routerLink="/backoffice/Ad" class="mb-0 brand-icon">
                 <span class="logo-icon">
@@ -108,21 +108,17 @@
             <ul class="list-unstyled mb-0">
                 <li class="d-flex align-items-center justify-content-center">
                     <div class="form-check form-switch theme-switch">
-                        <input class="form-check-input" type="checkbox" id="theme-switch">
+                        <input class="form-check-input" type="checkbox" id="theme-switch" (change)="toggleDarkMode()">
                         <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
                     </div>
                 </li>
-                <li class="d-flex align-items-center justify-content-center">
-                    <div class="form-check form-switch theme-rtl">
-                        <input class="form-check-input" type="checkbox" id="theme-rtl">
-                        <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-                    </div>
-                </li>
+               
             </ul>
-            <!-- Menu: menu collepce btn -->
-            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
-                <span class="ms-2"><i class="icofont-bubble-right"></i></span>
-            </button>
+            <button type="button" class="btn btn-link sidebar-mini-btn text-light" (click)="toggleSidebar()">
+                <span class="ms-2">
+                    <i class="icofont-bubble-right" [ngClass]="{'rotate': isSidebarMini}"></i>
+                </span>
+              </button>
         </div>
     </div>
 
@@ -135,6 +131,56 @@
         <div *ngIf="topExams.length > 0">
           <div class="menu">
            
+            
+                  
+            <div class="row">
+                <div class="col-md-4 col-sm-12 mb-3">
+                  <!-- Carte colorée pour les soumissions -->
+                  <div class="card bg-success text-white">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-clipboard-list fa-2x mr-3"></i> <!-- Icône pour les soumissions -->
+                        <h5 class="card-title">Total Exam Submissions</h5>
+                      </div>
+                      <p class="card-text">{{ totalSubmissions }}</p>
+                    </div>
+                  </div>
+                </div>
+              
+              
+              
+                <div class="col-md-4 col-sm-12 mb-3">
+                  <!-- Carte colorée pour les examens -->
+                  <div class="card bg-warning text-dark">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-file-alt fa-2x mr-3"></i> <!-- Icône pour les examens -->
+                        <h5 class="card-title">Total Exams</h5>
+                      </div>
+                      <p class="card-text">{{ total }}</p> <!-- Affichage du nombre total des examens -->
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-12 mb-3">
+                    <!-- Carte colorée pour la comparaison des scores -->
+                    <div class="card bg-info text-white">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <i class="fas fa-trophy fa-2x mr-3"></i> <!-- Icône pour la comparaison des scores -->
+                          <h5 class="card-title">Score Comparison</h5>
+                        </div>
+                        <p>Best Score: {{ scoreComparison.bestScore }}</p>
+                        <p>Worst Score: {{ scoreComparison.worstScore }}</p>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              
+    
+
            <!-- <div >
               <ul>
                 <li *ngFor="let exam of topExams">
@@ -144,7 +190,7 @@
             </div>-->
           </div>
           <!-- Canvas element for the chart -->
-          <canvas id="topExamsChart" width="600" height="400"></canvas>
+          <canvas id="topExamsChart" width="440" height="200"></canvas>
         </div>
       </div>         
     </div>

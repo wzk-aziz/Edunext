@@ -128,9 +128,6 @@ if (localStorage.getItem('examCheatingDetected')) {
     this.isSubmitDisabled = true;
   }
 
-  
-
- 
   submitExam() {
     const examSubmission = {
       user: { id: this.userId },
@@ -175,15 +172,6 @@ if (localStorage.getItem('examCheatingDetected')) {
     });
   }
   
-  
-   // Prevent page refresh or tab close
-   @HostListener('window:beforeunload', ['$event'])
-   unloadNotification($event: any): void {
-     if (localStorage.getItem('examSubmitted') !== 'true') {
-      this.isRefreshBlocked = true; // Flag to show custom warning message
-       $event.returnValue = true;  // Show confirmation dialog
-     }
-   }
 
   // Bloquer copier-coller
   @HostListener('document:copy', ['$event'])

@@ -68,8 +68,30 @@
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+                <li class="collapsed">
+                    <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+                        <i class="icofont-certificate"></i>
+                        <span>Certificates</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+                        <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of Certificates</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a></li>
+                    </ul>
+                </li>
+            
+                <li class="collapsed">
+                  <a class="m-link" (click)="toggleExamMenu()" role="button">
+                      <i class="icofont-paper text-light"></i>
+                      <span>Exam</span>
+                      <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isExamMenuOpen}"></span>
+                  </a>
+                  <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+                      <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+                      <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+                  </ul>
+              </li>
+                
                 <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>

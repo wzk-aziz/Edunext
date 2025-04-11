@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./courses-back.component.css']
 })
 export class CoursesBackComponent {
+  isCertificatMenuOpen = false;
+  isExamMenuOpen=false;
 
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+
+toggleCertificatMenu() {
+  this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
 }

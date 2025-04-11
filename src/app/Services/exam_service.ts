@@ -72,5 +72,15 @@ import { Question } from '../models/Question';
   getResultsByUserId(userId: number): Observable<any[]> {
     return this.http.get<any[]>(`http://localhost:8050/api/exams/user/${userId}`);
   }
+
+  getTotalExamSubmissions(): Observable<any> {
+    return this.http.get<number>('http://localhost:8050/api/exams/total-submissions'); 
+  }
+  gettotalExams(): Observable<any> {
+    return this.http.get<number>('http://localhost:8050/api/exams/total'); 
+  }
+  getcomparaissonscore(): Observable<any> {
+    return this.http.get<number>('http://localhost:8050/api/exams/score-comparison'); 
+  }
   
 }

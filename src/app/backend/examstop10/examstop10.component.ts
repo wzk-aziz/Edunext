@@ -14,7 +14,9 @@ export class Examstop10Component implements OnInit {
   isCertificatMenuOpen = false;
   isTeacherMenuOpen = false;
   isExamMenuOpen=false;
-
+  totalSubmissions = 0; // Variable pour stocker le nombre total de soumissions
+  total = 0; // Variable pour stocker le nombre total d'examens
+  scoreComparison: any = {};
  
   constructor(private examService: ExamService) { }
   ngOnInit(): void {
@@ -38,8 +40,36 @@ export class Examstop10Component implements OnInit {
     }, error => {
       console.error('Erreur lors de la récupération des données:', error);
     });
+    
+   // Appeler le service pour obtenir le nombre total de soumissions
+   this.examService.getTotalExamSubmissions().subscribe(
+    (data: number) => {
+      this.totalSubmissions = data;
+      console.log('Nombre total de soumissions:', this.totalSubmissions);
+    },
+    error => {
+      console.error('Erreur lors de la récupération du nombre de soumissions:', error);
+    }
+  );
+
+ // Appeler le service pour obtenir le nombre total de soumissions
+ this.examService.gettotalExams().subscribe(
+  (data: number) => {
+    this.total = data;
+    console.log('Nombre total :', this.total);
+  },
+  error => {
+    console.error('Erreur lors de la récupération du nombre exam:', error);
   }
-  
+);
+
+this.loadScoreComparison();
+  }
+  loadScoreComparison(): void {
+    this.examService.getcomparaissonscore().subscribe(data => {
+      this.scoreComparison = data;
+    });
+  }
   
 
     toggleCertificatMenu() {
@@ -92,4 +122,17 @@ export class Examstop10Component implements OnInit {
       }
     });
   }
+
+  isDarkMode = false;
+
+toggleDarkMode() {
+  this.isDarkMode = !this.isDarkMode;
+}
+// Variable pour savoir si la sidebar est réduite
+isSidebarMini = false;
+
+// Fonction pour basculer l'état de la sidebar
+toggleSidebar() {
+  this.isSidebarMini = !this.isSidebarMini;
+}
 }

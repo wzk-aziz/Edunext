@@ -27,12 +27,12 @@
     </script>
     
 </head>
-<body>
+<body [class.dark-mode]="isDarkMode">
 
 <div id="elearn-layout" class="theme-purple">
 
     <!-- sidebar -->
-    <div class="sidebar px-4 py-4 py-md-4  me-0">
+    <div class="sidebar px-4 py-4 py-md-4  me-0" [ngClass]="{'sidebar-mini': isSidebarMini}">
         <div class="d-flex flex-column h-100">
             <a routerLink="/backoffice/Ad" class="mb-0 brand-icon">
                 <span class="logo-icon">
@@ -104,22 +104,21 @@
             <!-- Theme: Switch Theme -->
             <ul class="list-unstyled mb-0">
                 <li class="d-flex align-items-center justify-content-center">
-                    <div class="form-check form-switch theme-switch">
-                        <input class="form-check-input" type="checkbox" id="theme-switch">
-                        <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-                    </div>
-                </li>
-                <li class="d-flex align-items-center justify-content-center">
-                    <div class="form-check form-switch theme-rtl">
-                        <input class="form-check-input" type="checkbox" id="theme-rtl">
-                        <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-                    </div>
+                  <div class="form-check form-switch theme-switch">
+                    <input class="form-check-input" type="checkbox" id="theme-switch" (change)="toggleDarkMode()">
+                    <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                </div>
+                
                 </li>
             </ul>
-            <!-- Menu: menu collepce btn -->
-            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
-                <span class="ms-2"><i class="icofont-bubble-right"></i></span>
-            </button>
+           
+            <!-- Menu: bouton de réduction de la sidebar -->
+<button type="button" class="btn btn-link sidebar-mini-btn text-light" (click)="toggleSidebar()">
+  <span class="ms-2">
+      <i class="icofont-bubble-right" [ngClass]="{'rotate': isSidebarMini}"></i>
+  </span>
+</button>
+
         </div>
     </div>
 

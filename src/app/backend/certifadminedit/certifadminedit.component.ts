@@ -96,4 +96,20 @@ toggleTeacherMenu() {
     cancel(): void {
       this.router.navigate(['/backoffice/Certificat']);
     }
+
+
+
+    isDarkMode = false;
+
+    toggleDarkMode() {
+      this.isDarkMode = !this.isDarkMode;
+    }
+    // Variable pour savoir si la sidebar est réduite
+    isSidebarMini = false;
+    
+    // Fonction pour basculer l'état de la sidebar
+    toggleSidebar() {
+      this.isSidebarMini = !this.isSidebarMini;
+    }
+
   }

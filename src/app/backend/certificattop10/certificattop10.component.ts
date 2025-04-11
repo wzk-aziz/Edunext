@@ -39,6 +39,7 @@ toggleTeacherMenu() {
     this.topCertificates = data;
     this.createChart();
   });
+  
 }
 // Fonction pour créer un graphique avec chart.js
 createChart(): void {
@@ -68,5 +69,18 @@ createChart(): void {
       }
     }
   });
+}
+
+isDarkMode = false;
+
+toggleDarkMode() {
+  this.isDarkMode = !this.isDarkMode;
+}
+// Variable pour savoir si la sidebar est réduite
+isSidebarMini = false;
+
+// Fonction pour basculer l'état de la sidebar
+toggleSidebar() {
+  this.isSidebarMini = !this.isSidebarMini;
 }
 }

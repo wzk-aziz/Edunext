@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./video-class.component.css']
 })
 export class VideoClassComponent {
+  isCertificatMenuOpen = false;
+  isExamMenuOpen=false;
 
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+
+toggleCertificatMenu() {
+  this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
 }

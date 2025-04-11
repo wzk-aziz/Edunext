@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./event.component.css']
 })
 export class EventComponent {
+  isCertificatMenuOpen = false;
+  isExamMenuOpen=false;
 
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+
+toggleCertificatMenu() {
+  this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
 }
