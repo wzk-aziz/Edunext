@@ -186,6 +186,8 @@ public class AuthenticationService {
             throw new BadCredentialsException("Code is not correct");
         }
         var jwtToken = jwtService.generateToken(user);
+        saveUserToken(user, jwtToken);
+
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .mfaEnabled(user.isMfaEnabled())

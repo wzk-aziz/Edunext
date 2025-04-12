@@ -1,6 +1,9 @@
 package com.security.EduNext.Auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.security.EduNext.Entities.BadWordException;
+import com.security.EduNext.Entities.ValidationResult;
+import com.security.EduNext.Services.RegistrationService;
 import org.springframework.core.io.Resource;
 import com.security.EduNext.Entities.User;
 import com.security.EduNext.Repositories.UserRepository;
@@ -20,9 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
@@ -34,10 +35,8 @@ public class AuthenticationController {
     private final UserRepository userRepository;
 
 
-
     @Value("${file.upload-dir}")
     private String uploadDir;
-
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @RequestPart("request") String requestJson,
@@ -46,11 +45,37 @@ public class AuthenticationController {
             ObjectMapper mapper = new ObjectMapper();
             RegisterRequest request = mapper.readValue(requestJson, RegisterRequest.class);
 
+            // Log the received values for debugging purposes
+            System.out.println("Firstname: " + request.getFirstname());
+            System.out.println("Lastname: " + request.getLastname());
+            System.out.println("Email: " + request.getEmail());
+            System.out.println("Password: " + request.getPassword());
+
+            // Check for bad words in firstname
+            if (containsBadWords(request.getFirstname())) {
+                return ResponseEntity.badRequest().body("The firstname contains forbidden words.");
+            }
+
+            // Check for bad words in lastname
+            if (containsBadWords(request.getLastname())) {
+                return ResponseEntity.badRequest().body("The lastname contains forbidden words.");
+            }
+
+            // Check for bad words in email
+            if (containsBadWords(request.getEmail())) {
+                return ResponseEntity.badRequest().body("The email contains forbidden words.");
+            }
+
+            // Check for bad words in password
+            if (containsBadWords(request.getPassword())) {
+                return ResponseEntity.badRequest().body("The password contains forbidden words.");
+            }
+
+            // If a file is provided, upload it
             if (file != null && !file.isEmpty()) {
                 String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
                 request.setImage(fileName);
 
-                // uploadDir doit être défini dans vos propriétés (@Value("${upload.dir}"))
                 File uploadDirectory = new File(uploadDir);
                 if (!uploadDirectory.exists()) {
                     uploadDirectory.mkdirs();
@@ -60,6 +85,7 @@ public class AuthenticationController {
                 file.transferTo(dest);
             }
 
+            // Register the user
             var response = service.register(request);
 
             if (request.isMfaEnabled()) {
@@ -67,6 +93,8 @@ public class AuthenticationController {
             }
 
             return ResponseEntity.accepted().build();
+        } catch (BadWordException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use!!");
         } catch (Exception e) {
@@ -74,6 +102,11 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred!");
         }
     }
+
+
+
+
+
 
     @GetMapping("/files/{fileName}")
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
@@ -170,6 +203,26 @@ public class AuthenticationController {
                 .mfaEnabled(false)
                 .build());
     }
+
+    private boolean containsBadWords(String input) {
+        if (input == null) {
+            return false;
+        }
+
+        // Nettoyer la chaîne d'entrée (enlever les espaces et passer en minuscule)
+        String cleanedInput = input.trim().toLowerCase();
+
+        List<String> badWords = Arrays.asList("badwordd", "tit", "no");  // Liste des mots interdits
+
+        for (String badWord : badWords) {
+            if (cleanedInput.contains(badWord.toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 
 

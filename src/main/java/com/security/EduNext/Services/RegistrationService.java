@@ -9,35 +9,8 @@ import java.util.List;
 @Service
 public class RegistrationService {
 
-    private static final List<String> BAD_WORDS = Arrays.asList("badword", "tit", "no");
+    private static final List<String> BAD_WORDS = Arrays.asList("badwordd", "tit", "no");
 
-    public ValidationResult validateRegistration(String firstname, String lastname, String email, String password) {
-        // Vérifier le prénom
-        String badWord = containsBadWords(firstname);
-        if (badWord != null) {
-            return new ValidationResult(false, "firstname", badWord);
-        }
-
-        // Vérifier le nom
-        badWord = containsBadWords(lastname);
-        if (badWord != null) {
-            return new ValidationResult(false, "lastname", badWord);
-        }
-
-        // Vérifier l'email
-        badWord = containsBadWords(email);
-        if (badWord != null) {
-            return new ValidationResult(false, "email", badWord);
-        }
-
-        // Vérifier le mot de passe
-        badWord = containsBadWords(password);
-        if (badWord != null) {
-            return new ValidationResult(false, "password", badWord);
-        }
-
-        return new ValidationResult(true);
-    }
 
     private String containsBadWords(String input) {
         if (input == null) {

@@ -1,33 +1,30 @@
 package com.security.EduNext.Entities;
 
+
 public class ValidationResult {
-    private boolean valid;
-    private String invalidField;
+    private boolean isValid;
+    private String field;
     private String badWord;
 
-    // Constructeurs, getters et setters
-    public ValidationResult(boolean valid) {
-        this.valid = valid;
+    public ValidationResult(boolean isValid) {
+        this.isValid = isValid;
     }
 
-    public ValidationResult(boolean valid, String invalidField, String badWord) {
-        this.valid = valid;
-        this.invalidField = invalidField;
+    public ValidationResult(boolean isValid, String field, String badWord) {
+        this.isValid = isValid;
+        this.field = field;
         this.badWord = badWord;
     }
 
-    // Getters et setters
     public boolean isValid() {
-        return valid;
+        return isValid;
     }
 
-    public String getInvalidField() {
-        return invalidField;
+    public String getField() {
+        return field;
     }
 
     public String getBadWord() {
         return badWord;
     }
 }
-
-
