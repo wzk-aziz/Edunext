@@ -42,6 +42,8 @@
           <span class="btn-space"></span>
           <a [routerLink]="['/update-user', user.id]" class="btn btn-warning action-btn">Mettre à jour</a>
         </td>
+        <button (click)="logout()" class="btn btn-danger">Déconnexion</button>
+
       </tr>
     </tbody>
   </table>

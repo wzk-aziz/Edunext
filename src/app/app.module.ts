@@ -64,6 +64,13 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
 import { ProfileComponent } from './Shared/profile/profile.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { VerificationComponent } from './Shared/verification/verification.component';
+import { CodeInputModule } from 'angular-code-input';
+import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -117,6 +124,8 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
     UsersComponent,
     UserStatsComponent,
     ProfileComponent,
+    VerificationComponent,
+    PasswordResetComponent,
    
   ],
   imports: [
@@ -135,7 +144,9 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
     MatlabModule,
     SocialLoginModule,
     RecaptchaModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CodeInputModule
+
 
   ],
   providers: [

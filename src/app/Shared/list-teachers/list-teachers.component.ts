@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user/user.service';
 import { User } from '../models/user';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-list-teachers',
@@ -23,7 +26,39 @@ export class ListTeachersComponent implements OnInit {
     totalPagesLearners: number = 1;
   
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
+
+
+  logout(): void {
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      this.clearStorageAndRedirect();
+      return;
+    }
+  
+    this.http.post('http://localhost:8050/api/v1/auth/logout', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: () => {
+        this.clearStorageAndRedirect();
+      },
+      error: (err) => {
+        console.error('Erreur de déconnexion', err);
+        this.clearStorageAndRedirect(); // Même en cas d'erreur
+      }
+    });
+  }
+  
+  private clearStorageAndRedirect(): void {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+  }
+  
 
   ngOnInit(): void {
     this.getAllUsers(); // Load all users

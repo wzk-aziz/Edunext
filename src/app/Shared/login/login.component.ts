@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationRequest } from '../models/authentication-request';
 import { AuthenticationResponse } from '../models/authentication-response';
-import { VerificationRequest } from '../models/verification-request';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
@@ -14,7 +13,6 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 })
 export class LoginComponent implements OnInit {
   authRequest: AuthenticationRequest = {};
-  otpCode: string = '';
   authResponse: AuthenticationResponse = {};
   errorMessage: string | null = null;
   user: SocialUser | null = null;
@@ -74,7 +72,7 @@ export class LoginComponent implements OnInit {
           const userRole = response.role?.toUpperCase();
           switch(userRole) {
             case 'ADMIN':
-              this.router.navigate(['backoffice']);
+              this.router.navigate(['Teachers']);
               break;
             case 'TEACHER':
               this.router.navigate(['listTeachers']);
@@ -94,47 +92,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  verifyCode() {
-    if (!this.otpCode) {
-      this.errorMessage = 'Please enter verification code';
-      return;
-    }
-
-    const verifyRequest: VerificationRequest = {
-      email: this.authRequest.email,
-      code: this.otpCode
-    };
-
-    this.authService.verifyCode(verifyRequest).subscribe({
-      next: (response) => {
-        if (response.accessToken) {
-          localStorage.setItem('token', response.accessToken);
-          
-          const userRole = response.role?.toUpperCase();
-          switch(userRole) {
-            case 'ADMIN':
-              this.router.navigate(['backoffice']);
-              break;
-            case 'TEACHER':
-              this.router.navigate(['listTeachers']);
-              break;
-            case 'LEARNER':
-              this.router.navigate(['studenthome']);
-              break;
-            default:
-              this.router.navigate(['main']);
-          }
-        } else {
-          this.errorMessage = 'Invalid verification response';
-        }
-      },
-      error: (err) => {
-        console.error('Verification error:', err);
-        this.errorMessage = err.error?.message || 'Verification failed';
-      }
-    });
-  }
-
   authenticate() {
     if (!this.authRequest.email || !this.authRequest.password) {
       this.errorMessage = 'Please enter both email and password';
@@ -146,14 +103,19 @@ export class LoginComponent implements OnInit {
         this.authResponse = response;
         console.log("User role:", this.authResponse.role);
 
-        if (!this.authResponse.mfaEnabled) {
+        if (response.mfaEnabled) {
+          // Redirect to verification component with email
+          this.router.navigate(['verify'], { 
+            queryParams: { email: this.authRequest.email }
+          });
+        } else {
           if (response.accessToken) {
             localStorage.setItem('token', response.accessToken);
             
             const userRole = this.authResponse.role?.toUpperCase();
             switch(userRole) {
               case 'ADMIN':
-                this.router.navigate(['backoffice']);
+                this.router.navigate(['backoffice/teachers']);
                 break;
               case 'TEACHER':
                 this.router.navigate(['listTeachers']);

@@ -14,6 +14,8 @@ export interface BanStats {
 export class UserService {
 
   private apiUrl = 'http://localhost:8050/api/v1/users';
+  private passUrl = 'http://localhost:8050/api/auth';
+
   
 
 
@@ -73,6 +75,36 @@ export class UserService {
   // Mettre à jour le profil de l'utilisateur
   updateUserProfile(userId: number, request: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/update/${userId}`, request);
+  }
+
+
+
+  getMyProfile(): Observable<User> {
+    console.log("adem");
+    const token = localStorage.getItem('token'); // Retrieve token from local storage
+
+    // Add the token to the headers if it exists
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<User>(`${this.apiUrl}/profile/me`, { headers });
+  }
+
+
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.passUrl}/forgot-password`, { email });
+  }
+
+  // Validate the reset token
+  validateResetToken(token: string): Observable<any> {
+    return this.http.get(`${this.passUrl}/validate-reset-token`, {
+      params: { token },
+    });
+  }
+
+  // Reset password with token and new password
+  resetPassword(token: string, password: string): Observable<any> {
+    return this.http.post(`${this.passUrl}/reset-password`, { token, password });
   }
 
   

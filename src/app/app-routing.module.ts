@@ -28,6 +28,8 @@ import { TeachersComponent } from './backend/teachers/teachers.component';
 import { UsersComponent } from './backend/users/users.component'
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
 import { ProfileComponent } from './Shared/profile/profile.component';
+import { VerificationComponent } from './Shared/verification/verification.component';
+import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -42,12 +44,16 @@ const routes: Routes = [
   { path: 'studenthome', component: LandigpageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'verify', component: VerificationComponent },
   { path: 'update', component: UpdateUserComponent },
   { path: 'update/:id', component: UpdateUserComponent },
   { path: 'pricing', component: PacksComponent },
   { path: 'studentdashboard', component: MaindashboardComponent },
   { path: 'myplan', component: SubscriptionComponent },
   { path: 'editprofile', component: EditprofileComponent },
+  { path : 'ResetPassword', component: PasswordResetComponent},
+
+
 
   // Courses
   { path: 'coursesdashboard', component: MycoursesComponent },
