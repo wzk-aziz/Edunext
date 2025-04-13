@@ -1,0 +1,32 @@
+{
+    "WELCOME_TITLE": "Bienvenue dans notre plus grande communauté",
+    "WELCOME_SUBTITLE": "Apprenons quelque chose de nouveau aujourd'hui !",
+    "WELCOME_STUDENTS": "Plus de 4k étudiants nous ont rejoints, à votre tour.",
+    "SIGNIN_TITLE": "Connectez-vous à votre compte !",
+    "SIGNIN_SUBTITLE": "Ravi de vous revoir ! Veuillez vous connecter avec votre compte.",
+    "LABEL_EMAIL": "E-mail",
+    "PLACEHOLDER_EMAIL": "Entrez votre e-mail",
+    "LABEL_PASSWORD": "Mot de passe",
+    "PLACEHOLDER_PASSWORD": "Entrez votre mot de passe",
+    "BUTTON_LOGIN": "Connexion",
+    "OR": "OU",
+    "NO_ACCOUNT": "Vous n'avez pas de compte ?",
+    "SIGN_UP": "Inscrivez-vous ici",
+    "FORGOT_PASSWORD": "Mot de passe oublié ?",
+    "RESET_HERE": "Réinitialisez-le ici",
+
+    
+    "WELCOME": "Bienvenue dans notre plus grande communauté",
+    "LEARN": "Apprenons quelque chose de nouveau aujourd'hui !",
+    "SIGNUP": "Inscrivez-vous pour votre compte !",
+    "FIRST_NAME": "Prénom *",
+    "LAST_NAME": "Nom de famille *",
+    "EMAIL": "Email *",
+    "PASSWORD": "Mot de passe *",
+    "ROLE": "Rôle *",
+    "SELECT_ROLE": "Sélectionnez un rôle",
+    "LEARNER": "Apprenant",
+    "TEACHER": "Enseignant",
+    "ENABLE_2FA": "Activer l'authentification à deux facteurs"
+  }
+  

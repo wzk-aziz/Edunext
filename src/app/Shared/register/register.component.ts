@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-register',
@@ -25,8 +27,17 @@ export class RegisterComponent {
 
   constructor(
     private authService: AuthenticationService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translate: TranslateService
+
+  ) {
+    this.translate.setDefaultLang('en');
+  }
+
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+  }
 
   onResolved(captchaResponse: string | null) {
     console.log(`Réponse du captcha: ${captchaResponse}`);

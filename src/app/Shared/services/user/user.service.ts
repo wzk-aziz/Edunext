@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
+import { UpdateUserRequest } from '../../models/UpdateUserRequest';
 
 export interface BanStats {
   banned: number;
@@ -44,9 +45,7 @@ export class UserService {
     return `http://localhost:8050/api/v1/auth/files/${fileName}`;
   }
 
-  updateUser(id: number, userData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/update/${id}`, userData);
-  }
+
 
   banUser(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/ban/${id}`, {});
@@ -72,9 +71,11 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/profile/${userId}`);
   }
 
-  // Mettre à jour le profil de l'utilisateur
-  updateUserProfile(userId: number, request: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${userId}`, request);
+  updateUser(id: number, request: UpdateUserRequest): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.put(`${this.apiUrl}/update/${id}`, request, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
 
 
@@ -106,9 +107,6 @@ export class UserService {
   resetPassword(token: string, password: string): Observable<any> {
     return this.http.post(`${this.passUrl}/reset-password`, { token, password });
   }
-
-  
-
 
   
 

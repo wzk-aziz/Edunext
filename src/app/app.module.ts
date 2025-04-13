@@ -67,8 +67,12 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { VerificationComponent } from './Shared/verification/verification.component';
 import { CodeInputModule } from 'angular-code-input';
 import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 
 
@@ -145,7 +149,15 @@ import { PasswordResetComponent } from './Shared/password-reset/password-reset.c
     SocialLoginModule,
     RecaptchaModule,
     ReactiveFormsModule,
-    CodeInputModule
+    CodeInputModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    
 
 
   ],

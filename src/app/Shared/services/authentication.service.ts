@@ -62,10 +62,6 @@ export class AuthenticationService {
 
  
   
-  
-  
-  
-
 
 
   login(authRequest: AuthenticationRequest) {
@@ -109,7 +105,11 @@ export class AuthenticationService {
   }
 
 
-
+  getCurrentUser(): any {
+    const userJson = localStorage.getItem('user');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+  
 
 
   

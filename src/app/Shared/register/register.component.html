@@ -1,4 +1,27 @@
 <body>
+    <!-- Language Switch Icons -->
+    <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: white; padding: 5px; border-radius: 5px;">
+
+      <!-- English Language Icon -->
+      <img src="https://unpkg.com/language-icons/icons/en.svg"
+           (click)="switchLang('en')"
+           alt="English"
+           style="cursor: pointer; width: 24px; height: 24px; margin-right: 8px;" />
+  
+      <!-- French Language Icon -->
+      <img src="https://unpkg.com/language-icons/icons/fr.svg"
+           (click)="switchLang('fr')"
+           alt="Français"
+           style="cursor: pointer; width: 24px; height: 24px; margin-right: 8px;" />
+      
+      <!-- Arabic Language Icon -->
+      <img src="https://unpkg.com/language-icons/icons/ar.svg"
+           (click)="switchLang('ar')"
+           alt="العربية"
+           style="cursor: pointer; width: 24px; height: 24px; margin-right: 8px;" />
+      
+      
+    </div>
   <main>
     <section class="p-0 d-flex align-items-center position-relative overflow-hidden">
       <div class="container-fluid">
@@ -6,8 +29,8 @@
           <!-- Left Section with light blue background -->
           <div class="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-primary bg-opacity-10 vh-lg-100" >
             <div class="p-3 p-lg-5 text-center">
-              <h2 class="fw-bold">Welcome to our largest community</h2>
-              <p class="mb-0 h6 fw-light">Let's learn something new today!</p>
+              <h2 class="fw-bold">{{ 'WELCOME' | translate }}</h2>
+              <p class="mb-0 h6 fw-light">{{ 'LEARN' | translate }}</p>
               <img src="/assets/images/element/02.svg" class="mt-5" alt="Illustration" style="max-width: 100%; height: auto;" />
               <div class="d-sm-flex mt-5 align-items-center justify-content-center">
                 <ul class="avatar-group mb-2 mb-sm-0">
@@ -16,7 +39,8 @@
                   <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar" /></li>
                   <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="avatar" /></li>
                 </ul>
-                <p class="mb-0 h6 fw-light ms-0 ms-sm-3">4k+ Students joined us, now it's your turn.</p>
+                <p class="mb-0 h6 fw-light ms-0 ms-sm-3">{{ 'WELCOME_STUDENTS' | translate }}</p>
+                
               </div>
             </div>
           </div>
@@ -25,8 +49,8 @@
           <div class="col-12 col-lg-6 m-auto p-4 rounded" style="background-color: #E6E6FA;">
             <div class="row my-3">
               <div class="col-sm-10 col-xl-8 m-auto">
-                <h2 class="mb-2">Sign up for your account!</h2>
-                <p class="lead mb-2">Nice to see you! Please sign up with your account.</p>
+                <h2 class="mb-2">{{ 'SIGNUP' | translate }}</h2>
+                <p class="lead mb-2">{{ 'SIGNIN_SUBTITLE' | translate }}</p>
 
                 <div class="container" *ngIf="!authResponse.mfaEnabled" style="background-color: rgb(255, 255, 255);">
                   <div class="success-message-panel" *ngIf="message">
@@ -36,7 +60,7 @@
                   <form (ngSubmit)="registerUser()" #registerForm="ngForm" (submit)="registerForm.form.markAllAsTouched()">
                     <!-- First Name -->
                     <div class="form-group position-relative">
-                      <label for="firstname">First name *</label>
+                      <label for="firstname">{{ 'FIRST_NAME' | translate }}</label>
                       <input id="firstname" 
                              name="firstname" 
                              required 
@@ -60,7 +84,7 @@
 
                     <!-- Last Name -->
                     <div class="form-group position-relative">
-                      <label for="lastname">Last name *</label>
+                      <label for="lastname">{{ 'LAST_NAME' | translate }}</label>
                       <input id="lastname" 
                              name="lastname" 
                              required 
@@ -84,7 +108,7 @@
 
                     <!-- Email -->
                     <div class="form-group position-relative">
-                      <label for="email">Email *</label>
+                      <label for="email">{{ 'EMAIL' | translate }}</label>
                       <input id="email" 
                              name="email" 
                              required 
@@ -106,7 +130,7 @@
 
                     <!-- Password -->
                     <div class="form-group position-relative">
-                      <label for="password">Password *</label>
+                      <label for="password">{{ 'PASSWORD' | translate }}</label>
                       <input id="password" 
                              name="password" 
                              required 
@@ -148,10 +172,10 @@
                               [(ngModel)]="registerRequest.role" 
                               #role="ngModel"
                               [ngClass]="{'is-valid': role.valid && role.touched, 'is-invalid': role.invalid && role.touched}">
-                        <option value="" disabled selected>Select a role</option>
-                        <option value="LEARNER">Learner</option>
-                        <option value="TEACHER">Teacher</option>
-                      </select>
+                              <option value="" disabled selected>{{ 'SELECT_ROLE' | translate }}</option>
+                              <option value="LEARNER">{{ 'LEARNER' | translate }}</option>
+                              <option value="TEACHER">{{ 'TEACHER' | translate }}</option>
+                            </select>
                       <div *ngIf="role.invalid && role.touched" class="alert alert-danger">
                         Please select a role.
                       </div>
@@ -163,8 +187,8 @@
                              name="mfaEnabled" 
                              type="checkbox" 
                              [(ngModel)]="registerRequest.mfaEnabled">
-                      <label for="mfaEnabled">Enable 2FA (Two-Factor Authentication)</label>
-                    </div>
+                             <label for="mfaEnabled">{{ 'ENABLE_2FA' | translate }}</label>
+                            </div>
 
                     <!-- reCAPTCHA -->
                     <div class="form-group">
@@ -174,9 +198,9 @@
                     <div *ngIf="errorMessage" class="alert alert-danger">
                       {{ errorMessage }}
                     </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-primary">{{ 'BUTTON_LOGIN' | translate }}</button>
 
-                    <a routerLink="/login" >Login</a>
+                    <a routerLink="/login">{{ 'SIGNIN_TITLE' | translate }}</a>
                   </form>
                 </div> 
 

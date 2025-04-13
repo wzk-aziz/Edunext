@@ -1,4 +1,28 @@
 <body>
+  <!-- Language Switch Icons -->
+  <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: white; padding: 5px; border-radius: 5px;">
+
+    <!-- English Language Icon -->
+    <img src="https://unpkg.com/language-icons/icons/en.svg"
+         (click)="switchLang('en')"
+         alt="English"
+         style="cursor: pointer; width: 24px; height: 24px; margin-right: 8px;" />
+
+    <!-- French Language Icon -->
+    <img src="https://unpkg.com/language-icons/icons/fr.svg"
+         (click)="switchLang('fr')"
+         alt="Français"
+         style="cursor: pointer; width: 24px; height: 24px; margin-right: 8px;" />
+    
+    <!-- Arabic Language Icon -->
+    <img src="https://unpkg.com/language-icons/icons/ar.svg"
+         (click)="switchLang('ar')"
+         alt="العربية"
+         style="cursor: pointer; width: 24px; height: 24px; margin-right: 8px;" />
+    
+    
+  </div>
+
   <main>
     <section class="p-0 d-flex align-items-center position-relative overflow-hidden">
       <div class="container-fluid">
@@ -6,8 +30,8 @@
           <!-- Left Section -->
           <div class="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-primary bg-opacity-10 vh-lg-100">
             <div class="p-3 p-lg-5 text-center">
-              <h2 class="fw-bold">Welcome to our largest community</h2>
-              <p class="mb-0 h6 fw-light">Let's learn something new today!</p>
+              <h2 class="fw-bold">{{ 'WELCOME_TITLE' | translate }}</h2>
+              <p class="mb-0 h6 fw-light">{{ 'WELCOME_SUBTITLE' | translate }}</p>
               <img src="/assets/images/element/02.svg" class="mt-5" alt="Illustration" style="max-width: 100%; height: auto;" />
               <div class="d-sm-flex mt-5 align-items-center justify-content-center">
                 <ul class="avatar-group mb-2 mb-sm-0">
@@ -16,7 +40,7 @@
                   <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar" /></li>
                   <li class="avatar avatar-sm"><img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="avatar" /></li>
                 </ul>
-                <p class="mb-0 h6 fw-light ms-0 ms-sm-3">4k+ Students joined us, now it's your turn.</p>
+                <p class="mb-0 h6 fw-light ms-0 ms-sm-3">{{ 'WELCOME_STUDENTS' | translate }}</p>
               </div>
             </div>
           </div>
@@ -26,44 +50,45 @@
             <div class="row my-5">
               <div class="col-sm-10 col-xl-8 m-auto">
                 <img src="/assets/images/element/03.svg" class="h-40px mb-2" alt="Illustration" />
-                <h2>Sign in to your account!</h2>
-                <p class="lead mb-4">Nice to see you! Please log in with your account.</p>
+                <h2>{{ 'SIGNIN_TITLE' | translate }}</h2>
+                <p class="lead mb-4">{{ 'SIGNIN_SUBTITLE' | translate }}</p>
 
                 <!-- Angular Form -->
                 <div class="container">
                   <form (ngSubmit)="authenticate()" #loginForm="ngForm">
                     <!-- Email -->
                     <div class="form-group position-relative">
-                      <label for="username">Email</label>
-                      <input id="username" 
-                             name="username" 
-                             required 
-                             type="email" 
-                             [(ngModel)]="authRequest.email" 
-                             placeholder="Enter your email">
+                      <label for="username">{{ 'LABEL_EMAIL' | translate }}</label>
+                      <input id="username"
+                             name="username"
+                             required
+                             type="email"
+                             [(ngModel)]="authRequest.email"
+                             [placeholder]="'PLACEHOLDER_EMAIL' | translate">
                     </div>
 
                     <!-- Password -->
                     <div class="form-group position-relative">
-                      <label for="password">Password</label>
-                      <input id="password" 
-                             name="password" 
-                             required 
-                             type="password" 
-                             [(ngModel)]="authRequest.password" 
-                             placeholder="Enter your password">
+                      <label for="password">{{ 'LABEL_PASSWORD' | translate }}</label>
+                      <input id="password"
+                             name="password"
+                             required
+                             type="password"
+                             [(ngModel)]="authRequest.password"
+                             [placeholder]="'PLACEHOLDER_PASSWORD' | translate">
                     </div>
 
                     <!-- Login Button -->
-                    <button type="submit" 
-                            [disabled]="loginForm.invalid" 
+                    <button type="submit"
+                            [disabled]="loginForm.invalid"
                             [ngClass]="{'disabled-button': loginForm.invalid, 'enabled-button': !loginForm.invalid}">
-                      Login
+                      {{ 'BUTTON_LOGIN' | translate }}
                     </button>
+
                     <div class="separator my-4">
-                      <span class="or-text">OR</span>
+                      <span class="or-text">{{ 'OR' | translate }}</span>
                     </div>
-              
+
                     <!-- Google Sign In Button -->
                     <div class="social-login text-center">
                       <asl-google-signin-button
@@ -73,10 +98,15 @@
                         (click)="signInWithGoogle()">
                       </asl-google-signin-button>
                     </div>
-              
+
                     <!-- Signup Link -->
                     <div class="mt-4 text-center">
-                      <span>Don't have an account? <a routerLink="/register">Sign up here</a></span>
+                      <span>{{ 'NO_ACCOUNT' | translate }} <a routerLink="/register">{{ 'SIGN_UP' | translate }}</a></span>
+                    </div>
+
+                    <!-- Forgot Password Link -->
+                    <div class="mt-2 text-center">
+                      <span>{{ 'FORGOT_PASSWORD' | translate }} <a routerLink="/ResetPassword">{{ 'RESET_HERE' | translate }}</a></span>
                     </div>
 
                     <!-- Error Message if Form is Invalid -->
@@ -88,6 +118,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
