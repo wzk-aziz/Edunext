@@ -414,10 +414,37 @@
                     </div>
                   </div>
                 </div>
+
+                
               </div>
             </div>
             
           </div>
+          <!-- Banned Users Charts -->
+<h3>Banned Users</h3>
+<div class="stats-card mb-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Total Banned Users: {{ totalBanned }}</h4>
+          <p>{{ percentageBanned }}% of all users are banned</p>
+          <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+            <canvas id="bannedPercentageChart"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h4>Distribution by Role</h4>
+          <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+            <canvas id="bannedUsersChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Keep your existing banned users table below this -->
 
         <!-- Body: Header -->
         

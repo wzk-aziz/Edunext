@@ -24,6 +24,13 @@ export class UserService {
   getAllUsers(): Observable<any[]> {  // Return an array explicitly
     return this.http.get<any[]>(`${this.apiUrl}/all`);
   }
+
+
+  getBannedUsersByRole(role: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/bannedByRole`, {
+      params: { role: role.toUpperCase() }
+    });
+  }
   
 
   getUsersByRole(role: string): Observable<User[]> {
@@ -78,8 +85,6 @@ export class UserService {
     });
   }
 
-
-
   getMyProfile(): Observable<User> {
     console.log("adem");
     const token = localStorage.getItem('token'); // Retrieve token from local storage
@@ -107,6 +112,17 @@ export class UserService {
   resetPassword(token: string, password: string): Observable<any> {
     return this.http.post(`${this.passUrl}/reset-password`, { token, password });
   }
+
+
+  // bannedUsers
+  getAllBannedUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/banned`, {
+    });
+  }
+
+
+  
+  
 
   
 

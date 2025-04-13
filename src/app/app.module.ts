@@ -69,6 +69,8 @@ import { CodeInputModule } from 'angular-code-input';
 import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { OAuthModule } from 'angular-oauth2-oidc';
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -157,6 +159,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    OAuthModule.forRoot({
+      resourceServer: {
+        allowedUrls: ['http://localhost:8050/api'],
+        sendAccessToken: true
+      }
+    })
     
 
 

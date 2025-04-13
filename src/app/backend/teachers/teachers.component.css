@@ -237,3 +237,14 @@ p {
 .stat-card.learners p {
   color: rgba(255, 255, 255, 0.9);
 }
+
+
+.charts-container {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.chart-card {
+  min-height: 420px;
+}
+
