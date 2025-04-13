@@ -17,6 +17,7 @@ toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 }
 
+
 isCertificatMenuOpen = false;
 isExamMenuOpen=false;
 
@@ -27,4 +28,5 @@ toggleExamMenu() {
 toggleCertificatMenu() {
 this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
 }

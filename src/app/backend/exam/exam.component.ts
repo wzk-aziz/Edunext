@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+
 import { Router } from '@angular/router';
 import { exam } from 'src/app/models/exam';
 import { ExamService } from 'src/app/Services/exam_service';
+
 
 @Component({
   selector: 'app-exam',
@@ -9,6 +11,7 @@ import { ExamService } from 'src/app/Services/exam_service';
   styleUrls: ['./exam.component.css']
 })
 export class ExamComponent {
+
   exams: exam[] = [];
 
   searchTerm: string = '';  // Variable pour le terme de recherche
@@ -119,5 +122,6 @@ isSidebarMini = false;
 // Fonction pour basculer l'état de la sidebar
 toggleSidebar() {
   this.isSidebarMini = !this.isSidebarMini;
+
 }
 }

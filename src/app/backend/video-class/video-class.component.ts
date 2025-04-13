@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./video-class.component.css']
 })
 export class VideoClassComponent {
+
   isCertificatMenuOpen = false;
   isExamMenuOpen=false;
 
@@ -16,4 +17,5 @@ export class VideoClassComponent {
 toggleCertificatMenu() {
   this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
 }

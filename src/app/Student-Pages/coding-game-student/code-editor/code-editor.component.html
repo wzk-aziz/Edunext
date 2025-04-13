@@ -1,0 +1,56 @@
+<div class="judge0-container">
+  <div class="judge0-toolbar">
+    <select class="judge0-language-select" [(ngModel)]="selectedLanguage">
+      <option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</option>
+    </select>
+    <div class="header-right d-flex align-items-center gap-2">
+      <button 
+        class="run-btn" 
+        (click)="runCode()"
+        [disabled]="isRunning">
+        <i class="play-icon">▶</i> 
+        {{ isRunning ? 'Running...' : 'Run Code' }}
+      </button>
+
+      <button 
+        class="github-btn" 
+        (click)="pushToGit()"
+        [disabled]="!isCodeExecutedSuccessfully || isPushing">
+        <i class="github-icon">⇧</i> 
+        {{ isPushing ? 'Pushing...' : 'Push to GitHub' }}
+      </button>
+
+      <input 
+      type="text"
+      [(ngModel)]="gitLink"
+      placeholder="Enter your GitHub link"
+      style="width: 300px; margin: 0 10px;" />
+    <button 
+      class="submit-btn" 
+      (click)="submitCode()" 
+      [disabled]="!isCodeExecutedSuccessfully"
+      style="background-color: #0aa879; color: white; border: none; padding: 8px 12px; border-radius: 4px;">
+      Submit
+    </button>
+    
+    </div>
+  </div>
+
+  <div class="judge0-main">
+    <div class="judge0-editor-panel">
+      <textarea class="judge0-editor" [(ngModel)]="sourceCode"></textarea>
+    </div>
+
+    <div class="judge0-io-panel">
+      <div class="judge0-io-box">
+        <label class="judge0-label">Input</label>
+        <textarea class="judge0-io-input" [(ngModel)]="inputData"></textarea>
+      </div>
+
+      <div class="judge0-io-box">
+        <label class="judge0-label">Output</label>
+        <pre class="judge0-io-output">{{ output }}</pre>
+      </div>
+    </div>
+  </div>
+</div>

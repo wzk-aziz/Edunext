@@ -16,4 +16,6 @@ export class MarketplaceComponent {
 toggleCertificatMenu() {
   this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
+
 }

@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+
+import { Component, Inject, ViewChild } from '@angular/core';
 import { Certificate } from 'src/app/models/Certificate';
 import { CertificateService } from 'src/app/Services/Certificate_Service';
 
@@ -7,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Router } from '@angular/router';
 import { jsPDF } from 'jspdf';
+
 @Component({
   selector: 'app-certificate',
   templateUrl: './certificate.component.html',
@@ -14,6 +16,7 @@ import { jsPDF } from 'jspdf';
 })
 export class CertificateComponent {
   isMenuOpen = false;
+
 searchTerm: string="";
 isCertificatMenuOpen = false;
 isExamMenuOpen=false;
@@ -26,6 +29,7 @@ toggleCertificatMenu() {
   this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
 
+
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
@@ -34,6 +38,7 @@ toggleCertificatMenu() {
 toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 }
+
 
   certificates: Certificate[] = [];
   filteredCertificates: Certificate[] = [];
@@ -47,7 +52,10 @@ toggleTeacherMenu() {
 
  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private certificateService: CertificateService,private router :Router) { }
+ constructor(
+  private certificateService: CertificateService, 
+  @Inject(Router) private router: Router
+) { } // Ensure proper spacing and syntax
  
  
   ngOnInit(): void {
@@ -204,6 +212,9 @@ toggleSidebar() {
  // editCertificate(certificate: Certificate): void {
     // Open a modal or navigate to an edit page with the selected certificate data
   //}
+
+
+
 
 
 

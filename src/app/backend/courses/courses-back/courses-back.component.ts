@@ -16,4 +16,6 @@ export class CoursesBackComponent {
 toggleCertificatMenu() {
   this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
+
 }

@@ -9,8 +9,8 @@ import { Certificate } from '../models/Certificate';
 })
 export class CertificateService {
 
-  private apiUrl = 'http://localhost:8050/api/certificates';
-  private apiUrl1 = 'http://localhost:8050/api/certificates';
+  private apiUrl = 'http://localhost:9090/api/certificates';
+  private apiUrl1 = 'http://localhost:9090/api/certificates';
 
 
   constructor(private http: HttpClient) {}

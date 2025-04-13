@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./coding-game.component.css']
 })
 export class CodingGameComponent {
+
   isCertificatMenuOpen = false;
   isExamMenuOpen=false;
 
@@ -16,4 +17,5 @@ export class CodingGameComponent {
 toggleCertificatMenu() {
   this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
 }

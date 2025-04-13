@@ -1,0 +1,21 @@
+<div class="container">
+    <h2>Language List</h2>
+    <button class="add-btn" (click)="goToAdd()">➕ Add New Language</button>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Actions</th>
+        </tr>
+        <tr *ngFor="let language of languages">
+            <td>{{ language.name }}</td>
+            <td>{{ language.version }}</td>
+            <td>
+                <button class="view-btn" (click)="goToView(language.id!)">👁 View</button>
+                <button class="edit-btn" (click)="goToUpdate(language.id!)">✏ Edit</button>
+                <button class="delete-btn" (click)="deleteLanguage(language.id)">🗑 Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>

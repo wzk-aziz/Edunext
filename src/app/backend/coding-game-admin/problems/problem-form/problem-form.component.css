@@ -1,0 +1,159 @@
+/* ✅ Conteneur du formulaire */
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+/* ✅ Titre du formulaire */
+h2 {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* ✅ Message de succès amélioré */
+.success-message {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.success-message i {
+    font-size: 18px;
+}
+
+/* ✅ Animation d'apparition */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ✅ Style des labels */
+label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+    color: #555;
+    text-align: left;
+}
+
+/* ✅ Champs de formulaire */
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ✅ Boutons alignés */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* ✅ Style des boutons */
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ✅ Bouton "Save Problem" */
+.save-btn {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+}
+
+.save-btn:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+}
+
+/* ✅ Bouton "Back to List" */
+.back-btn {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #5a6268, #495057);
+}
+
+/* ✅ Responsive */
+@media (max-width: 600px) {
+    .btn-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* ✅ Désactiver le bouton Save Problem */
+button:disabled {
+    background: #cccccc !important;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.action-buttons {
+    display: flex;
+    justify-content: center; /* Centre les boutons horizontalement */
+    gap: 10px; /* Espacement entre les boutons */
+    align-items: center; /* Alignement vertical */
+  }
+  
+  .action-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 80px; /* S'assure que tous les boutons ont la même largeur */
+    text-align: center;
+  }
+  
+  .view-btn {
+    background-color: green;
+    color: white;
+    border: none;
+  }
+  
+  .edit-btn {
+    background-color: orange;
+    color: white;
+    border: none;
+  }
+  
+  .delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+  }
+  

@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./donation.component.css']
 })
 export class DonationComponent {
+
   isCertificatMenuOpen = false;
   isExamMenuOpen=false;
 
@@ -16,4 +17,5 @@ export class DonationComponent {
 toggleCertificatMenu() {
   this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
 }

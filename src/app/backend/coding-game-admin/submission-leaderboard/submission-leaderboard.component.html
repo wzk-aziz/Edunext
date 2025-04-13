@@ -1,0 +1,206 @@
+<!-- submission-leaderboard.component.html -->
+<div class="dashboard-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p>Loading dashboard data...</p>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle"></i> {{ errorMessage }}
+    <button class="close-btn" (click)="errorMessage = ''">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading && !errorMessage" class="dashboard-content">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="header-title">
+        <h1>Submission Statistics Dashboard</h1>
+        <p class="subtitle">Analytical insights on student coding performance</p>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn refresh-btn" (click)="refreshData()" title="Refresh data">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <button class="action-btn export-btn" (click)="exportToCSV()" title="Export to CSV">
+          <i class="fas fa-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI Cards Section -->
+    <div class="kpi-section">
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <i class="fas fa-file-code"></i>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ totalSubmissions }}</h3>
+          <p class="kpi-label">Total Submissions</p>
+        </div>
+      </div>
+      
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ averageScore }}</h3>
+          <p class="kpi-label">Average Score</p>
+        </div>
+      </div>
+      
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ acceptanceRate }}%</h3>
+          <p class="kpi-label">Acceptance Rate</p>
+        </div>
+      </div>
+      
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ bestScores.length || 0 }}</h3>
+          <p class="kpi-label">Active Students</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+      <!-- Chart 1: Submissions per Problem -->
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2>Submissions per Problem</h2>
+          <div class="chart-actions">
+            <span class="chart-info" title="Shows the number of submissions for each problem">
+              <i class="fas fa-info-circle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas #submissionsPerProblemChart></canvas>
+        </div>
+      </div>
+      
+      <!-- Chart 2: Best Scores per Student -->
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2>Best Scores per Student</h2>
+          <div class="chart-actions">
+            <span class="chart-info" title="Displays the best score achieved by each student">
+              <i class="fas fa-info-circle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas #scoresPerStudentChart></canvas>
+        </div>
+      </div>
+      
+      <!-- Chart 3: Submission Status Distribution -->
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2>Submission Status Distribution</h2>
+          <div class="chart-actions">
+            <span class="chart-info" title="Shows the distribution of submission statuses">
+              <i class="fas fa-info-circle"></i>
+            </span>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas #submissionStatusChart></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Top Submissions Table -->
+    <div class="data-section">
+      <div class="section-header">
+        <h2>Top Submissions</h2>
+        <div class="search-filter">
+          <div class="search-input">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search submissions..." />
+          </div>
+        </div>
+      </div>
+      
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="rank-col">#</th>
+              <th>Student</th>
+              <th>Problem</th>
+              <th class="score-col">Score</th>
+              <th>Status</th>
+              <th class="actions-col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let submission of sortedSubmissions.slice(0, 10); let i = index">
+              <td class="rank-col">{{ i + 1 }}</td>
+              <td>
+                <div class="student-info">
+                  <div class="avatar">{{ submission.student?.id || '-' }}</div>
+                  <span>{{ submission.student?.name || 'Student ' + submission.student?.id || 'Unknown' }}</span>
+                </div>
+              </td>
+              <td>Problem {{ submission.problem?.id || '-' }}</td>
+              <td class="score-col">
+                <div class="score-display">
+                  <div class="score-bar" [style.width.%]="submission.score || 0" 
+                       [ngClass]="{'high': submission.score >= 80, 'medium': submission.score >= 50 && submission.score < 80, 'low': submission.score < 50}" *ngIf="submission.score !== undefined">
+                  </div>
+                  <span>{{ submission.score || 0 }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="status-badge" [ngClass]="submission.status?.toLowerCase() || 'unknown'">
+                  <span class="status-icon"></span>
+                  {{ submission.status || 'UNKNOWN' }}
+                </div>
+              </td>
+              <td class="actions-col">
+                <a *ngIf="submission.gitLink" class="btn btn-sm btn-primary" 
+                   [href]="submission.gitLink" target="_blank" 
+                   title="View code on GitHub">
+                  <i class="fas fa-code"></i> View
+                </a>
+                <span *ngIf="!submission.gitLink">-</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="table-footer">
+        <div class="showing-info">
+          Showing 1-{{ (10 < sortedSubmissions.length ? 10 : sortedSubmissions.length) }} of {{ sortedSubmissions.length }} submissions
+        </div>
+        <div class="pagination">
+          <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+          <button class="pagination-btn active">1</button>
+          <button class="pagination-btn">2</button>
+          <button class="pagination-btn">3</button>
+          <span class="pagination-ellipsis">...</span>
+          <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+    
+   
+  </div>
+</div>

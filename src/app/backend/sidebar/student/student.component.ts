@@ -16,6 +16,7 @@ export class StudentComponent {
 toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 }
+
 isCertificatMenuOpen = false;
 isExamMenuOpen=false;
 
@@ -28,3 +29,4 @@ this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
 
 }
+

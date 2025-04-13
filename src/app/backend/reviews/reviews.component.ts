@@ -26,4 +26,5 @@ toggleExamMenu() {
 toggleCertificatMenu() {
 this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
 }

@@ -8,10 +8,16 @@ import { Component } from '@angular/core';
 export class SidebarComponent {
   isMenuOpen = false;
 
+  isTeacherMenuOpen = false;
+  isCodingGameMenuOpen = false;
+  isForumMenuOpen = false;
+  showSubMenu = false;
+
+
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
-  isTeacherMenuOpen = false;
+
 
 toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
@@ -28,4 +34,20 @@ toggleExamMenu() {
 toggleCertificatMenu() {
 this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
+
+
+  
+
+  toggleCodingGameMenu() {
+    this.isCodingGameMenuOpen = !this.isCodingGameMenuOpen;
+  }
+
+  toggleForumMenu(): void {
+    this.isForumMenuOpen = !this.isForumMenuOpen;
+  }
+
+  toggleSubMenu() {
+    this.showSubMenu = !this.showSubMenu;
+  }
+
 }

@@ -1,0 +1,53 @@
+<div class="container">
+  <h2>{{ isEditMode ? 'Edit Compiler' : 'Add New Compiler' }}</h2>
+
+  <form (ngSubmit)="saveCompiler()">
+    <div class="mb-3">
+      <label>Command:</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="compiler.command" 
+        name="command" 
+        required 
+      />
+    </div>
+
+    <div class="mb-3">
+      <label>Language ID:</label>
+      <input 
+        type="number" 
+        class="form-control" 
+        [(ngModel)]="compiler.language.id" 
+        name="languageId" 
+        required 
+      />
+    </div>
+
+    <!-- Si tu veux aussi saisir le nom et la version : -->
+    <div class="mb-3">
+      <label>Language Name:</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="compiler.language.name" 
+        name="languageName"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label>Language Version:</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="compiler.language.version" 
+        name="languageVersion"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary" (click)="backToList()">Cancel</button>
+  </form>
+</div>
+
+  

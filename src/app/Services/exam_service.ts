@@ -10,7 +10,7 @@ import { Question } from '../models/Question';
   })
   export class ExamService {
 
-    private apiUrl = 'http://localhost:8050/api/exams';
+    private apiUrl = 'http://localhost:9090/api/exams';
 
     constructor(private http: HttpClient) {}
 
@@ -37,7 +37,7 @@ import { Question } from '../models/Question';
     return this.http.post<exam>(`${this.apiUrl}/${idExam}/questions`, question);
   }
   updateQuestion(id: number, question: Question): Observable<Question> {
-    const url = `http://localhost:8050/api/exams/questions/${id}`;
+    const url = `http://localhost:9090/api/exams/questions/${id}`;
     console.log("URL de la requête PUT:", url);
     return this.http.put<Question>(url, question);
   }
@@ -54,11 +54,11 @@ import { Question } from '../models/Question';
     return this.http.post<number>(`${this.apiUrl}/submit`, submission);
   }
   getCertificates(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8050/certificates/${userId}`);
+    return this.http.get<any[]>(`http://localhost:9090/certificates/${userId}`);
   }
   
   searchExams(title: string): Observable<exam[]> {
-    return this.http.get<exam[]>(`http://localhost:8050/api/exams/search?title=${title}`);
+    return this.http.get<exam[]>(`http://localhost:9090/api/exams/search?title=${title}`);
   }
   getTop10Certificates(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/top10`);
@@ -70,17 +70,17 @@ import { Question } from '../models/Question';
   }
   
   getResultsByUserId(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8050/api/exams/user/${userId}`);
+    return this.http.get<any[]>(`http://localhost:9090/api/exams/user/${userId}/list`);
   }
 
   getTotalExamSubmissions(): Observable<any> {
-    return this.http.get<number>('http://localhost:8050/api/exams/total-submissions'); 
+    return this.http.get<number>('http://localhost:9090/api/exams/total-submissions'); 
   }
   gettotalExams(): Observable<any> {
-    return this.http.get<number>('http://localhost:8050/api/exams/total'); 
+    return this.http.get<number>('http://localhost:9090/api/exams/total'); 
   }
   getcomparaissonscore(): Observable<any> {
-    return this.http.get<number>('http://localhost:8050/api/exams/score-comparison'); 
+    return this.http.get<number>('http://localhost:9090/api/exams/score-comparison'); 
   }
   
 }

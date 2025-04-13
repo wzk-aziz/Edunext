@@ -27,12 +27,17 @@
     </script>
     
 </head>
+
 <body [class.dark-mode]="isDarkMode">
+
+
 
 <div id="elearn-layout" class="theme-purple">
 
     <!-- sidebar -->
+
     <div class="sidebar px-4 py-4 py-md-4  me-0" [ngClass]="{'sidebar-mini': isSidebarMini}">
+
         <div class="d-flex flex-column h-100">
             <a routerLink="/backoffice/Ad" class="mb-0 brand-icon">
                 <span class="logo-icon">
@@ -73,6 +78,7 @@
                 </li>
                 <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
+
                 <li class="collapsed">
                   <a class="m-link" (click)="toggleCertificatMenu()" role="button">
                       <i class="icofont-certificate"></i>
@@ -95,6 +101,7 @@
                     <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
                 </ul>
             </li>
+
                 <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
                 <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
@@ -104,6 +111,7 @@
             <!-- Theme: Switch Theme -->
             <ul class="list-unstyled mb-0">
                 <li class="d-flex align-items-center justify-content-center">
+
                   <div class="form-check form-switch theme-switch">
                     <input class="form-check-input" type="checkbox" id="theme-switch" (change)="toggleDarkMode()">
                     <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
@@ -118,6 +126,7 @@
       <i class="icofont-bubble-right" [ngClass]="{'rotate': isSidebarMini}"></i>
   </span>
 </button>
+
 
         </div>
     </div>
@@ -217,7 +226,7 @@
 
 
 
-         
+ 
     </div>
 
 </div>
@@ -233,5 +242,7 @@
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/classes.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:56:07 GMT -->
-</html>
+
+
+
 
