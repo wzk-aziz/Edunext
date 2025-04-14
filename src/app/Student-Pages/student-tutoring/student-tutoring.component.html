@@ -90,6 +90,8 @@
     <button class="reset-btn" (click)="searchTerm = ''; selectedSubject = 'all'; filterPrograms()">Reset Filters</button>
   </div>
 
+  
+
     <!-- Add this right after the filters section and before the programs grid -->
   
   <div class="sorting-section" *ngIf="!loading && !error && filteredPrograms.length > 0">
@@ -212,3 +214,5 @@
     </div>
   </div>
 </div>
+
+<app-student-chatbot></app-student-chatbot>

@@ -1,0 +1,745 @@
+/* Base container */
+.student-chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-family: 'Roboto', sans-serif;
+}
+
+.student-chatbot-container.expanded {
+  width: 320px; /* Smaller width */
+  height: 480px; /* Smaller height */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Toggle button - updated to match classroom colors */
+.chat-toggle {
+  position: relative;
+  bottom: 0;
+  right: 0;
+  width: auto;
+  min-width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Updated to match classroom */
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(74, 90, 248, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0 15px;
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.toggle-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-toggle i {
+  font-size: 22px;
+  margin-right: 8px;
+  z-index: 2;
+}
+
+.toggle-label {
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+
+.chat-toggle:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(74, 90, 248, 0.6);
+  background: linear-gradient(135deg, #5a6bff, #2b3172);
+}
+
+.expanded .chat-toggle {
+  display: none;
+}
+
+/* Chat window with enhanced styling */
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Header - updated to match classroom */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Updated to match classroom */
+  color: white;
+}
+
+.chat-avatar {
+  width: 38px;
+  height: 38px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  position: relative;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.glow-animation {
+  animation: glow 3s infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4), 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0), 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.chat-avatar i {
+  font-size: 20px;
+  color: #4a5af8; /* Updated to match classroom */
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.chat-title {
+  flex: 1;
+}
+
+.chat-title h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.chat-title .status {
+  font-size: 12px;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #4CAF50; /* Live status color from classroom */
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.chat-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-button:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+/* Message container */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f8faff; /* Matching classroom's light background */
+  scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #bbc0fa;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #8a91e8;
+}
+
+/* Enhanced message bubbles with tails */
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.user {
+  align-self: flex-end;
+}
+
+.message.user .message-content {
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Updated to match classroom */
+  color: white;
+  border-radius: 18px 4px 18px 18px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(74, 90, 248, 0.25);
+}
+
+.message.user.with-tail .message-content::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: -5px;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(135deg, transparent 50%, #2b3172 50%); /* Updated to match */
+  transform: rotate(45deg);
+  border-radius: 0 0 5px 0;
+}
+
+.message.user .message-time {
+  align-self: flex-end;
+}
+
+.message.assistant {
+  align-self: flex-start;
+}
+
+.message.assistant .message-content {
+  background: linear-gradient(135deg, #ffffff, #f0f2ff); /* Lighter matching gradient */
+  color: #333;
+  border-radius: 4px 18px 18px 18px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(74, 90, 248, 0.1);
+}
+
+.message.assistant.with-tail .message-content::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -5px;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(225deg, transparent 50%, #ffffff 50%);
+  transform: rotate(45deg);
+  border-radius: 0 0 0 5px;
+}
+
+.message.assistant .message-time {
+  align-self: flex-start;
+}
+
+.message-content {
+  padding: 12px 15px;
+  word-break: break-word;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.message-content:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.message.user .message-content:hover {
+  box-shadow: 0 4px 12px rgba(74, 90, 248, 0.3);
+}
+
+.message-content p {
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.message-time {
+  font-size: 10px;
+  color: #999;
+  margin-top: 4px;
+  padding: 0 6px;
+}
+
+/* Enhanced quick suggestions */
+.quick-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.quick-suggestions button {
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  color: white;
+  display: flex;
+  align-items: center;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.quick-suggestions button i {
+  margin-right: 6px;
+  font-size: 11px;
+}
+
+.quick-suggestions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.1);
+}
+
+/* Enhanced context suggestions - updated to be more prominent */
+.context-suggestions {
+  margin-top: 12px;
+  background-color: #f0f2ff;
+  border-radius: 10px;
+  padding: 12px;
+  border-left: 3px solid #4a5af8; /* Updated to match classroom */
+  width: 100%;
+}
+
+.suggestions-header {
+  font-size: 12px;
+  color: #4a5af8; /* Updated to match classroom */
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.suggestions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestions-grid button {
+  background-color: white;
+  border: 1px solid #d8dcff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 12px;
+  text-align: left;
+  color: #2b3172;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.suggestions-grid button:before {
+  content: "•";
+  color: #4a5af8;
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.suggestions-grid button:hover {
+  background-color: #ebeeff;
+  border-color: #4a5af8;
+  box-shadow: 0 2px 5px rgba(74, 90, 248, 0.15);
+}
+
+/* Enhanced typing indicator */
+.typing-indicator {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #ffffff, #f0f2ff);
+  border-radius: 18px 18px 18px 0;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(74, 90, 248, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Updated to match classroom */
+  display: inline-block;
+  margin-right: 4px;
+  animation: wave 1.3s linear infinite;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.3s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes wave {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}
+
+/* Enhanced input area */
+.chat-input {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  background-color: #fff;
+  position: relative;
+}
+
+.chat-input::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: linear-gradient(to bottom, rgba(248, 250, 255, 0), rgba(248, 250, 255, 1));
+  pointer-events: none;
+}
+
+.chat-input input {
+  flex: 1;
+  border: 1px solid #d8dcff;
+  border-radius: 20px;
+  padding: 10px 15px;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  background-color: #f8faff;
+}
+
+.chat-input input:focus {
+  border-color: #4a5af8; /* Updated to match classroom */
+  box-shadow: 0 0 0 3px rgba(74, 90, 248, 0.15);
+  background-color: white;
+}
+
+.chat-input input::placeholder {
+  color: #aaa;
+  font-weight: 400;
+}
+
+.chat-input .send-button {
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Updated to match classroom */
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(74, 90, 248, 0.25);
+}
+
+.chat-input .send-button:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 5px 12px rgba(74, 90, 248, 0.35);
+}
+
+.chat-input .send-button:disabled {
+  background: linear-gradient(135deg, #d1d1d1, #bebebe);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.chat-input .send-button i {
+  font-size: 18px;
+}
+
+/* Enhanced message links */
+.message-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Updated to match classroom */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  box-shadow: 0 3px 8px rgba(74, 90, 248, 0.25);
+}
+
+/* Live button style from classroom */
+.link-button.live-action {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+}
+
+.link-button i {
+  margin-right: 6px;
+  font-size: 11px;
+}
+
+.link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(74, 90, 248, 0.4);
+}
+
+.link-button:active {
+  transform: translateY(0);
+}
+
+/* Enhanced HTML content styling */
+.message-content ul, .message-content ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.message-content li {
+  margin-bottom: 6px;
+  position: relative;
+  font-size: 13px;
+}
+
+.message-content ul li::before {
+  content: "•";
+  color: #4a5af8; /* Updated to match classroom */
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.message-content strong {
+  color: #2b3172; /* Updated to match classroom */
+  font-weight: 600;
+}
+
+/* Solution cards */
+.solution-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 12px;
+  margin-top: 8px;
+  border-left: 3px solid #4a5af8; /* Updated to match classroom */
+  transition: all 0.2s ease;
+}
+
+.solution-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.solution-card h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #2b3172; /* Updated to match classroom */
+  font-weight: 600;
+}
+
+.solution-card p {
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Mobile responsive enhancements */
+@media (max-width: 768px) {
+  .student-chatbot-container.expanded {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  
+  .chat-window {
+    border-radius: 0;
+  }
+  
+  .chat-toggle {
+    width: 50px;
+    height: 50px;
+    min-width: 0;
+    padding: 0;
+  }
+  
+  .toggle-label {
+    display: none;
+  }
+  
+  .chat-toggle i {
+    margin-right: 0;
+  }
+  
+  .link-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Add these styles to student-chatbot.component.css */
+.chat-toggle {
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Match blue from tutoring */
+  box-shadow: 0 4px 15px rgba(74, 90, 248, 0.4);
+}
+
+.chat-header {
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Match blue from tutoring */
+}
+
+.message.user .message-content {
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Match blue from tutoring */
+}
+
+.link-button {
+  background: linear-gradient(135deg, #4a5af8, #2b3172); /* Match blue from tutoring */
+}
+
+.link-button.live-action {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32); /* Keep green for live actions */
+}
+
+/* Ensure the spacing matches the clean design of the tutoring page */
+.chat-messages {
+  background-color: #f8faff;
+  padding: 15px;
+}
+
+.context-suggestions {
+  background-color: #f0f2ff;
+  border-left: 3px solid #4a5af8;
+}
+/* In student-chatbot.component.css */
+/* Enhanced welcome links styling */
+.welcome-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.welcome-links .link-button {
+  padding: 14px;
+  border-radius: 10px;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-links .link-button i {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.link-button.live-action {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+}
+
+.link-button.mentor-action {
+  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.25);
+}
+
+.welcome-links .link-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-links .link-button:active {
+  transform: translateY(-2px);
+}

@@ -84,6 +84,7 @@ import { TeacherDashboardComponent } from './Teacher-Pages/teacher-dashboard/tea
 import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-layout.component';
 import { TeacherSessionReviewComponent } from './Teacher-Pages/teacher-session-review/teacher-session-review.component';
 import { TeacherMentorshipComponent } from './Teacher-Pages/teachermentorship/teachermentorship.component';
+import { StudentChatbotComponent } from './Student-Pages/student-chatbot/student-chatbot.component';
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ import { TeacherMentorshipComponent } from './Teacher-Pages/teachermentorship/te
     TeacherLayoutComponent,
     TeacherSessionReviewComponent,
     TeacherMentorshipComponent,
+    StudentChatbotComponent,
 
   ],
   imports: [

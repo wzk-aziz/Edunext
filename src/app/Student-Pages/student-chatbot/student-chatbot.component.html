@@ -1,0 +1,88 @@
+<div class="student-chatbot-container" [class.expanded]="isChatExpanded">
+  <!-- Chat toggle button -->
+  <button class="chat-toggle" (click)="toggleChat()">
+    <div class="toggle-icon">
+      <i class="fas" [ngClass]="isChatExpanded ? 'fa-times' : 'fa-robot'"></i>
+      <div class="pulse-ring" *ngIf="!isChatExpanded"></div>
+    </div>
+    <span *ngIf="!isChatExpanded" class="toggle-label">NexGenius</span>
+  </button>
+  
+  <!-- Chat interface -->
+  <div class="chat-window" *ngIf="isChatExpanded">
+    <div class="chat-header">
+      <div class="chat-avatar glow-animation">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="chat-title">
+        <h3>NexGenius</h3>
+        <span class="status">
+          <span class="status-dot"></span>
+          Session & Tutoring Help
+        </span>
+      </div>
+      <div class="chat-actions">
+        <button class="action-button" (click)="clearChat()" title="Clear chat">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <button class="action-button" (click)="toggleChat()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    
+    <div class="chat-messages" #messagesContainer>
+      <!-- Chat history -->
+      <div *ngFor="let msg of messages; let i = index" 
+           class="message" 
+           [ngClass]="msg.role"
+           [class.with-tail]="shouldShowTail(msg, i)">
+        <div class="message-content">
+          <div *ngIf="msg.isHtml" [innerHTML]="msg.content"></div>
+          <p *ngIf="!msg.isHtml">{{msg.content}}</p>
+          
+          <!-- Navigation links (keep these) -->
+          <div *ngIf="msg.links && msg.links.length > 0" 
+               [ngClass]="{'message-links': true, 'welcome-links': messages.length === 1 && msg.role === 'assistant'}">
+            <button *ngFor="let link of msg.links" 
+                    class="link-button" 
+                    [class.live-action]="link.url.includes('virtual-classroom')"
+                    [class.mentor-action]="link.url.includes('tutoring')"
+                    (click)="navigateTo(link.url)">
+              <i class="fas {{link.icon}}"></i> {{link.text}}
+            </button>
+          </div>
+          
+          <!-- REMOVED: Quick suggestions section -->
+          
+          <!-- REMOVED: Related suggestions section -->
+          
+        </div>
+        <div class="message-time">
+          {{ msg.timestamp | date:'shortTime' }}
+        </div>
+      </div>
+      
+      <!-- Typing indicator -->
+      <div class="message assistant typing" *ngIf="isTyping">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Input area -->
+    <div class="chat-input">
+      <input type="text" 
+             placeholder="Ask about sessions or tutoring..." 
+             [(ngModel)]="currentMessage"
+             (keyup.enter)="sendMessage()"
+             [disabled]="isTyping">
+      <button class="send-button" (click)="sendMessage()" [disabled]="!currentMessage || isTyping">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
