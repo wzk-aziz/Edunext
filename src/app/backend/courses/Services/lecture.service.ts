@@ -8,7 +8,7 @@ import { Lecture } from 'src/app/model/Lecture.model';
   providedIn: 'root'
 })
 export class LectureService {
-  private baseUrl = 'http://localhost:8091/api/lectures';
+  private baseUrl = 'http://localhost:9090/api/lectures';
 
   constructor(private http: HttpClient) {}
 
@@ -36,6 +36,22 @@ export class LectureService {
   deleteLecture(lectureId: number): Observable<string> {
     return this.http.delete(`${this.baseUrl}/delete/${lectureId}`, { responseType: 'text' });
   }
+
+  // Save user progress (PDF or video)
+saveLectureProgress(lectureId: number, type: 'video' | 'pdf', progress: number) {
+  return this.http.post(`/api/progress/lecture/${lectureId}`, {
+    type,
+    progress
+  });
+}
+
+// Get user progress for all lectures
+getAllUserProgress() {
+  return this.http.get<{ lectureId: number; videoProgress: number; pdfProgress: number }[]>(
+    '/api/progress/all'
+  );
+}
+
 
 
   

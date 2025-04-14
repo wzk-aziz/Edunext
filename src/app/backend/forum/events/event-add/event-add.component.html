@@ -1,0 +1,152 @@
+<div class="form-container">
+    <div class="form-header">
+      <h1>Ajouter un nouvel événement</h1>
+      <div class="breadcrumb">
+        <a [routerLink]="['/backoffice/events']">Liste des événements</a>
+        <span class="separator">></span>
+        <span>Nouvel événement</span>
+      </div>
+    </div>
+  
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="event-form">
+      <div class="form-grid">
+        <!-- Title Field -->
+        <div class="form-field">
+          <label for="eventTitle">Titre de l'événement <span class="required">*</span></label>
+          <input 
+            id="eventTitle" 
+            type="text" 
+            formControlName="eventTitle" 
+            placeholder="Donnez un titre à votre événement"
+            [ngClass]="{'invalid': titleControl?.invalid && titleControl?.touched}"
+          >
+          <div class="validation-feedback" *ngIf="titleControl?.invalid && titleControl?.touched">
+            <span *ngIf="titleControl?.errors?.['required']">
+              <i class="fas fa-exclamation-circle"></i> Le titre est obligatoire
+            </span>
+            <span *ngIf="titleControl?.errors?.['minlength']">
+              <i class="fas fa-exclamation-circle"></i> Le titre doit contenir au moins 5 caractères
+            </span>
+            <span *ngIf="titleControl?.errors?.['maxlength']">
+              <i class="fas fa-exclamation-circle"></i> Le titre ne doit pas dépasser 100 caractères
+            </span>
+          </div>
+        </div>
+  
+        <!-- Location Field -->
+        <div class="form-field">
+          <label for="eventLocation">Lieu <span class="required">*</span></label>
+          <input 
+            id="eventLocation" 
+            type="text" 
+            formControlName="eventLocation" 
+            placeholder="Adresse ou nom du lieu"
+            [ngClass]="{'invalid': locationControl?.invalid && locationControl?.touched}"
+          >
+          <div class="validation-feedback" *ngIf="locationControl?.invalid && locationControl?.touched">
+            <span *ngIf="locationControl?.errors?.['required']">
+              <i class="fas fa-exclamation-circle"></i> Le lieu est obligatoire
+            </span>
+            <span *ngIf="locationControl?.errors?.['minlength']">
+              <i class="fas fa-exclamation-circle"></i> Le lieu doit contenir au moins 5 caractères
+            </span>
+          </div>
+        </div>
+  
+        <!-- Date Field -->
+        <div class="form-field">
+          <label for="eventDate">Date <span class="required">*</span></label>
+          <input 
+            id="eventDate" 
+            type="date" 
+            formControlName="eventDate" 
+            [min]="minDate"
+            [ngClass]="{'invalid': dateControl?.invalid && dateControl?.touched}"
+          >
+          <div class="validation-feedback" *ngIf="dateControl?.invalid && dateControl?.touched">
+            <span *ngIf="dateControl?.errors?.['required']">
+              <i class="fas fa-exclamation-circle"></i> La date est obligatoire
+            </span>
+          </div>
+        </div>
+  
+        <!-- Time Field -->
+        <div class="form-field">
+          <label for="eventTime">Heure <span class="required">*</span></label>
+          <input 
+            id="eventTime" 
+            type="time" 
+            formControlName="eventTime"
+            [ngClass]="{'invalid': timeControl?.invalid && timeControl?.touched}"
+          >
+          <div class="validation-feedback" *ngIf="timeControl?.invalid && timeControl?.touched">
+            <span *ngIf="timeControl?.errors?.['required']">
+              <i class="fas fa-exclamation-circle"></i> L'heure est obligatoire
+            </span>
+          </div>
+        </div>
+  
+        <!-- Max Participants Field -->
+        <div class="form-field">
+          <label for="maxParticipants">Nombre maximum de participants <span class="required">*</span></label>
+          <input 
+            id="maxParticipants" 
+            type="number" 
+            formControlName="maxParticipants" 
+            min="5" 
+            max="1000"
+            [ngClass]="{'invalid': maxParticipantsControl?.invalid && maxParticipantsControl?.touched}"
+          >
+          <div class="validation-feedback" *ngIf="maxParticipantsControl?.invalid && maxParticipantsControl?.touched">
+            <span *ngIf="maxParticipantsControl?.errors?.['required']">
+              <i class="fas fa-exclamation-circle"></i> Le nombre maximum de participants est obligatoire
+            </span>
+            <span *ngIf="maxParticipantsControl?.errors?.['min']">
+              <i class="fas fa-exclamation-circle"></i> Le minimum est de 5 participants
+            </span>
+            <span *ngIf="maxParticipantsControl?.errors?.['max']">
+              <i class="fas fa-exclamation-circle"></i> Le maximum est de 1000 participants
+            </span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Description Field -->
+      <div class="form-field full-width">
+        <label for="eventDescription">Description <span class="required">*</span></label>
+        <textarea 
+          id="eventDescription" 
+          formControlName="eventDescription" 
+          rows="6"
+          placeholder="Décrivez votre événement en détail..."
+          [ngClass]="{'invalid': descriptionControl?.invalid && descriptionControl?.touched}"
+        ></textarea>
+        <div class="char-count" [class.error]="descriptionControl?.value?.length < 20">
+          {{ descriptionControl?.value?.length || 0 }}/20 caractères minimum
+        </div>
+        <div class="validation-feedback" *ngIf="descriptionControl?.invalid && descriptionControl?.touched">
+          <span *ngIf="descriptionControl?.errors?.['required']">
+            <i class="fas fa-exclamation-circle"></i> La description est obligatoire
+          </span>
+          <span *ngIf="descriptionControl?.errors?.['minlength']">
+            <i class="fas fa-exclamation-circle"></i> La description doit contenir au moins 20 caractères
+          </span>
+        </div>
+      </div>
+  
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="onCancel()">
+          Annuler
+        </button>
+        <button 
+          type="submit" 
+          class="btn-primary" 
+          [disabled]="eventForm.invalid || isSubmitting">
+          <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          <span *ngIf="!isSubmitting">Créer l'événement</span>
+          <span *ngIf="isSubmitting">Création en cours...</span>
+        </button>
+      </div>
+    </form>
+  </div>

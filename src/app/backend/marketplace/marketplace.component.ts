@@ -6,5 +6,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./marketplace.component.css']
 })
 export class MarketplaceComponent {
+  isCertificatMenuOpen = false;
+  isExamMenuOpen=false;
+
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+
+toggleCertificatMenu() {
+  this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
+
 
 }

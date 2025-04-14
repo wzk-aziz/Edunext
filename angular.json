@@ -27,6 +27,7 @@
               "src/assetsback"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "src/assets/vendor/font-awesome/css/all.min.css",
               "src/assets/vendor/bootstrap-icons/bootstrap-icons.css",
@@ -100,6 +101,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -107,5 +109,11 @@
         }
       }
     }
+  },
+  "cli": {
+
+    "analytics": "e03a108c-befe-456e-a4fb-f95b3f753499"
+
+
   }
 }

@@ -1,0 +1,41 @@
+.detail-container {
+    width: 60%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .detail-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .detail-label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .detail-content {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .back-btn {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+  }
+  
+  .back-btn:hover {
+    background-color: #23272b;
+  }
+  

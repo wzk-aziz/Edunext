@@ -4,6 +4,7 @@ import { LectureService } from 'src/app/backend/courses/Services/lecture.service
 import { Category } from 'src/app/model/category.model';
 import { Course } from 'src/app/model/course.model';
 import { Lecture } from 'src/app/model/Lecture.model';
+import { UserCourseDashboardDto } from 'src/app/model/UserCourseDashboardDto.model';
 
 @Component({
   selector: 'app-mycourses',
@@ -14,76 +15,54 @@ export class MycoursesComponent implements OnInit {
   courseProgressList: Array<{
     id: number;
     name: string;
-    category?: Category;
-    level: string;
     thumbnail: string;
     progress: number;
     totalLectures: number;
     completedLectures: number;
   }> = [];
 
-  constructor(
-    private courseService: CourseService,
-    private lectureService: LectureService
-  ) {}
+  constructor(private courseService: CourseService) {}
 
   ngOnInit(): void {
-    this.loadCoursesWithProgress();
+    this.loadUserCourses();
   }
 
-  async loadCoursesWithProgress(): Promise<void> {
-    const courses: Course[] = (await this.courseService.getAllCourses().toPromise()) || [];
+  loadUserCourses(): void {
+    this.courseService.getUserCourses().subscribe((userCourses: UserCourseDashboardDto[]) => {
+      this.courseProgressList = userCourses.map(course => {
+        const completedLectures = course.lectures.filter(l =>
+          ((l.videoProgress ?? 0) + (l.pdfProgress ?? 0)) / (l.videoPath && l.pdfPath ? 2 : 1) >= 99
+        ).length;
 
-    for (const course of courses) {
-      const lectures: Lecture[] = (await this.lectureService.getLecturesByCourseId(course.id!).toPromise()) || [];
+        const totalLectures = course.lectures.length;
+        const totalProgress = course.lectures.reduce((sum, l) => {
+          if (l.videoPath && l.pdfPath) {
+            return sum + ((l.videoProgress ?? 0 + l.pdfProgress ?? 0) / 2);
+          } else if (l.videoPath) {
+            return sum + (l.videoProgress ?? 0);
+          } else if (l.pdfPath) {
+            return sum + (l.pdfProgress ?? 0);
+          } else {
+            return sum;
+          }
+        }, 0);
 
-      if (lectures.length === 0) continue;
+        const avgProgress = Math.floor(totalProgress / totalLectures);
+        const finalProgress = avgProgress >= 99 ? 100 : avgProgress;
 
-      let totalProgress = 0;
-      let completedLectures = 0;
-
-      for (const lecture of lectures) {
-        const videoKey = `lecture_video_progress_${lecture.id}`;
-        const pdfKey = `lecture_pdf_progress_${lecture.id}`;
-
-        const videoProgress = parseInt(localStorage.getItem(videoKey) || '0', 10);
-        const pdfProgress = parseInt(localStorage.getItem(pdfKey) || '0', 10);
-
-        let lectureProgress = 0;
-        if (lecture.videoPath && lecture.pdfPath) {
-          lectureProgress = Math.floor((videoProgress + pdfProgress) / 2);
-        } else if (lecture.videoPath) {
-          lectureProgress = videoProgress;
-        } else if (lecture.pdfPath) {
-          lectureProgress = pdfProgress;
-        }
-
-        totalProgress += lectureProgress;
-
-        if (lectureProgress >= 99) {
-          completedLectures++;
-        }
-      }
-
-      const avgProgress = Math.floor(totalProgress / lectures.length);
-      const finalProgress = avgProgress >= 99 ? 100 : avgProgress;
-
-      this.courseProgressList.push({
-        id: course.id!,
-        name: course.courseName,
-        level: course.courseLevel,
-        thumbnail: course.thumbnailData || '',
-        category: course.category,
-        progress: finalProgress,
-        totalLectures: lectures.length,
-        completedLectures: completedLectures
+        return {
+          id: course.courseId,
+          name: course.courseName,
+          thumbnail: course.thumbnail,
+          progress: finalProgress,
+          totalLectures,
+          completedLectures
+        };
       });
-    }
+    });
   }
 
   getTotalCompletedLessons(): number {
-    return this.courseProgressList.reduce((total, course: any) => {
-      return total + (course.completedLectures || 0);
-    }, 0);
+    return this.courseProgressList.reduce((total, course) => total + (course.completedLectures || 0), 0);
   }
 }

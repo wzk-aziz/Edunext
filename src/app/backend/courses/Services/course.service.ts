@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course, CourseLevel, PackType } from 'src/app/model/course.model';
+import { UserCourseDashboardDto } from 'src/app/model/UserCourseDashboardDto.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-  private baseUrl = 'http://localhost:8091/api/courses';
+  private baseUrl = 'http://localhost:9090/api/courses';
 
   constructor(private http: HttpClient) {}
 
@@ -57,4 +58,10 @@ export class CourseService {
   voteCourse(courseId: number, vote: 'like' | 'dislike'): Observable<Course> {
     return this.http.post<Course>(`${this.baseUrl}/${courseId}/vote?vote=${vote}`, {});
   }
+  
+  getUserCourses(): Observable<UserCourseDashboardDto[]> {
+    return this.http.get<UserCourseDashboardDto[]>('/api/user-dashboard/courses');
+  }
+  
+  
 }

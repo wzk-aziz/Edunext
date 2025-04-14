@@ -25,6 +25,8 @@ export class CoursepageComponent implements OnInit {
   notePanelOpen: boolean = false;
   showSavedMessage: boolean = false;
   savedTimeout: any;
+  lectureProgressMap: Map<number, { videoProgress: number; pdfProgress: number }> = new Map();
+
   constructor(
     private lectureService: LectureService,
     private courseService: CourseService,
@@ -37,8 +39,17 @@ export class CoursepageComponent implements OnInit {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCourse(courseId);
     this.loadLectures(courseId);
+  
+    this.lectureService.getAllUserProgress().subscribe((progressArray) => {
+      for (const item of progressArray) {
+        this.lectureProgressMap.set(item.lectureId, {
+          videoProgress: item.videoProgress ?? 0,
+          pdfProgress: item.pdfProgress ?? 0
+        });
+      }
+    });
   }
-
+  
   loadCourse(courseId: number): void {
     this.courseService.getCourseById(courseId).subscribe({
       next: (course) => {
@@ -130,42 +141,27 @@ export class CoursepageComponent implements OnInit {
     if (!this.currentLecture) return;
   
     const video = this.videoPlayer.nativeElement;
-  
-    // Save current time
-    localStorage.setItem(`lecture_video_time_${this.currentLecture.id}`, video.currentTime.toString());
-  
     const rawPercent = Math.floor((video.currentTime / video.duration) * 100);
     const percent = Math.min(rawPercent, 99);
   
-    const key = `lecture_video_progress_${this.currentLecture.id}`;
-    const prev = parseInt(localStorage.getItem(key) || '0', 10);
-    const maxProgress = Math.max(percent, prev);
-    localStorage.setItem(key, maxProgress.toString());
+    this.lectureService.saveLectureProgress(this.currentLecture.id!, 'video', percent).subscribe();
   }
   
   
 
   getLectureProgress(lectureId: number | undefined): number {
-    if (!lectureId) return 0;
+    if (!lectureId || !this.lectureProgressMap.has(lectureId)) return 0;
   
-    const videoProgress = parseInt(localStorage.getItem(`lecture_video_progress_${lectureId}`) || '0', 10);
-    const pdfProgress = parseInt(localStorage.getItem(`lecture_pdf_progress_${lectureId}`) || '0', 10);
-  
+    const p = this.lectureProgressMap.get(lectureId)!;
     const hasVideo = !!this.lectures.find(l => l.id === lectureId)?.videoPath;
     const hasPdf = !!this.lectures.find(l => l.id === lectureId)?.pdfPath;
   
-    let progress = 0;
-  
-    if (hasVideo && hasPdf) {
-      progress = Math.floor((videoProgress + pdfProgress) / 2);
-    } else if (hasVideo) {
-      progress = videoProgress;
-    } else if (hasPdf) {
-      progress = pdfProgress;
-    }
-  
-    return progress >= 99 ? 100 : progress;
+    if (hasVideo && hasPdf) return Math.floor((p.videoProgress + p.pdfProgress) / 2);
+    if (hasVideo) return p.videoProgress;
+    if (hasPdf) return p.pdfProgress;
+    return 0;
   }
+  
   
   
 
@@ -173,20 +169,10 @@ export class CoursepageComponent implements OnInit {
   onPdfScroll(percent: number): void {
     if (!this.currentLecture) return;
   
-    const capped = Math.min(percent, 99); // cap at 99%
-    const progressKey = `lecture_pdf_progress_${this.currentLecture.id}`;
-    const prev = parseInt(localStorage.getItem(progressKey) || '0', 10);
-    const maxProgress = Math.max(capped, prev);
+    const capped = Math.min(percent, 99);
+    this.lectureService.saveLectureProgress(this.currentLecture.id!, 'pdf', capped).subscribe();
+  }
   
-    // Save max progress
-    localStorage.setItem(progressKey, maxProgress.toString());
-  
-    // Save scroll position too (for resume functionality)
-    const scrollKey = `lecture_pdf_scroll_${this.currentLecture.id}`;
-    const scrollElement = document.querySelector('.pdf-container') as HTMLElement;
-    if (scrollElement) {
-      localStorage.setItem(scrollKey, scrollElement.scrollTop.toString());
-    }
   }
   
   
@@ -194,4 +180,3 @@ export class CoursepageComponent implements OnInit {
 
 
   
-}

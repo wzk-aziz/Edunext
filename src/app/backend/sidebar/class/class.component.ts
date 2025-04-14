@@ -16,4 +16,16 @@ export class ClassComponent {
 toggleTeacherMenu() {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 }
+
+isCertificatMenuOpen = false;
+isExamMenuOpen=false;
+
+toggleExamMenu() {
+  this.isExamMenuOpen = !this.isExamMenuOpen;
+}
+
+toggleCertificatMenu() {
+this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
+
 }

@@ -1,0 +1,56 @@
+/* Container */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title */
+  .form-title {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  
+  /* Form Styling */
+  .coupon-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Form Fields */
+  .form-field {
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Submit Button */
+  .submit-button {
+    background-color: #3f51b5;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #303f9f;
+  }
+  
+  /* Mat Form Field */
+  mat-form-field {
+    margin-bottom: 20px;
+  }
+  

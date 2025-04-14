@@ -1,0 +1,92 @@
+/* Conteneur principal */
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  background: white;
+  margin-top: 10px;
+}
+
+/* Titre */
+.form-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Champs de formulaire */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Questions */
+.question-container {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+/* Alignement des boutons */
+.d-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.d-md-flex {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Boutons */
+.btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+body.dark-mode {
+  background-color: rgb(151, 144, 144);
+  color: white; /* Ajustez également la couleur du texte */
+}
+
+/* Réduction de la sidebar */
+.sidebar-mini {
+width: 80px; /* Largeur réduite */
+}
+
+/* Cacher le texte du logo lorsque la sidebar est réduite */
+.sidebar-mini .logo-text {
+display: none;
+}
+
+/* Rotation de la flèche lorsque la sidebar est réduite */
+.sidebar-mini .icofont-bubble-right {
+transform: rotate(180deg);
+}

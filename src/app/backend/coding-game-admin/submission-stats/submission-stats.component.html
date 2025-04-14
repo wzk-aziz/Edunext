@@ -1,0 +1,37 @@
+<h2>📊 Submissions per Problem</h2>
+<ul>
+  <li *ngFor="let stat of submissionsByProblem">
+    Problem ID {{ stat[0] }} ➜ {{ stat[1] }} submissions
+  </li>
+</ul>
+
+<h2>🥇 Best Scores per Student</h2>
+<ul>
+  <li *ngFor="let score of bestScores">
+    Student ID {{ score[0] }} ➜ {{ score[1] }} points
+  </li>
+</ul>
+
+<h2>📋 All Submissions Sorted by Score</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Problem</th>
+      <th>Score</th>
+      <th>Git Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let sub of sortedSubmissions">
+      <td>{{ sub.student?.id }}</td>
+      <td>{{ sub.problem?.id }}</td>
+      <td>{{ sub.score }}</td>
+      <td>
+        <a *ngIf="sub.gitLink" [href]="sub.gitLink" target="_blank">
+          View GitHub
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>

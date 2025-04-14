@@ -7,4 +7,15 @@ import { Component } from '@angular/core';
 })
 export class CodingGameComponent {
 
+  isCertificatMenuOpen = false;
+  isExamMenuOpen=false;
+
+  toggleExamMenu() {
+    this.isExamMenuOpen = !this.isExamMenuOpen;
+  }
+
+toggleCertificatMenu() {
+  this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
+
 }

@@ -1,0 +1,65 @@
+<div *ngIf="exam" class="exam-container">
+  <h2 class="text-center mb-4">{{ exam.examTitle }}</h2>
+  
+  <!-- Timer avec barre de progression -->
+  <div class="timer-container">
+    <div class="timer-bar" [style.width.%]="(remainingTime / totalExamTime) * 100" [style.background]="getTimerColor()"></div>
+  </div>
+  
+  <p class="timer" [ngClass]="{'timer-stopped': isTimerStopped}">
+    Temps restant : <span>{{ formatTime(remainingTime) }}</span>
+    <span *ngIf="isTimerStopped" class="timer-blocked">(Temps bloqué)</span>
+  </p>
+ <!-- Message d'erreur avec icône et animation -->
+<div *ngIf="errorMessage" class="error-message">
+  <div class="error-icon">
+    ❌
+  </div>
+  <div class="error-text">
+    <p>{{ errorMessage }}</p>
+  </div>
+</div>
+
+  <!-- Affichage des messages d'avertissement -->
+  <div *ngIf="warningMessages.length > 0" class="warning-container">
+    <div *ngFor="let warning of warningMessages" class="warning-message">
+      ⚠️ {{ warning }}
+    </div>
+  </div>
+  <!-- Custom refresh block warning -->
+<div *ngIf="isRefreshBlocked" class="warning-message">
+  ⚠️ Vous ne pouvez pas rafraîchir ou quitter l'examen avant de le soumettre. Ceci est considéré comme une tentative de triche.
+</div>
+  <form (ngSubmit)="submitExam()">
+    
+    <!-- Affichage du score après soumission -->
+    <div *ngIf="score !== null" class="score-display" [ngClass]="score >= (exam.totalMarks / 2) ? 'score-pass' : 'score-fail'">
+      🎉 Votre score : {{ score }} / {{ exam.totalMarks }} 🎯
+    </div>
+    
+    <!-- Liste des questions -->
+    <div *ngFor="let question of exam.questions; let i = index" class="question-card">
+      <h5 class="question-title">Question {{ i + 1 }} :</h5>
+      <p class="question-text">{{ question.questionText }}</p>
+      <div *ngFor="let option of question.answerOptions" class="option">
+        <label class="option-label" [ngClass]="{'disabled': isSubmitDisabled}">
+          <input type="radio" [name]="'q' + question.id" [value]="option" 
+                 (change)="selectAnswer(question.id, option)" 
+                 [disabled]="isSubmitDisabled" />
+          {{ option }}
+        </label>
+      </div>
+    </div>
+    
+    <!-- Bouton de soumission désactivé si triche détectée -->
+    <button type="submit" class="btn-submit" [disabled]="isSubmitDisabled" 
+            [ngClass]="{'btn-disabled': isSubmitDisabled}">
+      {{ isSubmitDisabled ? 'Soumission bloquée' : 'submit' }}
+    </button>
+  </form>
+</div>
+
+<!-- Message si pas d'examen trouvé -->
+<div *ngIf="!exam" class="no-exam">
+  Chargement de l'examen...
+</div>

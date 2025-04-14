@@ -1,0 +1,159 @@
+<!-- Notification personnalisée -->
+<div class="notification-container" *ngIf="reservationMessage">
+  <div 
+    class="notification-box"
+    [ngClass]="{
+      'notification-success': reservationMessageType === 'success',
+      'notification-error': reservationMessageType === 'error'
+    }">
+    {{ reservationMessage }}
+  </div>
+</div>
+
+<div class="event-detail-container">
+  <!-- Event Header -->
+  <div class="event-header">
+    <div class="event-banner">
+      <!-- Bannière statique (vous pouvez la rendre dynamique si besoin) -->
+      <img src="assets/images/hackathon.jpg" alt="Event Banner" class="event-banner-img">
+      <div class="event-title-overlay">
+        <h1 class="event-title">{{ event?.eventTitle }}</h1>
+        <p class="event-subtitle">Upcoming Tech Events & Conferences</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Info Container -->
+  <div class="event-info-container">
+    <!-- Main Content -->
+    <div class="event-main-content">
+      <!-- Event Info Row -->
+      <div class="event-info-row">
+        <!-- Date & Time -->
+        <div class="info-box">
+          <i class="far fa-calendar-alt"></i>
+          <h4>Date & Time</h4>
+          <p>{{ event?.eventDate | date:'fullDate' }}</p>
+          <small *ngIf="event?.eventTime">{{ event?.eventTime }}</small>
+        </div>
+      
+        <!-- Location -->
+        <div class="info-box">
+          <i class="fas fa-map-marker-alt"></i>
+          <h4>Location</h4>
+          <p>{{ event?.eventLocation }}</p>
+          <small *ngIf="event?.eventLocationDetail">{{ event?.eventLocationDetail }}</small>
+        </div>
+      
+        <!-- Participants -->
+        <div class="info-box">
+          <i class="fas fa-user-friends"></i>
+          <h4>Participants</h4>
+          <p>{{ event?.numberParticipants || 0 }} / {{ event?.maxParticipants || 'Unlimited' }}</p>
+        </div>
+      </div>
+      
+
+      <!-- Ticket Section -->
+      <div class="ticket-section">
+        <h2>Reserve Your Ticket</h2>
+        <p class="ticket-price">{{ (event?.price > 0) ? (event?.price | currency:'EUR') : '49.99$' }}</p>
+        <input 
+          type="email" 
+          class="email-input" 
+          placeholder="Enter your email"
+          [(ngModel)]="studentEmail">
+        <button 
+          class="reserve-button" 
+          (click)="reserveTicket()">
+          Reserve Now
+        </button>
+      </div>
+
+      <!-- About Event Section -->
+      <div class="about-event-section">
+        <h3 class="section-title">About this Event</h3>
+        <p class="about-content">{{ event?.description }}</p>
+      </div>
+
+      <!-- Speakers Section -->
+      <div class="speakers-section">
+        <h3 class="section-title">Speakers</h3>
+        <p class="section-subtitle">{{ event?.speakersDescription }}</p>
+        <div class="speakers-container">
+          <div class="speaker-card" *ngFor="let speaker of event?.speakers">
+            <div class="speaker-avatar">
+              <img [src]="speaker.avatarUrl || 'assets/images/default-avatar.jpg'" alt="{{ speaker.name }}">
+            </div>
+            <div class="speaker-info">
+              <h4>{{ speaker.name }}</h4>
+              <p>{{ speaker.followers }} followers</p>
+            </div>
+            <button class="know-more-btn">Know more</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Schedule Section -->
+      <div class="schedule-section">
+        <h3 class="section-title">Event Schedule</h3>
+        <p class="section-subtitle">{{ event?.scheduleDescription }}</p>
+
+        <div class="schedule-day" *ngFor="let day of event?.schedule">
+          <div class="day-header" (click)="toggleScheduleDay(day)">
+            <h4>{{ day.name }}</h4>
+            <i class="fas" [ngClass]="day.isExpanded ? 'fa-minus' : 'fa-plus'"></i>
+          </div>
+
+          <div class="day-sessions" *ngIf="day.isExpanded">
+            <div class="session" *ngFor="let session of day.sessions">
+              <!-- Pause / Break -->
+              <div class="session-time" *ngIf="session.type === 'break'">
+                <i class="fas fa-clock"></i>
+                <span>{{ session.title }} ({{ session.time }})</span>
+              </div>
+              <!-- Session -->
+              <div class="session-details" *ngIf="session.type !== 'break'">
+                <div class="speaker-avatar" *ngIf="session.speaker">
+                  <img [src]="session.speaker.avatarUrl || 'assets/default-avatar.jpg'" alt="{{ session.speaker.name }}">
+                </div>
+                <div class="session-info">
+                  <h5>{{ session.title }} ({{ session.time }})</h5>
+                  <p *ngIf="session.speaker">by {{ session.speaker.name }} {{ session.speaker.role }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="event-sidebar">
+      <!-- Map Section -->
+      <div class="map-section">
+        <h3>Location</h3>
+        <div id="event-map" class="event-map"></div>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="event-stats">
+        <div class="stat-item">
+          <i class="fas fa-users"></i>
+          <p>{{ event?.numberParticipants || 0 }}</p>
+          <span>Attendees</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-clock"></i>
+          <p>{{ event?.duration || '2h' }}</p>
+          <span>Duration</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-calendar-check"></i>
+          <p>{{ event?.eventType || 'Workshop' }}</p>
+          <span>Type</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

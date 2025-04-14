@@ -1,0 +1,94 @@
+<main>
+  <section class="bg-dark align-items-center d-flex" style="background:url(/assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <h1 class="text-white">Edit exam</h1>
+                  <div class="d-flex">
+                      <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
+                              <li class="breadcrumb-item"><a routerLink="/studenthome">Home</a></li>
+                              <li class="breadcrumb-item"><a routerLink="/exams">Exams</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                          </ol>
+                      </nav>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  
+  <section class="pb-0 py-sm-5">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-lg-8">
+                  <div class="card shadow p-4">
+                      <h2 class="text-center mb-4">Edit exam</h2>
+                      <form (ngSubmit)="onSubmit()">
+                          <div class="mb-3">
+                              <label for="title" class="form-label">Titre :</label>
+                              <input id="title" type="text" class="form-control" [(ngModel)]="exam.examTitle" name="title" required>
+                          </div>
+
+                          <div class="mb-3">
+                              <label for="description" class="form-label">Description :</label>
+                              <textarea id="description" class="form-control" [(ngModel)]="exam.examDescription" name="description"></textarea>
+                          </div>
+
+                          <div class="mb-3">
+                              <label for="duration" class="form-label">Duration(min) :</label>
+                              <input id="duration" type="number" class="form-control" [(ngModel)]="exam.examDuration" name="duration" required>
+                          </div>
+
+                          <div class="mb-3">
+                              <label for="scheduledDate" class="form-label">Scheduled Date :</label>
+                              <input id="scheduledDate" type="datetime-local" class="form-control" [(ngModel)]="exam.scheduledDate" name="scheduledDate" required>
+                          </div>
+
+                          <h4 class="mt-4">Questions</h4>
+                          <div *ngFor="let question of exam.questions; let i = index" class="border p-3 mb-3 rounded">
+                              <div class="mb-3">
+                                  <label for="questionText{{i}}" class="form-label">Question {{ i + 1 }}</label>
+                                  <input 
+                                      id="questionText{{i}}" 
+                                      class="form-control" 
+                                      [(ngModel)]="question.questionText" 
+                                      name="questionText{{i}}" 
+                                      (change)="onQuestionUpdate(question)">
+                              </div>
+
+                              <div class="mb-3">
+                                  <label for="answerOptions{{i}}" class="form-label">Options (separated by ` |`)</label>
+                                  <input 
+                                      id="answerOptions{{i}}" 
+                                      class="form-control" 
+                                      [(ngModel)]="question.answerOptions" 
+                                      name="answerOptions{{i}}" 
+                                      (change)="onQuestionUpdate(question)">
+                              </div>
+                              <div class="mb-3">
+                                <label for="correctAnswer{{i}}" class="form-label">correct Answer</label>
+                                <input 
+                                    id="correctAnswer{{i}}" 
+                                    class="form-control" 
+                                    [(ngModel)]="question.correctAnswer" 
+                                    name="correctAnswer{{i}}" 
+                                    (change)="onQuestionUpdate(question)">
+                            </div>
+                          </div>
+
+                          <div class="text-center mt-4">
+                              <button type="submit" class="btn btn-primary me-2">
+                                  <i class="fas fa-save"></i> Edit
+                              </button>
+                              <button type="button" class="btn btn-secondary" routerLink="/examlist">
+                                  <i class="fas fa-times"></i> Cancel
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+</main>
