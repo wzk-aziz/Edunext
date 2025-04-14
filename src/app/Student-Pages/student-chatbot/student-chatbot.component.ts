@@ -87,10 +87,7 @@ export class StudentChatbotComponent implements OnInit, AfterViewChecked, OnDest
       timestamp: new Date(),
       isHtml: true,
       category: 'general',
-      links: [
-        {text: 'Live Sessions', url: '/student/virtual-classroom-sessions', icon: 'fa-video'},
-        {text: 'Mentorship Programs', url: '/student/tutoring', icon: 'fa-user-tie'}
-      ]
+
     };
     this.messages = [welcomeMessage];
     this.chatService.clearHistory();

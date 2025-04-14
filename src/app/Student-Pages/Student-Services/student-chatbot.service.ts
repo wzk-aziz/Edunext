@@ -27,7 +27,7 @@ export class StudentChatbotService {
   private apiKey = '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'; // Replace with your actual token
   private apiUrl = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2';
 
-  // System message to guide the AI
+  // Remove these lines from your systemPrompt
   private systemPrompt = `You are NexGenius, an AI assistant for the EduNext education platform. 
   You help students navigate the platform with a focus on two main areas:
   
@@ -36,16 +36,9 @@ export class StudentChatbotService {
   
   Keep your responses brief (under 80 words). Respond in a friendly, helpful manner.
   
-  When students ask about Live Sessions or classes, suggest this action:
-  ACTION_LINK: Live Sessions|/student/virtual-classroom-sessions|fa-video
+  Format your responses with HTML when appropriate using <p>, <strong>, or <ul>/<li> tags.
   
-  When students ask about Mentorship or tutoring, suggest this action:
-  ACTION_LINK: Mentorship Programs|/student/tutoring|fa-user-tie
-  
-  For general inquiries, suggest both options.
-  
-  Format your responses with HTML when appropriate using <p>, <strong>, or <ul>/<li> tags.`;
-  
+  Do not include links or action buttons in your responses. Just provide the information directly.`;
   // Pre-defined response templates for fallback
   private responses: {[key: string]: ResponseTemplate} = {
     fallback: {
