@@ -1,4 +1,5 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,41 +43,36 @@ import { ClassComponent } from './backend/sidebar/class/class.component';
 import { StudentComponent } from './backend/sidebar/student/student.component';
 import { BackAppComponent } from './backend/back-app/back-app.component';
 import { CoursesBackComponent } from './backend/courses/courses-back/courses-back.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './Shared/login/login.component';
 import { RegisterComponent } from './Shared/register/register.component';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { ListTeachersComponent } from './Shared/list-teachers/list-teachers.component';
-import { ReactiveFormsModule } from '@angular/forms';  // Ajoute cette ligne
+import { UpdateUserComponent } from './Shared/update/update.component';
+import { UsersComponent } from './backend/users/users.component';
+import { UserStatsComponent } from './backend/user-stats/user-stats.component';
+import { ProfileComponent } from './Shared/profile/profile.component';
+import { VerificationComponent } from './Shared/verification/verification.component';
+import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
+
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { PaginationModule, ButtonModule, GridModule } from '@coreui/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatlabModule } from './matlab/matlab.module';
 import { MatTableModule } from '@angular/material/table';
-import { UpdateUserComponent } from './Shared/update/update.component';
-import { UsersComponent } from './backend/users/users.component';
-//import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-//import { GoogleLoginProvider} from 'angularx-social-login';
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
-import { UserStatsComponent } from './backend/user-stats/user-stats.component';
-import { ProfileComponent } from './Shared/profile/profile.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
-import { VerificationComponent } from './Shared/verification/verification.component';
 import { CodeInputModule } from 'angular-code-input';
-import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { OAuthModule } from 'angular-oauth2-oidc';
-
+import { OAuth2RedirectComponent } from './Shared/oauth2-redirect/oauth2-redirect.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-
-
 
 @NgModule({
   declarations: [
@@ -123,8 +119,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     StudentComponent,
     BackAppComponent,
     CoursesBackComponent,
-    LoginComponent,
-    RegisterComponent,
     ListTeachersComponent,
     UpdateUserComponent,
     UsersComponent,
@@ -132,25 +126,25 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProfileComponent,
     VerificationComponent,
     PasswordResetComponent,
-   
+    OAuth2RedirectComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule,
     ReactiveFormsModule,
+    RouterModule,
     PaginationModule,
     ButtonModule,
-    BrowserAnimationsModule,
-    IconModule,    
     GridModule,
+    BrowserAnimationsModule,
+    IconModule,
     MatPaginatorModule,
     MatlabModule,
     SocialLoginModule,
     RecaptchaModule,
-    ReactiveFormsModule,
+    RecaptchaFormsModule,
     CodeInputModule,
     TranslateModule.forRoot({
       loader: {
@@ -158,19 +152,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    }),
-    OAuthModule.forRoot({
-      resourceServer: {
-        allowedUrls: ['http://localhost:8050/api'],
-        sendAccessToken: true
-      }
     })
-    
-
-
   ],
   providers: [
-    HttpClient,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -178,14 +162,19 @@ export function HttpLoaderFactory(http: HttpClient) {
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('376223933550-gedvfpvklutlp3cqi7frmoa5u33kvgvk.apps.googleusercontent.com')
-          },
-
+            provider: new GoogleLoginProvider(
+              '337472242674-g2eaus14f97qq2khau5a6ullpqu32m9m.apps.googleusercontent.com',
+              {
+                oneTapEnabled: false,
+                scopes: 'email profile',
+              }
+            )
+          }
         ]
       } as SocialAuthServiceConfig,
     }
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Add this line
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

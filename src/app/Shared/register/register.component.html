@@ -105,28 +105,57 @@
                         <i class="bi bi-check-circle-fill"></i>
                       </div>
                     </div>
+                    
 
                     <!-- Email -->
-                    <div class="form-group position-relative">
-                      <label for="email">{{ 'EMAIL' | translate }}</label>
-                      <input id="email" 
-                             name="email" 
-                             required 
-                             type="email" 
-                             [(ngModel)]="registerRequest.email" 
-                             #email="ngModel" 
-                             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                             placeholder="Enter your email"
-                             [ngClass]="{'is-valid': email.valid && email.touched, 'is-invalid': email.invalid && email.touched}">
+                    <!-- Email -->
+<div class="form-group position-relative">
+  <label for="email">{{ 'EMAIL' | translate }}</label>
+  <input id="email" 
+         name="email" 
+         required 
+         type="email" 
+         [(ngModel)]="registerRequest.email" 
+         #email="ngModel" 
+         pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+         placeholder="Enter your email"
+         [ngClass]="{'is-valid': email.valid && email.touched, 'is-invalid': email.invalid && email.touched}">
 
-                      <div *ngIf="email.invalid && email.touched" class="alert alert-danger">
-                        <div *ngIf="email.errors?.['required']">Email is required.</div>
-                        <div *ngIf="email.errors?.['pattern']">Please enter a valid email address.</div>
-                      </div>
-                      <div *ngIf="email.valid && email.touched" class="valid-feedback">
-                        <i class="bi bi-check-circle-fill"></i>
-                      </div>
-                    </div>
+  <div *ngIf="email.invalid && email.touched" class="alert alert-danger">
+    <div *ngIf="email.errors?.['required']">Email is required.</div>
+    <div *ngIf="email.errors?.['pattern']">Please enter a valid email address.</div>
+  </div>
+  <div *ngIf="email.valid && email.touched" class="valid-feedback">
+    <i class="bi bi-check-circle-fill"></i>
+  </div>
+</div>
+
+<!-- Phone Number -->
+<div class="form-group position-relative">
+  <label for="phonenumber">{{ 'PHONE_NUMBER' | translate }}</label>
+  <input id="phonenumber" 
+         name="phonenumber" 
+         required 
+         type="tel" 
+         [(ngModel)]="registerRequest.phonenumber" 
+         #phonenumber="ngModel" 
+         pattern="^\+?[1-9]\d{1,14}$"
+         placeholder="Enter your phone number"
+         [ngClass]="{'is-valid': phonenumber.valid && phonenumber.touched, 'is-invalid': phonenumber.invalid && phonenumber.touched}">
+
+  <div *ngIf="phonenumber.invalid && phonenumber.touched" class="alert alert-danger">
+    <div *ngIf="phonenumber.errors?.['required']">Phone number is required.</div>
+    <div *ngIf="phonenumber.errors?.['pattern']">Please enter a valid phone number.</div>
+  </div>
+  <div *ngIf="phonenumber.valid && phonenumber.touched" class="valid-feedback">
+    <i class="bi bi-check-circle-fill"></i>
+  </div>
+</div>
+
+
+                    
+
+                    
 
                     <!-- Password -->
                     <div class="form-group position-relative">

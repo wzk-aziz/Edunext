@@ -4,6 +4,7 @@
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/classes.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:55:49 GMT -->
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -223,7 +224,12 @@
                         Unban
                       </button>
                     <span class="btn-space"></span>
-                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                 
+                    <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>    
+                    <button class="download-pdf-btn"
+        (click)="downloadUserPdf(user.id)" 
+        title="Download PDF">
+  <i class="fas fa-file-pdf fa-spin"></i>
+</button>      
                   </td>
                 </tr>
               </tbody>
@@ -289,6 +295,11 @@
                   <span class="btn-space"></span>
                     <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                 
                   </td>
+                  <button class="download-pdf-btn"
+                  (click)="downloadUserPdf(user.id)" 
+                  title="Download PDF">
+            <i class="fas fa-file-pdf fa-spin"></i>
+          </button>  
                 </tr>
               </tbody>
             </table>
@@ -353,6 +364,11 @@
                     <span class="btn-space"></span>
                     <a [routerLink]="['/update', user.id]" class="btn btn-info action-btn custom-edit-btn">Update</a>                  
                   </td>
+                  <button class="download-pdf-btn"
+                  (click)="downloadUserPdf(user.id)" 
+                  title="Download PDF">
+            <i class="fas fa-file-pdf fa-spin"></i>
+          </button>  
                   
                 </tr>
               </tbody>

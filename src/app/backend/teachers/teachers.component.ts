@@ -386,4 +386,24 @@ export class TeachersComponent implements OnInit, AfterViewInit {
       }
     }, 100);
   }
+
+
+
+  downloadUserPdf(userId: number): void {
+    this.userService.downloadUserPdf(userId).subscribe(
+      (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `user_profile_${userId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Error downloading PDF:', error);
+        // Optionally show an error message to the user
+      }
+    );
+  }
+  
 }

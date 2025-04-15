@@ -15,13 +15,14 @@
     "FORGOT_PASSWORD": "Mot de passe oublié ?",
     "RESET_HERE": "Réinitialisez-le ici",
 
-    
+
     "WELCOME": "Bienvenue dans notre plus grande communauté",
     "LEARN": "Apprenons quelque chose de nouveau aujourd'hui !",
     "SIGNUP": "Inscrivez-vous pour votre compte !",
     "FIRST_NAME": "Prénom *",
     "LAST_NAME": "Nom de famille *",
     "EMAIL": "Email *",
+    "PHONE_NUMBER": "Numéro de téléphone",
     "PASSWORD": "Mot de passe *",
     "ROLE": "Rôle *",
     "SELECT_ROLE": "Sélectionnez un rôle",

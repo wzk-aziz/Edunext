@@ -137,17 +137,6 @@ export class RegisterComponent {
       });
   }
 
-  loginWithGoogle() {
-    this.authService.googleLogin(this.getGoogleAuthRequest()).subscribe({
-      next: (response) => {
-        console.log('Connexion réussie :', response);
-        // Gérer l'authentification ici (ex: stockage du token, redirection...)
-      },
-      error: (err) => {
-        console.error('Erreur de connexion Google :', err);
-      }
-    });
-  }
   
   // Fonction pour récupérer l'objet googleAuthRequest
   getGoogleAuthRequest() {

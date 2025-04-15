@@ -30,6 +30,7 @@ import { UserStatsComponent } from './backend/user-stats/user-stats.component';
 import { ProfileComponent } from './Shared/profile/profile.component';
 import { VerificationComponent } from './Shared/verification/verification.component';
 import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
+import { OAuth2RedirectComponent } from './Shared/oauth2-redirect/oauth2-redirect.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -52,6 +53,9 @@ const routes: Routes = [
   { path: 'myplan', component: SubscriptionComponent },
   { path: 'editprofile', component: EditprofileComponent },
   { path : 'ResetPassword', component: PasswordResetComponent},
+  { path: 'oauth2/redirect', component: OAuth2RedirectComponent },
+
+
 
 
 

@@ -121,6 +121,13 @@ export class UserService {
   }
 
 
+  downloadUserPdf(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}`, {
+      responseType: 'blob'
+    });
+  }
+
+
   
   
 

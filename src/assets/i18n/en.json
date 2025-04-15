@@ -14,13 +14,14 @@
     "SIGN_UP": "Sign up here",
     "FORGOT_PASSWORD": "Forgot your password?",
     "RESET_HERE": "Reset it here",
-    
+
     "WELCOME": "Welcome to our largest community",
     "LEARN": "Let's learn something new today!",
     "SIGNUP": "Sign up for your account!",
     "FIRST_NAME": "First name *",
     "LAST_NAME": "Last name *",
     "EMAIL": "Email *",
+    "PHONE_NUMBER": "Phone Number",
     "PASSWORD": "Password *",
     "ROLE": "Role *",
     "SELECT_ROLE": "Select a role",

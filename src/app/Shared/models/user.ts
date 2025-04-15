@@ -6,10 +6,11 @@ export interface User {
     first_name: string;
     last_name: string;
     email_address: string;
+    phone_number?: string; 
     authorities: { authority: string }[];
     mfaEnabled: boolean;
     role: string;
-    image: string; // Ensure the property name matches the one used in the HTML template
+    image: string; 
     cvFilePath?: string;
     banned: boolean;
   }
