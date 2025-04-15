@@ -1,0 +1,66 @@
+<div class="add-thread-container">
+    <div class="add-thread-header">
+      <h1>Create New Thread</h1>
+      <p class="subtitle">Share your thoughts with the community</p>
+    </div>
+  
+    <div class="alert error-alert" *ngIf="error">
+      <i class="fa fa-exclamation-circle"></i> {{error}}
+    </div>
+  
+    <form [formGroup]="threadForm" (ngSubmit)="onSubmit()" class="thread-form">
+      <div class="form-group">
+        <label for="threadTitle">Title</label>
+        <input 
+          type="text" 
+          id="threadTitle" 
+          formControlName="threadTitle" 
+          placeholder="Enter a descriptive title"
+        >
+        <div class="form-error" *ngIf="threadForm.get('threadTitle')?.invalid && threadForm.get('threadTitle')?.touched">
+          <span *ngIf="threadForm.get('threadTitle')?.errors?.['required']">Title is required</span>
+          <span *ngIf="threadForm.get('threadTitle')?.errors?.['minlength']">Title must be at least 5 characters</span>
+          <span *ngIf="threadForm.get('threadTitle')?.errors?.['maxlength']">Title cannot exceed 100 characters</span>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="threadContent">Content</label>
+        <textarea 
+          id="threadContent" 
+          formControlName="threadContent" 
+          rows="10" 
+          placeholder="Share your thoughts here. Use #tag to add tags to your post."
+        ></textarea>
+        <div class="form-error" *ngIf="threadForm.get('threadContent')?.invalid && threadForm.get('threadContent')?.touched">
+          <span *ngIf="threadForm.get('threadContent')?.errors?.['required']">Content is required</span>
+          <span *ngIf="threadForm.get('threadContent')?.errors?.['minlength']">Content must be at least 20 characters</span>
+        </div>
+      </div>
+  
+      <div class="suggested-tags">
+        <h3>Suggested Tags</h3>
+        <div class="tags-container">
+          <span 
+            *ngFor="let tag of suggestedTags" 
+            class="tag" 
+            (click)="addTag(tag)"
+          >
+            #{{tag}}
+          </span>
+        </div>
+      </div>
+  
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/threads">Cancel</button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="threadForm.invalid || isSubmitting"
+        >
+          <i class="fa fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          {{isSubmitting ? 'Creating...' : 'Create Thread'}}
+        </button>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,108 @@
+/* Chargement */
+.text-center {
+    text-align: center;
+  }
+  
+  .my-5 {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Carte */
+  .card {
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: white;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  /* Titres */
+  .form-title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* Champs de formulaire */
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Messages d'erreur */
+  .text-danger {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* Boutons */
+  .btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #545b62;
+  }
+  
+  /* Alignement des boutons */
+  .d-grid {
+    display: grid;
+  }
+  
+  .gap-2 {
+    gap: 10px;
+  }
+  
+  .d-md-flex {
+    display: flex;
+    justify-content: flex-end;
+  }
+  body.dark-mode {
+    background-color: rgb(151, 144, 144);
+    color: white; /* Ajustez également la couleur du texte */
+  }
+ 
+  /* Réduction de la sidebar */
+.sidebar-mini {
+  width: 80px; /* Largeur réduite */
+}
+
+/* Cacher le texte du logo lorsque la sidebar est réduite */
+.sidebar-mini .logo-text {
+  display: none;
+}
+
+/* Rotation de la flèche lorsque la sidebar est réduite */
+.sidebar-mini .icofont-bubble-right {
+  transform: rotate(180deg);
+}
+  

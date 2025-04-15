@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Événements</h1>
+    <button class="add-btn" (click)="goToAddEvent()">
+      <i class="fas fa-plus-circle"></i> Ajouter un Événement
+    </button>
+  </div>
+  
+  <div class="filters-section">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" [formControl]="searchControl" placeholder="Rechercher un événement...">
+    </div>
+    
+    <div class="location-filter">
+      <i class="fas fa-map-marker-alt"></i>
+      <select [formControl]="locationFilter">
+        <option value="">Tous les lieux</option>
+        <option *ngFor="let event of events" [value]="event.eventLocation">
+          {{ event.eventLocation }}
+        </option>
+      </select>
+    </div>
+    
+    <button class="refresh-btn" (click)="refreshEvents()" title="Rafraîchir la liste">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Chargement des événements...</p>
+  </div>
+  
+  <div *ngIf="!isLoading && filteredEvents.length === 0" class="empty-state">
+    <i class="fas fa-calendar-times empty-icon"></i>
+    <p>Aucun événement trouvé.</p>
+  </div>
+  
+  <div *ngIf="!isLoading && filteredEvents.length > 0" class="grid-container">
+    <div *ngFor="let event of paginatedEvents" class="card">
+      <div class="card-header">
+        <h3>{{ event.eventTitle }}</h3>
+        <div class="actions">
+          <button class="edit-btn" (click)="editEvent(event.id.toString())" title="Modifier">
+            <i class="fas fa-edit"></i>
+          </button>
+         
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <p class="event-details">
+          <i class="fas fa-calendar-alt"></i> 
+          {{ event.eventDate | date:'EEEE, d MMMM y' }}
+        </p>
+        <p class="event-details">
+          <i class="fas fa-map-marker-alt"></i> 
+          {{ event.eventLocation }}
+        </p>
+        <p class="event-details">
+          <i class="fas fa-users"></i> 
+          Participants: {{ event.numberParticipants }} / {{ event.maxParticipants }}
+        </p>
+        
+        <div class="progress-bar">
+          <div class="progress" 
+               [style.width.%]="(event.numberParticipants / event.maxParticipants) * 100"
+               [ngClass]="{'almost-full': (event.numberParticipants / event.maxParticipants) > 0.8}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="totalPages.length > 1" class="pagination">
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)" class="page-btn">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <button *ngFor="let page of totalPages" 
+            [class.active]="page === currentPage"
+            (click)="changePage(page)" 
+            class="page-btn">
+      {{ page }}
+    </button>
+    
+    <button [disabled]="currentPage === totalPages.length" (click)="changePage(currentPage + 1)" class="page-btn">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

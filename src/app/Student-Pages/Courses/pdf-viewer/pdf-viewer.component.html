@@ -1,0 +1,41 @@
+<!-- Loader Spinner -->
+<div *ngIf="loading" class="pdf-loader d-flex justify-content-center align-items-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading PDF...</span>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="d-flex justify-content-between align-items-center my-2">
+  <button class="btn btn-outline-primary btn-sm" (click)="addBookmark()">🔖 Add Bookmark</button>
+</div>
+
+<!-- Bookmark List -->
+<div *ngIf="bookmarks.length > 0" class="bookmark-list mb-2">
+  <h6>📑 Bookmarks</h6>
+  <ul class="list-group">
+    <li *ngFor="let b of bookmarks" class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center w-100">
+        <span *ngIf="editingBookmarkId !== b.id" class="flex-grow-1" (click)="goToBookmark(b.scrollTop)" style="cursor: pointer;">
+          {{ b.label }}
+        </span>
+  
+        <input *ngIf="editingBookmarkId === b.id"
+               class="form-control form-control-sm me-2"
+               [(ngModel)]="b.label"
+               (blur)="finishEditing(b, b.label)"
+               (keyup.enter)="finishEditing(b, b.label)"
+               style="max-width: 150px;" />
+  
+        <button *ngIf="editingBookmarkId !== b.id" class="btn btn-sm btn-outline-secondary me-1" (click)="startEditing(b.id)">📝</button>
+        <button class="btn btn-sm btn-danger" (click)="removeBookmark(b.id)">🗑️</button>
+      </div>
+    </li>
+  </ul>
+  
+</div>
+
+<!-- PDF Pages -->
+<div #pdfContainer class="pdf-container" (scroll)="onScroll()">
+  <canvas *ngFor="let page of pages; let i = index" [attr.id]="'page_' + (i + 1)"></canvas>
+</div>

@@ -1,0 +1,42 @@
+<div class="container mt-5">
+  <div class="quiz-container p-4 shadow-lg rounded bg-white">
+    <h2 class="fw-bold mb-4">Available Quizzes</h2>
+
+    <!-- Loading & Error Messages -->
+    <div *ngIf="loading" class="alert alert-info text-center">Loading quizzes...</div>
+    <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
+
+    <!-- Quiz Table -->
+    <div *ngIf="hasQuizzes(); else noQuizzes">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Time Limit</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let quiz of quizzes">
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.description }}</td>
+            <td>{{ formatTimeLimit(quiz.timeLimit) }}</td>
+            <td>
+              <button class="btn btn-success btn-sm" (click)="startQuiz(quiz.id)">
+                Start Quiz
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- No Quizzes Available -->
+    <ng-template #noQuizzes>
+      <div class="alert alert-warning text-center">
+        No quizzes available.
+      </div>
+    </ng-template>
+  </div>
+</div>

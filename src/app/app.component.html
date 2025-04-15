@@ -3,5 +3,6 @@
   <app-header *ngIf="showHeader && !isTeacherRoute"></app-header>
   <app-headerteacher *ngIf="showHeader && isTeacherRoute"></app-headerteacher>
   <router-outlet></router-outlet>
+  <app-global-alert></app-global-alert>
   <app-footer *ngIf="showFooter"></app-footer>
 </div>

@@ -1,0 +1,45 @@
+/* Animate.css is assumed for basic animations; include it in your project if not already */
+
+/* Hover effect on course image */
+.course-img-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .course-img-hover:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  }
+  
+  /* Hover effect on instructor image */
+  .instructor-img-hover {
+    transition: transform 0.3s ease;
+  }
+  .instructor-img-hover:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Lecture list item hover */
+  .lecture-item {
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  .lecture-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Additional spacing and styling for headers */
+  h1.display-4 {
+    letter-spacing: -0.5px;
+  }
+  h3.fw-bold {
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 0.5rem;
+  }
+  
+  /* Button animation */
+  .btn-success.btn-lg {
+    transition: transform 0.2s ease;
+  }
+  .btn-success.btn-lg:hover {
+    transform: scale(1.05);
+  }
+  

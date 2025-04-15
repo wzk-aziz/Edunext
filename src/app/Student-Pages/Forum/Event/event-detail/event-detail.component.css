@@ -1,0 +1,415 @@
+/* ======================================= */
+/*          NOTIFICATION STYLES           */
+/* ======================================= */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999; /* Pour être au-dessus du contenu */
+}
+
+.notification-box {
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  animation: fade-in 0.3s ease-out;
+}
+
+.notification-success {
+  background-color: #4CAF50; /* Vert succès */
+}
+
+.notification-error {
+  background-color: #f44336; /* Rouge erreur */
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ======================================= */
+/*           GENERAL PAGE STYLES          */
+/* ======================================= */
+body {
+  font-family: 'Roboto', 'Arial', sans-serif;
+  background-color: #f5f7f9;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.event-detail-container {
+  width: 80%;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* Event Header */
+.event-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.event-banner-img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.event-title-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(227, 236, 236, 0.45);
+  padding: 15px 25px;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.event-title-overlay h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+/* Conteneur principal (section gauche + sidebar) */
+.event-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.event-main-content {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+.event-sidebar {
+  width: 30%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+/* ======================================= */
+/*  UNIFIED STYLE FOR DATE/TIME, LOCATION, PARTICIPANTS */
+/* ======================================= */
+
+/* Conteneur des trois "cartes" */
+.event-info-row {
+  display: flex;
+  gap: 20px; /* Espace horizontal entre les cartes */
+  margin-bottom: 20px;
+}
+
+/* Chaque "carte" (Date & Time, Location, Participants) */
+.info-box {
+  flex: 1;
+  background: #f1f1f1;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  min-height: 130px;         /* Hauteur minimale pour uniformiser */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* Centrage vertical */
+  align-items: center;
+}
+
+.info-box i {
+  font-size: 24px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.info-box h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.info-box p,
+.info-box small {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Ticket Section */
+.ticket-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.ticket-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.email-input {
+  padding: 10px;
+  width: 60%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.reserve-button {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+.reserve-button:hover {
+  background: #0056b3;
+}
+
+/* About Event Section */
+.about-event-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  font-size: 22px;
+  border-bottom: 2px solid #f1f8ff;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.section-subtitle {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.about-content {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Speakers Section */
+.speakers-section {
+  margin-top: 30px;
+}
+
+.speakers-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.speaker-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  width: 45%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.speaker-card:hover {
+  transform: scale(1.02);
+}
+
+.speaker-avatar {
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+.speaker-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.speaker-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.speaker-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.know-more-btn {
+  margin-left: auto;
+  padding: 6px 12px;
+  background: #343a40;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.know-more-btn:hover {
+  background: #23272b;
+}
+
+/* Schedule Section */
+.schedule-section {
+  margin-top: 30px;
+}
+
+.schedule-day {
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+.day-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.day-sessions {
+  padding: 0;
+  background-color: #fff;
+}
+
+.session {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+.session:last-child {
+  border-bottom: none;
+}
+
+.session-time {
+  display: flex;
+  align-items: center;
+  color: #555;
+}
+.session-time i {
+  margin-right: 10px;
+}
+
+.session-details {
+  display: flex;
+  align-items: center;
+}
+.session-info {
+  margin-left: 15px;
+}
+.session-info h5 {
+  margin: 0 0 5px 0;
+  font-weight: 500;
+}
+.session-info p {
+  margin: 0;
+  color: #666;
+}
+
+/* Map Section */
+.map-section {
+  text-align: center;
+}
+
+#event-map.event-map {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+
+/* Stats Section (Attendees, Duration, Type) */
+.event-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.event-stats .stat-item {
+  text-align: center;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 5px;
+}
+.event-stats .stat-item i {
+  font-size: 24px;
+  color: #007bff;
+}
+
+/* =========================== */
+/*         RESPONSIVE         */
+/* =========================== */
+@media (max-width: 992px) {
+  .event-info-container {
+    flex-direction: column;
+  }
+  .event-main-content,
+  .event-sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .speakers-container .speaker-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-detail-container {
+    width: 95%;
+  }
+  .email-input {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  .reserve-button {
+    width: 100%;
+  }
+
+  /* Les 3 cartes (Date & Time, Location, Participants) s’empilent */
+  .event-info-row {
+    flex-direction: column;
+  }
+  .info-box {
+    margin-bottom: 10px;
+  }
+}

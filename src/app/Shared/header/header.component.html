@@ -1,14 +1,17 @@
-<!-- Header START -->
-<header class="navbar-light navbar-sticky header-static">
+
+<header class="navbar-light navbar-sticky header-static" *ngIf="!isRegisterPage">
+
   <!-- Logo Nav START -->
   <nav class="navbar navbar-expand-xl">
     <div class="container-fluid px-3 px-xl-5">
       <!-- Logo START -->
       <a class="navbar-brand" href="index.html">
+
         <img
           class="light-mode-item navbar-brand-item"
          />
-      
+        <img class="light-mode-item navbar-brand-item" />
+
       </a>
       <!-- Logo END -->
 
@@ -46,8 +49,7 @@
             >
             <ul class="dropdown-menu" aria-labelledby="coursesMenu">
               <li><a class="dropdown-item" routerLink="/courselist">Course List</a></li>
-              <li><a class="dropdown-item" routerLink="/coursedetail">Course Detail</a></li>
-              <li><a class="dropdown-item" routerLink="/coursepage">Quizzes</a></li>
+              <li><a class="dropdown-item" routerLink="/student-quizzes">Quizzes</a></li>
             </ul>
           </li>
           <!-- Market Place -->
@@ -62,10 +64,11 @@
               >Market Place</a
             >
             <ul class="dropdown-menu" aria-labelledby="marketplaceMenu">
-              <li><a class="dropdown-item" routerLink="/empty">Products</a></li>
-              <li><a class="dropdown-item" routerLink="/empty">Categories</a></li>
-              <li><a class="dropdown-item" routerLink="/empty">Cart</a></li>
-              <li><a class="dropdown-item" routerLink="/empty">Checkout</a></li>
+
+              <li><a class="dropdown-item" routerLink="/produitList">Products</a></li>
+              <li><a class="dropdown-item" routerLink="/cart">Cart</a></li>
+              <li><a class="dropdown-item" routerLink="/wishlist">wishlist</a></li>
+
             </ul>
           </li>
           <!-- Exams & Certifications -->
@@ -80,11 +83,13 @@
               >Exams & Certifications</a
             >
             <ul class="dropdown-menu" aria-labelledby="examsMenu">
-              <li><a class="dropdown-item" routerLink="/empty">Upcoming Exams</a></li>
+
+              <li><a class="dropdown-item" routerLink="/examstudent">Upcoming Exams</a></li>
               <li>
-                <a class="dropdown-item" routerLink="/empty">Certification Programs</a>
+                <a class="dropdown-item" routerLink="/certificatet">Certification Programs</a>
               </li>
-              <li><a class="dropdown-item" routerLink="/empty">Exam Results</a></li>
+              <li><a class="dropdown-item" routerLink="/result">Exam Results</a></li>
+
             </ul>
           </li>
           <!-- Coding Games & Interactive Learning -->
@@ -100,7 +105,9 @@
             >
             <ul class="dropdown-menu" aria-labelledby="codingGamesMenu">
               <li>
-                <a class="dropdown-item" routerLink="/empty">Coding Challenges</a>
+
+                <a class="dropdown-item" routerLink="/coding-game">Coding Challenges</a>
+
               </li>
               <li>
                 <a class="dropdown-item" routerLink="/empty">Interactive Tutorials</a>
@@ -123,11 +130,13 @@
             >
             <ul class="dropdown-menu" aria-labelledby="forumMenu">
               <li>
-                <a class="dropdown-item" routerLink="/empty">Discussion Boards</a>
+
+                <a class="dropdown-item" routerLink="/blog">Blog</a>
               </li>
-              <li><a class="dropdown-item" routerLink="/empty">Q&A</a></li>
+              <li><a class="dropdown-item" routerLink="/thread">Threads</a></li>
               <li>
-                <a class="dropdown-item" routerLink="/empty">Community Guidelines</a>
+                <a class="dropdown-item" routerLink="/event">Events</a>
+
               </li>
             </ul>
           </li>
@@ -150,7 +159,9 @@
           </li>
           <!-- Donate -->
           <li class="nav-item">
-            <a class="nav-link" routerLink="/empty">Donate</a>
+
+            <a class="nav-link" routerLink="/Donation">Donate</a>
+
           </li>
           <!-- Check Profile -->
           <li class="nav-item ms-3">
@@ -164,4 +175,3 @@
   </nav>
   <!-- Logo Nav END -->
 </header>
-<!-- Header END -->

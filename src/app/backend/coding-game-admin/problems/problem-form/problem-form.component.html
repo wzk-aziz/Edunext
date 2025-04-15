@@ -1,0 +1,24 @@
+
+<div class="form-container">
+    <h2>{{ isEditMode ? 'Update Problem' : 'Add New Problem' }}</h2>
+
+    <div *ngIf="successMessage" class="success-message">
+        <i>✔</i> {{ successMessage }}
+    </div>
+
+    <form (ngSubmit)="saveProblem()">
+        <label for="title">Title:</label>
+        <input type="text" id="title" [(ngModel)]="problem.title" name="title" required (input)="validateForm()">
+
+        <label for="description">Description:</label>
+        <textarea id="description" [(ngModel)]="problem.description" name="description" required (input)="validateForm()"></textarea>
+
+        <label for="expectedOutput">Expected Output:</label>
+        <textarea id="expectedOutput" [(ngModel)]="problem.expectedOutput" name="expectedOutput" required (input)="validateForm()"></textarea>
+
+        <div class="btn-group">
+            <button type="submit" class="save-btn" [disabled]="!isFormValid">💾 Save Problem</button>
+            <button type="button" class="back-btn" (click)="goBack()">⬅ Back to List</button>
+        </div>
+    </form>
+</div>

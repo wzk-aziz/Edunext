@@ -1,0 +1,70 @@
+<!-- Anti-Cheating Warning Modal -->
+<div *ngIf="showCheatingPopup" class="cheating-warning-popup">
+  <div class="warning-content">
+    <h4 class="text-danger fw-bold mb-2">⚠️ Cheating Detected</h4>
+    <p>If you continue, the quiz will be <strong>closed and failed</strong>.</p>
+  </div>
+</div>
+<!-- Disqualified Popup -->
+<div *ngIf="disqualified" class="disqualified-popup">
+  <div class="disqualified-content">
+    <h4 class="text-danger fw-bold mb-2">🚫 Disqualified</h4>
+    <p>You have been disqualified from this quiz due to repeated suspicious activity.</p>
+    <p>The quiz will now be closed.</p>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="quiz-container p-4 shadow-lg rounded bg-white">
+    <!-- Quiz Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold">Take Quiz</h2>
+      <div class="timer-container">
+        <span class="fw-bold text-danger">Time Left:</span> 
+        <strong class="text-dark ms-2">{{ formatTimeLeft(timeLeft) }}</strong>
+      </div>
+    </div>
+
+    <!-- Timer Progress Bar -->
+    <div class="progress mb-4" style="height: 10px;">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" 
+           role="progressbar"
+           [style.width]="(timeLeft / (quizTimeLimit * 60)) * 100 + '%'">
+      </div>
+    </div>
+
+    <!-- Loading & Error Messages -->
+    <div *ngIf="loading" class="alert alert-info text-center">Loading questions...</div>
+    <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
+
+    <!-- Quiz Form -->
+    <form [formGroup]="quizForm" (ngSubmit)="submitQuiz()">
+      <div formArrayName="answers">
+        <div *ngFor="let question of questions; let i = index" class="mb-4">
+          <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">{{ i + 1 }}. {{ question.questionText }}</h5>
+              <p class="text-muted">{{ question.questionType === 'MULTIPLE_CHOICE' ? 'Select multiple answers' : 'Select one answer' }}</p>
+
+              <div class="options mt-3">
+                <div *ngFor="let option of question.answerOptions; let j = index" 
+                     class="option-item p-3 rounded text-center"
+                     [class.selected]="isSelected(i, option)"
+                     (click)="selectAnswer(i, option, question.questionType)">
+                  {{ option }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-lg btn-primary px-4 py-2 rounded-pill shadow-sm">
+          Submit Quiz
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

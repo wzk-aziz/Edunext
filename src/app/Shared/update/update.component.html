@@ -1,0 +1,116 @@
+<div class="page-container">
+  <div class="form-container">
+    <!-- Success Alert -->
+    <div *ngIf="showSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+      User updated successfully!
+    </div>
+    
+    <h2 class="text-center mb-4">Update User</h2>
+
+    <!-- Form to update user -->
+    <form [formGroup]="userForm" (ngSubmit)="updateUser()" class="update-form">
+      <div class="row">
+        <!-- First Name -->
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="firstname">First Name *</label>
+            <input 
+              id="firstname" 
+              formControlName="firstname" 
+              class="form-control" 
+              placeholder="Enter first name"
+              [ngClass]="{ 'is-invalid': userForm.controls['firstname'].invalid && userForm.controls['firstname'].touched }"
+            />
+            <div *ngIf="userForm.controls['firstname'].invalid && userForm.controls['firstname'].touched" class="invalid-feedback">
+              First Name is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="lastname">Last Name *</label>
+            <input 
+              id="lastname" 
+              formControlName="lastname" 
+              class="form-control" 
+              placeholder="Enter last name"
+              [ngClass]="{ 'is-invalid': userForm.controls['lastname'].invalid && userForm.controls['lastname'].touched }"
+            />
+            <div *ngIf="userForm.controls['lastname'].invalid && userForm.controls['lastname'].touched" class="invalid-feedback">
+              Last Name is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group mb-3">
+        <label for="email">Email *</label>
+        <input 
+          id="email" 
+          formControlName="email" 
+          type="email" 
+          class="form-control" 
+          placeholder="Enter email"
+          [ngClass]="{ 'is-invalid': userForm.controls['email'].invalid && userForm.controls['email'].touched }"
+        />
+        <div *ngIf="userForm.controls['email'].invalid && userForm.controls['email'].touched" class="invalid-feedback">
+          Please enter a valid email.
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group mb-3">
+        <label for="password">Password *</label>
+        <input 
+          id="password" 
+          formControlName="password" 
+          type="password" 
+          class="form-control" 
+          placeholder="Enter password"
+          [ngClass]="{ 'is-invalid': userForm.controls['password'].invalid && userForm.controls['password'].touched }"
+        />
+        <div *ngIf="userForm.controls['password'].invalid && userForm.controls['password'].touched" class="invalid-feedback">
+          Password is required and should be at least 6 characters long.
+        </div>
+      </div>
+
+      <!-- Role -->
+      <div class="form-group mb-4">
+        <label for="role">Role *</label>
+        <select 
+          id="role" 
+          formControlName="role" 
+          class="form-control" 
+          [ngClass]="{ 'is-invalid': userForm.controls['role'].invalid && userForm.controls['role'].touched }"
+        >
+          <option value="" disabled selected>Select a role</option>
+          <option value="LEARNER">Learner</option>
+          <option value="TEACHER">Teacher</option>
+        </select>
+        <div *ngIf="userForm.controls['role'].invalid && userForm.controls['role'].touched" class="invalid-feedback">
+          Please select a role.
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-lg"
+          (click)="userForm.markAllAsTouched()"
+          [disabled]="updating"
+        >
+          {{ updating ? 'Updating...' : 'Update' }}
+        </button>
+
+        <!-- Error message for incomplete form -->
+        <div *ngIf="userForm.invalid && userForm.touched" class="mt-3 text-danger">
+          Please fill out all required fields.
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

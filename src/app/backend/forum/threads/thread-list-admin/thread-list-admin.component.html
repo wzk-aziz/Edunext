@@ -1,0 +1,130 @@
+<!-- thread-list-admin.component.html -->
+<div class="admin-threads-container">
+  <div class="admin-threads-header">
+    <h1>Administration des Threads</h1>
+    <p class="subtitle">Gestion et modération du forum</p>
+  </div>
+
+  <div class="admin-filters-container">
+    <!-- Search bar -->
+    <div class="admin-search-bar">
+      <i class="fa fa-search"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="filterThreads()" 
+        placeholder="Rechercher des threads..." 
+      />
+    </div>
+
+    <div class="admin-filter-options">
+      <!-- Tags filter -->
+      <div class="admin-tags-filter">
+        <span class="filter-label">Filtrer par tag:</span>
+        <div class="admin-tags-list">
+          <span 
+            *ngFor="let tag of availableTags" 
+            class="admin-tag" 
+            [class.active]="selectedTags.includes(tag)"
+            (click)="addTag(tag)"
+          >
+            #{{tag}}
+          </span>
+        </div>
+      </div>
+
+      <!-- Sort options -->
+      <div class="admin-sort-options">
+        <span class="filter-label">Trier par:</span>
+        <select [(ngModel)]="selectedSort" (change)="sortThreads(selectedSort)" class="admin-sort-select">
+          <option *ngFor="let option of sortOptions" [value]="option.value">{{option.label}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Threads list -->
+  <div class="admin-threads-list" *ngIf="getCurrentPageThreads().length > 0; else noThreads">
+    <div class="admin-thread-card" *ngFor="let thread of getCurrentPageThreads()">
+      <div class="admin-thread-header">
+        <h3 class="admin-thread-title">{{thread.threadTitle}}</h3>
+        <div class="admin-thread-actions">
+          <button class="admin-btn view-btn" (click)="toggleCommentBox(thread)">
+            <i class="fa fa-eye"></i> Voir détails
+          </button>
+          <button class="admin-btn delete-btn" (click)="deleteThread(thread.id!)">
+            <i class="fa fa-trash"></i> Supprimer
+          </button>
+        </div>
+      </div>
+
+      
+
+      <div class="admin-thread-content">{{getThreadPreview(thread.threadContent)}}</div>
+
+      <!-- Stats section -->
+      <div class="admin-thread-stats">
+        <div class="admin-stat-item">
+          <i class="fa fa-thumbs-up" style="color: #4267B2"></i>
+          <span>{{getReactionCount(thread.id!, 'LIKE') || 0}}</span>
+        </div>
+        <div class="admin-stat-item">
+          <i class="fa fa-heart" style="color: #E91E63"></i>
+          <span>{{getReactionCount(thread.id!, 'LOVE') || 0}}</span>
+        </div>
+        <div class="admin-stat-item">
+          <i class="fa fa-laugh" style="color: #FFC107"></i>
+          <span>{{getReactionCount(thread.id!, 'HAHA') || 0}}</span>
+        </div>
+        <div class="admin-stat-item">
+          <i class="fa fa-comment"></i>
+          <span>{{getThreadComments(thread).length}}</span>
+        </div>
+      </div>
+
+      <!-- Comments expanded view -->
+     
+      
+    </div>
+  </div>
+  
+  <ng-template #noThreads>
+    <div class="admin-no-threads">
+      <i class="fa fa-search"></i>
+      <p>Aucun thread trouvé correspondant à vos critères.</p>
+    </div>
+  </ng-template>
+
+  <!-- Pagination -->
+  <div class="admin-pagination" *ngIf="filteredThreads.length > 0">
+    <button 
+      class="admin-pagination-btn" 
+      [disabled]="currentPage === 1" 
+      (click)="changePage(currentPage - 1)"
+    >
+      <i class="fa fa-chevron-left"></i>
+    </button>
+    
+    <span class="admin-pagination-info">
+      Page {{currentPage}} sur {{totalPages}}
+    </span>
+    
+    <button 
+      class="admin-pagination-btn" 
+      [disabled]="currentPage === totalPages" 
+      (click)="changePage(currentPage + 1)"
+    >
+      <i class="fa fa-chevron-right"></i>
+    </button>
+    
+    <select 
+      class="admin-pagination-size" 
+      [(ngModel)]="pageSize" 
+      (change)="currentPage = 1; filterThreads()"
+    >
+      <option [value]="5">5 par page</option>
+      <option [value]="10">10 par page</option>
+      <option [value]="20">20 par page</option>
+    </select>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="container">
+    <h2>Problem List</h2>
+    <button class="add-btn" [routerLink]="['/backoffice/problems/new']">➕ Add New Problem</button>
+  
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let problem of paginatedProblems">
+        <td>{{ problem.title }}</td>
+        <td>{{ problem.description }}</td>
+        <td>
+          <div class="action-buttons">
+            <button class="view-btn" (click)="goToView(problem.id!)">👁 View</button>
+            <button class="edit-btn" (click)="goToUpdate(problem.id!)">✏ Edit</button>
+            <button class="delete-btn" (click)="deleteProblem(problem.id)">🗑 Delete</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+      <button class="btn btn-secondary me-2" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+        Précédent
+      </button>
+      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <button class="btn btn-secondary ms-2" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
+        Suivant
+      </button>
+    </div>
+  </div>
+  

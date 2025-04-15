@@ -1,0 +1,16 @@
+.icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    /* Adjust padding, border-radius, etc. as needed */
+  }
+  
+  .icon-btn .btn-text {
+    display: none;
+    margin-left: 5px;
+  }
+  
+  .icon-btn:hover .btn-text {
+    display: inline-block;
+  }
+  

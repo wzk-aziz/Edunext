@@ -1,0 +1,68 @@
+/* Hover effect for the entire card */
+.hover-effect:hover {
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Thumbnail hover zoom effect */
+.thumbnail-container {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.thumbnail-image {
+    transition: all 0.3s ease;
+    transform-origin: center center;
+}
+
+.thumbnail-container:hover .thumbnail-image {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Optional: Add hover effect to the "View more" button */
+.btn-dark:hover {
+    background-color: #333 !important;
+    transform: translateY(-2px);
+}
+.courses-list-container {
+    max-width: 900px;
+    margin: auto;
+    background: #f8f9fa;
+  }
+  
+  .course-card {
+    background: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .pack-ribbon {
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    background: #dc3545;
+    color: #fff;
+    padding: 5px 10px;
+    transform: rotate(45deg);
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+  
+  .search-filter input {
+    max-width: 300px;
+  }
+  
+  .filter-options button {
+    margin-bottom: 5px;
+  }
+  

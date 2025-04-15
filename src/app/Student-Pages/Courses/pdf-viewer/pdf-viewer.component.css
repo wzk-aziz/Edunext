@@ -1,0 +1,41 @@
+.pdf-container {
+  height: 500px;
+  overflow-y: auto;
+  position: relative;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+canvas {
+  display: block;
+  margin: 0 auto 20px;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-loader {
+  position: absolute;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.8);
+  inset: 0;
+}
+.bookmark-list {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  background-color: #fff;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.bookmark-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+input.form-control-sm {
+  height: auto;
+  font-size: 0.85rem;
+}

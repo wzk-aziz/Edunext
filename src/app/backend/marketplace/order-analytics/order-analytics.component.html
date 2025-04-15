@@ -1,0 +1,231 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:36 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>:: e-Learn:: Education Dashboard </title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+  <!-- plugin css file  -->
+  <link rel="stylesheet" href="/assetsback/css/carousel.min.css" />
+  <!-- project css file  -->
+  <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+  <!-- Google Code  -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-264428387-1');
+  </script>
+</head>
+<body>
+
+<div id="elearn-layout" class="theme-purple">
+  <!-- sidebar -->
+  <div class="sidebar px-4 py-4 py-md-4  me-0">
+    <div class="d-flex flex-column h-100">
+      <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
+                <span class="logo-icon">
+                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                </span>
+        <span class="logo-text">e-Learn </span>
+      </a>
+      <!-- Menu: main ul -->
+
+      <ul class="menu-list flex-grow-1 mt-3">
+        <li><a class="m-link active" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/Student" ><i class="icofont-group-students"></i> <span>Students </span></a></li>
+        <li class="collapsed">
+          <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+            <i class="icofont-teacher"></i>
+            <span>Teachers</span>
+            <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
+          </a>
+          <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+            <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+            <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
+          </ul>
+        </li>
+
+
+        <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
+        <li class="collapsed">
+          <a class="m-link" (click)="toggleMenu()" role="button">
+            <i class="icofont-certificate"></i>
+            <span>Marketplace</span>
+            <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+          </a>
+          <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+            <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace dashboard</span></a></li>
+            <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+            <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a></li>
+            <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+            <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
+
+          </ul>
+        </li>
+        <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
+        <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
+
+      </ul>
+      <!-- Theme: Switch Theme -->
+      <ul class="list-unstyled mb-0">
+        <li class="d-flex align-items-center justify-content-center">
+          <div class="form-check form-switch theme-switch">
+            <input class="form-check-input" type="checkbox" id="theme-switch">
+            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-center">
+          <div class="form-check form-switch theme-rtl">
+            <input class="form-check-input" type="checkbox" id="theme-rtl">
+            <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+          </div>
+        </li>
+      </ul>
+      <!-- Menu: menu collepce btn -->
+      <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+        <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- main body area -->
+  <div class="main px-lg-4 px-md-4">
+
+    <!-- Body: Header -->
+    <div class="header">
+      <nav class="navbar py-4">
+        <div class="container-xxl">
+
+
+
+          <!-- menu toggler -->
+          <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
+            <span class="fa fa-bars"></span>
+          </button>
+
+
+
+        </div>
+      </nav>
+    </div>
+    <!-- SECTION NAVIGATION -->
+    <div class="navigation-section">
+      <h3>🔗 Quick Access</h3>
+      <div class="nav-buttons">
+        <button (click)="goTo('backoffice/productBack')" class="nav-btn products">
+          <i class="fas fa-box"></i> Products
+        </button>
+        <button (click)="goTo('backoffice/categorieBack')" class="nav-btn categories">
+          <i class="fas fa-th"></i> Categories
+        </button>
+        <button (click)="goTo('backoffice/order')" class="nav-btn orders">
+          <i class="fas fa-receipt"></i> Orders
+        </button>
+        <button (click)="goTo('backoffice/coupon')" class="nav-btn coupons">
+          <i class="fas fa-ticket-alt"></i> Coupons
+        </button>
+      </div>
+    </div>
+    <div class="analytics-dashboard">
+      <h2 class="dashboard-title">📊 Order Statistics</h2>
+
+      <!-- SECTION DES COMMANDES -->
+      <div *ngIf="analyticsData" class="section-orders">
+        <h3>Order Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-card placed">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Orders Placed</p>
+            <h3>{{ analyticsData.placed }}</h3>
+          </div>
+
+          <div class="stat-card shipped">
+            <i class="fas fa-truck"></i>
+            <p>Orders Shipped</p>
+            <h3>{{ analyticsData.shipped }}</h3>
+          </div>
+
+          <div class="stat-card delivered">
+            <i class="fas fa-box-open"></i>
+            <p>Orders Delivered</p>
+            <h3>{{ analyticsData.delivered }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION DES FINANCES -->
+      <div *ngIf="analyticsData" class="section-finances">
+        <h3>Financial Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-card earnings-current">
+            <i class="fas fa-euro-sign"></i>
+            <p>Current Month Earnings</p>
+            <h3>€{{ analyticsData.currentMonthEarnings }}</h3>
+          </div>
+
+          <div class="stat-card earnings-previous">
+            <i class="fas fa-euro-sign"></i>
+            <p>Previous Month Earnings</p>
+            <h3>€{{ analyticsData.previousMonthEarnings }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION DU MOIS -->
+      <div *ngIf="analyticsData" class="section-month">
+        <h3>Monthly Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-card current-month">
+            <i class="fas fa-calendar-alt"></i>
+            <p>Orders This Month</p>
+            <h3>{{ analyticsData.currentMonthOrders }}</h3>
+          </div>
+
+          <div class="stat-card previous-month">
+            <i class="fas fa-calendar-minus"></i>
+            <p>Orders Last Month</p>
+            <h3>{{ analyticsData.previousMonthOrders }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!analyticsData" class="loading-message">
+        <p>Loading statistics...</p>
+      </div>
+    </div>
+
+
+
+
+  </div>
+</div>
+
+<!-- Jquery Core Js -->
+<script src="/assetsback/bundles/libscripts.bundle.js"></script>
+
+<!-- Plugin Js-->
+<script src="/assetsback/bundles/carousel.bundle.js"></script>
+<script src="/assetsback/bundles/apexcharts.bundle.js"></script>
+
+<!-- Jquery Page Js -->
+<script src="../js/template.js"></script>
+<script src="../js/page/elearn-index.js"></script>
+</body>
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:55 GMT -->
+</html>

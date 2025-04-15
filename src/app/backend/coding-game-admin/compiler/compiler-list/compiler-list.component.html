@@ -1,0 +1,28 @@
+<div class="container">
+    <h2>Compiler List</h2>
+    <button (click)="goToCreate()" class="btn btn-primary">+ Add New Compiler</button>
+  
+    <table class="table table-striped mt-3">
+      <thead class="bg-primary text-white">
+        <tr>
+          <th>ID</th>
+          <th>Command</th>
+          <th>Language ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let compiler of compilers">
+          <td>{{ compiler.id }}</td>
+          <td>{{ compiler.command }}</td>
+          <td>{{ compiler.language.id }}</td>
+          <td>
+            <button (click)="goToEdit(compiler.id!)" class="btn btn-warning">✏ Edit</button>
+            <button (click)="deleteCompiler(compiler.id!)" class="btn btn-danger">🗑 Delete</button>
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  

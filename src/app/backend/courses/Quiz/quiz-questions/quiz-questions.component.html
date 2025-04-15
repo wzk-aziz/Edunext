@@ -1,0 +1,228 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:36 GMT -->
+<head>
+    <meta charset="utf-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>:: e-Learn:: Education Dashboard </title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <!-- plugin css file  -->
+    <link rel="stylesheet" href="/assetsback/css/carousel.min.css" />
+    <!-- project css file  -->
+    <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+    <!-- Google Code  -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-264428387-1');
+    </script>
+</head>
+<body>
+
+<div id="elearn-layout" class="theme-purple">
+    <!-- sidebar -->
+    <div class="sidebar px-4 py-4 py-md-4  me-0">
+        <div class="d-flex flex-column h-100">
+            <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
+                <span class="logo-icon">
+                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                </span>
+                <span class="logo-text">e-Learn </span>
+            </a>
+            <!-- Menu: main ul -->
+             
+            <ul class="menu-list flex-grow-1 mt-3">
+                <li><a class="m-link active" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Student" ><i class="icofont-group-students"></i> <span>Students </span></a></li>
+                <li class="collapsed">
+                    <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+                        <i class="icofont-teacher"></i>
+                        <span>Teachers</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+                        <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="collapsed">
+                    <a class="m-link" (click)="toggleMenu()" role="button">
+                        <i class="icofont-certificate"></i>
+                        <span>Courses</span>
+                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+                        <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Create Courses</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures </span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
+                        <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a></li>
+                    </ul>
+                </li>
+                <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
+                <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
+                
+            </ul>
+            <!-- Theme: Switch Theme -->
+            <ul class="list-unstyled mb-0">
+                <li class="d-flex align-items-center justify-content-center">
+                    <div class="form-check form-switch theme-switch">
+                        <input class="form-check-input" type="checkbox" id="theme-switch">
+                        <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                    </div>
+                </li>
+                <li class="d-flex align-items-center justify-content-center">
+                    <div class="form-check form-switch theme-rtl">
+                        <input class="form-check-input" type="checkbox" id="theme-rtl">
+                        <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+                    </div>
+                </li>
+            </ul>
+            <!-- Menu: menu collepce btn -->
+            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+                <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
+
+        
+      <div class="container my-4">
+        <h2 class="mb-4">Add Questions to Quiz {{ quizId }}</h2>
+        <form [formGroup]="questionsForm" (ngSubmit)="onSubmit()">
+          <div formArrayName="questions">
+            <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index" [formGroupName]="i" class="card mb-3 shadow-sm">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Question {{ i + 1 }}</h5>
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeQuestion(i)" *ngIf="questionsFormArray.length > 1">
+                  Remove
+                </button>
+              </div>
+              <div class="card-body">
+                <!-- Question Text -->
+                <div class="mb-3">
+                  <label for="questionText{{ i }}" class="form-label">
+                    Question Text <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" id="questionText{{ i }}" formControlName="questionText" class="form-control" required>
+                  <div *ngIf="questionGroup.get('questionText')?.invalid && (questionGroup.get('questionText')?.dirty || questionGroup.get('questionText')?.touched)" class="text-danger">
+                    Question text is required.
+                  </div>
+                </div>
+                <!-- Question Type -->
+                <div class="mb-3">
+                  <label for="questionType{{ i }}" class="form-label">
+                    Question Type <span class="text-danger">*</span>
+                  </label>
+                  <select id="questionType{{ i }}" formControlName="questionType" class="form-select" required>
+                    <option value="SINGLE_CHOICE">Single Choice</option>
+                    <option value="MULTIPLE_CHOICE">Multiple Choice</option>
+                  </select>
+                  <div *ngIf="questionGroup.get('questionType')?.invalid && (questionGroup.get('questionType')?.dirty || questionGroup.get('questionType')?.touched)" class="text-danger">
+                    Question type is required.
+                  </div>
+                </div>
+                <!-- Answer Options -->
+                <div class="mb-3" formArrayName="answerOptions">
+                  <label class="form-label">
+                    Answer Options <span class="text-danger">*</span>
+                  </label>
+                  <div *ngFor="let option of getAnswerOptionsArray(i).controls; let j = index" class="input-group mb-2">
+                    <input type="text" [formControlName]="j" class="form-control" placeholder="Answer option" required>
+                    <button type="button" class="btn btn-outline-danger" (click)="removeAnswerOption(i, j)" *ngIf="getAnswerOptionsArray(i).length > 1">
+                      &times;
+                    </button>
+                  </div>
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="addAnswerOption(i)">
+                    <i class="fas fa-plus me-1"></i> Add Option
+                  </button>
+                </div>
+                <!-- Correct Answers -->
+<div class="mb-3" formArrayName="correctAnswers">
+  <label class="form-label">
+    Correct Answers <span class="text-danger">*</span>
+  </label>
+  <div *ngFor="let answer of getCorrectAnswersArray(i).controls; let k = index" class="input-group mb-2">
+    <input type="text" [formControlName]="k" class="form-control" placeholder="Correct answer" required>
+    <button type="button" class="btn btn-outline-danger" (click)="removeCorrectAnswer(i, k)" *ngIf="getCorrectAnswersArray(i).length > 1">
+      &times;
+    </button>
+  </div>
+  <!-- Only show Add button if not single choice with one answer -->
+  <button *ngIf="!(questionGroup.get('questionType')?.value === 'SINGLE_CHOICE' && getCorrectAnswersArray(i).length >= 1)"
+          type="button" class="btn btn-outline-primary btn-sm" (click)="addCorrectAnswer(i)">
+    <i class="fas fa-plus me-1"></i> Add Correct Answer
+  </button>
+</div>
+
+                <!-- Points (auto-distributed) -->
+                <div class="mb-3">
+                  <label for="points{{ i }}" class="form-label">
+                    Points <span class="text-danger">*</span>
+                  </label>
+                  <input type="number" id="points{{ i }}" formControlName="points" class="form-control" readonly>
+                  <small class="form-text text-muted">Points are evenly distributed from the total quiz points.</small>
+                  <div *ngIf="questionGroup.get('points')?.invalid && (questionGroup.get('points')?.dirty || questionGroup.get('points')?.touched)" class="text-danger">
+                    Points must be at least 1.
+                  </div>
+                </div>
+                <!-- Explanation -->
+                <div class="mb-3">
+                  <label for="explanation{{ i }}" class="form-label">Explanation</label>
+                  <textarea id="explanation{{ i }}" formControlName="explanation" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Button to add another question -->
+          <div class="mb-3">
+            <button type="button" class="btn btn-outline-primary" (click)="addQuestion()">
+              <i class="fas fa-plus me-1"></i> Add Another Question
+            </button>
+          </div>
+          <!-- Submit Button -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">
+              Submit Quiz Questions
+            </button>
+          </div>
+        </form>
+      </div>
+      
+  
+    </div>
+</div>
+
+<!-- Jquery Core Js -->
+<script src="/assetsback/bundles/libscripts.bundle.js"></script>
+
+<!-- Plugin Js-->
+<script src="/assetsback/bundles/carousel.bundle.js"></script>
+<script src="/assetsback/bundles/apexcharts.bundle.js"></script> 
+
+<!-- Jquery Page Js -->
+<script src="../js/template.js"></script>
+<script src="../js/page/elearn-index.js"></script>
+</body>
+
+<!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:55 GMT -->
+</html>

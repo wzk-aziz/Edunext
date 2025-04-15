@@ -1,0 +1,11 @@
+<div *ngIf="exam" class="exam-detail">
+    <h3>{{ exam.examTitle }}</h3>
+    <p>{{ exam.examDescription }}</p>
+    <h4>Questions :</h4>
+    <ul>
+      <li *ngFor="let question of exam.questions">
+        {{ question.questionText }}
+      </li>
+    </ul>
+  </div>
+  

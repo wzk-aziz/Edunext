@@ -1,0 +1,82 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, tap, throwError } from 'rxjs';
+import { Certificate } from '../models/Certificate';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CertificateService {
+
+  private apiUrl = 'http://localhost:9090/api/certificates';
+  private apiUrl1 = 'http://localhost:9090/api/certificates';
+
+
+  constructor(private http: HttpClient) {}
+
+  getCertificatesByUser(userId: number): Observable<Certificate[]> {
+    return this.http.get<Certificate[]>(`${this.apiUrl1}/user/${userId}`, {
+      withCredentials: true  // Permet l'envoi des cookies (si nécessaire)
+    });
+  }
+
+  updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {
+    return this.http.put<Certificate>(`${this.apiUrl}/${id}`, certificate);
+  }
+
+  //  Supprimer un certificat
+  deleteCertificate(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+  getAllCertificate(): Observable<Certificate[]> {
+      return this.http.get<Certificate[]>(this.apiUrl);
+    }
+
+  createCertificate(examId: number, certificate: Certificate): Observable<Certificate> {
+    return this.http.post<Certificate>(`${this.apiUrl}/${examId}`, certificate);
+  }
+
+  getCertificatesByExam(idExam: number): Observable<Certificate[]> {
+    console.log(`Fetching certificates for exam ID: ${idExam}`); // Log l'ID de l'examen
+    return this.http.get<Certificate[]>(`http://localhost:9090/api/certificates/exam/${idExam}`)
+      .pipe(
+        catchError(err => {
+          console.error('Error fetching certificates:', err);
+          return throwError(() => new Error(err));
+        })
+      );
+  }
+  downloadCertificate(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}`, {
+      responseType: 'blob' // Permet de récupérer un fichier
+    });
+  }
+  
+
+ // getCertificates(): Observable<Certificate[]> {
+  //  return this.http.get<Certificate[]>(this.apiUrl);
+//  }
+getCertificateById(id: number): Observable<Certificate> {
+  return this.http.get<Certificate>(`${this.apiUrl}/certificates/${id}`);
+}
+  getCertificate(id: number): Observable<Certificate> {
+    return this.http.get<Certificate>(`${this.apiUrl}/${id}`);
+  }
+
+getTop10Certificates(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/top10`);
+}
+
+  //createCertificate(certificate: Certificate): Observable<Certificate> {
+  //  return this.http.post<Certificate>(this.apiUrl, certificate);
+//  }
+
+  //updateCertificateAndAffectToExam(id: number, certificate: Certificate, idExam: number): Observable<Certificate> { 
+    //return this.http.put<Certificate>(`${this.apiUrl}/${id}/affectToExam/${idExam}`, certificate);
+  //}  
+
+  //deleteCertificate(id: number): Observable<void> {
+   // return this.http.delete<void>(`${this.apiUrl}/${id}`);
+ // }
+}

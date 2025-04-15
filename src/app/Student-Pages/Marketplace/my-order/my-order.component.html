@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Mes Commandes</h2>
+
+    <div *ngIf="myOrders?.length > 0; else noOrders">
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Référence</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Total</th>
+                <th>Détails</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of myOrders; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ order.reference }}</td>
+                <td>{{ order.date | date:'dd/MM/yyyy' }}</td>
+                <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': order.status === 'Livré',
+              'bg-warning': order.status === 'En attente',
+              'bg-danger': order.status === 'Annulé'
+            }">
+              {{ order.status }}
+            </span>
+                </td>
+                <td>{{ order.total | currency:'EUR' }}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" (click)="viewOrderDetails(order)">
+                        Voir Détails
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Message si aucune commande trouvée -->
+    <ng-template #noOrders>
+        <div class="alert alert-warning text-center">
+            Vous n'avez encore passé aucune commande.
+        </div>
+    </ng-template>
+</div>

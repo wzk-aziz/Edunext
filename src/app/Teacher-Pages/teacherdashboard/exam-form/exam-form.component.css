@@ -1,0 +1,17 @@
+.form-control {
+  min-height: 45px;
+  font-size: 1rem;
+  padding: 0.75rem;
+}
+
+textarea.form-control {
+  min-height: 150px;
+}
+
+.card {
+  padding: 2rem;
+}
+
+.form-label {
+  font-weight: bold;
+}

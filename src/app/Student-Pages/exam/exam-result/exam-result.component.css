@@ -1,0 +1,96 @@
+/* Style général */
+.card {
+    border-radius: 1rem;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .form-control {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  /* Liste des résultats */
+  .result-card {
+    background-color: #f9f9f9;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .questions {
+    margin-top: 1rem;
+  }
+  
+  .questions h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .questions li {
+    margin-bottom: 1.5rem;
+    list-style: none;
+  }
+  
+  /* Bouton détails */
+  .btn-outline-primary {
+    border-radius: 2rem;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+  }
+  
+  /* Bouton retour */
+  button.btn-secondary {
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  /* Pagination */
+  .pagination .page-item .page-link {
+    border-radius: 50%;
+    margin: 0 0.2rem;
+    color: #007bff;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  .pagination .page-item.disabled .page-link {
+    color: #ccc;
+    pointer-events: none;
+  }
+  
+  /* Sidebar */
+  .list-group-item {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border: none;
+  }
+  
+  .shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .card-body {
+      text-align: center;
+    }
+  
+   
+  }
+  
