@@ -50,30 +50,16 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<User> getAllBannedUsers() {
+        return userRepository.findByBannedTrue();
+    }
+
+    public List<User> getBannedUsersByRole(Role role) {
+        return userRepository.findBannedUsersByRole(role);
+    }
 
 
 
-  /*  public User updateUser(UpdateUserRequest request, Integer userId) {
-        Optional<User> existingUserOptional = userRepository.findById(userId);
-
-        if (existingUserOptional.isPresent()) {
-            User existingUser = existingUserOptional.get();
-
-            // Mise à jour des champs avec les données du request
-            existingUser.setFirstname(request.getFirstname());
-            existingUser.setLastname(request.getLastname());
-            existingUser.setEmail(request.getEmail());
-            String encodedPassword = passwordEncoder.encode(request.getPassword());
-            existingUser.setPassword(encodedPassword); // Utilisez le mot de passe encodé ici
-            existingUser.setMfaEnabled(request.isMfaEnabled());
-            // existingUser.setRole(request.getRole()); // si besoin de mettre à jour le rôle
-
-            // Sauvegarde l'utilisateur mis à jour
-            return userRepository.save(existingUser);
-        }
-
-        throw new RuntimeException("Utilisateur non trouvé avec l'ID : " + userId);
-    }*/
 
     public User updateUser(UpdateUserRequest request, Integer userId) {
         // Récupérer l'ID de l'utilisateur connecté

@@ -20,8 +20,8 @@ public class RegisterRequest {
     private String password;
     private String address;
     private String phonenumber;
-    private boolean mfaEnabled;
-    private Role role;
+    private boolean mfaEnabled = false; // valeur par défaut
+    private Role role = Role.LEARNER;
     private String Image;
 
 

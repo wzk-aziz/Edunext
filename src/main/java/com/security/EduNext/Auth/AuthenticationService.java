@@ -49,6 +49,7 @@ public class AuthenticationService {
                 .role(request.getRole())
                 .mfaEnabled(request.isMfaEnabled())
                 .Image(request.getImage())
+                .phoneNumber(request.getPhonenumber()) // Add this line
                 .build();
 
         if (request.isMfaEnabled()) {

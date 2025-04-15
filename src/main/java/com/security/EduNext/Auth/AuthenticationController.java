@@ -71,6 +71,11 @@ public class AuthenticationController {
                 return ResponseEntity.badRequest().body("The password contains forbidden words.");
             }
 
+            if (!isValidPhoneNumber(request.getPhonenumber())) {
+                return ResponseEntity.badRequest().body("Invalid phone number format.");
+            }
+
+
             // If a file is provided, upload it
             if (file != null && !file.isEmpty()) {
                 String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
@@ -222,6 +227,32 @@ public class AuthenticationController {
 
         return false;
     }
+
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // This is a simple validation - adjust the regex pattern according to your needs
+        return phoneNumber != null && phoneNumber.matches("^\\+?[1-9]\\d{1,14}$");
+    }
+
+
+    @GetMapping("/oauth2/success")
+    public ResponseEntity<AuthenticationResponse> oauth2Success(@RequestParam String token) {
+        return ResponseEntity.ok(AuthenticationResponse.builder()
+                .accessToken(token)
+                .mfaEnabled(false)
+                .build());
+    }
+
+    @GetMapping("/oauth2/url")
+    public ResponseEntity<String> getOAuth2Url() {
+        String url = "https://accounts.google.com/o/oauth2/v2/auth?" +
+                "client_id=337472242674-g2eaus14f97qq2khau5a6ullpqu32m9m.apps.googleusercontent.com&" +
+                "redirect_uri=http://localhost:8050/login/oauth2/code/google&" +
+                "response_type=code&" +
+                "scope=profile email";
+        return ResponseEntity.ok(url);
+    }
+
 
 
 

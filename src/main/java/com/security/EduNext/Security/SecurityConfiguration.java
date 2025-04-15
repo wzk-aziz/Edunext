@@ -2,6 +2,7 @@ package com.security.EduNext.Security;
 
 
 
+import com.security.EduNext.OAuth2.OAuth2LoginSuccessHandler;
 import org.springframework.boot.CommandLineRunner;  // Correct import
 import com.security.EduNext.Entities.Role;
 import com.security.EduNext.Entities.User;
@@ -34,69 +35,44 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/api/auth/**").permitAll()  // Permet l'accès à ces routes
-                        .anyRequest().authenticated()  // Toute autre requête nécessite une authentification
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/api/auth/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configuration pour une session stateless
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationProvider(authenticationProvider)  // Utilisation du provider d'authentification
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)  // Ajout du filtre JWT
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                        .logoutUrl("/api/v1/auth/logout") // URL de déconnexion personnalisée
-                        .addLogoutHandler(logoutHandler)  // Handler de déconnexion
-                        .logoutSuccessHandler(logoutSuccessHandler())  // Handler personnalisé après déconnexion
+                        .logoutUrl("/api/v1/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler(logoutSuccessHandler())
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .authorizationEndpoint(authorization -> authorization
+                                .baseUri("/oauth2/authorization") // Standard Spring OAuth2 endpoint
+                        )
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/login/oauth2/code/*")
+                        )
                 );
 
         return http.build();
     }
 
-  /*  @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())  // Désactivation de la protection CSRF
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**" ,"/api/v1/auth/request-password-reset").permitAll()// Permet l'accès à ces routes
-                        .anyRequest().authenticated()  // Toute autre requête nécessite une authentification
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configuration pour une session stateless
-                )
-                .authenticationProvider(authenticationProvider)  // Utilisation du provider d'authentification
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)  // Ajout du filtre JWT
-                .logout(logout -> logout
-                        .logoutUrl("/api/v1/auth/logout") // URL de déconnexion personnalisée
-                        .addLogoutHandler(logoutHandler)  // Handler de déconnexion
-                        .logoutSuccessHandler(logoutSuccessHandler())  // Handler personnalisé après déconnexion
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/api/v1/auth/login")  // Page de login personnalisée
-                        .authorizationEndpoint(authz -> authz
-                                .baseUri("/oauth2/authorize")  // URI de base pour l'autorisation OAuth2
-                        )
-                        .tokenEndpoint(token -> token
-                                .accessTokenResponseClient(new DefaultAuthorizationCodeTokenResponseClient())  // Utilisation du client par défaut
-                        )
-                );
-        return http.build();  // Appelez build une seule fois à la fin
-    }*/
+
+
+
 
     //Role of admin is in ApplicationConfig class
-
-
-
-
-
-
-
-
-
 
 
 
