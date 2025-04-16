@@ -82,7 +82,12 @@ export class AuthenticationService {
     const token = localStorage.getItem('token');
     if (!token) return;
   
-    this.http.post('http://localhost:8050/api/v1/auth/logout', {}, {
+    this.http.post('http://localhost:8093/api/v1/auth/logout', {}, {
+
+
+
+
+      
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {

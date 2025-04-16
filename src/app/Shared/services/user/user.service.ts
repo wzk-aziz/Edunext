@@ -49,7 +49,7 @@ export class UserService {
   }
 
   getUserImage(fileName: string): string {
-    return `http://localhost:8050/api/v1/auth/files/${fileName}`;
+    return `http://localhost:8093/api/v1/auth/files/${fileName}`;
   }
 
 

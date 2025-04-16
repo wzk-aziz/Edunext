@@ -13,8 +13,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthenticationServiceService {
 
-  private baseUrl: string = 'http://localhost:8050/api/v1/auth';
-  private apiUrl = 'http://localhost:8080/api/v1/auth/logout'; 
+  private baseUrl: string = 'http://localhost:8093/api/v1/auth';
+  private apiUrl = 'http://localhost:8093/api/v1/auth/logout'; 
   private user: User | null = null;
 
 
