@@ -18,14 +18,28 @@ public class ApiGatwewayApplication {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("exam-service", r -> r.path("/api/exams/**")
-                        .uri("lb://exam-service"))
+               // .route("exam-service", r -> r.path("/api/exams/**")
+                 //       .uri("lb://exam-service"))
+
+                .route("CERTIFICATE-SERVICE", r -> r.path("/generate")
+                        .uri("lb://certificate-service"))  // Génération du certificat
+                .route("DOWNLOAD-CERTIFICATE", r -> r.path("/certificates/**")
+                        .uri("lb://certificate-service"))  // Téléchargement du certificat
+
+                .route("marketplace-service", r -> r.path("/api/customer/**", "/api/admin/**", "/api/admin/coupons/**", "/api/payments/**", "/api/donations/**")
+                        .uri("lb://MARKETPLACE-SERVICE"))
+
+               //pi
                 .route("exam-route", r -> r.path("/api/exams/**")
-                        .uri("lb://EduNext"))
+                        .uri("lb://EXAM-SERVICE"))
+                .route("cert-route", r -> r.path("/api/certificates/**")
+                        .uri("lb://EXAM-SERVICE"))
+
+
                 .route("EduNext", r -> r.path("/api/v1/auth/**")
-                        .uri("lb://EduNext"))
+                        .uri("lb://EXAM-SERVICE"))
                 .route("EduNext", r -> r.path("/api/v1/users/**")
-                        .uri("lb://EduNext"))
+                        .uri("lb://EXAM-SERVICE"))
                 .build();
 
     }
