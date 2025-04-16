@@ -3,4 +3,5 @@ export interface AuthenticationResponse {
     mfaEnabled?: boolean;
     secretImageUri?: string;
     role?: string; // Add this line
+    userId?: number;
 }

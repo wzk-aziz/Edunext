@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {MarketplaceService} from "../services/marketplace.service";
+import {AuthenticationService} from "../../../Shared/services/authentication.service";
 
 @Component({
   selector: 'app-my-order',
@@ -7,21 +8,40 @@ import {MarketplaceService} from "../services/marketplace.service";
   styleUrls: ['./my-order.component.css']
 })
 export class MyOrderComponent {
-  myOrders: any;
-  constructor(private marketplaceService: MarketplaceService) { }
 
-  ngOnInit(){
-    this.getMyOrders();
+
+  orders: any[] = [];
+  errorMessage: string = '';
+
+  constructor(private marketplaceService: MarketplaceService, private authService: AuthenticationService) {}
+
+  ngOnInit() {
+    this.loadUserOrders();
   }
 
-  getMyOrders(){
-    this.marketplaceService.getOrders().subscribe(res=>{
-      this.myOrders=res;
-    })
+  loadUserOrders() {
+    const userId = this.authService.getUserId();  // Récupérer l'ID de l'utilisateur
+    if (userId) {
+      this.marketplaceService.getMyOrders(Number(userId)).subscribe(
+          (data) => {
+            this.orders = data;
+          },
+          (error) => {
+            this.errorMessage = 'Could not load orders. Please try again later.';
+          }
+      );
+    } else {
+      this.errorMessage = 'User is not logged in.';
+    }
   }
-  viewOrderDetails(order: any) {
-    console.log("Détails de la commande :", order);
-    alert(`Commande Réf: ${order.reference}\nDate: ${order.date}\nTotal: ${order.total}€\nStatut: ${order.status}`);
+  getStatusClass(status: string) {
+    switch (status) {
+      case 'Shipped': return 'status-shipped';
+      case 'Delivered': return 'status-delivered';
+      case 'Pending': return 'status-pending';
+      case 'Cancelled': return 'status-cancelled';
+      default: return '';
+    }
   }
 
 }

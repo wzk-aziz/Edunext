@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
 
   private handleGoogleLogin(user: SocialUser): void {
     console.log('Handling Google login for user:', user);
-    
+
     const googleAuthRequest = {
       token: user.idToken,
       email: user.email,
@@ -70,7 +70,8 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (response.accessToken) {
           localStorage.setItem('token', response.accessToken);
-          
+          localStorage.setItem('user', JSON.stringify(response)); // ← ici
+
           const userRole = response.role?.toUpperCase();
           switch(userRole) {
             case 'ADMIN':
@@ -109,11 +110,12 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (response.accessToken) {
           localStorage.setItem('token', response.accessToken);
-          
+          localStorage.setItem('user', JSON.stringify(response)); // ← ici
+
           const userRole = response.role?.toUpperCase();
           switch(userRole) {
             case 'ADMIN':
-              this.router.navigate(['backoffice']);
+              this.router.navigate(['backoffice/teachers']);
               break;
             case 'TEACHER':
               this.router.navigate(['listTeachers']);
@@ -144,16 +146,64 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.authRequest).subscribe({
       next: (response) => {
         this.authResponse = response;
+
         console.log("User role:", this.authResponse.role);
 
         if (!this.authResponse.mfaEnabled) {
           if (response.accessToken) {
             localStorage.setItem('token', response.accessToken);
-            
+            // Vérifier si l'ID utilisateur est présent et le sauvegarder dans localStorage
+            if (this.authResponse.userId) {
+              localStorage.setItem('userId', JSON.stringify(this.authResponse.userId));
+              console.log("User ID saved in localStorage:", this.authResponse.userId);
+            } else {
+              console.log("User ID is missing in the response.");
+            }
+
             const userRole = this.authResponse.role?.toUpperCase();
             switch(userRole) {
               case 'ADMIN':
                 this.router.navigate(['backoffice']);
+                break;
+              case 'TEACHER':
+                this.router.navigate(['listTeachers']);
+                break;
+              case 'LEARNER':
+                this.router.navigate(['studenthome']);
+                break;
+              default:
+                this.router.navigate(['main']);
+            }
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Authentication error:', err);
+        if (err.status === 400) {
+          this.errorMessage = 'Invalid email format';
+        } else if (err.status === 401) {
+          this.errorMessage = 'Invalid credentials';
+        } else {
+          this.errorMessage = 'Authentication failed';
+        }
+      }
+    });
+
+
+    this.authService.login(this.authRequest).subscribe({
+      next: (response) => {
+        this.authResponse = response;
+        console.log("User role:", this.authResponse.role);
+
+        if (!this.authResponse.mfaEnabled) {
+          if (response.accessToken) {
+            localStorage.setItem('token', response.accessToken);
+            localStorage.setItem('user', JSON.stringify(response)); // ← ici
+
+            const userRole = this.authResponse.role?.toUpperCase();
+            switch(userRole) {
+              case 'ADMIN':
+                this.router.navigate(['backoffice/teachers']);
                 break;
               case 'TEACHER':
                 this.router.navigate(['listTeachers']);

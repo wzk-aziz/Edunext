@@ -5,6 +5,7 @@ import { MarketplaceService } from '../services/marketplace.service';
 import { Router } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentServiceService } from "../../Donnation/services/payment-service.service";
+import {AuthenticationService} from "../../../Shared/services/authentication.service";
 
 @Component({
   selector: 'app-place-order',
@@ -20,13 +21,16 @@ export class PlaceOrderComponent implements OnInit {
   cardError: string = '';  // Error message for card payment
   totalAmount: number;  // Total Amount passed from CartComponent
 
+
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private marketplaceService: MarketplaceService,
     private paymentService: PaymentServiceService,  // Inject Payment service
+    private authService: AuthenticationService,
     private router: Router,
     private dialog: MatDialog,
+
     @Inject(MAT_DIALOG_DATA) public data: any  // Inject the data passed from CartComponent
   ) {
     this.totalAmount = data.totalAmount;  // Retrieve the totalAmount passed from CartComponent
@@ -84,7 +88,21 @@ export class PlaceOrderComponent implements OnInit {
           this.snackBar.open("Payment failed, please try again.", 'Close', { duration: 5000 });
         } else if (result.paymentIntent.status === 'succeeded') {
           // If payment succeeded, place the order
-          this.marketplaceService.placeOrder(this.orderForm.value).subscribe((res) => {
+          const userId = this.authService.getUserId(); // Récupérer l'ID utilisateur depuis le service d'authentification
+
+          if (!userId) {
+            this.snackBar.open('User not logged in', 'Close', { duration: 5000 });
+            return;
+          }
+
+          const orderData = {
+            address: this.orderForm.get('address')?.value,
+            orderDescription: this.orderForm.get('orderDescription')?.value,
+            totalAmount: this.totalAmount,
+          };
+
+          // Now pass both the userId and orderData to placeOrder
+          this.marketplaceService.placeOrder(userId, orderData).subscribe((res) => {
             if (res.id != null) {
               this.snackBar.open("Order placed successfully", 'Close', { duration: 5000 });
               this.router.navigateByUrl("/produitList");
@@ -96,9 +114,11 @@ export class PlaceOrderComponent implements OnInit {
         }
       }).catch((error: any) => {
         console.error("Error during payment confirmation", error);
+        this.snackBar.open("Payment confirmation failed", 'Close', { duration: 5000 });
       });
     });
   }
+
 
   closeForm() {
     this.dialog.closeAll();

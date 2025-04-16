@@ -262,28 +262,31 @@
     </div>
 
     <div class="donations-container">
-      <h2>Liste des Donations</h2>
+      <h2 class="title">Donation List</h2>
 
-      <!-- Vérification de l'existence des donations -->
-      <table *ngIf="donations.length > 0" class="donations-table">
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Montant</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let donation of donations">
-          <!-- Affichage uniquement de l'ID et du montant -->
-          <td>{{ donation.id }}</td>
-          <td>{{ donation.amount | currency }}</td>
-        </tr>
-        </tbody>
-      </table>
+      <!-- Check if there are donations -->
+      <div *ngIf="donations.length > 0" class="table-wrapper">
+        <table class="donations-table">
+          <thead>
+          <tr>
+            <th>Donation Number</th>
+            <th>Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let donation of donations">
+            <td>{{ donation.id }}</td>
+            <td>{{ donation.amount | currency }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-      <!-- Message si aucune donation -->
-      <p *ngIf="donations.length === 0">Aucune donation enregistrée.</p>
+      <!-- Message if no donations -->
+      <p *ngIf="donations.length === 0" class="no-donations-message">No donations recorded.</p>
     </div>
+
+
 
 
   </div>

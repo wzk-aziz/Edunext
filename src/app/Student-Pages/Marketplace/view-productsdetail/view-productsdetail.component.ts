@@ -38,22 +38,23 @@ export class ViewProductsdetailComponent {
     })
   }
 
-  addToWishlist(){
-    const wishListDto = {
-      productId : this.productId,
-    }
-    this.marketplaceService.addProductToWishlist(wishListDto).subscribe(res=>{
-      if(res.id !=null){
-        this.snackBar.open('Product Added to wishlist Successfully!','Close',{
-          duration:5000
-        });
-      }else{
-        this.snackBar.open("Already in Wishlist","WRROR",{
-          duration:5000
-        })
-      }
-    })
-  }
+  // addToWishlist(){
+  //   const wishListDto = {
+  //      // Assure-toi que ça retourne bien un ID
+  //     productId : this.productId,
+  //   }
+  //   this.marketplaceService.addProductToWishlist(userId,wishListDto).subscribe(res=>{
+  //     if(res.id !=null){
+  //       this.snackBar.open('Product Added to wishlist Successfully!','Close',{
+  //         duration:5000
+  //       });
+  //     }else{
+  //       this.snackBar.open("Already in Wishlist","WRROR",{
+  //         duration:5000
+  //       })
+  //     }
+  //   })
+  // }
 
 
 
