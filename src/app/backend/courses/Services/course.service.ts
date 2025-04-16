@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course, CourseLevel, PackType } from 'src/app/model/course.model';
 import { UserCourseDashboardDto } from 'src/app/model/UserCourseDashboardDto.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -60,8 +61,11 @@ export class CourseService {
   }
   
   getUserCourses(): Observable<UserCourseDashboardDto[]> {
-    return this.http.get<UserCourseDashboardDto[]>('/api/user-dashboard/courses');
+    return this.http.get<UserCourseDashboardDto[]>(`${environment.courseUrl}/api/user-dashboard/courses`);
   }
   
+  enrollInCourse(courseId: number): Observable<void> {
+    return this.http.post<void>(`${environment.courseUrl}/api/user-dashboard/enroll/${courseId}`, {});
+  }
   
 }

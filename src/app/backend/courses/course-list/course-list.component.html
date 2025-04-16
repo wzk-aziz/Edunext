@@ -2,581 +2,581 @@
 <html class="no-js" lang="en" dir="ltr">
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:36 GMT -->
-
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <title>:: e-Learn:: Education Dashboard </title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
-  <!-- plugin css file  -->
-  <link rel="stylesheet" href="/assetsback/css/carousel.min.css" />
-  <!-- project css file  -->
-  <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
-  <!-- Google Code  -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'UA-264428387-1');
-  </script>
+    <meta charset="utf-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>:: e-Learn:: Education Dashboard </title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <!-- plugin css file  -->
+    <link rel="stylesheet" href="/assetsback/css/carousel.min.css" />
+    <!-- project css file  -->
+    <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+    <!-- Google Code  -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-264428387-1');
+    </script>
 </head>
 
 <body id="elearn-layout" class="theme-purple">
-  <!-- sidebar -->
-  <div class="sidebar px-4 py-4 py-md-4  me-0">
-    <div class="d-flex flex-column h-100">
-      <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
-        <span class="logo-icon">
-          <svg width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
-            <path
-              d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z" />
-            <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-          </svg>
-        </span>
-        <span class="logo-text">e-Learn </span>
-      </a>
-      <!-- Menu: main ul -->
-
-      <!-- Menu: main ul -->
-
-      <ul class="menu-list flex-grow-1 mt-3">
-        <li><a class="m-link active" routerLink="/backoffice/Admin"><i
-              class="icofont-ui-home"></i><span>Dashboard</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i>
-            <span>Classes</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i>
-            <span>Students</span></a></li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleTeacherMenu()" role="button">
-            <i class="icofont-teacher"></i>
-            <span>Teachers</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-              [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
-            <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers
-                  Profile</span></a></li>
-          </ul>
-        </li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleVirtualClassroomMenu()" role="button">
-            <i class="icofont-calendar"></i>
-            <span>Tutoring</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-              [ngClass]="{'rotate': isVirtualClassroomMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomMenuOpen}" id="menu-VirtualClassroom">
-            <li class="collapsed">
-              <a class="ms-link" (click)="toggleVirtualClassroomSubMenu()" role="button">
-                <span>VirtualClassrooms</span>
-                <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-                  [ngClass]="{'rotate': isVirtualClassroomSubMenuOpen}"></span>
-              </a>
-              <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomSubMenuOpen}"
-                id="menu-VirtualClassroomSub">
-                <li><a class="ms-link" routerLink="/backoffice/sessions"><span>Sessions</span></a>
+    <!-- sidebar -->
+    <div class="sidebar px-4 py-4 py-md-4  me-0">
+        <div class="d-flex flex-column h-100">
+            <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
+                <span class="logo-icon">
+                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                </span>
+                <span class="logo-text">e-Learn </span>
+            </a>
+            <!-- Menu: main ul -->
+            <ul class="menu-list flex-grow-1 mt-3">
+              <li><a class="m-link active" routerLink="/backoffice/Admin"><i
+                    class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+              <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i>
+                  <span>Classes</span></a></li>
+              <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i>
+                  <span>Students</span></a></li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+                  <i class="icofont-teacher"></i>
+                  <span>Teachers</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+                  <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers
+                        Profile</span></a></li>
+                </ul>
+              </li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleVirtualClassroomMenu()" role="button">
+                  <i class="icofont-calendar"></i>
+                  <span>Tutoring</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isVirtualClassroomMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomMenuOpen}" id="menu-VirtualClassroom">
+                  <li class="collapsed">
+                    <a class="ms-link" (click)="toggleVirtualClassroomSubMenu()" role="button">
+                      <span>VirtualClassrooms</span>
+                      <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                        [ngClass]="{'rotate': isVirtualClassroomSubMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomSubMenuOpen}"
+                      id="menu-VirtualClassroomSub">
+                      <li><a class="ms-link" routerLink="/backoffice/sessions"><span>Sessions</span></a>
+                      </li>
+                      <li><a class="ms-link" routerLink="/backoffice/feedbacks"><span>Feedback</span></a>
+                      </li>
+                      <!--   <li><a class="ms-link" routerLink="/backoffice/chat-messages"><span>Chat Messages</span></a></li>
+                              -->
+                    </ul>
+                  </li>
+                  <li class="collapsed">
+                    <a class="ms-link" (click)="toggleLiveTutoringSubMenu()" role="button">
+                      <span>Live Tutoring</span>
+                      <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                        [ngClass]="{'rotate': isLiveTutoringSubMenuOpen}"></span>
+                    </a>
+                    <ul class="sub-menu collapse" [ngClass]="{'show': isLiveTutoringSubMenuOpen}" id="menu-LiveTutoringSub">
+                      <li><a class="ms-link" routerLink="/backoffice/mentorship-programs"><span>Mentorship
+                            Program</span></a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+      
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleCoursesMenu()" role="button">
+                  <i class="icofont-certificate"></i>
+                  <span>Courses</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isMenuOpenCourses}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpenCourses}">
+                  <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Create Courses</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures
+                      </span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a>
+                  </li>
+                </ul>
+              </li>
+      
+      
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleMenu()" role="button">
+                  <i class="icofont-certificate"></i>
+                  <span>Marketplace</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+                  <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace
+                        dashboard</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
+                </ul>
+              </li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+                  <i class="icofont-certificate"></i>
+                  <span>Certificates</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+                  <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of
+                        Certificates</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a>
+                  </li>
+                </ul>
+              </li>
+      
+      
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleExamMenu()" role="button">
+                  <i class="icofont-paper text-light"></i>
+                  <span>Exam</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isExamMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+                  <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+                  <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+                </ul>
+              </li>
+              <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i>
+                  <span>Reviews</span></a></li>
+              <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i>
+                  <span>Donation</span></a></li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleMenuForum()" role="button">
+                  <i class="icofont-ui-chat"></i>
+                  <span>Forum</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isForumMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isForumMenuOpen}" id="menu-Forum">
+                  <li>
+                    <a class="ms-link" routerLink="/backoffice/threads">
+                      <span>Manage Threads</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="ms-link" routerLink="/backoffice/blogs">
+                      <span>Manage Blogs</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="ms-link" routerLink="/backoffice/events">
+                      <span>Manage Events</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="collapsed">
+                <a class="m-link" (click)="toggleCodingGameMenu()" role="button">
+                  <i class="icofont-code-alt"></i>
+                  <span>CodingGame</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isCodingGameMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isCodingGameMenuOpen}" id="menu-CodingGame">
+                  <li><a class="ms-link" routerLink="/backoffice/problems"><span>Manage Problems</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/submissions/stats"><span>Manage
+                        submissions</span></a></li>
+      
+                  <li><a class="ms-link" routerLink="/backoffice/languages"><span>Manage Languages</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/compilers"><span>Manage Compilers</span></a>
+                  </li>
+                </ul>
+              </li>
+      
+            </ul>
+            <!-- Theme: Switch Theme -->
+            <ul class="list-unstyled mb-0">
+                <li class="d-flex align-items-center justify-content-center">
+                    <div class="form-check form-switch theme-switch">
+                        <input class="form-check-input" type="checkbox" id="theme-switch">
+                        <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                    </div>
                 </li>
-                <li><a class="ms-link" routerLink="/backoffice/feedbacks"><span>Feedback</span></a>
+                <li class="d-flex align-items-center justify-content-center">
+                    <div class="form-check form-switch theme-rtl">
+                        <input class="form-check-input" type="checkbox" id="theme-rtl">
+                        <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+                    </div>
                 </li>
-                <!--   <li><a class="ms-link" routerLink="/backoffice/chat-messages"><span>Chat Messages</span></a></li>
-                        -->
-              </ul>
-            </li>
-            <li class="collapsed">
-              <a class="ms-link" (click)="toggleLiveTutoringSubMenu()" role="button">
-                <span>Live Tutoring</span>
-                <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-                  [ngClass]="{'rotate': isLiveTutoringSubMenuOpen}"></span>
-              </a>
-              <ul class="sub-menu collapse" [ngClass]="{'show': isLiveTutoringSubMenuOpen}" id="menu-LiveTutoringSub">
-                <li><a class="ms-link" routerLink="/backoffice/mentorship-programs"><span>Mentorship
-                      Program</span></a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleCoursesMenu()" role="button">
-            <i class="icofont-certificate"></i>
-            <span>Courses</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-              [ngClass]="{'rotate': isMenuOpenCourses}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpenCourses}">
-            <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Create Courses</span></a>
-            </li>
-            <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a>
-            </li>
-            <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures
-                </span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a>
-            </li>
-          </ul>
-        </li>
-
-
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleMenu()" role="button">
-            <i class="icofont-certificate"></i>
-            <span>Marketplace</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-            <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace
-                  dashboard</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a>
-            </li>
-            <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
-          </ul>
-        </li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleCertificatMenu()" role="button">
-            <i class="icofont-certificate"></i>
-            <span>Certificates</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-              [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
-            <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of
-                  Certificates</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a>
-            </li>
-          </ul>
-        </li>
-
-
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleExamMenu()" role="button">
-            <i class="icofont-paper text-light"></i>
-            <span>Exam</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isExamMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
-            <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
-          </ul>
-        </li>
-        <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i>
-            <span>Reviews</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i>
-            <span>Donation</span></a></li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleMenuForum()" role="button">
-            <i class="icofont-ui-chat"></i>
-            <span>Forum</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-              [ngClass]="{'rotate': isForumMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isForumMenuOpen}" id="menu-Forum">
-            <li>
-              <a class="ms-link" routerLink="/backoffice/threads">
-                <span>Manage Threads</span>
-              </a>
-            </li>
-            <li>
-              <a class="ms-link" routerLink="/backoffice/blogs">
-                <span>Manage Blogs</span>
-              </a>
-            </li>
-            <li>
-              <a class="ms-link" routerLink="/backoffice/events">
-                <span>Manage Events</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleCodingGameMenu()" role="button">
-            <i class="icofont-code-alt"></i>
-            <span>CodingGame</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
-              [ngClass]="{'rotate': isCodingGameMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isCodingGameMenuOpen}" id="menu-CodingGame">
-            <li><a class="ms-link" routerLink="/backoffice/problems"><span>Manage Problems</span></a>
-            </li>
-            <li><a class="ms-link" routerLink="/backoffice/submissions/stats"><span>Manage
-                  submissions</span></a></li>
-
-            <li><a class="ms-link" routerLink="/backoffice/languages"><span>Manage Languages</span></a>
-            </li>
-            <li><a class="ms-link" routerLink="/backoffice/compilers"><span>Manage Compilers</span></a>
-            </li>
-          </ul>
-        </li>
-
-      </ul>
-      <!-- Theme: Switch Theme -->
-      <ul class="list-unstyled mb-0">
-        <li class="d-flex align-items-center justify-content-center">
-          <div class="form-check form-switch theme-switch">
-            <input class="form-check-input" type="checkbox" id="theme-switch">
-            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-          </div>
-        </li>
-        <li class="d-flex align-items-center justify-content-center">
-          <div class="form-check form-switch theme-rtl">
-            <input class="form-check-input" type="checkbox" id="theme-rtl">
-            <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-          </div>
-        </li>
-      </ul>
-      <!-- Menu: menu collapse btn -->
-      <!-- Theme: Switch Theme -->
-      <ul class="list-unstyled mb-0">
-        <li class="d-flex align-items-center justify-content-center">
-          <div class="form-check form-switch theme-switch">
-            <input class="form-check-input" type="checkbox" id="theme-switch">
-            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-          </div>
-        </li>
-        <li class="d-flex align-items-center justify-content-center">
-          <div class="form-check form-switch theme-rtl">
-            <input class="form-check-input" type="checkbox" id="theme-rtl">
-            <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-          </div>
-        </li>
-      </ul>
-      <!-- Menu: menu collepce btn -->
-      <button type="button" class="btn btn-link sidebar-mini-btn text-light">
-        <span class="ms-2"><i class="icofont-bubble-right"></i></span>
-      </button>
-    </div>
-  </div>
-
-  <!-- main body area -->
-  <div class="main px-lg-4 px-md-4">
-
-    <!-- Body: Header -->
-    <div class="header">
-      <nav class="navbar py-4">
-        <div class="container-xxl">
-
-          <!-- header rightbar icon -->
-
-
-          <!-- menu toggler -->
-          <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse"
-            data-bs-target="#mainHeader">
-            <span class="fa fa-bars"></span>
-          </button>
-
+            </ul>
+            <!-- Menu: menu collepce btn -->
+            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+                <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+            </button>
         </div>
-      </nav>
     </div>
 
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
 
-    <!-- Title and select START -->
-    <div class="row g-3 align-items-center mb-4">
-      <div class="col-md-4">
-        <h4 class="mb-0">
-          Showing {{ startIndex }} - {{ endIndex }} of {{ courses.length }}
-          result{{ courses.length !== 1 ? 's' : '' }}
-        </h4>
-      </div>
-      <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Insert course name ..."
-          (input)="searchCoursesByName($event)" />
-      </div>
-    </div>
-    <!-- Title and select END -->
+        <!-- Body: Header -->
+        <div class="header">
+            <nav class="navbar py-4">
+                <div class="container-xxl">
+    
+                    <!-- header rightbar icon -->
+                    
+    
+                    <!-- menu toggler -->
+                    <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
+                        <span class="fa fa-bars"></span>
+                    </button>
+    
+                </div>
+            </nav>
+        </div>
 
-    <div class="row">
-      <!-- Main content START -->
-      <div class="col-xl-9 col-xxl-8">
-        <!-- Course list START -->
-        <div class="row g-4">
-          <!-- Loop over courses -->
-          <div class="col-12" *ngFor="
+
+        <!-- Title and select START -->
+      <div class="row g-3 align-items-center mb-4">
+        <div class="col-md-4">
+          <h4 class="mb-0">
+            Showing {{ startIndex }} - {{ endIndex }} of {{ courses.length }}
+            result{{ courses.length !== 1 ? 's' : '' }}
+          </h4>
+        </div>
+        <div class="col-md-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Insert course name ..."
+            (input)="searchCoursesByName($event)"
+          />
+        </div>
+      </div>
+      <!-- Title and select END -->
+
+      <div class="row">
+        <!-- Main content START -->
+        <div class="col-xl-9 col-xxl-8">
+          <!-- Course list START -->
+          <div class="row g-4">
+            <!-- Loop over courses -->
+            <div
+              class="col-12"
+              *ngFor="
                 let course of courses
                   | paginate: { itemsPerPage: 3, currentPage: page }
-              ">
-            <!-- Course card START -->
-            <div class="card shadow overflow-hidden p-2 hover-effect">
-              <div class="row g-0">
-                <!-- Thumbnail Column -->
-                <div class="col-md-5 overflow-hidden thumbnail-container">
-                  <img *ngIf="course.thumbnailData" [src]="'data:image/png;base64,' + course.thumbnailData"
-                    class="rounded-2 thumbnail-image" alt="Course Thumbnail" />
-                  <!-- Ribbon overlay for Pack Type -->
-                  <div class="card-img-overlay">
-                    <div class="ribbon" [ngClass]="getPackRibbonClass(course)">
-                      <span>{{ getPackTypeText(course) }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Content Column -->
-                <div class="col-md-7">
-                  <div class="card-body">
-                    <!-- Top row: Category on left, action buttons on right -->
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                      <!-- Category Badge -->
-                      <a [ngClass]="getCategoryBadgeClass(course)" class="badge mb-2 mb-sm-0">
-                        {{ course.category?.name || 'N/A' }}
-                      </a>
-
-                      <!-- Admin Action Buttons -->
-                      <div class="actions d-flex gap-2">
-                        <!-- Add Lectures -->
-                        <button class="btn btn-success btn-sm icon-btn"
-                          [routerLink]="['/backoffice/lecture-create', course.id]">
-                          <i class="fas fa-plus"></i>
-                          <span class="btn-text">Add Lectures</span>
-                        </button>
-                        <!-- Edit -->
-                        <button class="btn btn-warning btn-sm icon-btn"
-                          [routerLink]="['/backoffice/course-update', course.id]">
-                          <i class="fas fa-edit"></i>
-                          <span class="btn-text">Edit</span>
-                        </button>
-                        <!-- Delete -->
-                        <button class="btn btn-danger btn-sm icon-btn" (click)="deleteCourse(course.id!)">
-                          <i class="fas fa-trash"></i>
-                          <span class="btn-text">Delete</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Course Title & Description -->
-                    <h5 class="card-title">
-                      {{ course.courseName }}
-                    </h5>
-                    <p class="text-truncate-2 d-none d-lg-block">
-                      {{ course.courseDescription }}
-                    </p>
-
-                    <!-- Course Metadata -->
-                    <ul class="list-inline">
-                      <li class="list-inline-item h6 fw-light mb-1 mb-sm-0">
-                        <i class="far fa-clock text-danger me-2"></i>
-                        {{ course.duration }}h
-                      </li>
-                      <li class="list-inline-item h6 fw-light mb-1 mb-sm-0">
-                        <i class="fas fa-table text-orange me-2"></i>
-                        {{ course.numberOfLectures }} lectures
-                      </li>
-                      <li class="list-inline-item h6 fw-light">
-                        <i [ngClass]="getSignalClass(course)"></i>
-                        {{ getCourseLevelText(course) }}
-                      </li>
-                    </ul>
-
-                    <!-- Star rating display (like/dislike ratio) -->
-                    <div class="mb-2">
-                      <ng-container *ngFor="let star of getRatingStars(course)">
-                        <i class="fa" [ngClass]="
-                              star ? 'fa-star text-warning' : 'fa-star-o text-secondary'
-                            "></i>
-                      </ng-container>
-                      <small>
-                        ({{ (course.likes || 0) + ' likes out of ' + ((course.likes || 0) + (course.dislikes || 0)) + '
-                        votes' }})
-                      </small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Course card END -->
-          </div>
-          <!-- Card list END -->
-        </div>
-        <!-- Course list END -->
-
-        <!-- Pagination START -->
-        <div class="col-12">
-          <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
-            <ul class="pagination pagination-primary-soft rounded mb-0">
-              <!-- First Page -->
-              <li class="page-item" [class.disabled]="page === 1">
-                <a class="page-link" href="#" tabindex="-1" (click)="setPage(1, $event)">
-                  <i class="fas fa-angle-double-left"></i>
-                </a>
-              </li>
-              <!-- Page Numbers -->
-              <li class="page-item" *ngFor="let p of pagesArray" [class.active]="p === page">
-                <a class="page-link" href="#" (click)="setPage(p, $event)">
-                  {{ p }}
-                </a>
-              </li>
-              <!-- Last Page -->
-              <li class="page-item" [class.disabled]="page === totalPages">
-                <a class="page-link" href="#" (click)="setPage(totalPages, $event)">
-                  <i class="fas fa-angle-double-right"></i>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <!-- Pagination END -->
-      </div>
-      <!-- Main content END -->
-    </div>
-
-
-
-    <!-- Modal Members-->
-    <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title  fw-bold" id="addUserLabel">Invite Friend's</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="inviteby_email">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Members Invite" aria-label="Recipient's username"
-                  aria-describedby="button-addon2">
-                <button class="btn btn-dark" type="button" id="button-addon2">Members Invite</button>
-              </div>
-            </div>
-            <div class="members_list">
-              <h6 class="fw-bold ">Members of e-Learn</h6>
-              <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
-                <li class="list-group-item py-3 text-center text-md-start">
-                  <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                    <div class="no-thumbnail mb-2 mb-md-0">
-                      <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
-                    </div>
-                    <div class="flex-fill ms-3 text-truncate">
-                      <h6 class="mb-0  fw-bold">Rachel Carr(you)</h6>
-                      <span class="text-muted">rachel.carrcom</span>
-                    </div>
-                    <div class="members-action">
-                      <span class="members-role ">Admin</span>
-                      <div class="btn-group">
-                        <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          <i class="icofont-ui-settings  fs-6"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li><a class="dropdown-item" href="#"><i
-                                class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
-                          <li><a class="dropdown-item" href="#"><i
-                                class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
-                        </ul>
+              "
+            >
+              <!-- Course card START -->
+              <div class="card shadow overflow-hidden p-2 hover-effect">
+                <div class="row g-0">
+                  <!-- Thumbnail Column -->
+                  <div class="col-md-5 overflow-hidden thumbnail-container">
+                    <img
+                      *ngIf="course.thumbnailData"
+                      [src]="'data:image/png;base64,' + course.thumbnailData"
+                      class="rounded-2 thumbnail-image"
+                      alt="Course Thumbnail"
+                    />
+                    <!-- Ribbon overlay for Pack Type -->
+                    <div class="card-img-overlay">
+                      <div class="ribbon" [ngClass]="getPackRibbonClass(course)">
+                        <span>{{ getPackTypeText(course) }}</span>
                       </div>
                     </div>
                   </div>
-                </li>
-                <li class="list-group-item py-3 text-center text-md-start">
-                  <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                    <div class="no-thumbnail mb-2 mb-md-0">
-                      <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                    </div>
-                    <div class="flex-fill ms-3 text-truncate">
-                      <h6 class="mb-0  fw-bold">Lucas Baker<a href="#" class="link-secondary ms-2">(Resend
-                          invitation)</a></h6>
-                      <span class="text-muted">lucas.bakercom</span>
-                    </div>
-                    <div class="members-action">
-                      <div class="btn-group">
-                        <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          Members
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li>
-                            <a class="dropdown-item" href="#">
-                              <i class="icofont-check-circled"></i>
-                              Member
-                              <span>Can view, edit, delete, comment on and save files</span>
-                            </a>
-
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">
-                              <i class="fs-6 p-2 me-1"></i>
-                              Admin
-                              <span>Member, but can invite and manage team members</span>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="btn-group">
-                        <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          <i class="icofont-ui-settings  fs-6"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Delete
-                              Member</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item py-3 text-center text-md-start">
-                  <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                    <div class="no-thumbnail mb-2 mb-md-0">
-                      <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
-                    </div>
-                    <div class="flex-fill ms-3 text-truncate">
-                      <h6 class="mb-0  fw-bold">Una Coleman</h6>
-                      <span class="text-muted">una.coleman.com</span>
-                    </div>
-                    <div class="members-action">
-                      <div class="btn-group">
-                        <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          Members
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li>
-                            <a class="dropdown-item" href="#">
-                              <i class="icofont-check-circled"></i>
-                              Member
-                              <span>Can view, edit, delete, comment on and save files</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">
-                              <i class="fs-6 p-2 me-1"></i>
-                              Admin
-                              <span>Member, but can invite and manage team members</span>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="btn-group">
-                        <div class="btn-group">
-                          <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="icofont-ui-settings  fs-6"></i>
+      
+                  <!-- Content Column -->
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <!-- Top row: Category on left, action buttons on right -->
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <!-- Category Badge -->
+                        <a
+                          [ngClass]="getCategoryBadgeClass(course)"
+                          class="badge mb-2 mb-sm-0"
+                        >
+                          {{ course.category?.name || 'N/A' }}
+                        </a>
+      
+                        <!-- Admin Action Buttons -->
+                        <div class="actions d-flex gap-2">
+                          <!-- Add Lectures -->
+                          <button
+                            class="btn btn-success btn-sm icon-btn"
+                            [routerLink]="['/backoffice/lecture-create', course.id]"
+                          >
+                            <i class="fas fa-plus"></i>
+                            <span class="btn-text">Add Lectures</span>
                           </button>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i
-                                  class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
-                            <li><a class="dropdown-item" href="#"><i
-                                  class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Suspend
-                                member</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="icofont-not-allowed fs-6 me-2"></i>Delete
-                                Member</a></li>
-                          </ul>
+                          <!-- Edit -->
+                          <button
+                            class="btn btn-warning btn-sm icon-btn"
+                            [routerLink]="['/backoffice/course-update', course.id]"
+                          >
+                            <i class="fas fa-edit"></i>
+                            <span class="btn-text">Edit</span>
+                          </button>
+                          <!-- Delete -->
+                          <button
+                            class="btn btn-danger btn-sm icon-btn"
+                            (click)="deleteCourse(course.id!)"
+                          >
+                            <i class="fas fa-trash"></i>
+                            <span class="btn-text">Delete</span>
+                          </button>
                         </div>
                       </div>
+      
+                      <!-- Course Title & Description -->
+                      <h5 class="card-title">
+                        {{ course.courseName }}
+                      </h5>
+                      <p class="text-truncate-2 d-none d-lg-block">
+                        {{ course.courseDescription }}
+                      </p>
+      
+                      <!-- Course Metadata -->
+                      <ul class="list-inline">
+                        <li class="list-inline-item h6 fw-light mb-1 mb-sm-0">
+                          <i class="far fa-clock text-danger me-2"></i>
+                          {{ course.duration }}h
+                        </li>
+                        <li class="list-inline-item h6 fw-light mb-1 mb-sm-0">
+                          <i class="fas fa-table text-orange me-2"></i>
+                          {{ course.numberOfLectures }} lectures
+                        </li>
+                        <li class="list-inline-item h6 fw-light">
+                          <i [ngClass]="getSignalClass(course)"></i>
+                          {{ getCourseLevelText(course) }}
+                        </li>
+                      </ul>
+      
+                      <!-- Star rating display (like/dislike ratio) -->
+                      <div class="mb-2">
+                        <ng-container *ngFor="let star of getRatingStars(course)">
+                          <i
+                            class="fa"
+                            [ngClass]="
+                              star ? 'fa-star text-warning' : 'fa-star-o text-secondary'
+                            "
+                          ></i>
+                        </ng-container>
+                        <small>
+                          ({{ (course.likes || 0) + ' likes out of ' + ((course.likes || 0) + (course.dislikes || 0)) + ' votes' }})
+                        </small>
+                      </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <!-- Course card END -->
+            </div>
+            <!-- Card list END -->
+          </div>
+          <!-- Course list END -->
+      
+          <!-- Pagination START -->
+          <div class="col-12">
+            <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+              <ul class="pagination pagination-primary-soft rounded mb-0">
+                <!-- First Page -->
+                <li class="page-item" [class.disabled]="page === 1">
+                  <a
+                    class="page-link"
+                    href="#"
+                    tabindex="-1"
+                    (click)="setPage(1, $event)"
+                  >
+                    <i class="fas fa-angle-double-left"></i>
+                  </a>
+                </li>
+                <!-- Page Numbers -->
+                <li
+                  class="page-item"
+                  *ngFor="let p of pagesArray"
+                  [class.active]="p === page"
+                >
+                  <a class="page-link" href="#" (click)="setPage(p, $event)">
+                    {{ p }}
+                  </a>
+                </li>
+                <!-- Last Page -->
+                <li class="page-item" [class.disabled]="page === totalPages">
+                  <a
+                    class="page-link"
+                    href="#"
+                    (click)="setPage(totalPages, $event)"
+                  >
+                    <i class="fas fa-angle-double-right"></i>
+                  </a>
                 </li>
               </ul>
-            </div>
+            </nav>
           </div>
+          <!-- Pagination END -->
         </div>
+        <!-- Main content END -->
       </div>
+      
+
+
+        <!-- Modal Members-->
+        <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title  fw-bold" id="addUserLabel">Invite Friend's</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="inviteby_email">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Members Invite" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-dark" type="button" id="button-addon2">Members Invite</button>
+                        </div>
+                    </div>
+                    <div class="members_list">
+                        <h6 class="fw-bold ">Members of e-Learn</h6>
+                        <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                        <h6 class="mb-0  fw-bold">Rachel Carr(you)</h6>
+                                        <span class="text-muted">rachel.carrcom</span>
+                                    </div>
+                                    <div class="members-action">
+                                        <span class="members-role ">Admin</span>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="icofont-ui-settings  fs-6"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                        <h6 class="mb-0  fw-bold">Lucas Baker<a href="#" class="link-secondary ms-2">(Resend invitation)</a></h6>
+                                        <span class="text-muted">lucas.bakercom</span>
+                                    </div>
+                                    <div class="members-action">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Members
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li>
+                                                  <a class="dropdown-item" href="#">
+                                                    <i class="icofont-check-circled"></i>
+                                                        Member
+                                                    <span>Can view, edit, delete, comment on and save files</span>
+                                                   </a>
+                                                   
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="fs-6 p-2 me-1"></i>
+                                                            Admin
+                                                        <span>Member, but can invite and manage team members</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="icofont-ui-settings  fs-6"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Delete Member</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item py-3 text-center text-md-start">
+                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                                    <div class="no-thumbnail mb-2 mb-md-0">
+                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                                    </div>
+                                    <div class="flex-fill ms-3 text-truncate">
+                                        <h6 class="mb-0  fw-bold">Una Coleman</h6>
+                                        <span class="text-muted">una.coleman.com</span>
+                                    </div>
+                                    <div class="members-action">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Members
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                              <li>
+                                                  <a class="dropdown-item" href="#">
+                                                    <i class="icofont-check-circled"></i>
+                                                        Member
+                                                    <span>Can view, edit, delete, comment on and save files</span>
+                                                   </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="fs-6 p-2 me-1"></i>
+                                                            Admin
+                                                        <span>Member, but can invite and manage team members</span>
+                                                       </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="icofont-ui-settings  fs-6"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Suspend member</a></li>
+                                                  <li><a class="dropdown-item" href="#"><i class="icofont-not-allowed fs-6 me-2"></i>Delete Member</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
     </div>
-  </div>
 </body>
 
 <!-- Jquery Core Js -->
@@ -584,19 +584,18 @@
 
 <!-- Plugin Js-->
 <script src="/assetsback/bundles/carousel.bundle.js"></script>
-<script src="/assetsback/bundles/apexcharts.bundle.js"></script>
+<script src="/assetsback/bundles/apexcharts.bundle.js"></script> 
 
 <!-- Jquery Page Js -->
 <script src="../js/template.js"></script>
 <script src="../js/page/elearn-index.js"></script>
 
-<!-- Simple hover effect on thumbnail -->
-<style>
-  .thumbnail-image:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-  }
-</style>
+  <!-- Simple hover effect on thumbnail -->
+  <style>
+    .thumbnail-image:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+  </style>
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:55 GMT -->
-
 </html>

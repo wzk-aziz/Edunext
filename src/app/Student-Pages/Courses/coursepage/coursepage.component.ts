@@ -62,20 +62,37 @@ export class CoursepageComponent implements OnInit {
       error: (err) => console.error('Error loading course:', err)
     });
   }
-
   loadLectures(courseId: number): void {
-    // Assuming you have a service method to get lectures by course id
-    // You may adjust the endpoint as needed.
     this.lectureService.getLecturesByCourseId(courseId).subscribe({
       next: (lectures) => {
         this.lectures = lectures.sort((a, b) => a.lectureOrder - b.lectureOrder);
+  
         if (this.lectures.length > 0) {
           this.currentLecture = this.lectures[0];
+  
+          // ⬇️ Trigger backend progress entry creation
+          this.lectureService.saveLectureProgress(this.currentLecture.id!, 'video', 0).subscribe();
+          this.lectureService.saveLectureProgress(this.currentLecture.id!, 'pdf', 0).subscribe();
         }
       },
       error: (err) => console.error('Error loading lectures:', err)
     });
   }
+  
+
+  // loadLectures(courseId: number): void {
+  //   // Assuming you have a service method to get lectures by course id
+  //   // You may adjust the endpoint as needed.
+  //   this.lectureService.getLecturesByCourseId(courseId).subscribe({
+  //     next: (lectures) => {
+  //       this.lectures = lectures.sort((a, b) => a.lectureOrder - b.lectureOrder);
+  //       if (this.lectures.length > 0) {
+  //         this.currentLecture = this.lectures[0];
+  //       }
+  //     },
+  //     error: (err) => console.error('Error loading lectures:', err)
+  //   });
+  // }
 
   selectLecture(lecture: Lecture): void {
     this.currentLecture = lecture;
@@ -172,7 +189,6 @@ export class CoursepageComponent implements OnInit {
     const capped = Math.min(percent, 99);
     this.lectureService.saveLectureProgress(this.currentLecture.id!, 'pdf', capped).subscribe();
   }
-  
   }
   
   

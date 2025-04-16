@@ -53,10 +53,11 @@ export class CoursedetailComponent implements OnInit {
   
 
   enrollCourse(): void {
-    // Navigate to a course player or enrollment page.
-    this.router.navigate(['/coursepage', this.courseId]);
+    this.courseService.enrollInCourse(this.courseId).subscribe(() => {
+      this.router.navigate(['/coursepage', this.courseId]);
+    });
   }
-
+  
   // Helper method to display a friendly course level label.
   getCourseLevelText(course: Course): string {
     switch (course.courseLevel) {
@@ -67,5 +68,4 @@ export class CoursedetailComponent implements OnInit {
       default: return 'Unknown';
     }
   }
-
 }
