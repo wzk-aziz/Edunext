@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class PasswordResetController {
-
-
     private final PasswordResetService passwordResetService;
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         try {
             passwordResetService.createPasswordResetTokenForUser(request.getEmail());
-            return ResponseEntity.ok().body("Password reset email sent successfully");
+            return ResponseEntity.ok().body("Password reset instructions sent successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -5,14 +5,14 @@ import com.security.EduNext.Auth.AuthenticationService;
 import com.security.EduNext.Auth.UpdateUserRequest;
 import com.security.EduNext.Entities.Role;
 import com.security.EduNext.Entities.User;
+import com.security.EduNext.Services.PdfService;
 import com.security.EduNext.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +26,8 @@ public class UserController {
     private final UserRepository userRepository;
 
     private final AuthenticationService authenticationService;
+
+    private final PdfService pdfService;
 
 
 
@@ -88,6 +90,40 @@ public class UserController {
 
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+
+    @GetMapping("/banned")
+    public ResponseEntity<List<User>> getAllBannedUsers() {
+        List<User> bannedUsers = userService.getAllBannedUsers();
+        return ResponseEntity.ok(bannedUsers);
+    }
+
+
+    @GetMapping("/bannedByRole")
+    public List<User> getBannedUsersByRole(@RequestParam Role role) {
+        return userService.getBannedUsersByRole(role);
+    }
+
+
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadUserPdf(@PathVariable Integer id) {
+        Optional<User> userOptional = userService.getUserById(id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ByteArrayInputStream pdfStream = pdfService.generateUserPdf(userOptional.get());
+        byte[] pdfBytes = pdfStream.readAllBytes();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition
+                .attachment()
+                .filename("user_profile_" + id + ".pdf")
+                .build());
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 
 

@@ -49,6 +49,7 @@ public class AuthenticationService {
                 .role(request.getRole())
                 .mfaEnabled(request.isMfaEnabled())
                 .Image(request.getImage())
+                .phoneNumber(request.getPhonenumber()) // Add this line
                 .build();
 
         if (request.isMfaEnabled()) {
@@ -102,6 +103,10 @@ public class AuthenticationService {
                     .refreshToken("")
                     .mfaEnabled(true)
                     .role(user.getRole().name())  // Add role to response
+                    .firstName(user.getFirstname()) // Ajouter prénom
+                    .lastName(user.getLastname()) // Ajouter nom
+                    .email(user.getEmail()) // Ajouter email
+                    .userId(user.getId()) // Ajouter l'ID utilisateur
                     .build();
         }
 
@@ -119,7 +124,10 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
                 .role(user.getRole().name())
-
+                .firstName(user.getFirstname()) // Ajouter prénom
+                .lastName(user.getLastname()) // Ajouter nom
+                .email(user.getEmail()) // Ajouter email
+                .userId(user.getId()) // Ajouter l'ID utilisateur
                 .build();
     }
 

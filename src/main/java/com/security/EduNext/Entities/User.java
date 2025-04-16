@@ -35,6 +35,10 @@ public class User implements UserDetails {
     @JsonProperty("email_address") // Pour renommer la propriété dans la réponse JSON
     private String email;
 
+    @Column(name = "phone_number")
+    @JsonProperty("phone_number")
+    private String phoneNumber;
+
     private String password;
     //private String address;
     private boolean mfaEnabled;
@@ -91,11 +95,12 @@ public class User implements UserDetails {
         return password;
     }
 
-    public User(Integer id, String firstname, String lastname, String email, String password, boolean mfaEnabled, String secret, String image, Role role, List<Token> tokens, boolean banned) {
+    public User(Integer id, String firstname, String lastname, String email, String phoneNumber, String password, boolean mfaEnabled, String secret, String image, Role role, List<Token> tokens, boolean banned) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.mfaEnabled = mfaEnabled;
         this.secret = secret;
@@ -104,6 +109,4 @@ public class User implements UserDetails {
         this.tokens = tokens;
         this.banned = banned;
     }
-
-
 }
