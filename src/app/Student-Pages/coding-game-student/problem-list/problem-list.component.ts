@@ -47,22 +47,44 @@ export class ProblemListComponent implements OnInit {
   // Ajouter cette référence pour utiliser dans le template
   Math = Math;
   loadProblems(): void {
-    this.problemService.getAll().subscribe((data) => {
-      this.problems = data;
-      this.applyFilters();
+    this.problemService.getAll().subscribe({
+      next: (data) => {
+        this.problems = data;
+        console.log('Loaded problems:', this.problems); // Debug
+        this.applyFilters();
+      },
+      error: (error) => {
+        console.error('Error loading problems:', error);
+      }
     });
   }
 
   applyFilters(): void {
-    this.filteredProblems = this.selectedDifficulty
-      ? this.problems.filter(p => p.difficulty === this.selectedDifficulty)
-      : [...this.problems];
+    // Convertir en minuscules pour la comparaison
+    const difficulty = this.selectedDifficulty.toLowerCase();
+    
+    this.filteredProblems = this.problems.filter(problem => {
+      if (!this.selectedDifficulty) {
+        return true;
+      }
+      // Assurez-vous que la comparaison est insensible à la casse
+      return problem.difficulty.toLowerCase() === difficulty;
+    });
+    
     this.totalItems = this.filteredProblems.length;
+    // Revenir à la première page après le filtrage
+    this.currentPage = 1;
+    console.log('Filtered problems:', this.filteredProblems); // Debug
   }
 
   onDifficultyChange(difficulty: string): void {
-    this.selectedDifficulty = difficulty;
-    this.currentPage = 1;
+    console.log('Selected difficulty:', difficulty); // Debug
+    // Si on clique sur le même niveau, on désélectionne
+    if (this.selectedDifficulty === difficulty) {
+      this.selectedDifficulty = '';
+    } else {
+      this.selectedDifficulty = difficulty;
+    }
     this.applyFilters();
   }
 

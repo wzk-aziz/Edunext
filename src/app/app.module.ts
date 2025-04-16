@@ -143,6 +143,7 @@ import { UsersComponent } from './backend/users/users.component';
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
 import { ProfileComponent } from './Shared/profile/profile.component';
 import { ChatbotBubbleComponent } from './Student-Pages/Forum/Event/chatbot-bubble/chatbot-bubble.component';
+import { LinkyModule } from 'ngx-linky';
 
 @NgModule({
   declarations: [
@@ -255,6 +256,7 @@ import { ChatbotBubbleComponent } from './Student-Pages/Forum/Event/chatbot-bubb
     NgChartsModule,
     NgxSpinnerModule,
     FontAwesomeModule,
+    LinkyModule,
     // Material Modules
     MatIconModule,
     MatSelectModule,

@@ -45,7 +45,7 @@
           <p class="kpi-label">Total Submissions</p>
         </div>
       </div>
-      
+
       <div class="kpi-card">
         <div class="kpi-icon">
           <i class="fas fa-star"></i>
@@ -55,7 +55,7 @@
           <p class="kpi-label">Average Score</p>
         </div>
       </div>
-      
+
       <div class="kpi-card">
         <div class="kpi-icon">
           <i class="fas fa-check-circle"></i>
@@ -65,7 +65,7 @@
           <p class="kpi-label">Acceptance Rate</p>
         </div>
       </div>
-      
+
       <div class="kpi-card">
         <div class="kpi-icon">
           <i class="fas fa-users"></i>
@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Charts Grid -->
     <div class="charts-grid">
       <!-- Chart 1: Submissions per Problem -->
@@ -93,7 +93,7 @@
           <canvas #submissionsPerProblemChart></canvas>
         </div>
       </div>
-      
+
       <!-- Chart 2: Best Scores per Student -->
       <div class="chart-container">
         <div class="chart-header">
@@ -108,7 +108,7 @@
           <canvas #scoresPerStudentChart></canvas>
         </div>
       </div>
-      
+
       <!-- Chart 3: Submission Status Distribution -->
       <div class="chart-container">
         <div class="chart-header">
@@ -124,7 +124,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Top Submissions Table -->
     <div class="data-section">
       <div class="section-header">
@@ -136,7 +136,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="table-wrapper">
         <table class="data-table">
           <thead>
@@ -161,8 +161,9 @@
               <td>Problem {{ submission.problem?.id || '-' }}</td>
               <td class="score-col">
                 <div class="score-display">
-                  <div class="score-bar" [style.width.%]="submission.score || 0" 
-                       [ngClass]="{'high': submission.score >= 80, 'medium': submission.score >= 50 && submission.score < 80, 'low': submission.score < 50}" *ngIf="submission.score !== undefined">
+                  <div class="score-bar" [style.width.%]="submission.score || 0"
+                    [ngClass]="{'high': submission.score >= 80, 'medium': submission.score >= 50 && submission.score < 80, 'low': submission.score < 50}"
+                    *ngIf="submission.score !== undefined">
                   </div>
                   <span>{{ submission.score || 0 }}</span>
                 </div>
@@ -174,9 +175,8 @@
                 </div>
               </td>
               <td class="actions-col">
-                <a *ngIf="submission.gitLink" class="btn btn-sm btn-primary" 
-                   [href]="submission.gitLink" target="_blank" 
-                   title="View code on GitHub">
+                <a *ngIf="submission.gitLink" class="btn btn-sm btn-primary" [href]="submission.gitLink" target="_blank"
+                  title="View code on GitHub">
                   <i class="fas fa-code"></i> View
                 </a>
                 <span *ngIf="!submission.gitLink">-</span>
@@ -185,22 +185,22 @@
           </tbody>
         </table>
       </div>
-      
+
       <div class="table-footer">
         <div class="showing-info">
-          Showing 1-{{ (10 < sortedSubmissions.length ? 10 : sortedSubmissions.length) }} of {{ sortedSubmissions.length }} submissions
-        </div>
-        <div class="pagination">
-          <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
-          <button class="pagination-btn active">1</button>
-          <button class="pagination-btn">2</button>
-          <button class="pagination-btn">3</button>
-          <span class="pagination-ellipsis">...</span>
-          <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+          Showing 1-{{ (10 < sortedSubmissions.length ? 10 : sortedSubmissions.length) }} of {{ sortedSubmissions.length
+            }} submissions </div>
+            <div class="pagination">
+              <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn">2</button>
+              <button class="pagination-btn">3</button>
+              <span class="pagination-ellipsis">...</span>
+              <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
       </div>
+
+
     </div>
-    
-   
   </div>
-</div>

@@ -1,88 +1,90 @@
-<div class="container-fluid py-4">
+<div class="container-fluid py-5">
   <div class="row justify-content-center">
     <div class="col-12 col-xxl-10">
-      <div class="card shadow border-0 rounded-lg">
-        <div class="card-header bg-gradient-primary text-white py-3">
-          <h2 class="mb-0 text-center fw-bold">Catalogue de Problèmes</h2>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="mb-0 text-center text-white">
+            <i class="fas fa-code me-2"></i>
+            Catalogue des Défis de Programmation
+          </h2>
+          <p class="text-center text-white-50 mb-0 mt-2">
+            Relevez les défis et améliorez vos compétences en programmation
+          </p>
         </div>
-        
-        <div class="card-body px-4 py-4">
-          <!-- Filter section with improved styling -->
-          <div class="row mb-4 align-items-center">
+
+        <div class="card-body p-4">
+          <!-- Filter section with glass morphism effect -->
+          <div class="row mb-4 align-items-center bg-white p-4 rounded-3 shadow-sm">
             <div class="col-md-7">
-              <div class="d-flex flex-wrap align-items-center gap-2">
-                <label class="me-2 text-primary fw-bold">Filtrer par difficulté:</label>
+              <div class="d-flex flex-wrap align-items-center gap-3">
+                <label class="mb-0 text-primary fw-bold fs-5">
+                  <i class="fas fa-filter me-2"></i>Niveau de difficulté:
+                </label>
                 <div class="btn-group shadow-sm">
-                  <button 
-                    *ngFor="let difficulty of difficulties" 
-                    class="btn btn-sm px-3 py-2" 
-                    [class.btn-primary]="selectedDifficulty === difficulty"
-                    [class.btn-outline-primary]="selectedDifficulty !== difficulty"
-                    (click)="onDifficultyChange(difficulty)">
-                    <i class="fas" 
-                      [ngClass]="{
-                        'fa-smile': difficulty === 'Easy',
-                        'fa-meh': difficulty === 'Medium',
-                        'fa-frown': difficulty === 'Hard'
+                  <button *ngFor="let difficulty of difficulties" class="btn fw-bold"
+                    [class.active]="selectedDifficulty === difficulty" (click)="onDifficultyChange(difficulty)">
+                    <i class="fas me-2" [ngClass]="{
+                        'fa-smile text-success': difficulty === 'Easy',
+                        'fa-meh text-warning': difficulty === 'Medium',
+                        'fa-frown text-danger': difficulty === 'Hard'
                       }"></i>
                     {{ difficulty }}
                   </button>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary ms-2" (click)="resetFilters()" *ngIf="selectedDifficulty">
-                  <i class="fas fa-times"></i> Effacer
+                <button class="btn btn-light" (click)="resetFilters()" *ngIf="selectedDifficulty">
+                  <i class="fas fa-times"></i>
                 </button>
               </div>
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0">
-              <span class="badge bg-light text-dark rounded-pill px-3 py-2">
-                <i class="fas fa-list me-1"></i>
-                {{ filteredProblems.length }} problème(s) 
-                <span *ngIf="selectedDifficulty" class="ms-1 fst-italic">(filtrés par {{ selectedDifficulty }})</span>
-              </span>
+              <div class="badge bg-white text-primary shadow-sm p-2">
+                <i class="fas fa-tasks me-2"></i>
+                {{ filteredProblems.length }} défi(s) disponible(s)
+              </div>
             </div>
           </div>
 
-          <!-- Table of problems with improved styling -->
+          <!-- Problems Grid -->
           <div class="table-responsive">
-            <table class="table table-hover align-middle custom-table">
+            <table class="table">
               <thead>
-                <tr class="bg-light">
-                  <th class="text-primary fw-bold border-0">Titre</th>
-                  <th class="text-primary fw-bold border-0">Description</th>
-                  <th class="text-primary fw-bold border-0 text-center">Difficulté</th>
-                  <th class="text-primary fw-bold border-0 text-center">Actions</th>
+                <tr>
+                  <th class="fs-6">Défi</th>
+                  <th class="fs-6">Description</th>
+                  <th class="text-center fs-6">Niveau</th>
+                  <th class="text-center fs-6">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let problem of paginatedProblems" class="border-bottom">
-                  <td class="fw-bold py-3">{{ problem.title }}</td>
-                  <td class="py-3 text-secondary">{{ problem.description }}</td>
-                  <td class="text-center py-3">
-                    <span class="badge rounded-pill px-3 py-2" 
-                      [ngClass]="{
-                        'bg-success bg-opacity-75': problem.difficulty === 'Easy',
-                        'bg-warning bg-opacity-75': problem.difficulty === 'Medium',
-                        'bg-danger bg-opacity-75': problem.difficulty === 'Hard'
+                <tr *ngFor="let problem of paginatedProblems; let i = index" [style.--animation-order]="i">
+                  <td class="fw-bold fs-6">{{ problem.title }}</td>
+                  <td class="w-50">
+                    <p class="text-muted mb-0 fs-6">{{ problem.description }}</p>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge" [ngClass]="{
+                        'bg-success': problem.difficulty === 'Easy',
+                        'bg-warning': problem.difficulty === 'Medium',
+                        'bg-danger': problem.difficulty === 'Hard'
                       }">
-                      <i class="fas" 
-                        [ngClass]="{
-                          'fa-smile me-1': problem.difficulty === 'Easy',
-                          'fa-meh me-1': problem.difficulty === 'Medium',
-                          'fa-frown me-1': problem.difficulty === 'Hard'
-                        }"></i>
+                      <i class="fas" [ngClass]="{
+                        'fa-smile': problem.difficulty === 'Easy',
+                        'fa-meh': problem.difficulty === 'Medium',
+                        'fa-frown': problem.difficulty === 'Hard'
+                      }"></i>
                       {{ problem.difficulty }}
                     </span>
                   </td>
-                  <td class="py-3">
+                  <td>
                     <div class="d-flex justify-content-center gap-2">
-                      <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="viewProblem(problem.id)">
-                        <i class="fas fa-eye me-1"></i> Voir
+                      <button class="btn btn-primary btn-sm" (click)="viewProblem(problem.id)">
+                        <i class="fas fa-eye me-1"></i>
                       </button>
-                      <button class="btn btn-sm btn-success rounded-pill px-3" (click)="launchProblem(problem.id)">
-                        <i class="fas fa-play me-1"></i> Lancer
+                      <button class="btn btn-success btn-sm" (click)="launchProblem(problem.id)">
+                        <i class="fas fa-play me-1"></i>
                       </button>
-                      <button class="btn btn-sm btn-danger rounded-pill px-3" (click)="generatePDF(problem)">
-                        <i class="fas fa-file-pdf me-1"></i> PDF
+                      <button class="btn btn-danger btn-sm" (click)="generatePDF(problem)">
+                        <i class="fas fa-file-pdf me-1"></i>
                       </button>
                     </div>
                   </td>
@@ -90,51 +92,48 @@
               </tbody>
             </table>
           </div>
-          
-          <!-- Improved no results message -->
-          <div *ngIf="filteredProblems.length === 0" class="text-center my-5 py-4">
-            <div class="empty-state">
-              <i class="fas fa-search fa-3x text-muted mb-3"></i>
-              <p class="text-muted">Aucun problème ne correspond aux filtres sélectionnés.</p>
-              <button class="btn btn-outline-primary rounded-pill mt-2" (click)="resetFilters()">
-                <i class="fas fa-sync me-1"></i> Réinitialiser les filtres
-              </button>
-            </div>
+
+          <!-- Empty State with Animation -->
+          <div *ngIf="filteredProblems.length === 0" class="empty-state text-center">
+            <i class="fas fa-search fa-4x mb-3"></i>
+            <h4 class="text-muted">Aucun défi trouvé</h4>
+            <p class="text-muted mb-4">Essayez de modifier vos filtres de recherche</p>
+            <button class="btn btn-primary" (click)="resetFilters()">
+              <i class="fas fa-sync-alt me-2"></i>
+              Réinitialiser les filtres
+            </button>
           </div>
-          
-          <!-- Improved pagination -->
-          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4" *ngIf="filteredProblems.length > 0">
-            <div class="mb-3 mb-md-0">
-              <span class="text-secondary fst-italic">
-                Affichage {{ (currentPage - 1) * pageSize + 1 }} à 
-                {{ Math.min(currentPage * pageSize, filteredProblems.length) }}
-                sur {{ filteredProblems.length }} problèmes
-              </span>
+
+          <!-- Improved Pagination -->
+          <div class="d-flex justify-content-between align-items-center mt-4" *ngIf="filteredProblems.length > 0">
+            <div class="text-muted">
+              Affichage {{ (currentPage - 1) * pageSize + 1 }} -
+              {{ Math.min(currentPage * pageSize, filteredProblems.length) }}
+              sur {{ filteredProblems.length }}
             </div>
-            <nav aria-label="Problem pagination">
-              <ul class="pagination pagination-sm mb-0">
+            <nav>
+              <ul class="pagination mb-0">
                 <li class="page-item" [class.disabled]="currentPage === 1">
-                  <a class="page-link rounded-start" (click)="changePage(1)" aria-label="First">
-                    <span aria-hidden="true">&laquo;</span>
+                  <a class="page-link" (click)="changePage(1)">
+                    <i class="fas fa-angle-double-left"></i>
                   </a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === 1">
-                  <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
-                    <span aria-hidden="true">&lt;</span>
+                  <a class="page-link" (click)="changePage(currentPage - 1)">
+                    <i class="fas fa-angle-left"></i>
                   </a>
                 </li>
-                <li class="page-item" *ngFor="let page of getPaginationRange(); let i = index" 
-                    [class.active]="currentPage === page">
+                <li class="page-item" *ngFor="let page of getPaginationRange()" [class.active]="currentPage === page">
                   <a class="page-link" (click)="changePage(page)">{{ page }}</a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
-                    <span aria-hidden="true">&gt;</span>
+                  <a class="page-link" (click)="changePage(currentPage + 1)">
+                    <i class="fas fa-angle-right"></i>
                   </a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <a class="page-link rounded-end" (click)="changePage(totalPages)" aria-label="Last">
-                    <span aria-hidden="true">&raquo;</span>
+                  <a class="page-link" (click)="changePage(totalPages)">
+                    <i class="fas fa-angle-double-right"></i>
                   </a>
                 </li>
               </ul>

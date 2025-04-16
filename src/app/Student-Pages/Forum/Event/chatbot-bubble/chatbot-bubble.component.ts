@@ -14,16 +14,49 @@ export class ChatbotBubbleComponent implements OnInit {
   userInput = '';
   events: Event[] = [];
   isTyping = false;
+// Ajout à la classe ChatbotBubbleComponent
+// Nouvelles propriétés
+botName = 'EventBot';
+botAvatar = 'assets/images/bot-avatar.png'; // Créez cette image
+userAvatar = 'assets/images/user-avatar.png'; // Optionnel
+showTimestamp = true;
+animateMessages = true;
+suggestionCategories = ['Général', 'Événements', 'Aide'];
+currentSuggestionCategory = 'Général';
 
+// Suggestions étendues organisées par catégorie
+extendedSuggestions = {
+  'Général': [
+    { text: 'Présentation', query: 'Pouvez-vous vous présenter?' },
+    { text: 'À propos du site', query: 'Parlez-moi de cette plateforme' },
+    { text: 'Contact', query: 'Comment vous contacter?' }
+  ],
+  'Événements': [
+    { text: 'Prochains événements', query: 'Quels sont les prochains événements?' },
+    { text: 'Événements populaires', query: 'Événements les plus populaires?' },
+    { text: 'Hackathons', query: 'Informations sur les hackathons' }
+  ],
+  'Aide': [
+    { text: 'S\'inscrire', query: 'Comment s\'inscrire?' },
+    { text: 'Filtrer par ville', query: 'Comment filtrer par ville?' },
+    { text: 'Annuler participation', query: 'Comment annuler ma participation?' }
+  ]
+};
   // Predefined responses about events and site
   botResponses = {
-    welcome: "Bonjour ! Je suis EventBot, votre assistant virtuel. Je peux vous aider à découvrir nos événements et hackathons. Que voulez-vous savoir ?",
-    events: "Nous organisons régulièrement des hackathons, des ateliers tech, et des conférences thématiques pour la communauté étudiante et professionnelle. Utilisez les filtres en haut pour trouver un événement qui vous intéresse !",
-    registration: "L'inscription est simple ! Cliquez sur 'View Details' pour l'événement qui vous intéresse, puis sur le bouton d'inscription. Vous recevrez une confirmation par email.",
-    about: "Notre plateforme connecte les passionnés de technologie et d'innovation. Nous facilitons la participation à des événements enrichissants pour développer vos compétences et élargir votre réseau professionnel.",
-    location: "Nos événements se déroulent dans différentes villes. Pour voir les événements dans une ville spécifique, utilisez le filtre de localisation en haut de la page.",
-    contact: "Vous avez une question spécifique ? Contactez-nous à support@eventhub.com ou utilisez notre formulaire de contact accessible depuis le footer du site.",
-    default: "Désolé, je n'ai pas compris. Pourriez-vous reformuler ou poser une question sur nos événements, l'inscription, ou notre plateforme ?"
+    welcome: "Bonjour ! Je suis EventBot, votre assistant virtuel. Je peux vous aider avec les événements, inscriptions et informations sur notre plateforme. Que puis-je faire pour vous aujourd'hui ?",
+    events: "Nous organisons régulièrement des hackathons, ateliers tech, et conférences pour la communauté. Voici quelques événements à venir:\n\n• Hackathon IA pour débutants\n• Workshop Design Thinking\n• Conférence Cybersécurité\n\nSouhaitez-vous des détails sur l'un d'entre eux ?",
+    registration: "L'inscription est simple !\n\n1. Cliquez sur 'View Details' pour l'événement qui vous intéresse\n2. Cliquez sur le bouton d'inscription\n3. Remplissez le formulaire\n4. Validez par email\n\nBesoin d'aide supplémentaire ?",
+    about: "Notre plateforme connecte les passionnés de technologie et d'innovation. Créée en 2020, nous avons déjà organisé plus de 150 événements avec 12,000+ participants. Notre mission: faciliter les rencontres et le partage de connaissances dans un cadre convivial et professionnel.",
+    location: "Nos événements se déroulent dans plusieurs villes comme Paris, Lyon, Bordeaux, Lille et Marseille. Pour les événements dans votre ville, utilisez le filtre de localisation en haut de la page principale. Nous proposons aussi des événements en ligne accessibles partout !",
+    contact: "Plusieurs options pour nous contacter :\n\n• Email: support@eventhub.com\n• Téléphone: 01 23 45 67 89\n• Formulaire: en bas de la page d'accueil\n• Réseaux sociaux: @EventHub sur Twitter et Instagram\n\nNotre équipe répond sous 24h ouvrées.",
+    faq: "Voici les questions fréquentes :\n\n• Les événements sont-ils gratuits ? La plupart sont gratuits, certains premium sont payants\n• Faut-il s'inscrire en avance ? Oui, les places sont limitées\n• Puis-je annuler ? Oui, jusqu'à 48h avant l'événement\n\nD'autres questions ?",
+    hackathons: "Nos hackathons sont des compétitions d'innovation intensives de 24 à 48h. Vous formez des équipes pour résoudre des défis réels posés par nos partenaires. Ils sont ouverts aux développeurs, designers et chefs de projet. Les meilleures équipes remportent des prix et opportunités professionnelles !",
+    partners: "Nous collaborons avec de nombreuses entreprises tech et institutions comme Microsoft, Google, Orange, BNF, et plusieurs universités françaises. Nos partenaires proposent des défis, mentoring et sponsorisent les événements.",
+    speakers: "Nos conférenciers sont des experts reconnus dans leurs domaines : CTO, chercheurs, entrepreneurs à succès, et professionnels expérimentés. Nous sélectionnons des intervenants passionnés capables de transmettre leur savoir de façon engageante.",
+    preparation: "Pour bien préparer votre participation :\n\n1. Lisez la description complète de l'événement\n2. Vérifiez les prérequis techniques si nécessaire\n3. Rejoignez notre Discord pour rencontrer d'autres participants\n4. Préparez vos questions pour les intervenants\n\nBesoin d'autres conseils ?",
+    benefits: "Participer à nos événements vous permet de :\n\n• Développer vos compétences techniques\n• Élargir votre réseau professionnel\n• Découvrir les dernières tendances\n• Rencontrer des recruteurs potentiels\n• Obtenir des certifications (pour certains ateliers)\n\nC'est un excellent moyen d'accélérer votre carrière !",
+    default: "Je n'ai pas bien saisi votre demande. Pouvez-vous reformuler ou choisir parmi les suggestions ci-dessous ? Je suis là pour vous aider avec tout ce qui concerne nos événements et notre plateforme."
   };
 
   constructor(private eventService: EventService, private router: Router) { }
@@ -35,6 +68,10 @@ export class ChatbotBubbleComponent implements OnInit {
     });
   }
 
+// Nouvelles méthodes
+  changeSuggestionCategory(category: string): void {
+    this.currentSuggestionCategory = category;
+  }
   toggleChat(): void {
     this.isOpen = !this.isOpen;
     if (this.isOpen && this.messages.length === 0) {
@@ -60,7 +97,28 @@ export class ChatbotBubbleComponent implements OnInit {
     
     setTimeout(() => {
       this.isTyping = false;
-      
+      // Analyse sémantique étendue
+    if (input.includes('prochain') || input.includes('bientôt') || input.includes('à venir')) {
+      this.suggestUpcomingEvents();
+    } else if (input.includes('populaire') || input.includes('recommand') || input.includes('tendance')) {
+      this.suggestPopularEvents();
+    } else if (input.includes('hackathon') || input.includes('compétition') || input.includes('concours')) {
+      this.addBotMessage(this.botResponses.hackathons);
+    } else if (input.includes('partenaire') || input.includes('sponsor') || input.includes('entreprise')) {
+      this.addBotMessage(this.botResponses.partners);
+    } else if (input.includes('conférencier') || input.includes('intervenant') || input.includes('speaker')) {
+      this.addBotMessage(this.botResponses.speakers);
+    } else if (input.includes('prépar') || input.includes('conseil') || input.includes('avant de')) {
+      this.addBotMessage(this.botResponses.preparation);
+    } else if (input.includes('avantage') || input.includes('bénéfice') || input.includes('pourquoi particip')) {
+      this.addBotMessage(this.botResponses.benefits);
+    } else if (input.includes('faq') || input.includes('question') || input.includes('fréquent')) {
+      this.addBotMessage(this.botResponses.faq);
+    } else if (input.includes('événement') || input.includes('evenement') || input.includes('event')) {
+      this.addBotMessage(this.botResponses.events);
+    } else if (input.includes('inscri') || input.includes('particip') || input.includes('rejoin')) {
+      this.addBotMessage(this.botResponses.registration);
+    } 
       // Check for event-specific query first
       if (input.includes('prochain') || input.includes('bientôt') || input.includes('à venir')) {
         this.suggestUpcomingEvents();
@@ -91,20 +149,31 @@ export class ChatbotBubbleComponent implements OnInit {
                 input.includes('hello') || input.includes('bonsoir')) {
         this.addBotMessage("Bonjour ! Comment puis-je vous aider aujourd'hui concernant nos événements ?");
       } else {
-        // Try to extract location query
-        const locations = this.getUniqueLocations();
-        const mentionedLocation = locations.find(location => 
-          input.includes(location.toLowerCase())
-        );
-        
-        if (mentionedLocation) {
-          this.suggestEventsByLocation(mentionedLocation);
-        } else {
-          this.addBotMessage(this.botResponses.default);
+        // Recherche de mots-clés généraux
+      const keywords = {
+        'présentation': this.botResponses.welcome,
+        'bonjour': "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+        'merci': "De rien ! Je suis ravi d'avoir pu vous aider. N'hésitez pas si vous avez d'autres questions.",
+        'au revoir': "Au revoir ! J'espère vous revoir bientôt sur notre plateforme.",
+        'aide': "Je suis là pour vous aider ! Vous pouvez me poser des questions sur nos événements, l'inscription, nos partenaires, ou notre plateforme en général."
+      };
+ 
+      // Vérifier si un mot-clé est présent
+      let foundKeyword = false;
+      for (const [keyword, response] of Object.entries(keywords)) {
+        if (input.includes(keyword)) {
+          this.addBotMessage(response);
+          foundKeyword = true;
+          break;
         }
       }
-    }, 800); // Simulate thinking time
-  }
+      
+      if (!foundKeyword) {
+        this.addBotMessage(this.botResponses.default);
+      }
+    }
+  }, 800);
+}
 
   suggestUpcomingEvents(): void {
     if (this.events.length === 0) {
@@ -190,7 +259,13 @@ export class ChatbotBubbleComponent implements OnInit {
   }
 
   addBotMessage(message: string): void {
-    this.messages.push({text: message, isBot: true});
+    // Ajouter timestamp si activé
+    const timestamp = this.showTimestamp ? new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+    
+    this.messages.push({
+      text: message, 
+      isBot: true,
+    });
     
     // Auto-scroll to bottom after new message
     setTimeout(() => {
@@ -205,4 +280,5 @@ export class ChatbotBubbleComponent implements OnInit {
     this.router.navigate(['event/event-detail', eventId]);
     this.isOpen = false; // Close chat after navigation
   }
+  
 }
