@@ -9,6 +9,7 @@ import { Lecture } from 'src/app/model/Lecture.model';
 })
 export class LectureService {
   private baseUrl = 'http://localhost:9090/api/lectures';
+  private baseProgressUrl = 'http://localhost:9090/api/progress';
 
   constructor(private http: HttpClient) {}
 
@@ -37,12 +38,20 @@ export class LectureService {
     return this.http.delete(`${this.baseUrl}/delete/${lectureId}`, { responseType: 'text' });
   }
 
-  // Save user progress (PDF or video)
-saveLectureProgress(lectureId: number, type: 'video' | 'pdf', progress: number) {
-  return this.http.post(`/api/progress/lecture/${lectureId}`, {
-    type,
-    progress
-  });
+//   // Save user progress (PDF or video)
+// saveLectureProgress(lectureId: number, type: 'video' | 'pdf', progress: number) {
+//   return this.http.post(`/api/progress/lecture/${lectureId}`, {
+//     type,
+//     progress
+//   });
+// }
+
+saveLectureProgress(lectureId: number, type: 'video' | 'pdf', percent: number): Observable<any> {
+  if (type === 'video') {
+    return this.http.post(`${this.baseProgressUrl}/lecture/${lectureId}?videoProgress=${percent}&pdfProgress=0`, {});
+  } else {
+    return this.http.post(`${this.baseProgressUrl}/lecture/${lectureId}?videoProgress=0&pdfProgress=${percent}`, {});
+  }
 }
 
 // Get user progress for all lectures
@@ -51,8 +60,5 @@ getAllUserProgress() {
     '/api/progress/all'
   );
 }
-
-
-
   
 }
