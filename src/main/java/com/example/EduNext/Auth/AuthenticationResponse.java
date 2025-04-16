@@ -20,6 +20,16 @@ public class AuthenticationResponse {
     private String secretImageUri;
     @JsonProperty("role")
     private String role;
+    @JsonProperty("first_name")
+    private String firstName;
+
+    @JsonProperty("last_name")
+    private String lastName;
+
+    @JsonProperty("email_address")
+    private String email;
+    private int userId;
+
 
 
 }

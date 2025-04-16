@@ -23,6 +23,29 @@ import java.io.IOException;
 
 import jakarta.mail.MessagingException;
 
+import com.example.EduNext.Entities.Token;
+import com.example.EduNext.Repositories.TokenRepository;
+import com.example.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Security.JwtService;
+import com.example.EduNext.Services.EmailService;
+import com.example.EduNext.Tfa.TwoFactorAuthenticationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.EduNext.Entities.TokenType;
+import com.example.EduNext.Entities.User;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
+import java.io.IOException;
+
+import jakarta.mail.MessagingException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -136,9 +159,12 @@ public class AuthenticationService {
                     .refreshToken("")
                     .mfaEnabled(true)
                     .role(user.getRole().name())  // Add role to response
+                    .firstName(user.getFirstname()) // Ajouter prénom
+                    .lastName(user.getLastname()) // Ajouter nom
+                    .email(user.getEmail()) // Ajouter email
+                    .userId(user.getId()) // Ajouter l'ID utilisateur
                     .build();
         }
-
         // Générer un token si l'utilisateur n'est pas banni et MFA désactivé
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -148,16 +174,12 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
                 .role(user.getRole().name())
-
+                .firstName(user.getFirstname()) // Ajouter prénom
+                .lastName(user.getLastname()) // Ajouter nom
+                .email(user.getEmail()) // Ajouter email
+                .userId(user.getId()) // Ajouter l'ID utilisateur
                 .build();
     }
-
-
-
-
-
-
-
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllByValidTokensByUser(user.getId());
         if(validUserTokens.isEmpty())

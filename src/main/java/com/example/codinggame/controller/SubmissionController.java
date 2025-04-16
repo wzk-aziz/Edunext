@@ -3,6 +3,7 @@ package com.example.codinggame.controller;
 import com.example.codinggame.entity.Submission;
 import com.example.codinggame.service.SubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,7 @@ public class SubmissionController {
     }
 
     // ✅ Créer une soumission (submit)
-    @PostMapping("/submit")
-    public ResponseEntity<Submission> submitCode(@RequestBody Submission submission) {
-        System.out.println("Received submission: " + submission);
-        System.out.println("Git link: " + submission.getGitLink());
 
-        Submission saved = submissionService.create(submission); // utilise bien `create` ici
-        return ResponseEntity.ok(saved);
-    }
 
     // 🔍 Obtenir une soumission par ID
     @GetMapping("/{id}")
@@ -82,4 +76,14 @@ public class SubmissionController {
     public List<Submission> getSubmissionsByUser(@PathVariable Long userId) {
         return submissionService.getSubmissionsByUserId(userId);
     }
+    @PostMapping("/submit")
+    public ResponseEntity<?> submitCode(@RequestBody Submission submission) {
+        try {
+            Submission createdSubmission = submissionService.create(submission);
+            return new ResponseEntity<>(createdSubmission, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

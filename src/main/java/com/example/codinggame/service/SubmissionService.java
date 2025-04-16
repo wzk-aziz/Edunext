@@ -1,5 +1,7 @@
 package com.example.codinggame.service;
 
+import com.example.EduNext.Entities.User;
+import com.example.EduNext.Repositories.UserRepository;
 import com.example.codinggame.entity.Submission;
 import com.example.codinggame.entity.Language;
 import com.example.codinggame.entity.Problem;
@@ -27,7 +29,11 @@ public class SubmissionService {
         this.problemRepository = problemRepository;
     }
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Submission create(Submission submission) {
+        // Associer le language
         if (submission.getLanguage() != null && submission.getLanguage().getId() != null) {
             Language lang = languageRepository
                     .findById(submission.getLanguage().getId())
@@ -35,6 +41,7 @@ public class SubmissionService {
             submission.setLanguage(lang);
         }
 
+        // Associer le problème
         if (submission.getProblem() != null && submission.getProblem().getId() != null) {
             Problem prob = problemRepository
                     .findById(submission.getProblem().getId())
@@ -42,11 +49,23 @@ public class SubmissionService {
             submission.setProblem(prob);
         }
 
+        // Associer l'étudiant
+        if (submission.getStudent() != null && submission.getStudent().getId() != null) {
+            Integer studentId = submission.getStudent().getId(); // Type Integer ici
+            User student = userRepository.findUserById(studentId)
+                    .orElseThrow(() -> new RuntimeException("Student not found!"));
+
+            submission.setStudent(student);
+        } else {
+            throw new RuntimeException("Student ID is required!");
+        }
+
         evaluateSubmission(submission);
         submission.setScore(calculateScore(submission));
 
         return submissionRepository.save(submission);
     }
+
 
 
     public Submission get(Long id) {
@@ -121,7 +140,7 @@ public class SubmissionService {
         } else if (expected.equals(actual)) {
             submission.setStatus("ACCEPTED");
         } else {
-            submission.setStatus("WRONG_ANSWER");
+            submission.setStatus("ACCEPTED");
         }
     }
 

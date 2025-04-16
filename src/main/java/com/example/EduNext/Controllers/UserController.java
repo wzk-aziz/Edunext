@@ -1,11 +1,12 @@
 package com.example.EduNext.Controllers;
 
-import com.example.EduNext.Repositories.UserRepository;
-import com.example.EduNext.Services.UserService;
+
 import com.example.EduNext.Auth.AuthenticationService;
 import com.example.EduNext.Auth.UpdateUserRequest;
 import com.example.EduNext.Entities.Role;
 import com.example.EduNext.Entities.User;
+import com.example.EduNext.Repositories.UserRepository;
+import com.example.EduNext.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/users")
