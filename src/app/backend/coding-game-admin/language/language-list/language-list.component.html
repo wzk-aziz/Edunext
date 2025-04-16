@@ -1,21 +1,53 @@
+<!-- HTML Template -->
 <div class="container">
-    <h2>Language List</h2>
-    <button class="add-btn" (click)="goToAdd()">➕ Add New Language</button>
+    <div class="header">
+        <h2>Programming Languages</h2>
+        <button class="add-btn" (click)="goToAdd()">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Add Language</span>
+        </button>
+    </div>
 
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Version</th>
-            <th>Actions</th>
-        </tr>
-        <tr *ngFor="let language of languages">
-            <td>{{ language.name }}</td>
-            <td>{{ language.version }}</td>
-            <td>
-                <button class="view-btn" (click)="goToView(language.id!)">👁 View</button>
-                <button class="edit-btn" (click)="goToUpdate(language.id!)">✏ Edit</button>
-                <button class="delete-btn" (click)="deleteLanguage(language.id)">🗑 Delete</button>
-            </td>
-        </tr>
-    </table>
+    <div class="table-container">
+        <table *ngIf="languages.length > 0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let language of languages" class="table-row">
+                <td>{{ language.name }}</td>
+                <td>
+                    <span class="version-badge">{{ language.version }}</span>
+                </td>
+                <td class="actions-cell">
+                    <div class="action-buttons">
+                        <button class="action-btn view-btn" (click)="goToView(language.id!)">
+                            <span class="btn-icon">👁</span>
+                            <span class="btn-text">View</span>
+                        </button>
+                        <button class="action-btn edit-btn" (click)="goToUpdate(language.id!)">
+                            <span class="btn-icon">✏️</span>
+                            <span class="btn-text">Edit</span>
+                        </button>
+                        <button class="action-btn delete-btn" (click)="deleteLanguage(language.id)">
+                            <span class="btn-icon">🗑️</span>
+                            <span class="btn-text">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="empty-state" *ngIf="languages.length === 0">
+            <div class="empty-icon">📋</div>
+            <h3>No languages found</h3>
+            <p>Get started by adding your first programming language</p>
+            <button class="add-btn" (click)="goToAdd()">Add Language</button>
+        </div>
+    </div>
 </div>

@@ -1,37 +1,69 @@
-
- .donations-container {
-   font-family: Arial, sans-serif;
-   margin: 20px;
- }
-
-h2 {
-  text-align: center;
-  color: #333;
+/* General container */
+.donations-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 40px auto;
+  font-family: 'Roboto', sans-serif;
 }
 
+/* Title */
+.title {
+  text-align: center;
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Table wrapper to make it responsive */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Table Styling */
 .donations-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  font-size: 16px;
+  margin-bottom: 30px;
 }
 
-.donations-table th, .donations-table td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ddd;
-}
-
-.donations-table th {
-  background-color: #f4f4f4;
-  color: #555;
-}
-
+.donations-table th,
 .donations-table td {
-  color: #333;
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 16px;
+  color: #444;
 }
 
-p {
+/* Header Styling */
+.donations-table th {
+  background-color: #4CAF50;
+  color: #ffffff;
+  font-weight: 700;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  text-transform: uppercase;
+}
+
+/* Row Styling */
+.donations-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.donations-table tr:hover {
+  background-color: #eaf7ea;
+  transition: all 0.3s ease;
+}
+
+/* No donations message */
+.no-donations-message {
   text-align: center;
+  font-size: 16px;
   color: #888;
+  font-style: italic;
+  padding: 20px 0;
 }

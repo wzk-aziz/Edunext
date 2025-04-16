@@ -1,0 +1,108 @@
+/* Conteneur global */
+.container {
+  max-width: 700px; /* Augmenter la largeur */
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Style du mat-card sans cadre blanc */
+.order-card {
+  padding: 40px;
+  background-color: transparent; /* Retirer le fond blanc */
+  box-shadow: none; /* Supprimer l'ombre */
+}
+
+/* Style du titre */
+.order-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Champs de saisie */
+.input-field {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Effet de focus pour les champs de saisie */
+.mat-form-field .mat-input-element:focus {
+  border-color: #4caf50; /* Vert doux pour le focus */
+}
+
+/* Élément Stripe */
+.stripe-element {
+  margin: 24px 0;
+}
+
+.stripe-error {
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* Zone des boutons */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+/* Bouton de commande */
+.order-button {
+  padding: 14px 30px;
+  font-size: 18px;
+  width: 48%;
+  background-color: #4caf50;
+  transition: all 0.3s ease;
+}
+
+.order-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Bouton de fermeture */
+.close-button {
+  padding: 14px 30px;
+  font-size: 18px;
+  width: 48%;
+  border: 2px solid #f44336;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #f44336;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Transition douce pour tous les éléments */
+input, mat-form-field {
+  transition: all 0.3s ease;
+}
+
+/* Titres des sections */
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+/* Description sous le titre Payment Information */
+.payment-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Style des champs de formulaire */
+.input-field {
+  margin-bottom: 20px;
+}

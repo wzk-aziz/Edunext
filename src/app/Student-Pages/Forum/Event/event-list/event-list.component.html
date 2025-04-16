@@ -3,12 +3,12 @@
   <div class="header-section">
     <h1>Upcoming Events & Hackathons</h1>
     <div class="search-filter">
-      <input 
-        type="text" 
-        placeholder="Search events..." 
-        [(ngModel)]="searchTerm" 
-        (input)="filterEvents()"
-        class="search-input"
+      <input
+              type="text"
+              placeholder="Search events..."
+              [(ngModel)]="searchTerm"
+              (input)="filterEvents()"
+              class="search-input"
       >
       <select [(ngModel)]="locationFilter" (change)="filterEvents()" class="location-filter">
         <option value="">All Locations</option>
@@ -39,10 +39,13 @@
       <button class="view-details-btn" (click)="goToEventDetail(event.id)">View Details</button>
     </div>
   </div>
-  
+
   <ng-template #noEvents>
     <div class="no-events">
       <p>No events match your search criteria.</p>
     </div>
   </ng-template>
 </div>
+
+<!-- ✅ Chatbot flottant en bas à droite -->
+<app-chatbot-bubble></app-chatbot-bubble>

@@ -1,10 +1,10 @@
 <!-- =======================
 Page Banner START -->
-<section class="py-5 bg-dark text-white">
+<section class="py-5 bg-dark text-white" style="background-image: url('assets/images/01.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
   <div class="container">
     <div class="row">
       <div class="col-lg-8 mx-auto text-center">
-        <h1 class="text-white">Make a Donation</h1>
+        <h1 class="display-4">Make a Donation</h1>
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0 justify-content-center">
@@ -21,36 +21,39 @@ Page Banner END -->
 
 <!-- =======================
 Donation Form START -->
-<section class="py-5">
+<section class="py-5" style="background-color: rgba(255, 255, 255, 0.85);">
   <div class="container">
     <div class="row justify-content-center">
       <!-- Main content START -->
       <div class="col-lg-6">
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <h4 class="text-center mb-4">Support Our Cause</h4>
+        <div class="card shadow-lg border-0 rounded-4">
+          <div class="card-body p-5">
+            <h4 class="text-center mb-4" style="color: #4CAF50; font-weight: 700;">Support Our Cause</h4>
 
-            <!-- Amount Input -->
-            <div class="mb-3">
-              <label class="form-label"><i class="fas fa-dollar-sign"></i> Donation Amount:</label>
-              <input type="number" class="form-control" [(ngModel)]="amount" placeholder="Enter amount" min="1" />
+            <!-- Donation Amount Section -->
+            <div class="mb-4">
+              <label class="form-label text-dark" for="amount"><i class="fas fa-dollar-sign"></i> Donation Amount</label>
+              <input type="number" id="amount" class="form-control" [(ngModel)]="amount" placeholder="Enter the donation amount" min="1" required />
             </div>
 
-            <!-- Currency Selection -->
-            <div class="mb-3">
-              <label class="form-label"><i class="fas fa-money-bill-wave"></i> Select Currency:</label>
-              <select class="form-select" [(ngModel)]="currency">
+            <!-- Currency Selection Section -->
+            <div class="mb-4">
+              <label class="form-label text-dark" for="currency"><i class="fas fa-money-bill-wave"></i> Select Currency</label>
+              <select class="form-select" [(ngModel)]="currency" id="currency" required>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
                 <option value="TND">TND (DT)</option>
               </select>
             </div>
 
-            <!-- Card Payment Element -->
-            <div id="card-element" class="mb-3"></div>
+            <!-- Payment Card Section -->
+            <div class="mb-4">
+              <label class="form-label text-dark" for="card-element"><i class="fas fa-credit-card"></i> Payment Information</label>
+              <div id="card-element" class="stripe-element"></div>
+            </div>
 
             <!-- Donate Button -->
-            <button class="btn btn-primary w-100" (click)="makePayment()">
+            <button class="btn btn-success w-100 py-3" style="font-size: 18px; font-weight: 600;" (click)="makePayment()">
               <i class="fas fa-heart"></i> Donate Now
             </button>
           </div>

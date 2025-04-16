@@ -14,29 +14,29 @@ export class SubmissionService {
 
   submit(submission: Submission): Observable<Submission> {
     return this.http.post<Submission>(`${this.apiUrl}/submit`, submission)
-      .pipe(catchError(this.handleError<Submission>('submit')));
+        .pipe(catchError(this.handleError<Submission>('submit')));
   }
 
   getByUser(userId: number): Observable<Submission[]> {
     return this.http.get<Submission[]>(`${this.apiUrl}/user/${userId}`)
-      .pipe(catchError(this.handleError<Submission[]>('getByUser', [])));
+        .pipe(catchError(this.handleError<Submission[]>('getByUser', [])));
   }
 
   getSubmissionsPerProblem(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/stats/by-problem`)
-      .pipe(catchError(this.handleError<any[]>('getSubmissionsPerProblem', [])));
+        .pipe(catchError(this.handleError<any[]>('getSubmissionsPerProblem', [])));
   }
 
   getBestScoresPerStudent(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/stats/best-scores`)
-      .pipe(catchError(this.handleError<any[]>('getBestScoresPerStudent', [])));
+        .pipe(catchError(this.handleError<any[]>('getBestScoresPerStudent', [])));
   }
 
   getAllSubmissionsSorted(): Observable<Submission[]> {
     return this.http.get<Submission[]>(`${this.apiUrl}/stats/all-sorted`)
-      .pipe(catchError(this.handleError<Submission[]>('getAllSubmissionsSorted', [])));
+        .pipe(catchError(this.handleError<Submission[]>('getAllSubmissionsSorted', [])));
   }
-  
+
 
   // Helper method to handle HTTP errors
   private handleError<T>(operation = 'operation', result?: T) {

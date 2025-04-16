@@ -8,21 +8,21 @@ import {Observable} from "rxjs";
 })
 export class PaymentServiceService {
   private stripePromise = loadStripe('pk_test_51QwtvpR88uyR8EQrqAq8qSIJ61ZsTAUtltcDU3EDqhVBgvQFVH08F5SUsngiPiu2AHTsx5feb7ejgLmfpNDQLiyN00hpHvt7Wk');
-  private apiUrl = 'http://localhost:8087/api';
+  private apiUrl = 'http://localhost:8087/';
 
   constructor(private http: HttpClient) {}
 
   createPaymentIntent(amount: number, currency: string) {
     return this.http.post<{ clientSecret: string }>(
-      `${this.apiUrl}/payments/create-payment-intent`,
+      `${this.apiUrl}api/payments/create-payment-intent`,
       { amount, currency }
     );
   }
   saveDonation(donation: any) {
-    return this.http.post(`${this.apiUrl}/donations/create`, donation);
+    return this.http.post(`${this.apiUrl}api/donations/create`, donation);
   }
   getDonations():Observable<any> {
-    return this.http.get(`${this.apiUrl}/donations/list`);
+    return this.http.get(`${this.apiUrl}api/donations/list`);
   }
 
   async getStripe() {

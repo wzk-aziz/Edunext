@@ -1,0 +1,101 @@
+<!-- chatbot-bubble.component.html -->
+<div class="chatbot-container">
+    <!-- Bouton pour ouvrir/fermer le chatbot -->
+    <button class="chat-toggle-btn" (click)="toggleChat()">
+        <i class="fa" [ngClass]="isOpen ? 'fa-times' : 'fa-comment'"></i>
+    </button>
+
+    <!-- Fenêtre de chat -->
+    <div class="chat-window" [ngClass]="{'open': isOpen}">
+        <div class="chat-header">
+            <div class="chat-title">
+                <i class="fa fa-robot"></i>
+                <span>EventBot</span>
+            </div>
+        </div>
+
+        <div class="chat-messages">
+            <div *ngFor="let message of messages" class="message" [ngClass]="{'bot': message.isBot, 'user': !message.isBot}">
+                <div class="message-content">
+                    <div class="message-text" [innerHTML]="message.text"></div>          </div>
+            </div>
+
+            <div *ngIf="isTyping" class="message bot">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <input
+                    type="text"
+                    [(ngModel)]="userInput"
+                    (keyup.enter)="sendMessage()"
+                    placeholder="Posez votre question..."
+                    autocomplete="off"
+            >
+            <button (click)="sendMessage()">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <div class="chat-suggestions">
+            <button (click)="userInput='Prochains événements?'; sendMessage()">Prochains événements</button>
+            <button (click)="userInput='Comment s\'inscrire?'; sendMessage()">S'inscrire</button>
+            <button (click)="userInput='Événements populaires?'; sendMessage()">Événements populaires</button>
+        </div>
+    </div>
+</div><!-- chatbot-bubble.component.html -->
+<div class="chatbot-container">
+    <!-- Bouton pour ouvrir/fermer le chatbot -->
+    <button class="chat-toggle-btn" (click)="toggleChat()">
+        <i class="fa" [ngClass]="isOpen ? 'fa-times' : 'fa-comment'"></i>
+    </button>
+
+    <!-- Fenêtre de chat -->
+    <div class="chat-window" [ngClass]="{'open': isOpen}">
+        <div class="chat-header">
+            <div class="chat-title">
+                <i class="fa fa-robot"></i>
+                <span>EventBot</span>
+            </div>
+        </div>
+
+        <div class="chat-messages">
+            <div *ngFor="let message of messages" class="message" [ngClass]="{'bot': message.isBot, 'user': !message.isBot}">
+                <div class="message-content">
+                    <div class="message-text" [innerHTML]="message.text"></div>          </div>
+            </div>
+
+            <div *ngIf="isTyping" class="message bot">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <input
+                    type="text"
+                    [(ngModel)]="userInput"
+                    (keyup.enter)="sendMessage()"
+                    placeholder="Posez votre question..."
+                    autocomplete="off"
+            >
+            <button (click)="sendMessage()">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <div class="chat-suggestions">
+            <button (click)="userInput='Prochains événements?'; sendMessage()">Prochains événements</button>
+            <button (click)="userInput='Comment s\'inscrire?'; sendMessage()">S'inscrire</button>
+            <button (click)="userInput='Événements populaires?'; sendMessage()">Événements populaires</button>
+        </div>
+    </div>
+</div>

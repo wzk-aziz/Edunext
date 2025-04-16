@@ -20,7 +20,7 @@ export class LanguageListComponent implements OnInit {
   viewLanguage(id: number): void {
     this.router.navigate([`/backoffice/languages/view/${id}`]);
   }
-  
+
   loadLanguages() {
     this.languageService.getAll().subscribe(data => {
       this.languages = data;

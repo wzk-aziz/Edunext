@@ -14,10 +14,10 @@ export interface BanStats {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8093/api/v1/users';
-  private passUrl = 'http://localhost:8093/api/auth';
+  private apiUrl = 'http://localhost:8087/api/v1/users';
+  private passUrl = 'http://localhost:8087/api/auth';
 
-  
+
 
 
   constructor(private http: HttpClient) { }
@@ -31,7 +31,7 @@ export class UserService {
       params: { role: role.toUpperCase() }
     });
   }
-  
+
 
   getUsersByRole(role: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/${role}`);
@@ -49,7 +49,7 @@ export class UserService {
   }
 
   getUserImage(fileName: string): string {
-    return `http://localhost:8093/api/v1/auth/files/${fileName}`;
+    return `http://localhost:8087/api/v1/auth/files/${fileName}`;
   }
 
 
@@ -57,7 +57,7 @@ export class UserService {
   banUser(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/ban/${id}`, {});
   }
-  
+
   unbanUser(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/unban/${id}`, {});
   }
@@ -128,9 +128,9 @@ export class UserService {
   }
 
 
-  
-  
 
-  
+
+
+
 
 }

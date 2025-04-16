@@ -43,14 +43,14 @@ export class MarketplaceService {
   }
   // Récupérer les produits filtrés
 
-    // marketplace.service.ts
-    getAllProductsByName(filters: { category: any; sortBy: any }): Observable<any> {
-        // Vous pouvez ajuster l'URL en fonction de vos paramètres
-        const { category, sortBy } = filters;
-        return this.http.get(`${BASIC_URL}api/admin/search`, {
-            params: { category, sortBy }
-        });
-    }
+  // marketplace.service.ts
+  getAllProductsByName(filters: { category: any; sortBy: any }): Observable<any> {
+    // Vous pouvez ajuster l'URL en fonction de vos paramètres
+    const { category, sortBy } = filters;
+    return this.http.get(`${BASIC_URL}api/admin/search`, {
+      params: { category, sortBy }
+    });
+  }
 
 
 
@@ -64,14 +64,24 @@ export class MarketplaceService {
   }
 
 
-  increaseProductQuantity(productId: any): Observable<any> {
-    const cartDto = {productId};
-    return this.http.post(BASIC_URL + 'api/customer/increase-quantity', cartDto);
+  // increaseProductQuantity(productId: any): Observable<any> {
+  //   const cartDto = {productId};
+  //   return this.http.post(BASIC_URL + 'api/customer/increase-quantity', cartDto);
+  // }
+  //
+  // decreaseProductQuantity(productId: any): Observable<any> {
+  //   const cartDto = {productId};
+  //   return this.http.post(BASIC_URL + 'api/customer/decrease-quantity', cartDto);
+  // }
+
+  increaseProductQuantity(productId: any, userId: number): Observable<any> {
+    const cartDto = { productId };
+    return this.http.post(BASIC_URL + `api/customer/increase-quantity/${userId}`, cartDto);
   }
 
-  decreaseProductQuantity(productId: any): Observable<any> {
-    const cartDto = {productId};
-    return this.http.post(BASIC_URL + 'api/customer/decrease-quantity', cartDto);
+  decreaseProductQuantity(productId: any, userId: number): Observable<any> {
+    const cartDto = { productId };
+    return this.http.post(BASIC_URL + `api/customer/decrease-quantity/${userId}`, cartDto);
   }
 
   // Ajouter la méthode pour supprimer un produit du panier
@@ -89,19 +99,36 @@ export class MarketplaceService {
   }
 
 
-  getCart(): Observable<any> {
-    return this.http.get(BASIC_URL + `api/customer/cart`);
+  // getCart(): Observable<any> {
+  //   return this.http.get(BASIC_URL + `api/customer/cart`);
+  // }
+  getCart(userId: number): Observable<any> {
+    return this.http.get(`${BASIC_URL}api/customer/cart/${userId}`);
   }
 
 
-  applyCoupon(code: string): Observable<any> {
-    return this.http.post(`${BASIC_URL}api/customer/apply-coupon/${code}`, {});
+  // applyCoupon(code: string): Observable<any> {
+  //   return this.http.post(`${BASIC_URL}api/customer/apply-coupon/${code}`, {});
+  // }
+  applyCoupon(userId: number, code: string): Observable<any> {
+    return this.http.post(`${BASIC_URL}api/customer/apply-coupon/${userId}/${code}`, {});
   }
 
 
-  placeOrder(orderDto: any): Observable<any> {
-    return this.http.post(BASIC_URL + 'api/customer/place-order', orderDto);
+  // placeOrder(orderDto: any): Observable<any> {
+  //   return this.http.post(BASIC_URL + 'api/customer/place-order', orderDto);
+  // }
+
+  placeOrder(userId: any, orderDto: any): Observable<any> {
+    // Passer l'ID utilisateur et l'objet `orderDto` dans la requête
+    return this.http.post(`${BASIC_URL}api/customer/place-order/${userId}`, orderDto);
   }
+
+  // Récupérer les commandes d'un utilisateur (My Orders)
+  getMyOrders(userId: number): Observable<any> {
+    return this.http.get(`${BASIC_URL}api/admin/myOrders/${userId}`);
+  }
+
 
   getOrders(): Observable<any> {
     return this.http.get(BASIC_URL + `api/customer/myOrders`);
@@ -119,10 +146,13 @@ export class MarketplaceService {
     return this.http.get(BASIC_URL + `api/customer/product/${productId}`);
   }
 
-  addProductToWishlist(wishlistDto: { productId: number }): Observable<any> {
-    return this.http.post(`${BASIC_URL}api/customer/wishlist`, wishlistDto);
-  }
+  // addProductToWishlist(wishlistDto: { productId: number }): Observable<any> {
+  //   return this.http.post(`${BASIC_URL}api/customer/wishlist`, wishlistDto);
+  // }
 
+  addProductToWishlist(userId: number, wishlistDto: { productId: number }): Observable<any> {
+    return this.http.post(`${BASIC_URL}api/customer/wishlist/${userId}`, wishlistDto);
+  }
 
   deleteProduct(productId: number): Observable<any> {
     return this.http.delete(BASIC_URL + `api/admin/product/${productId}`);
@@ -142,7 +172,7 @@ export class MarketplaceService {
 
   updateProduct(productId:any, productDto: any): Observable<any> {
     return this.http.put(BASIC_URL + `api/admin/product/${productId}`, productDto);
-   }
+  }
   // addProduct(productDto: any): Observable<any> {
   //   const formData = new FormData();
   //
@@ -154,8 +184,8 @@ export class MarketplaceService {
   //   return this.http.post(BASIC_URL + 'api/admin/product', formData);
   // }
 
-   addProduct(productDto: any): Observable<any> {
-     return this.http.post(BASIC_URL + 'api/admin/product', productDto);
+  addProduct(productDto: any): Observable<any> {
+    return this.http.post(BASIC_URL + 'api/admin/product', productDto);
   }
   getProductById(productId:number): Observable<any> {
     return this.http.get(BASIC_URL + `api/admin/product/${productId}`);
@@ -163,12 +193,25 @@ export class MarketplaceService {
   getAllCategories(): Observable<any> {
     return this.http.get(BASIC_URL + 'api/admin/categories');
   }
-    deleteFromWishlist(productId: number): Observable<any> {
-        return this.http.delete(BASIC_URL + `api/customer/wishlist/product/${productId}`);
-    }
+  // deleteFromWishlist(productId: number): Observable<any> {
+  //     return this.http.delete(BASIC_URL + `api/customer/wishlist/product/${productId}`);
+  // }
 
-  getWishlist(): Observable<any> {
-    return this.http.get(BASIC_URL + 'api/customer/wishlist').pipe(
+  deleteFromWishlist(userId: number, productId: number): Observable<any> {
+    return this.http.delete(`${BASIC_URL}api/customer/wishlist/${userId}/product/${productId}`);
+  }
+
+  // getWishlist(): Observable<any> {
+  //   return this.http.get(BASIC_URL + 'api/customer/wishlist').pipe(
+  //     catchError(error => {
+  //       console.error('Error fetching wishlist', error);
+  //       return throwError(error); // ou un Observable vide
+  //     })
+  //   );
+  // }
+
+  getWishlist(userId: number): Observable<any> {
+    return this.http.get(BASIC_URL + `api/customer/wishlist/${userId}`).pipe(
       catchError(error => {
         console.error('Error fetching wishlist', error);
         return throwError(error); // ou un Observable vide
@@ -185,8 +228,12 @@ export class MarketplaceService {
   addProductToCart(addProductInCartDto: any): Observable<any> {
     return this.http.post(BASIC_URL + 'api/customer/cart', addProductInCartDto);
   }
-  addToCart(addProductInCartDto: any): Observable<any> {
-    return this.http.post(BASIC_URL + 'api/customer/add', addProductInCartDto, { responseType: 'text' });
+  // addToCart(addProductInCartDto: any): Observable<any> {
+  //   return this.http.post(BASIC_URL + 'api/customer/add', addProductInCartDto, { responseType: 'text' });
+  // }
+
+  addToCart(userId: number, cartDto: { productId: number }): Observable<any> {
+    return this.http.post(`${BASIC_URL}api/customer/add/${userId}`, cartDto);
   }
 
 

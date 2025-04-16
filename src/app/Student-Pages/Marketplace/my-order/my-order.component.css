@@ -1,23 +1,107 @@
-.container {
-    max-width: 900px;
-    margin: auto;
+/* my-orders.component.css */
+.orders-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-h2 {
-    color: #333;
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #333;
 }
 
-.table {
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
+.error-message {
+  color: red;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
 }
 
-.badge {
-    font-size: 14px;
-    padding: 5px 10px;
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.btn-sm {
-    font-size: 13px;
+.order-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-id {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.order-date {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.order-details {
+  margin: 10px 0;
+}
+
+.product-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.product-price {
+  font-size: 1rem;
+  color: #888;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-status {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.view-details-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.view-details-btn:hover {
+  background-color: #0056b3;
+}
+
+.no-orders-message {
+  font-size: 1.2rem;
+  color: #888;
+  text-align: center;
+}
+.status-pending {
+  color: orange;
+}
+.status-shipped {
+  color: blue;
+}
+.status-delivered {
+  color: green;
+}
+.status-cancelled {
+  color: red;
 }

@@ -1,28 +1,81 @@
-<div class="container">
-    <h2>Compiler List</h2>
-    <button (click)="goToCreate()" class="btn btn-primary">+ Add New Compiler</button>
-  
-    <table class="table table-striped mt-3">
-      <thead class="bg-primary text-white">
+<!-- compiler-list.component.html -->
+<div class="dashboard-container">
+  <div class="header-section">
+    <h2>Compiler Management</h2>
+    <button (click)="goToCreate()" class="btn-create">
+      <i class="fas fa-plus-circle"></i> Add New Compiler
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="search-section">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search compilers..." (input)="filterCompilers()">
+      </div>
+      <div class="filters">
+        <select [(ngModel)]="filterLanguage" (change)="filterCompilers()">
+          <option value="">All Languages</option>
+          <option *ngFor="let lang of uniqueLanguages" [value]="lang">{{lang}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
         <tr>
-          <th>ID</th>
-          <th>Command</th>
-          <th>Language ID</th>
+          <th (click)="sortBy('id')">
+            ID <i class="fas" [ngClass]="{'fa-sort-up': sortColumn === 'id' && sortDirection === 'asc',
+                                           'fa-sort-down': sortColumn === 'id' && sortDirection === 'desc',
+                                           'fa-sort': sortColumn !== 'id'}"></i>
+          </th>
+          <th (click)="sortBy('command')">
+            Command <i class="fas" [ngClass]="{'fa-sort-up': sortColumn === 'command' && sortDirection === 'asc',
+                                              'fa-sort-down': sortColumn === 'command' && sortDirection === 'desc',
+                                              'fa-sort': sortColumn !== 'command'}"></i>
+          </th>
+          <th (click)="sortBy('language.id')">
+            Language <i class="fas" [ngClass]="{'fa-sort-up': sortColumn === 'language.id' && sortDirection === 'asc',
+                                               'fa-sort-down': sortColumn === 'language.id' && sortDirection === 'desc',
+                                               'fa-sort': sortColumn !== 'language.id'}"></i>
+          </th>
           <th>Actions</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let compiler of compilers">
-          <td>{{ compiler.id }}</td>
-          <td>{{ compiler.command }}</td>
-          <td>{{ compiler.language.id }}</td>
-          <td>
-            <button (click)="goToEdit(compiler.id!)" class="btn btn-warning">✏ Edit</button>
-            <button (click)="deleteCompiler(compiler.id!)" class="btn btn-danger">🗑 Delete</button>
+        </thead>
+        <tbody>
+        <tr *ngIf="filteredCompilers.length === 0">
+          <td colspan="4" class="no-data">No compilers found</td>
+        </tr>
+        <tr *ngFor="let compiler of filteredCompilers; let i = index" [ngClass]="{'alternate': i % 2 !== 0}">
+          <td>{{compiler.id}}</td>
+          <td class="command-cell">
+            <code>{{compiler.command}}</code>
+          </td>
+          <td class="language-cell">
+            <span class="language-badge">{{compiler.language.id}}</span>
+          </td>
+          <td class="actions-cell">
+            <button (click)="goToEdit(compiler.id!)" class="btn-edit" title="Edit compiler">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteCompiler(compiler.id!)" class="btn-delete" title="Delete compiler">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </td>
         </tr>
-        
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)" class="page-button">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="page-info">Page {{currentPage}} of {{totalPages}}</span>
+      <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)" class="page-button">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
-  
+</div>

@@ -15,15 +15,32 @@ export class ProblemsComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 6;
 
-  constructor(private problemService: ProblemService, private router: Router) {}
+  constructor(
+      private problemService: ProblemService,
+      private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadProblems();
   }
 
   loadProblems() {
-    this.problemService.getAll().subscribe(data => {
-      this.problems = data;
+    this.loading = true;
+    this.problemService.getAll().subscribe({
+      next: (data) => {
+        this.problems = data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching problems:', error);
+        this.loading = false;
+        Swal.fire({
+          title: 'Error!',
+          text: 'Unable to load problems. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
     });
   }
 
@@ -44,23 +61,46 @@ export class ProblemsComponent implements OnInit {
 
   deleteProblem(id?: number) {
     if (!id) return;
-    
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#3498db',
       confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
         this.loading = true;
-        this.problemService.delete(id).subscribe(() => {
-          this.problems = this.problems.filter(p => p.id !== id);
-          this.loading = false;
-          Swal.fire('Deleted!', 'Your problem has been deleted.', 'success');
+        this.problemService.delete(id).subscribe({
+          next: () => {
+            this.problems = this.problems.filter(p => p.id !== id);
+            this.loading = false;
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Problem has been successfully deleted.',
+              icon: 'success',
+              confirmButtonColor: '#3498db'
+            });
+
+            // Adjust current page if necessary after deletion
+            if (this.paginatedProblems.length === 0 && this.currentPage > 1) {
+              this.currentPage--;
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting problem:', error);
+            this.loading = false;
+            Swal.fire({
+              title: 'Error!',
+              text: 'Unable to delete the problem. Please try again later.',
+              icon: 'error',
+              confirmButtonColor: '#3498db'
+            });
+          }
         });
       }
     });

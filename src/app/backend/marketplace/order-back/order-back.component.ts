@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MarketplaceService } from "../../../Student-Pages/Marketplace/services/marketplace.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FormControl, FormGroup } from "@angular/forms";
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+
 @Component({
-  standalone: true,
-  imports: [CommonModule , MatCardModule , MatTableModule , MatMenuModule],
   selector: 'app-order-back',
   templateUrl: './order-back.component.html',
   styleUrls: ['./order-back.component.css']

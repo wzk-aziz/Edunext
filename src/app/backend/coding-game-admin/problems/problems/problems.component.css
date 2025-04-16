@@ -1,239 +1,308 @@
-/* Style général */
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Conteneur principal */
+/* problems.component.css */
 .container {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 1000px;
-    width: 100%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Titre */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
 h2 {
-    text-align: center;
-    color: #343a40;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-/* Bouton Ajouter */
-button.add-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.3s ease-in-out;
-    margin-bottom: 15px;
-}
-
-button.add-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
-}
-
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-table th, table td {
-    padding: 14px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    font-size: 16px;
-}
-
-table th {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    font-size: 18px;
-    text-align: center;
-}
-
-table tr:nth-child(even) {
-    background: #f8f9fa;
-}
-
-/* Centrer les actions */
-td:last-child {
-    text-align: center;
-}
-
-/* Boutons Actions */
-button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.3s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-/* Bouton View */
-button.view-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-button.view-btn:hover {
-    background-color: #218838;
-}
-
-/* Bouton Edit */
-button.edit-btn {
-    background-color: #ffc107;
-    color: black;
-}
-
-button.edit-btn:hover {
-    background-color: #e0a800;
-}
-
-/* Bouton Delete */
-button.delete-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-button.delete-btn:hover {
-    background-color: #c82333;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    button {
-        font-size: 12px;
-        padding: 6px 10px;
-    }
-}
-/* Regroupe les boutons côte à côte */
-.btn-group {
-    display: flex;
-    gap: 10px; /* Espace entre les boutons */
-    justify-content: center;
-    align-items: center;
-}
-
-/* Ajuste la taille et l'affichage des boutons */
-button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.3s ease-in-out;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* Empêche les boutons de se superposer sur mobile */
-@media (max-width: 600px) {
-    .btn-group {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-/* ✅ Style pour la liste */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-th {
-    background-color: #007bff;
-    color: white;
-}
-
-/* ✅ Style des boutons */
-button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.view-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-.edit-btn {
-    background-color: #ffc107;
-    color: black;
-}
-
-.delete-btn {
-    background-color: #dc3545;
-    color: white;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin: 0;
+    font-weight: 600;
 }
 
 .add-btn {
-    background-color: #007bff;
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
     color: white;
-    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+}
+
+.btn-icon {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    min-height: 200px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+}
+
+th {
+    color: #334155;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    color: #64748b;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.title-cell {
+    font-weight: 500;
+    color: #334155;
+}
+
+.description-cell {
+    max-width: 400px;
+}
+
+.description-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.table-row {
+    transition: background-color 0.15s ease;
+}
+
+.table-row:hover {
+    background-color: #f8fafc;
+}
+
+.actions-cell {
+    padding: 0.5rem 1rem;
+}
+
 .action-buttons {
     display: flex;
-    gap: 8px;
-  }
-  
-  .view-btn {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .edit-btn {
-    background-color: #ffc107;
-    color: black;
-  }
-  
-  .delete-btn {
-    background-color: #dc3545;
-    color: white;
-  }
-  
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.view-btn {
+    background-color: #ecfdf5;
+    color: #10b981;
+}
+
+.view-btn:hover {
+    background-color: #d1fae5;
+}
+
+.edit-btn {
+    background-color: #fff7ed;
+    color: #f97316;
+}
+
+.edit-btn:hover {
+    background-color: #ffedd5;
+}
+
+.delete-btn {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background-color: #fee2e2;
+}
+
+.loading-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.loading-container p {
+    margin-top: 1rem;
+    color: #6366f1;
+    font-weight: 500;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(99, 102, 241, 0.2);
+    border-radius: 50%;
+    border-top-color: #6366f1;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.empty-state {
+    padding: 3rem 0;
+    text-align: center;
+    background-color: #f8fafc;
+    border-radius: 8px;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.2rem;
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:not([disabled]):hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+.pagination-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-icon {
+    font-size: 0.8rem;
+}
+
+.page-info {
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .btn-icon {
+        margin-right: 0;
+    }
+
+    .action-btn {
+        padding: 0.4rem;
+    }
+
+    .description-cell {
+        display: none;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        display: none;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.table-container {
+    animation: fadeIn 0.3s ease;
+}

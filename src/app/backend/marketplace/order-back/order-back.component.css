@@ -1,42 +1,41 @@
 .mat-elevation-z8 {
-    width: 100%;
-    margin: 10px 0;
-  }
-  
-  .mat-header-cell, .mat-cell {
-    padding: 16px;
-    text-align: left;
-  }
-  
-  .mat-row:hover {
-    background-color: #f5f5f5;
-  }
-  
-  button.mat-raised-button {
-    width: 100%;
-  }
-  
-  .mat-menu-item {
-    font-size: 14px;
-  }
-  
-  .status-shipped {
-    color: #1976D2; /* Blue for Shipped */
-    font-weight: bold;
-  }
-  
-  .status-delivered {
-    color: #388E3C; /* Green for Delivered */
-    font-weight: bold;
-  }
-  
-  .status-pending {
-    color: #FF9800; /* Orange for Pending */
-    font-weight: bold;
-  }
-  
-  .status-cancelled {
-    color: #D32F2F; /* Red for Cancelled */
-    font-weight: bold;
-  }
-  
+  width: 100%;
+  margin: 10px 0;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 16px;
+  text-align: left;
+}
+
+.mat-row:hover {
+  background-color: #f5f5f5;
+}
+
+button.mat-raised-button {
+  width: 100%;
+}
+
+.mat-menu-item {
+  font-size: 14px;
+}
+
+.status-shipped {
+  color: #1976D2; /* Blue for Shipped */
+  font-weight: bold;
+}
+
+.status-delivered {
+  color: #388E3C; /* Green for Delivered */
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #FF9800; /* Orange for Pending */
+  font-weight: bold;
+}
+
+.status-cancelled {
+  color: #D32F2F; /* Red for Cancelled */
+  font-weight: bold;
+}

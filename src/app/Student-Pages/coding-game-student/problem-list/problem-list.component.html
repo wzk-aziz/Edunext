@@ -1,122 +1,139 @@
-<div class="container mt-5">
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h2 class="mb-0 text-center">Available Problems</h2>
+<div class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xxl-10">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="mb-0 text-center text-white">
+            <i class="fas fa-code me-2"></i>
+            Catalogue des Défis de Programmation
+          </h2>
+          <p class="text-center text-white-50 mb-0 mt-2">
+            Relevez les défis et améliorez vos compétences en programmation
+          </p>
         </div>
-        
-        <div class="card-body">
-          <!-- Filter section -->
-          <div class="row mb-4">
-            <div class="col-md-6">
-              <div class="d-flex align-items-center">
-                <label class="me-2 text-primary fw-bold">Filter by Difficulty:</label>
-                <div class="btn-group">
-                  <button 
-                    *ngFor="let difficulty of difficulties" 
-                    class="btn" 
-                    [class.btn-primary]="selectedDifficulty === difficulty"
-                    [class.btn-outline-primary]="selectedDifficulty !== difficulty"
-                    (click)="onDifficultyChange(difficulty)">
+
+        <div class="card-body p-4">
+          <!-- Filter section with glass morphism effect -->
+          <div class="row mb-4 align-items-center bg-white p-4 rounded-3 shadow-sm">
+            <div class="col-md-7">
+              <div class="d-flex flex-wrap align-items-center gap-3">
+                <label class="mb-0 text-primary fw-bold fs-5">
+                  <i class="fas fa-filter me-2"></i>Niveau de difficulté:
+                </label>
+                <div class="btn-group shadow-sm">
+                  <button *ngFor="let difficulty of difficulties" class="btn fw-bold"
+                          [class.active]="selectedDifficulty === difficulty" (click)="onDifficultyChange(difficulty)">
+                    <i class="fas me-2" [ngClass]="{
+                        'fa-smile text-success': difficulty === 'Easy',
+                        'fa-meh text-warning': difficulty === 'Medium',
+                        'fa-frown text-danger': difficulty === 'Hard'
+                      }"></i>
                     {{ difficulty }}
                   </button>
                 </div>
-                <button class="btn btn-outline-secondary ms-2" (click)="resetFilters()" *ngIf="selectedDifficulty">
-                  <i class="fas fa-times"></i> Clear
+                <button class="btn btn-light" (click)="resetFilters()" *ngIf="selectedDifficulty">
+                  <i class="fas fa-times"></i>
                 </button>
               </div>
             </div>
-            <div class="col-md-6 text-end">
-              <span class="text-muted">
-                Showing {{ filteredProblems.length }} problems
-                <span *ngIf="selectedDifficulty"> (filtered by {{ selectedDifficulty }})</span>
-              </span>
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+              <div class="badge bg-white text-primary shadow-sm p-2">
+                <i class="fas fa-tasks me-2"></i>
+                {{ filteredProblems.length }} défi(s) disponible(s)
+              </div>
             </div>
           </div>
 
-          <!-- Table of problems -->
+          <!-- Problems Grid -->
           <div class="table-responsive">
-            <table class="table table-hover table-striped">
-              <thead class="bg-light">
-                <tr>
-                  <th class="text-primary">Title</th>
-                  <th class="text-primary">Description</th>
-                  <th class="text-primary">Difficulty</th>
-                  <th class="text-primary text-center">Actions</th>
-                </tr>
+            <table class="table">
+              <thead>
+              <tr>
+                <th class="fs-6">Défi</th>
+                <th class="fs-6">Description</th>
+                <th class="text-center fs-6">Niveau</th>
+                <th class="text-center fs-6">Actions</th>
+              </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let problem of paginatedProblems">
-                  <td class="font-weight-bold align-middle">{{ problem.title }}</td>
-                  <td class="align-middle">{{ problem.description }}</td>
-                  <td class="align-middle">
-                    <span class="badge" 
-                      [ngClass]="{
+              <tr *ngFor="let problem of paginatedProblems; let i = index" [style.--animation-order]="i">
+                <td class="fw-bold fs-6">{{ problem.title }}</td>
+                <td class="w-50">
+                  <p class="text-muted mb-0 fs-6">{{ problem.description }}</p>
+                </td>
+                <td class="text-center">
+                    <span class="badge" [ngClass]="{
                         'bg-success': problem.difficulty === 'Easy',
                         'bg-warning': problem.difficulty === 'Medium',
                         'bg-danger': problem.difficulty === 'Hard'
                       }">
+                      <i class="fas" [ngClass]="{
+                        'fa-smile': problem.difficulty === 'Easy',
+                        'fa-meh': problem.difficulty === 'Medium',
+                        'fa-frown': problem.difficulty === 'Hard'
+                      }"></i>
                       {{ problem.difficulty }}
                     </span>
-                  </td>
-                  <td>
-                    <div class="d-flex justify-content-center gap-2">
-                      <button class="btn btn-outline-primary" (click)="viewProblem(problem.id)">
-                        <i class="fas fa-eye"></i> View
-                      </button>
-                      <button class="btn btn-success" (click)="launchProblem(problem.id)">
-                        <i class="fas fa-play"></i> Lancer
-                      </button>
-                      <button class="btn btn-danger" (click)="generatePDF(problem)">
-                        <i class="fas fa-file-pdf"></i> PDF
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-primary btn-sm" (click)="viewProblem(problem.id)">
+                      <i class="fas fa-eye me-1"></i>
+                    </button>
+                    <button class="btn btn-success btn-sm" (click)="launchProblem(problem.id)">
+                      <i class="fas fa-play me-1"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" (click)="generatePDF(problem)">
+                      <i class="fas fa-file-pdf me-1"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
-          
-          <!-- No results message -->
-          <div *ngIf="filteredProblems.length === 0" class="text-center my-4">
-            <p class="text-muted">No problems found with the selected filters.</p>
-            <button class="btn btn-outline-primary" (click)="resetFilters()">
-              <i class="fas fa-sync"></i> Reset Filters
+
+          <!-- Empty State with Animation -->
+          <div *ngIf="filteredProblems.length === 0" class="empty-state text-center">
+            <i class="fas fa-search fa-4x mb-3"></i>
+            <h4 class="text-muted">Aucun défi trouvé</h4>
+            <p class="text-muted mb-4">Essayez de modifier vos filtres de recherche</p>
+            <button class="btn btn-primary" (click)="resetFilters()">
+              <i class="fas fa-sync-alt me-2"></i>
+              Réinitialiser les filtres
             </button>
           </div>
-          
-          <!-- Pagination -->
+
+          <!-- Improved Pagination -->
           <div class="d-flex justify-content-between align-items-center mt-4" *ngIf="filteredProblems.length > 0">
-            <div>
-              <span class="text-muted">
-                Showing {{ (currentPage - 1) * pageSize + 1 }} to 
-              </span>
+            <div class="text-muted">
+              Affichage {{ (currentPage - 1) * pageSize + 1 }} -
+              {{ Math.min(currentPage * pageSize, filteredProblems.length) }}
+              sur {{ filteredProblems.length }}
             </div>
-            <nav aria-label="Problem pagination">
+            <nav>
               <ul class="pagination mb-0">
                 <li class="page-item" [class.disabled]="currentPage === 1">
-                  <a class="page-link" (click)="changePage(1)" aria-label="First">
-                    <span aria-hidden="true">&laquo;</span>
+                  <a class="page-link" (click)="changePage(1)">
+                    <i class="fas fa-angle-double-left"></i>
                   </a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === 1">
-                  <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
-                    <span aria-hidden="true">&lt;</span>
+                  <a class="page-link" (click)="changePage(currentPage - 1)">
+                    <i class="fas fa-angle-left"></i>
                   </a>
                 </li>
-                <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" 
-                    [class.active]="currentPage === i + 1">
-                  <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+                <li class="page-item" *ngFor="let page of getPaginationRange()" [class.active]="currentPage === page">
+                  <a class="page-link" (click)="changePage(page)">{{ page }}</a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
-                    <span aria-hidden="true">&gt;</span>
+                  <a class="page-link" (click)="changePage(currentPage + 1)">
+                    <i class="fas fa-angle-right"></i>
                   </a>
                 </li>
                 <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <a class="page-link" (click)="changePage(totalPages)" aria-label="Last">
-                    <span aria-hidden="true">&raquo;</span>
+                  <a class="page-link" (click)="changePage(totalPages)">
+                    <i class="fas fa-angle-double-right"></i>
                   </a>
                 </li>
               </ul>

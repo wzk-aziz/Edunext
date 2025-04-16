@@ -59,7 +59,7 @@ import { EmptypageteacherComponent } from './Teacher-Pages/emptypageteacher/empt
 // Virtual Classroom Components
 import { StudentVirtualClassroomSessionsComponent } from './Student-Pages/student-virtual-classroom-sessions/student-virtual-classroom-sessions.component';
 import { StudentLiveClassComponent } from './Student-Pages/student-live-class/student-live-class.component';
-import { StudentTutoringComponent } from './Student-Pages/student-tutoring/student-tutoring.component'; 
+import { StudentTutoringComponent } from './Student-Pages/student-tutoring/student-tutoring.component';
 import { TeacherVirtualClassroomsComponent } from './Teacher-Pages/teacher-virtual-classrooms/teacher-virtual-classrooms.component';
 import { TeacherDashboardComponent } from './Teacher-Pages/teacher-dashboard/teacher-dashboard.component';
 import { TeacherLayoutComponent } from './Teacher-Pages/teacher-layout/teacher-layout.component';
@@ -84,6 +84,7 @@ import { UsersComponent } from './backend/users/users.component';
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
 import { VerificationComponent } from './Shared/verification/verification.component';
 import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
+import { ChatbotBubbleComponent } from './Student-Pages/Forum/Event/chatbot-bubble/chatbot-bubble.component';
 
 // Route Guard
 import { authGuard } from './Shared/services/auth/auth.guard';
@@ -116,13 +117,13 @@ const routes: Routes = [
   { path: 'studentdashboard', component: MaindashboardComponent },
   { path: 'myplan', component: SubscriptionComponent },
   { path: 'editprofile', component: EditprofileComponent },
-  
+
   // Exam routes for students
   { path: 'examstudent', component: ExamstudentComponent },
   { path: 'exam/:id', component: ExamstudentsubmitComponent },
   { path: 'certificatet', component: CertificateListComponentComponent },
   { path: 'result', component: ExamResultComponent },
-  
+
   // Courses & Quizzes
   { path: 'coursesdashboard', component: MycoursesComponent },
   { path: 'courselist', component: CourseslistComponent },
@@ -145,6 +146,8 @@ const routes: Routes = [
   { path: 'thread', component: ThreadListComponent },
   { path: 'new', component: ThreadAddComponent },
   { path: 'event', component: EventListComponent },
+  // app-routing.module.ts
+  { path: 'chatbot', component: ChatbotBubbleComponent },
   { path: 'event/event-detail/:id', component: EventDetailComponent },
 
   // Marketplace Routes
@@ -165,7 +168,7 @@ const routes: Routes = [
   { path: 'teachercourses', component: TeachercoursesComponent },
   { path: 'teachereditprofile', component: TeachereditprofileComponent },
   { path: 'studentlist', component: StudentslistComponent },
-  
+
   // Teacher Exam Management Routes
   { path: 'examlist', component: ExamListComponent },
   { path: 'creeaxam', component: ExamFormComponent },
@@ -208,7 +211,7 @@ const routes: Routes = [
   { path: 'teachereditprofile', redirectTo: 'teacher/edit-profile', pathMatch: 'full' },
   { path: 'teacher-dashboard', redirectTo: 'teacher/dashboard', pathMatch: 'full' },
   { path: 'teacher-virtual-classrooms', redirectTo: 'teacher/virtual-classrooms', pathMatch: 'full' },
-  
+
   // Lazy-loaded Back-office Routes
   { path: 'backoffice', loadChildren: () => import('./backend/back-routing.module').then(m => m.BackRoutingModule) },
 

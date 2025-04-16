@@ -13,13 +13,14 @@ export interface Submission {
     expectedOutput?: string;
   };
   gitLink?: string;
+  elapsedTime?: string; // Added elapsed time field
   student?: {
     id: number;
     name?: string;
     email?: string; // Add email field
   };
   score?: number;
-  
+
   // For form submission
   problemId?: number;
   studentId?: number;

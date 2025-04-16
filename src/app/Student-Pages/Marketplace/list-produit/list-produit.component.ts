@@ -3,6 +3,7 @@ import { MarketplaceService } from "../services/marketplace.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {AuthenticationService} from "../../../Shared/services/authentication.service";
 
 @Component({
   selector: 'app-list-produit',
@@ -30,6 +31,7 @@ export class ListProduitComponent implements OnInit {
 
   constructor(
     private marketplaceService: MarketplaceService,
+    private authService: AuthenticationService,
     private snackbar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -37,7 +39,8 @@ export class ListProduitComponent implements OnInit {
 
   ngOnInit() {
     this.getCategories();  // Récupérer les catégories au démarrage
-    this.loadWishlist();   // Charger l'état de la wishlist depuis le backend ou autre source persistante
+    const userId = this.authService.getUserId();
+    this.loadWishlist(userId);   // Charger l'état de la wishlist depuis le backend ou autre source persistante
     this.getAllProducts();
     this.searchProductForm = this.fb.group({
       title: [null, [Validators.required]],
@@ -65,9 +68,9 @@ export class ListProduitComponent implements OnInit {
       }
     );
   }
-  loadWishlist(): void {
+  loadWishlist(userId: number): void {
     // Charger la wishlist depuis le service (qui combine localStorage et backend)
-    this.marketplaceService.getWishlist().subscribe({
+    this.marketplaceService.getWishlist(userId).subscribe({
       next: (wishlist: number[]) => {
         this.wishlist = new Set(wishlist);  // Charger les produits dans la wishlist
         console.log("Wishlist chargée", this.wishlist);
@@ -132,8 +135,9 @@ export class ListProduitComponent implements OnInit {
 
 
   toggleWishlist(productId: number): void {
+    const userId = this.authService.getUserId(); // Assure-toi que ça retourne bien un ID
     if (this.wishlist.has(productId)) {
-      this.marketplaceService.deleteFromWishlist(productId).subscribe({
+      this.marketplaceService.deleteFromWishlist(userId, productId).subscribe({
         next: () => {
           this.wishlist.delete(productId);
           this.snackbar.open('Produit retiré de la wishlist', 'Fermer', { duration: 3000 });
@@ -145,18 +149,19 @@ export class ListProduitComponent implements OnInit {
       });
     } else {
       const wishlistDto = { productId };
-      this.marketplaceService.addProductToWishlist(wishlistDto).subscribe({
+      this.marketplaceService.addProductToWishlist(userId, wishlistDto).subscribe({
         next: () => {
-          this.wishlist.add(productId);  // Mise à jour de l'état local
+          this.wishlist.add(productId);
           this.snackbar.open('Produit ajouté à la wishlist', 'Fermer', { duration: 3000 });
         },
         error: (error) => {
-          console.error('Erreur lors de l\'ajout à la wishlist :', error);
-          this.snackbar.open('Erreur lors de l\'ajout à la wishlist', 'Fermer', { duration: 3000 });
+          console.error('Produit déja existe dans la wishlist :', error);
+          this.snackbar.open('Produit déja existe dans la wishlist !', 'Fermer', { duration: 3000 });
         }
       });
     }
   }
+
 
 
 
@@ -204,20 +209,28 @@ export class ListProduitComponent implements OnInit {
     this.updatePaginatedProducts();
   }
 
-
   addToCart(productId: number): void {
-    const addProductInCartDto = { productId };
-    this.marketplaceService.addToCart(addProductInCartDto).subscribe({
-      next: (response) => {
-        console.log('Produit ajouté au panier', response);
-        this.snackbar.open('Produit ajouté au panier avec succès!', 'Fermer', { duration: 5000 });
+    const userId = this.authService.getUserId(); // Assure-toi que ça renvoie bien l’ID de l’utilisateur connecté
+
+    if (!userId) {
+      this.snackbar.open('Vous devez être connecté pour ajouter au panier.', 'Fermer', { duration: 3000 });
+      return;
+    }
+
+    const cartDto = { productId };
+
+    this.marketplaceService.addToCart(userId, cartDto).subscribe({
+      next: () => {
+        this.snackbar.open('Produit ajouté au panier avec succès!', 'Fermer', { duration: 3000 });
       },
       error: (error) => {
-        console.error('Erreur lors de l\'ajout du produit au panier', error);
-        this.snackbar.open('Erreur lors de l\'ajout du produit au panier', 'Fermer', { duration: 5000 });
+        console.error('Produit ajouté au panier avec succès! :', error);
+        this.snackbar.open('Produit ajouté au panier avec succès!', 'Fermer', { duration: 3000 });
       }
     });
+
   }
+
 
 
 

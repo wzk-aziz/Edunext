@@ -4,6 +4,7 @@ import {MarketplaceService} from "../services/marketplace.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {PlaceOrderComponent} from "../place-order/place-order.component";
+import {AuthenticationService} from "../../../Shared/services/authentication.service";
 
 @Component({
   selector: 'app-cart',
@@ -13,12 +14,15 @@ import {PlaceOrderComponent} from "../place-order/place-order.component";
 export class CartComponent {
 
 
+
   cartItems: any[] = [];
   order: any;
   couponForm!: FormGroup;
 
   constructor(private marketplaceService: MarketplaceService,
+              private authService: AuthenticationService,
               private snackBar: MatSnackBar,
+              private snackbar: MatSnackBar,
               private fb: FormBuilder,
               public dialog: MatDialog,) { }
 
@@ -31,63 +35,76 @@ export class CartComponent {
 
   applyCoupon() {
     const couponCode = this.couponForm.get(['code'])!.value;
+    const userId = this.authService.getUserId(); // À adapter selon ta logique d'auth
 
-    this.marketplaceService.applyCoupon(couponCode).subscribe(res => {
-      this.snackBar.open("Coupon applied successfully!", 'Close', {
-        duration: 5000
-      });
-      this.getCart(); // Mettre à jour le panier après l'application du coupon
-    }, error => {
-      // Vérifier si error.error est une chaîne et contient "expired"
-      if (typeof error.error === 'string' && error.error.includes("expired")) {
-        this.snackBar.open("Coupon expired. Please use a valid coupon.", 'Close', {
+    this.marketplaceService.applyCoupon(userId, couponCode).subscribe({
+      next: (res) => {
+        this.snackBar.open("Coupon applied successfully!", 'Close', {
           duration: 5000
         });
-      } else {
-        // Si error.error n'est pas une chaîne, vérifier si c'est un objet ou autre
-        this.snackBar.open(error.error?.message || "An error occurred. Please try again.", 'Close', {
-          duration: 5000
-        });
+        this.getCart(); // Mise à jour du panier
+      },
+      error: (error) => {
+        if (typeof error.error === 'string' && error.error.includes("expired")) {
+          this.snackBar.open("Coupon expired. Please use a valid coupon.", 'Close', {
+            duration: 5000
+          });
+        } else {
+          this.snackBar.open(error.error?.message || "An error occurred. Please try again.", 'Close', {
+            duration: 5000
+          });
+        }
       }
     });
   }
 
 
-
   getCart() {
     this.cartItems = [];
-    this.marketplaceService.getCart().subscribe(res => {
-      console.log('Cart Items:', res.cartItems); // Vérifier combien d'articles sont retournés
-    });
 
-    this.marketplaceService.getCart().subscribe(res => {
+    const userId = this.authService.getUserId(); // Assure-toi que cette méthode existe et fonctionne
+
+    if (!userId) {
+      this.snackbar.open('Utilisateur non connecté.', 'Fermer', { duration: 3000 });
+      return;
+    }
+
+    this.marketplaceService.getCart(userId).subscribe(res => {
+      console.log('Cart Items:', res.cartItems);
       this.order = res;
+
       res.cartItems.forEach((element: { processedImg: string; returnedImage: string; }) => {
         element.processedImg = 'data:image/jpeg;base64,' + element.returnedImage;
         this.cartItems.push(element);
       });
+    }, error => {
+      console.error('Erreur lors de la récupération du panier :', error);
+      this.snackbar.open('Erreur lors de la récupération du panier.', 'Fermer', { duration: 3000 });
     });
   }
 
 
 
-  increaseQuantity(productId:any){
-    this.marketplaceService.increaseProductQuantity(productId).subscribe(res=>{
-      this.snackBar.open('Product quantity increased. ','Close',{
-        duration:5000
+  increaseQuantity(productId: any) {
+    const userId = this.authService.getUserId();
+    this.marketplaceService.increaseProductQuantity(productId, userId).subscribe(res => {
+      this.snackBar.open('Product quantity increased.', 'Close', {
+        duration: 5000
       });
       this.getCart();
-    })
+    });
   }
 
-  decreaseQuantity(productId:any){
-    this.marketplaceService.decreaseProductQuantity(productId).subscribe(res=>{
-      this.snackBar.open('Product quantity decreased. ','Close',{
-        duration:5000
+  decreaseQuantity(productId: any) {
+    const userId = this.authService.getUserId();
+    this.marketplaceService.decreaseProductQuantity(productId, userId).subscribe(res => {
+      this.snackBar.open('Product quantity decreased.', 'Close', {
+        duration: 5000
       });
       this.getCart();
-    })
+    });
   }
+
 
   placeOrder() {
     // Calculate the total amount from cart items
@@ -102,6 +119,7 @@ export class CartComponent {
       }
     });
   }
+
 
 
 }

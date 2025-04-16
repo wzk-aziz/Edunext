@@ -54,7 +54,7 @@ this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
 }
 
 
-  
+
 
   toggleCodingGameMenu() {
     this.isCodingGameMenuOpen = !this.isCodingGameMenuOpen;

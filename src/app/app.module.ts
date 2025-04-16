@@ -157,7 +157,6 @@ import { EventUpdateComponent } from './backend/forum/events/event-update/event-
 
 // Marketplace Backend
 import { ProductBackComponent } from './backend/marketplace/product-back/product-back.component';
-import { OrderBackComponent } from './backend/marketplace/order-back/order-back.component';
 import { CategorieBackComponent } from './backend/marketplace/categorie-back/categorie-back.component';
 import { CouponBackComponent } from './backend/marketplace/coupon-back/coupon-back.component';
 import { ProductFormComponent } from './backend/marketplace/product-form/product-form.component';
@@ -212,6 +211,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
 import { VerificationComponent } from './Shared/verification/verification.component';
+import {OrderBackComponent} from "./backend/marketplace/order-back/order-back.component";
+import { ChatbotBubbleComponent } from './Student-Pages/Forum/Event/chatbot-bubble/chatbot-bubble.component';
+import { LayoutamalComponent } from './backend/coding-game-admin/layoutamal/layoutamal.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -272,6 +274,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MentorshipPorgramComponent,
     ProgressReportComponent,
     LayoutComponent,
+    LayoutamalComponent,
     ChatPanelComponent,
     ResourcePanelComponent,
     StudentVirtualClassroomSessionsComponent,
@@ -366,7 +369,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProfileComponent,
     PasswordResetComponent,
     VerificationComponent,
-    
+    OrderBackComponent,
+    ChatbotBubbleComponent,
+    LayoutamalComponent
+
   ],
   imports: [
     BrowserModule,

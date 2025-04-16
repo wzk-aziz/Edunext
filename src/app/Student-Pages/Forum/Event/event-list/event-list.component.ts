@@ -32,14 +32,14 @@ export class EventListComponent implements OnInit {
   filterEvents(): void {
     this.filteredEvents = this.events.filter(event => {
       // Filter by search term
-      const matchesSearch = this.searchTerm === '' || 
-        event.eventTitle.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        event.eventDescription.toLowerCase().includes(this.searchTerm.toLowerCase());
-      
+      const matchesSearch = this.searchTerm === '' ||
+          event.eventTitle.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          event.eventDescription.toLowerCase().includes(this.searchTerm.toLowerCase());
+
       // Filter by location
-      const matchesLocation = this.locationFilter === '' || 
-        event.eventLocation === this.locationFilter;
-      
+      const matchesLocation = this.locationFilter === '' ||
+          event.eventLocation === this.locationFilter;
+
       return matchesSearch && matchesLocation;
     });
   }
