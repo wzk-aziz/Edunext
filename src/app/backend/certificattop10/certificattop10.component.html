@@ -1,14 +1,14 @@
-
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/classes.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:55:49 GMT -->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <title>:: e-Learn:: Classes</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
     <!-- plugin css file  -->
@@ -16,185 +16,323 @@
 
     <!-- project css file  -->
     <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
-    
+
     <!-- Google Code  -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'UA-264428387-1');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-264428387-1');
     </script>
-    
+
 </head>
+
 <body [class.dark-mode]="isDarkMode">
 
-<div id="elearn-layout" class="theme-purple">
+    <div id="elearn-layout" class="theme-purple">
 
-    <!-- sidebar -->
-    <div class="sidebar px-4 py-4 py-md-4  me-0" [ngClass]="{'sidebar-mini': isSidebarMini}">
-        <div class="d-flex flex-column h-100">
-            <a routerLink="/backoffice/Ad" class="mb-0 brand-icon">
-                <span class="logo-icon">
-                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
-                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
-                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    </svg>
-                </span>
-                <span class="logo-text">e-Learn</span>
-            </a>
-            <!-- Menu: main ul   -->
-            <ul class="menu-list flex-grow-1 mt-3">
-                <li><a class="m-link" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
-                <li><a class="m-link  active"  routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i> <span>Students</span></a></li>
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleTeacherMenu()" role="button">
-                        <i class="icofont-teacher"></i>
-                        <span>Teachers</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
-                        <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
-                    </ul>
-                </li>
-                
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleMenu()" role="button">
-                        <i class="icofont-certificate"></i>
-                        <span>Courses</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/courses"><span>Courses</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/purchase"><span>Course Purchase</span></a></li>
-                    </ul>
-                </li>
-                <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleCertificatMenu()" role="button">
-                        <i class="fas fa-award text-light"></i>
-                        <span>Certificates</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of Certificates</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a></li>
-                    </ul>
-                </li>
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleExamMenu()" role="button">
-                        <i class="icofont-paper text-light"></i>
-                        <span>Exam</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isExamMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
-                    </ul>
-                </li>
-                
-                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
-            </ul>
+        <!-- sidebar -->
+        <div class="sidebar px-4 py-4 py-md-4  me-0" [ngClass]="{'sidebar-mini': isSidebarMini}">
+            <div class="d-flex flex-column h-100">
+                <a routerLink="/backoffice/Ad" class="mb-0 brand-icon">
+                    <span class="logo-icon">
+                        <svg width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z" />
+                            <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        </svg>
+                    </span>
+                    <span class="logo-text">e-Learn</span>
+                </a>
+                <!-- Menu: main ul -->
 
-            <!-- Theme: Switch Theme -->
-            <ul class="list-unstyled mb-0">
-                <li class="d-flex align-items-center justify-content-center">
-                    <div class="form-check form-switch theme-switch">
-                        <input class="form-check-input" type="checkbox" id="theme-switch" (change)="toggleDarkMode()">
-                        <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-                    </div>
-                </li>
-               
-            </ul>
-            <button type="button" class="btn btn-link sidebar-mini-btn text-light" (click)="toggleSidebar()">
-                <span class="ms-2">
-                    <i class="icofont-bubble-right" [ngClass]="{'rotate': isSidebarMini}"></i>
-                </span>
-              </button>
+                <ul class="menu-list flex-grow-1 mt-3">
+                    <li><a class="m-link active" routerLink="/backoffice/Admin"><i
+                                class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+                    <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i>
+                            <span>Classes</span></a></li>
+                    <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i>
+                            <span>Students</span></a></li>
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+                            <i class="icofont-teacher"></i>
+                            <span>Teachers</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+                            <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers
+                                        Profile</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleVirtualClassroomMenu()" role="button">
+                            <i class="icofont-calendar"></i>
+                            <span>Tutoring</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isVirtualClassroomMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomMenuOpen}"
+                            id="menu-VirtualClassroom">
+                            <li class="collapsed">
+                                <a class="ms-link" (click)="toggleVirtualClassroomSubMenu()" role="button">
+                                    <span>VirtualClassrooms</span>
+                                    <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                        [ngClass]="{'rotate': isVirtualClassroomSubMenuOpen}"></span>
+                                </a>
+                                <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomSubMenuOpen}"
+                                    id="menu-VirtualClassroomSub">
+                                    <li><a class="ms-link" routerLink="/backoffice/sessions"><span>Sessions</span></a>
+                                    </li>
+                                    <li><a class="ms-link" routerLink="/backoffice/feedbacks"><span>Feedback</span></a>
+                                    </li>
+                                    <!--   <li><a class="ms-link" routerLink="/backoffice/chat-messages"><span>Chat Messages</span></a></li>
+                        -->
+                                </ul>
+                            </li>
+                            <li class="collapsed">
+                                <a class="ms-link" (click)="toggleLiveTutoringSubMenu()" role="button">
+                                    <span>Live Tutoring</span>
+                                    <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                        [ngClass]="{'rotate': isLiveTutoringSubMenuOpen}"></span>
+                                </a>
+                                <ul class="sub-menu collapse" [ngClass]="{'show': isLiveTutoringSubMenuOpen}"
+                                    id="menu-LiveTutoringSub">
+                                    <li><a class="ms-link" routerLink="/backoffice/mentorship-programs"><span>Mentorship
+                                                Program</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleCoursesMenu()" role="button">
+                            <i class="icofont-certificate"></i>
+                            <span>Courses</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isMenuOpenCourses}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpenCourses}">
+                            <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Create Courses</span></a>
+                            </li>
+                            <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a>
+                            </li>
+                            <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures
+                                    </span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleMenu()" role="button">
+                            <i class="icofont-certificate"></i>
+                            <span>Marketplace</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+                            <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace
+                                        dashboard</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a>
+                            </li>
+                            <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+                            <i class="icofont-certificate"></i>
+                            <span>Certificates</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+                            <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of
+                                        Certificates</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleExamMenu()" role="button">
+                            <i class="icofont-paper text-light"></i>
+                            <span>Exam</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isExamMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+                            <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+                            <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+                        </ul>
+                    </li>
+                    <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i>
+                            <span>Reviews</span></a></li>
+                    <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i>
+                            <span>Donation</span></a></li>
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleMenuForum()" role="button">
+                            <i class="icofont-ui-chat"></i>
+                            <span>Forum</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isForumMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isForumMenuOpen}" id="menu-Forum">
+                            <li>
+                                <a class="ms-link" routerLink="/backoffice/threads">
+                                    <span>Manage Threads</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="ms-link" routerLink="/backoffice/blogs">
+                                    <span>Manage Blogs</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="ms-link" routerLink="/backoffice/events">
+                                    <span>Manage Events</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="collapsed">
+                        <a class="m-link" (click)="toggleCodingGameMenu()" role="button">
+                            <i class="icofont-code-alt"></i>
+                            <span>CodingGame</span>
+                            <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                                [ngClass]="{'rotate': isCodingGameMenuOpen}"></span>
+                        </a>
+                        <ul class="sub-menu collapse" [ngClass]="{'show': isCodingGameMenuOpen}" id="menu-CodingGame">
+                            <li><a class="ms-link" routerLink="/backoffice/problems"><span>Manage Problems</span></a>
+                            </li>
+                            <li><a class="ms-link" routerLink="/backoffice/submissions/stats"><span>Manage
+                                        submissions</span></a></li>
+
+                            <li><a class="ms-link" routerLink="/backoffice/languages"><span>Manage Languages</span></a>
+                            </li>
+                            <li><a class="ms-link" routerLink="/backoffice/compilers"><span>Manage Compilers</span></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <!-- Theme: Switch Theme -->
+                <ul class="list-unstyled mb-0">
+                    <li class="d-flex align-items-center justify-content-center">
+                        <div class="form-check form-switch theme-switch">
+                            <input class="form-check-input" type="checkbox" id="theme-switch">
+                            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center justify-content-center">
+                        <div class="form-check form-switch theme-rtl">
+                            <input class="form-check-input" type="checkbox" id="theme-rtl">
+                            <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+                        </div>
+                    </li>
+                </ul>
+                <!-- Menu: menu collapse btn -->
+
+                <!-- Theme: Switch Theme -->
+                <ul class="list-unstyled mb-0">
+                    <li class="d-flex align-items-center justify-content-center">
+                        <div class="form-check form-switch theme-switch">
+                            <input class="form-check-input" type="checkbox" id="theme-switch"
+                                (change)="toggleDarkMode()">
+                            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                        </div>
+                    </li>
+
+                </ul>
+                <button type="button" class="btn btn-link sidebar-mini-btn text-light" (click)="toggleSidebar()">
+                    <span class="ms-2">
+                        <i class="icofont-bubble-right" [ngClass]="{'rotate': isSidebarMini}"></i>
+                    </span>
+                </button>
+            </div>
         </div>
+
+        <!-- main body area -->
+
+
+        <div class="main px-lg-4 px-md-4">
+
+
+            <h2 class="mb-4 fw-bold">Top 5 Most Popular Certificates </h2>
+
+            <!-- Champ de recherche -->
+            <div class="row g-3 align-items-center mb-4">
+
+            </div>
+
+            <!-- Liste des certificats sous forme de cartes -->
+            <div class="row row-deck">
+                <div class="col-md-4">
+
+                </div>
+            </div>
+
+            <!-- Pagination -->
+
+
+
+            <!-- Formulaire de modification -->
+
+
+            <!-- Body: Body -->
+
+
+            <div class="container">
+
+                <canvas id="topCertificatesChart"></canvas> <!-- Canvas pour le graphique -->
+            </div>
+
+
+
+
+
+        </div>
+
     </div>
 
-    <!-- main body area -->
-
-
-    <div class="main px-lg-4 px-md-4">
-
-        
-        <h2 class="mb-4 fw-bold">Top 5 Most Popular Certificates </h2>
-
-<!-- Champ de recherche -->
-<div class="row g-3 align-items-center mb-4">
-  
-</div>
-
-<!-- Liste des certificats sous forme de cartes -->
-<div class="row row-deck">
-  <div class="col-md-4" >
-   
-     </div>
-    </div>
-
-<!-- Pagination -->
-
-       
-          
-<!-- Formulaire de modification -->
-
-
-        <!-- Body: Body -->
-     
-
-<div class="container">
-    
-    <canvas id="topCertificatesChart"></canvas> <!-- Canvas pour le graphique -->
-  </div>
 
 
 
 
-         
-    </div>
-
-</div>
- 
 
 
-       
-          
+    <!-- Body: Body -->
 
 
-        <!-- Body: Body -->
-        
-
-     
-       
-        
-         
-
-       
-        
 
 
-<!-- Jquery Core Js -->
-<script src="/assetsback/bundles/libscripts.bundle.js"></script>
 
-<!-- Plugin Js-->
-<script src="/assetsback/bundles/fullcalendar.bundle.js"></script>
 
-<!-- Jquery Page Js -->
-<script src="../js/template.js"></script>
+
+
+
+
+
+    <!-- Jquery Core Js -->
+    <script src="/assetsback/bundles/libscripts.bundle.js"></script>
+
+    <!-- Plugin Js-->
+    <script src="/assetsback/bundles/fullcalendar.bundle.js"></script>
+
+    <!-- Jquery Page Js -->
+    <script src="../js/template.js"></script>
 
 
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/classes.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:56:07 GMT -->
-</html>
 
+</html>

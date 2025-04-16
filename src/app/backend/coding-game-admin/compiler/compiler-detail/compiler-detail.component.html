@@ -1,12 +1,12 @@
+
 <div class="container">
-    <h2>Compiler Details</h2>
-  
-    <div *ngIf="compiler">
-      <p class="detail"><strong>ID:</strong> {{ compiler.id }}</p>
-      <p class="detail"><strong>Command:</strong> {{ compiler.command }}</p>
-      <p class="detail"><strong>Language:</strong> {{ compiler.language?.name }} ({{ compiler.language?.version }})</p>
-    </div>
-  
-    <a class="back-btn" (click)="backToList()">Back to List</a>
+  <h2>Compiler Details</h2>
+
+  <div *ngIf="compiler">
+    <p class="detail"><strong>ID:</strong> {{ compiler.id }}</p>
+    <p class="detail"><strong>Command:</strong> {{ compiler.command }}</p>
+    <p class="detail"><strong>Language:</strong> {{ compiler.language?.name }} ({{ compiler.language?.version }})</p>
   </div>
-  
+
+  <a class="back-btn" (click)="backToList()">Back to List</a>
+</div>

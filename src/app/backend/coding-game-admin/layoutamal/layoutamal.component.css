@@ -1,80 +1,81 @@
 .layout-container {
+    width: 100%;
+    height: 100vh;
     display: flex;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: #111;
-    color: white;
-    height: 100vh;
+    flex-direction: row; /* Assure que les éléments sont alignés horizontalement */
+  }
+  
+  .sidebar {
+    width: 250px; /* Largeur fixe du sidebar */
     flex-shrink: 0;
-    position: relative; /* Evite le chevauchement fixe */
-}
-
-.content-container {
+    background-color: #111; /* Fond noir comme dans ton design */
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+  }
+  
+  .content-container {
     flex-grow: 1;
     padding: 20px;
-    background-color: #f8f9fa;
-    overflow-y: auto;
-}
-
-
-
-/* Ajustement des tableaux */
-.table-container {
+    margin-left: 250px; /* Décale le contenu pour ne pas chevaucher le sidebar */
+    background-color: #f8f9fa; /* Fond clair */
+  }
+  
+  
+  /* Ajustement des tableaux */
+  .table-container {
     width: 100%;
     max-width: 90%; /* Permet au tableau d'être plus large */
     margin: auto;
-}
-
-table {
+  }
+  
+  table {
     width: 100%;
     border-collapse: collapse;
-}
-
-th, td {
+  }
+  
+  th, td {
     padding: 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-}
-
-th {
+  }
+  
+  th {
     background-color: #007bff;
     color: white;
     font-size: 18px;
-}
-
-td {
+  }
+  
+  td {
     font-size: 16px;
-}
-
-/* Ajustement des boutons */
-.button-container {
+  }
+  
+  /* Ajustement des boutons */
+  .button-container {
     display: flex;
     justify-content: center;
     gap: 5px;
-}
-
-button {
+  }
+  
+  button {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-button.view {
+  }
+  
+  button.view {
     background-color: #28a745;
     color: white;
-}
-
-button.edit {
+  }
+  
+  button.edit {
     background-color: #ffc107;
     color: black;
-}
-
-button.delete {
+  }
+  
+  button.delete {
     background-color: #dc3545;
     color: white;
-}
+  }

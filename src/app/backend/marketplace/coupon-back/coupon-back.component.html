@@ -2,6 +2,7 @@
 <html class="no-js" lang="en" dir="ltr">
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:36 GMT -->
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -17,299 +18,476 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'UA-264428387-1');
   </script>
 </head>
+
 <body>
 
-<div id="elearn-layout" class="theme-purple">
-  <!-- sidebar -->
-  <div class="sidebar px-4 py-4 py-md-4  me-0">
-    <div class="d-flex flex-column h-100">
-      <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
-                <span class="logo-icon">
-                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
-                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
-                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    </svg>
-                </span>
-        <span class="logo-text">e-Learn </span>
-      </a>
-      <!-- Menu: main ul -->
+  <div id="elearn-layout" class="theme-purple">
+    <!-- sidebar -->
+    <div class="sidebar px-4 py-4 py-md-4  me-0">
+      <div class="d-flex flex-column h-100">
+        <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
+          <span class="logo-icon">
+            <svg width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+              <path
+                d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z" />
+              <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            </svg>
+          </span>
+          <span class="logo-text">e-Learn </span>
+        </a>
+        <!-- Menu: main ul -->
 
-      <ul class="menu-list flex-grow-1 mt-3">
-        <li><a class="m-link active" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/Student" ><i class="icofont-group-students"></i> <span>Students </span></a></li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleTeacherMenu()" role="button">
-            <i class="icofont-teacher"></i>
-            <span>Teachers</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
-            <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
-          </ul>
-        </li>
+        <!-- Menu: main ul -->
+
+        <ul class="menu-list flex-grow-1 mt-3">
+          <li><a class="m-link active" routerLink="/backoffice/Admin"><i
+                class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+          <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i>
+              <span>Classes</span></a></li>
+          <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i>
+              <span>Students</span></a></li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+              <i class="icofont-teacher"></i>
+              <span>Teachers</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+              <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers
+                    Profile</span></a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleVirtualClassroomMenu()" role="button">
+              <i class="icofont-calendar"></i>
+              <span>Tutoring</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isVirtualClassroomMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomMenuOpen}" id="menu-VirtualClassroom">
+              <li class="collapsed">
+                <a class="ms-link" (click)="toggleVirtualClassroomSubMenu()" role="button">
+                  <span>VirtualClassrooms</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isVirtualClassroomSubMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomSubMenuOpen}"
+                  id="menu-VirtualClassroomSub">
+                  <li><a class="ms-link" routerLink="/backoffice/sessions"><span>Sessions</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/feedbacks"><span>Feedback</span></a>
+                  </li>
+                  <!--   <li><a class="ms-link" routerLink="/backoffice/chat-messages"><span>Chat Messages</span></a></li>
+                -->
+                </ul>
+              </li>
+              <li class="collapsed">
+                <a class="ms-link" (click)="toggleLiveTutoringSubMenu()" role="button">
+                  <span>Live Tutoring</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isLiveTutoringSubMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isLiveTutoringSubMenuOpen}" id="menu-LiveTutoringSub">
+                  <li><a class="ms-link" routerLink="/backoffice/mentorship-programs"><span>Mentorship
+                        Program</span></a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleCoursesMenu()" role="button">
+              <i class="icofont-certificate"></i>
+              <span>Courses</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isMenuOpenCourses}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpenCourses}">
+              <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Create Courses</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures
+                  </span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a>
+              </li>
+            </ul>
+          </li>
 
 
-        <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
-        <li class="collapsed">
-          <a class="m-link" (click)="toggleMenu()" role="button">
-            <i class="icofont-certificate"></i>
-            <span>Marketplace</span>
-            <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-          </a>
-          <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-            <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace dashboard</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
-            <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
-          </ul>
-        </li>
-        <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
-        <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleMenu()" role="button">
+              <i class="icofont-certificate"></i>
+              <span>Marketplace</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+              <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace
+                    dashboard</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+              <i class="icofont-certificate"></i>
+              <span>Certificates</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+              <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of
+                    Certificates</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a>
+              </li>
+            </ul>
+          </li>
 
-      </ul>
-      <!-- Theme: Switch Theme -->
-      <ul class="list-unstyled mb-0">
-        <li class="d-flex align-items-center justify-content-center">
-          <div class="form-check form-switch theme-switch">
-            <input class="form-check-input" type="checkbox" id="theme-switch">
-            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-          </div>
-        </li>
-        <li class="d-flex align-items-center justify-content-center">
-          <div class="form-check form-switch theme-rtl">
-            <input class="form-check-input" type="checkbox" id="theme-rtl">
-            <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-          </div>
-        </li>
-      </ul>
-      <!-- Menu: menu collepce btn -->
-      <button type="button" class="btn btn-link sidebar-mini-btn text-light">
-        <span class="ms-2"><i class="icofont-bubble-right"></i></span>
-      </button>
-    </div>
-  </div>
 
-  <!-- main body area -->
-  <div class="main px-lg-4 px-md-4">
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleExamMenu()" role="button">
+              <i class="icofont-paper text-light"></i>
+              <span>Exam</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isExamMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+              <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+            </ul>
+          </li>
+          <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i>
+              <span>Reviews</span></a></li>
+          <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i>
+              <span>Donation</span></a></li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleMenuForum()" role="button">
+              <i class="icofont-ui-chat"></i>
+              <span>Forum</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isForumMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isForumMenuOpen}" id="menu-Forum">
+              <li>
+                <a class="ms-link" routerLink="/backoffice/threads">
+                  <span>Manage Threads</span>
+                </a>
+              </li>
+              <li>
+                <a class="ms-link" routerLink="/backoffice/blogs">
+                  <span>Manage Blogs</span>
+                </a>
+              </li>
+              <li>
+                <a class="ms-link" routerLink="/backoffice/events">
+                  <span>Manage Events</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleCodingGameMenu()" role="button">
+              <i class="icofont-code-alt"></i>
+              <span>CodingGame</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isCodingGameMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isCodingGameMenuOpen}" id="menu-CodingGame">
+              <li><a class="ms-link" routerLink="/backoffice/problems"><span>Manage Problems</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/submissions/stats"><span>Manage
+                    submissions</span></a></li>
 
-    <!-- Body: Header -->
-    <div class="header">
-      <nav class="navbar py-4">
-        <div class="container-xxl">
+              <li><a class="ms-link" routerLink="/backoffice/languages"><span>Manage Languages</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/compilers"><span>Manage Compilers</span></a>
+              </li>
+            </ul>
+          </li>
 
-          <!-- header rightbar icon -->
-          <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-            <div class="d-flex">
-              <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
-                <i class="icofont-info-square fs-5"></i>
-              </a>
-              <div class="avatar-list avatar-list-stacked px-3">
-                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
-                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
-                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar4.jpg" alt="">
-                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
-                <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
-                <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal" data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
-              </div>
+        </ul>
+        <!-- Theme: Switch Theme -->
+        <ul class="list-unstyled mb-0">
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-switch">
+              <input class="form-check-input" type="checkbox" id="theme-switch">
+              <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
             </div>
-            <div class="dropdown notifications zindex-popover">
-              <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="icofont-alarm fs-5"></i>
-                <span class="pulse-ring"></span>
-              </a>
-              <div id="NotificationsDiv" class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
-                <div class="card border-0 w380">
-                  <div class="card-header border-0 p-3">
-                    <h5 class="mb-0 font-weight-light d-flex justify-content-between">
-                      <span>Notifications</span>
-                      <span class="badge text-white">14</span>
-                    </h5>
-                  </div>
-                  <div class="tab-content card-body">
-                    <div class="tab-pane fade show active">
-                      <ul class="list-unstyled list mb-0">
-                        <li class="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" class="d-flex">
-                            <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
-                            <div class="flex-fill ms-2">
-                              <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Molly Cornish</span> <small>2MIN</small></p>
-                              <span class="">Added  2021-02-19 e-Learn links_no_expiration_report.csv <span class="badge bg-success">Review</span></span>
-                            </div>
-                          </a>
-                        </li>
-                        <li class="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" class="d-flex">
-                            <div class="avatar rounded-circle no-thumbnail">DF</div>
-                            <div class="flex-fill ms-2">
-                              <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane Fisher</span> <small>13MIN</small></p>
-                              <span class="">Server added Get Started with e-Learn.pdf</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li class="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" class="d-flex">
-                            <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                            <div class="flex-fill ms-2">
-                              <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea Gill</span> <small>1HR</small></p>
-                              <span class="">Server added Document.docx</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li class="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" class="d-flex">
-                            <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar5.jpg" alt="">
-                            <div class="flex-fill ms-2">
-                              <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane Fisher</span> <small>13MIN</small></p>
-                              <span class="">Add folder on Server</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li class="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" class="d-flex">
-                            <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar6.jpg" alt="">
-                            <div class="flex-fill ms-2">
-                              <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea Gill</span> <small>1HR</small></p>
-                              <span class="">Delete folder on Server</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li class="py-2">
-                          <a href="javascript:void(0);" class="d-flex">
-                            <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
-                            <div class="flex-fill ms-2">
-                              <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
-                              <span class="">The generated Lorem Ipsum</span>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
+          </li>
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-rtl">
+              <input class="form-check-input" type="checkbox" id="theme-rtl">
+              <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+            </div>
+          </li>
+        </ul>
+        <!-- Menu: menu collapse btn -->
+        <!-- Theme: Switch Theme -->
+        <ul class="list-unstyled mb-0">
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-switch">
+              <input class="form-check-input" type="checkbox" id="theme-switch">
+              <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+            </div>
+          </li>
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-rtl">
+              <input class="form-check-input" type="checkbox" id="theme-rtl">
+              <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+            </div>
+          </li>
+        </ul>
+        <!-- Menu: menu collepce btn -->
+        <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+          <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
+
+      <!-- Body: Header -->
+      <div class="header">
+        <nav class="navbar py-4">
+          <div class="container-xxl">
+
+            <!-- header rightbar icon -->
+            <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
+              <div class="d-flex">
+                <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
+                  <i class="icofont-info-square fs-5"></i>
+                </a>
+                <div class="avatar-list avatar-list-stacked px-3">
+                  <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
+                  <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
+                  <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                  <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar4.jpg" alt="">
+                  <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
+                  <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                  <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal"
+                    data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
                 </div>
               </div>
-            </div>
-            <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
-              <div class="u-info me-2">
-                <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Molly Cornish</span></p>
-                <small>Student Profile</small>
-              </div>
-              <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                <img class="avatar lg rounded-circle img-thumbnail" src="/assetsback/images/profile_av.png" alt="profile">
-              </a>
-              <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
-                <div class="card border-0 w280">
-                  <div class="card-body pb-0">
-                    <div class="d-flex py-1">
-                      <img class="avatar rounded-circle" src="/assetsback/images/profile_av.png" alt="profile">
-                      <div class="flex-fill ms-3">
-                        <p class="mb-0"><span class="font-weight-bold">Molly Cornish</span></p>
-                        <small class="">molly.cornish.com</small>
+              <div class="dropdown notifications zindex-popover">
+                <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
+                  <i class="icofont-alarm fs-5"></i>
+                  <span class="pulse-ring"></span>
+                </a>
+                <div id="NotificationsDiv"
+                  class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-sm-end p-0 m-0">
+                  <div class="card border-0 w380">
+                    <div class="card-header border-0 p-3">
+                      <h5 class="mb-0 font-weight-light d-flex justify-content-between">
+                        <span>Notifications</span>
+                        <span class="badge text-white">14</span>
+                      </h5>
+                    </div>
+                    <div class="tab-content card-body">
+                      <div class="tab-pane fade show active">
+                        <ul class="list-unstyled list mb-0">
+                          <li class="py-2 mb-1 border-bottom">
+                            <a href="javascript:void(0);" class="d-flex">
+                              <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar1.jpg" alt="">
+                              <div class="flex-fill ms-2">
+                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Molly
+                                    Cornish</span> <small>2MIN</small></p>
+                                <span class="">Added 2021-02-19 e-Learn links_no_expiration_report.csv <span
+                                    class="badge bg-success">Review</span></span>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="py-2 mb-1 border-bottom">
+                            <a href="javascript:void(0);" class="d-flex">
+                              <div class="avatar rounded-circle no-thumbnail">DF</div>
+                              <div class="flex-fill ms-2">
+                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane
+                                    Fisher</span> <small>13MIN</small></p>
+                                <span class="">Server added Get Started with e-Learn.pdf</span>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="py-2 mb-1 border-bottom">
+                            <a href="javascript:void(0);" class="d-flex">
+                              <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                              <div class="flex-fill ms-2">
+                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea
+                                    Gill</span> <small>1HR</small></p>
+                                <span class="">Server added Document.docx</span>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="py-2 mb-1 border-bottom">
+                            <a href="javascript:void(0);" class="d-flex">
+                              <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar5.jpg" alt="">
+                              <div class="flex-fill ms-2">
+                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Diane
+                                    Fisher</span> <small>13MIN</small></p>
+                                <span class="">Add folder on Server</span>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="py-2 mb-1 border-bottom">
+                            <a href="javascript:void(0);" class="d-flex">
+                              <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar6.jpg" alt="">
+                              <div class="flex-fill ms-2">
+                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Andrea
+                                    Gill</span> <small>1HR</small></p>
+                                <span class="">Delete folder on Server</span>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="py-2">
+                            <a href="javascript:void(0);" class="d-flex">
+                              <img class="avatar rounded-circle" src="/assetsback/images/xs/avatar7.jpg" alt="">
+                              <div class="flex-fill ms-2">
+                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe
+                                    Wright</span> <small class="">1DAY</small></p>
+                                <span class="">The generated Lorem Ipsum</span>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
                       </div>
                     </div>
-                    <div><hr class="dropdown-divider border-dark"></div>
+                    <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
                   </div>
-                  <div class="list-group m-2 ">
-                    <a routerLink="/backoffice/Student" class="list-group-item list-group-item-action border-0 "><i class="icofont-graduate-alt fs-6 me-3"></i>Student Profile</a>
-                    <a routerLink="/backoffice/video_class" class="list-group-item list-group-item-action border-0 "><i class="icofont-black-board fs-6 me-3"></i>Video Class</a>
-                    <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-6 me-3"></i>Signout</a>
-                    <div><hr class="dropdown-divider border-dark"></div>
-                    <a href="ui-elements/auth-signup.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>
+                </div>
+              </div>
+              <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
+                <div class="u-info me-2">
+                  <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Molly Cornish</span></p>
+                  <small>Student Profile</small>
+                </div>
+                <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown"
+                  data-bs-display="static">
+                  <img class="avatar lg rounded-circle img-thumbnail" src="/assetsback/images/profile_av.png"
+                    alt="profile">
+                </a>
+                <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                  <div class="card border-0 w280">
+                    <div class="card-body pb-0">
+                      <div class="d-flex py-1">
+                        <img class="avatar rounded-circle" src="/assetsback/images/profile_av.png" alt="profile">
+                        <div class="flex-fill ms-3">
+                          <p class="mb-0"><span class="font-weight-bold">Molly Cornish</span></p>
+                          <small class="">molly.cornish.com</small>
+                        </div>
+                      </div>
+                      <div>
+                        <hr class="dropdown-divider border-dark">
+                      </div>
+                    </div>
+                    <div class="list-group m-2 ">
+                      <a routerLink="/backoffice/Student" class="list-group-item list-group-item-action border-0 "><i
+                          class="icofont-graduate-alt fs-6 me-3"></i>Student Profile</a>
+                      <a routerLink="/backoffice/video_class"
+                        class="list-group-item list-group-item-action border-0 "><i
+                          class="icofont-black-board fs-6 me-3"></i>Video Class</a>
+                      <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i
+                          class="icofont-logout fs-6 me-3"></i>Signout</a>
+                      <div>
+                        <hr class="dropdown-divider border-dark">
+                      </div>
+                      <a href="ui-elements/auth-signup.html" class="list-group-item list-group-item-action border-0 "><i
+                          class="icofont-contact-add fs-5 me-3"></i>Add personal account</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- menu toggler -->
-          <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
-            <span class="fa fa-bars"></span>
-          </button>
+            <!-- menu toggler -->
+            <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainHeader">
+              <span class="fa fa-bars"></span>
+            </button>
 
-          <!-- main menu Search-->
-          <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
-            <div class="input-group flex-nowrap input-group-lg">
-              <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
-              <input type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
-              <button type="button" class="input-group-text add-member-top" id="addon-wrappingone" data-bs-toggle="modal" data-bs-target="#addUser"><i class="fa fa-plus"></i></button>
+            <!-- main menu Search-->
+            <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
+              <div class="input-group flex-nowrap input-group-lg">
+                <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
+                <input type="search" class="form-control" placeholder="Search" aria-label="search"
+                  aria-describedby="addon-wrapping">
+                <button type="button" class="input-group-text add-member-top" id="addon-wrappingone"
+                  data-bs-toggle="modal" data-bs-target="#addUser"><i class="fa fa-plus"></i></button>
+              </div>
             </div>
+
           </div>
-
-        </div>
-      </nav>
-    </div>
-
-    <div class="container">
-      <button class="add-button" (click)="goToAddCoupon()">Add Coupon</button>
-
-      <!-- Display coupons for the current page -->
-      <div class="coupon-list">
-        <mat-card *ngFor="let coupon of paginatedCoupons" class="coupon-card">
-          <mat-card-header>
-            <mat-card-title>{{ coupon.name }}</mat-card-title>
-            <mat-card-subtitle>Coupon Code: <span class="coupon-code">{{ coupon.code }}</span></mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p><strong>Discount:</strong> {{ coupon.discount }}%</p>
-            <p><strong>Expiration Date:</strong> {{ coupon.expirationDate | date: 'dd/MM/yyyy' }}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <!-- Pagination Controls -->
-      <div class="col-12">
-        <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
-          <ul class="pagination pagination-primary-soft rounded mb-0">
-            <li class="page-item mb-0" [class.disabled]="currentPage === 1">
-              <a class="page-link" (click)="changePage(currentPage - 1)" tabindex="-1">
-                <i class="fas fa-angle-double-left"></i>
-              </a>
-            </li>
-            <li *ngFor="let page of getPages()" class="page-item mb-0" [class.active]="page === currentPage">
-              <a class="page-link" (click)="changePage(page)">{{ page }}</a>
-            </li>
-            <li class="page-item mb-0" [class.disabled]="currentPage === totalPages">
-              <a class="page-link" (click)="changePage(currentPage + 1)">
-                <i class="fas fa-angle-double-right"></i>
-              </a>
-            </li>
-          </ul>
         </nav>
       </div>
+
+      <div class="container">
+        <button class="add-button" (click)="goToAddCoupon()">Add Coupon</button>
+
+        <!-- Display coupons for the current page -->
+        <div class="coupon-list">
+          <mat-card *ngFor="let coupon of paginatedCoupons" class="coupon-card">
+            <mat-card-header>
+              <mat-card-title>{{ coupon.name }}</mat-card-title>
+              <mat-card-subtitle>Coupon Code: <span class="coupon-code">{{ coupon.code }}</span></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p><strong>Discount:</strong> {{ coupon.discount }}%</p>
+              <p><strong>Expiration Date:</strong> {{ coupon.expirationDate | date: 'dd/MM/yyyy' }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="col-12">
+          <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+            <ul class="pagination pagination-primary-soft rounded mb-0">
+              <li class="page-item mb-0" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="changePage(currentPage - 1)" tabindex="-1">
+                  <i class="fas fa-angle-double-left"></i>
+                </a>
+              </li>
+              <li *ngFor="let page of getPages()" class="page-item mb-0" [class.active]="page === currentPage">
+                <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+              </li>
+              <li class="page-item mb-0" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="changePage(currentPage + 1)">
+                  <i class="fas fa-angle-double-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+
+
+
+
     </div>
-
-
-
-
-
   </div>
-</div>
 
-<!-- Jquery Core Js -->
-<script src="/assetsback/bundles/libscripts.bundle.js"></script>
+  <!-- Jquery Core Js -->
+  <script src="/assetsback/bundles/libscripts.bundle.js"></script>
 
-<!-- Plugin Js-->
-<script src="/assetsback/bundles/carousel.bundle.js"></script>
-<script src="/assetsback/bundles/apexcharts.bundle.js"></script>
+  <!-- Plugin Js-->
+  <script src="/assetsback/bundles/carousel.bundle.js"></script>
+  <script src="/assetsback/bundles/apexcharts.bundle.js"></script>
 
-<!-- Jquery Page Js -->
-<script src="../js/template.js"></script>
-<script src="../js/page/elearn-index.js"></script>
+  <!-- Jquery Page Js -->
+  <script src="../js/template.js"></script>
+  <script src="../js/page/elearn-index.js"></script>
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:55 GMT -->
+
 </html>

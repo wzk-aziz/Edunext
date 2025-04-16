@@ -27,6 +27,15 @@ export class SidebarComponent {
     this.isTeacherMenuOpen = !this.isTeacherMenuOpen;
 
   }
+  toggleCoursesMenu() {
+    this.isMenuOpenCourses = !this.isMenuOpenCourses;
+
+  }
+
+  toggleMenuForum() {
+    this.isForumMenuOpen = !this.isForumMenuOpen;
+
+  }
 
   toggleVirtualClassroomMenu() {
     this.isVirtualClassroomMenuOpen = !this.isVirtualClassroomMenuOpen;
@@ -44,7 +53,7 @@ export class SidebarComponent {
 
 isCertificatMenuOpen = false;
 isExamMenuOpen=false;
-
+isMenuOpenCourses=false;
 toggleExamMenu() {
   this.isExamMenuOpen = !this.isExamMenuOpen;
 }

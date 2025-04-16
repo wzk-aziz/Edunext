@@ -255,4 +255,66 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   trackByCategoryId(index: number, category: Category): number {
     return category.id!;
   }
+
+  
+  isVirtualClassroomMenuOpen = false;
+  isVirtualClassroomSubMenuOpen = false;
+  isLiveTutoringSubMenuOpen = false;
+
+
+  isCodingGameMenuOpen = false;
+  isForumMenuOpen = false;
+  showSubMenu = false;
+
+
+
+  toggleCoursesMenu() {
+    this.isMenuOpenCourses = !this.isMenuOpenCourses;
+
+  }
+
+  toggleMenuForum() {
+    this.isForumMenuOpen = !this.isForumMenuOpen;
+
+  }
+
+  toggleVirtualClassroomMenu() {
+    this.isVirtualClassroomMenuOpen = !this.isVirtualClassroomMenuOpen;
+  }
+
+  toggleVirtualClassroomSubMenu() {
+    this.isVirtualClassroomSubMenuOpen = !this.isVirtualClassroomSubMenuOpen;
+  }
+
+  toggleLiveTutoringSubMenu() {
+    this.isLiveTutoringSubMenuOpen = !this.isLiveTutoringSubMenuOpen;
+  }
+
+
+
+isCertificatMenuOpen = false;
+isExamMenuOpen=false;
+isMenuOpenCourses=false;
+toggleExamMenu() {
+  this.isExamMenuOpen = !this.isExamMenuOpen;
+}
+
+toggleCertificatMenu() {
+this.isCertificatMenuOpen = !this.isCertificatMenuOpen;
+}
+
+
+
+
+  toggleCodingGameMenu() {
+    this.isCodingGameMenuOpen = !this.isCodingGameMenuOpen;
+  }
+
+  toggleForumMenu(): void {
+    this.isForumMenuOpen = !this.isForumMenuOpen;
+  }
+
+  toggleSubMenu() {
+    this.showSubMenu = !this.showSubMenu;
+  }
 }

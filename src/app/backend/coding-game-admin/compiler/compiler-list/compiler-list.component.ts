@@ -167,4 +167,7 @@ export class CompilerListComponent implements OnInit {
   goToEdit(id: number): void {
     this.router.navigate([`/backoffice/compilers/edit/${id}`]);
   }
+
+
+  
 }

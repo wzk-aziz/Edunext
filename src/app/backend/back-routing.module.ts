@@ -87,6 +87,7 @@ import { DonationsListComponent } from './donation/donations-list/donations-list
 import { UsersComponent } from './users/users.component';
 import { UserStatsComponent } from './user-stats/user-stats.component';
 import { TeachersComponent } from './teachers/teachers.component';
+import { LayoutamalComponent } from './coding-game-admin/layoutamal/layoutamal.component';
 
 
 const routes: Routes = [
@@ -94,6 +95,45 @@ const routes: Routes = [
     path: '',
     component: BackAppComponent,
     children: [
+      {
+        path: '',
+        component: LayoutamalComponent,
+        children: [
+          { path: 'submissions/stats', component: SubmissionLeaderboardComponent },
+          { path: 'problems', component: ProblemsComponent },
+          { path: 'problems/new', component: ProblemFormComponent },
+          { path: 'problems/edit/:id', component: ProblemFormComponent },
+          { path: 'problems/view/:id', component: ProblemDetailComponent },
+          { path: 'languages', component: LanguageListComponent },
+          { path: 'languages/new', component: LanguageFormComponent },
+          { path: 'languages/edit/:id', component: LanguageFormComponent },
+          { path: 'languages/view/:id', component: LanguageDetailComponent },
+          { path: 'compilers', component: CompilerListComponent },
+          { path: 'compilers/new', component: CompilerFormComponent },
+          { path: 'compilers/edit/:id', component: CompilerFormComponent },
+          { path: 'compilers/view/:id', component: CompilerDetailComponent },
+          { path: 'threads', component: ThreadListAdminComponent },
+          { path: 'blogs', component: BlogListAdminComponent },
+          { path: 'events', component: EventListAdminComponent },
+          { path: 'blogs/add', component: BlogAddComponent },
+          { path: 'event/add', component: EventComponent },
+          { path: 'event/update', component: EventUpdateComponent },
+        ],
+      },
+      {
+        path: '',
+        component: LayoutComponent,
+        children: [
+        // Virtual Classroom & Tutoring
+        { path: 'mentorship-programs', component: MentorshipPorgramComponent },
+        { path: 'sessions', component: SessionComponent },
+        { path: 'chat-messages', component: ChatMessageComponent },
+        { path: 'feedbacks', component: FeedBackComponent },
+        { path: 'goals', component: GoalComponent },
+        { path: 'progress-reports', component: ProgressReportComponent },
+      
+        ],
+      },
       // General BackOffice routes
       { path: 'Admin', component: SidebarComponent },
       { path: 'Admin2', component: Sidebar2Component },
@@ -112,28 +152,9 @@ const routes: Routes = [
       { path: 'Marketplace', component: MarketplaceComponent },
      // { path: 'courses', component: CoursesBackComponent },
       
-      // Virtual Classroom & Tutoring
-      { path: 'mentorship-programs', component: MentorshipPorgramComponent },
-      { path: 'sessions', component: SessionComponent },
-      { path: 'chat-messages', component: ChatMessageComponent },
-      { path: 'feedbacks', component: FeedBackComponent },
-      { path: 'goals', component: GoalComponent },
-      { path: 'progress-reports', component: ProgressReportComponent },
+    
       
-      // Coding Game Admin
-      { path: 'submissions/stats', component: SubmissionLeaderboardComponent },
-      { path: 'problems', component: ProblemsComponent },
-      { path: 'problems/new', component: ProblemFormComponent },
-      { path: 'problems/edit/:id', component: ProblemFormComponent },
-      { path: 'problems/view/:id', component: ProblemDetailComponent },
-      { path: 'languages', component: LanguageListComponent },
-      { path: 'languages/new', component: LanguageFormComponent },
-      { path: 'languages/edit/:id', component: LanguageFormComponent },
-      { path: 'languages/view/:id', component: LanguageDetailComponent },
-      { path: 'compilers', component: CompilerListComponent },
-      { path: 'compilers/new', component: CompilerFormComponent },
-      { path: 'compilers/edit/:id', component: CompilerFormComponent },
-      { path: 'compilers/view/:id', component: CompilerDetailComponent },
+    
       
       // Forum Admin
       { path: 'threads', component: ThreadListAdminComponent },

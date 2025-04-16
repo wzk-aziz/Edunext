@@ -1,8 +1,10 @@
-<div class="layout-container">
-    <div class="sidebar">
-        <app-sidebar></app-sidebar> <!-- Vérifie ce tag -->
-    </div>
+<div class="d-flex layout-container">
+    <!-- Sidebar -->
+    <app-sidebar class="sidebar"></app-sidebar>
+  
+    <!-- Contenu Principal -->
     <div class="content-container">
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
-</div>
+  </div>
+ 

@@ -2,480 +2,678 @@
 <html class="no-js" lang="en" dir="ltr">
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:36 GMT -->
+
 <head>
-    <meta charset="utf-8"> 
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <title>:: e-Learn:: Education Dashboard </title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
-    <!-- plugin css file  -->
-    <link rel="stylesheet" href="/assetsback/css/carousel.min.css" />
-    <!-- project css file  -->
-    <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
-    <!-- Google Code  -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'UA-264428387-1');
-    </script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>:: e-Learn:: Education Dashboard </title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+  <!-- plugin css file  -->
+  <link rel="stylesheet" href="/assetsback/css/carousel.min.css" />
+  <!-- project css file  -->
+  <link rel="stylesheet" href="/assetsback/css/e-learn.style.min.css">
+  <!-- Google Code  -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-264428387-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-264428387-1');
+  </script>
 </head>
+
 <body>
 
-<div id="elearn-layout" class="theme-purple">
+  <div id="elearn-layout" class="theme-purple">
     <!-- sidebar -->
     <div class="sidebar px-4 py-4 py-md-4  me-0">
-        <div class="d-flex flex-column h-100">
-            <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
-                <span class="logo-icon">
-                    <svg  width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
-                        <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
-                        <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    </svg>
-                </span>
-                <span class="logo-text">e-Learn </span>
+      <div class="d-flex flex-column h-100">
+        <a routerLink="/backoffice/Admin" class="mb-0 brand-icon">
+          <span class="logo-icon">
+            <svg width="35" height="35" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+              <path
+                d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z" />
+              <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            </svg>
+          </span>
+          <span class="logo-text">e-Learn </span>
+        </a>
+        <!-- Menu: main ul -->
+
+        <!-- Menu: main ul -->
+
+        <ul class="menu-list flex-grow-1 mt-3">
+          <li><a class="m-link active" routerLink="/backoffice/Admin"><i
+                class="icofont-ui-home"></i><span>Dashboard</span></a></li>
+          <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i>
+              <span>Classes</span></a></li>
+          <li><a class="m-link" routerLink="/backoffice/Student"><i class="icofont-group-students"></i>
+              <span>Students</span></a></li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleTeacherMenu()" role="button">
+              <i class="icofont-teacher"></i>
+              <span>Teachers</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
             </a>
-            <!-- Menu: main ul -->
-             
-            <ul class="menu-list flex-grow-1 mt-3">
-                <li><a class="m-link active" routerLink="/backoffice/Admin"><i class="icofont-ui-home"></i><span>Dashboard</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Class"><i class="icofont-read-book-alt"></i> <span>Classes</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Student" ><i class="icofont-group-students"></i> <span>Students </span></a></li>
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleTeacherMenu()" role="button">
-                        <i class="icofont-teacher"></i>
-                        <span>Teachers</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isTeacherMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
-                        <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers Profile</span></a></li>
-                    </ul>
-                </li>
-                
-                <li class="collapsed">
-                    <a class="m-link" (click)="toggleMenu()" role="button">
-                        <i class="icofont-certificate"></i>
-                        <span>Courses</span>
-                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
-                    </a>
-                    <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
-                        <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Courses</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures </span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
-                        <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a></li>
-                    </ul>
-                </li>
-                <li><a class="m-link" routerLink="/backoffice/chat"><i class="icofont-ui-text-chat"></i> <span>Massages</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Marketplace"><i class="icofont-cart"></i> <span>Marketplace</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Certificat"><i class="icofont-certificate"></i> <span>Certificat</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Exam"><i class="icofont-ui-text-chat"></i> <span>Exam</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i> <span>Reviews</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Donation"><i class="icofont-heart"></i> <span>Donation</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/Event"><i class="icofont-calendar"></i> <span>Event</span></a></li>
-                <li><a class="m-link" routerLink="/backoffice/CodingGame"><i class="icofont-code-alt"></i> <span>CodingGame</span></a></li>
-                
+            <ul class="sub-menu collapse" [ngClass]="{'show': isTeacherMenuOpen}" id="menu-Teachers">
+              <li><a class="ms-link" routerLink="/backoffice/all-teachers"><span>Teachers</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/teachers-info"><span>Teachers
+                    Profile</span></a></li>
             </ul>
-            <!-- Theme: Switch Theme -->
-            <ul class="list-unstyled mb-0">
-                <li class="d-flex align-items-center justify-content-center">
-                    <div class="form-check form-switch theme-switch">
-                        <input class="form-check-input" type="checkbox" id="theme-switch">
-                        <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-                    </div>
-                </li>
-                <li class="d-flex align-items-center justify-content-center">
-                    <div class="form-check form-switch theme-rtl">
-                        <input class="form-check-input" type="checkbox" id="theme-rtl">
-                        <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-                    </div>
-                </li>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleVirtualClassroomMenu()" role="button">
+              <i class="icofont-calendar"></i>
+              <span>Tutoring</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isVirtualClassroomMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomMenuOpen}" id="menu-VirtualClassroom">
+              <li class="collapsed">
+                <a class="ms-link" (click)="toggleVirtualClassroomSubMenu()" role="button">
+                  <span>VirtualClassrooms</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isVirtualClassroomSubMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isVirtualClassroomSubMenuOpen}"
+                  id="menu-VirtualClassroomSub">
+                  <li><a class="ms-link" routerLink="/backoffice/sessions"><span>Sessions</span></a>
+                  </li>
+                  <li><a class="ms-link" routerLink="/backoffice/feedbacks"><span>Feedback</span></a>
+                  </li>
+                  <!--   <li><a class="ms-link" routerLink="/backoffice/chat-messages"><span>Chat Messages</span></a></li>
+                        -->
+                </ul>
+              </li>
+              <li class="collapsed">
+                <a class="ms-link" (click)="toggleLiveTutoringSubMenu()" role="button">
+                  <span>Live Tutoring</span>
+                  <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                    [ngClass]="{'rotate': isLiveTutoringSubMenuOpen}"></span>
+                </a>
+                <ul class="sub-menu collapse" [ngClass]="{'show': isLiveTutoringSubMenuOpen}" id="menu-LiveTutoringSub">
+                  <li><a class="ms-link" routerLink="/backoffice/mentorship-programs"><span>Mentorship
+                        Program</span></a></li>
+                </ul>
+              </li>
             </ul>
-            <!-- Menu: menu collepce btn -->
-            <button type="button" class="btn btn-link sidebar-mini-btn text-light">
-                <span class="ms-2"><i class="icofont-bubble-right"></i></span>
-            </button>
-        </div>
+          </li>
+
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleCoursesMenu()" role="button">
+              <i class="icofont-certificate"></i>
+              <span>Courses</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isMenuOpenCourses}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpenCourses}">
+              <li><a class="ms-link" routerLink="/backoffice/course-form"><span>Create Courses</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/courseslist"><span>List of courses</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/view-lectures"><span>View Lectures
+                  </span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/create-quiz"><span>Add Quizes</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/view-quizes"><span>View Quizes</span></a>
+              </li>
+            </ul>
+          </li>
+
+
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleMenu()" role="button">
+              <i class="icofont-certificate"></i>
+              <span>Marketplace</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5" [ngClass]="{'rotate': isMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isMenuOpen}">
+              <li><a class="ms-link" routerLink="/backoffice/analyse"><span>Marketplace
+                    dashboard</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/productBack"><span>product</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/categorieBack"><span>categorie</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/order"><span>order</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/coupon"><span>coupon</span></a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleCertificatMenu()" role="button">
+              <i class="icofont-certificate"></i>
+              <span>Certificates</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isCertificatMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isCertificatMenuOpen}">
+              <li><a class="ms-link" routerLink="/backoffice/Certificat"><span>List of
+                    Certificates</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/top5"><span>Top 5 Certificates</span></a>
+              </li>
+            </ul>
+          </li>
+
+
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleExamMenu()" role="button">
+              <i class="icofont-paper text-light"></i>
+              <span>Exam</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isExamMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isExamMenuOpen}">
+              <li><a class="ms-link" routerLink="/backoffice/Exam"><span>List of Exam</span></a></li>
+              <li><a class="ms-link" routerLink="/backoffice/top10"><span>Top 5 Exam</span></a></li>
+            </ul>
+          </li>
+          <li><a class="m-link" routerLink="/backoffice/reviews"><i class="icofont-match-review"></i>
+              <span>Reviews</span></a></li>
+          <li><a class="m-link" routerLink="/backoffice/listDonnation"><i class="icofont-heart"></i>
+              <span>Donation</span></a></li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleMenuForum()" role="button">
+              <i class="icofont-ui-chat"></i>
+              <span>Forum</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isForumMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isForumMenuOpen}" id="menu-Forum">
+              <li>
+                <a class="ms-link" routerLink="/backoffice/threads">
+                  <span>Manage Threads</span>
+                </a>
+              </li>
+              <li>
+                <a class="ms-link" routerLink="/backoffice/blogs">
+                  <span>Manage Blogs</span>
+                </a>
+              </li>
+              <li>
+                <a class="ms-link" routerLink="/backoffice/events">
+                  <span>Manage Events</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" (click)="toggleCodingGameMenu()" role="button">
+              <i class="icofont-code-alt"></i>
+              <span>CodingGame</span>
+              <span class="arrow icofont-dotted-down ms-auto text-end fs-5"
+                [ngClass]="{'rotate': isCodingGameMenuOpen}"></span>
+            </a>
+            <ul class="sub-menu collapse" [ngClass]="{'show': isCodingGameMenuOpen}" id="menu-CodingGame">
+              <li><a class="ms-link" routerLink="/backoffice/problems"><span>Manage Problems</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/submissions/stats"><span>Manage
+                    submissions</span></a></li>
+
+              <li><a class="ms-link" routerLink="/backoffice/languages"><span>Manage Languages</span></a>
+              </li>
+              <li><a class="ms-link" routerLink="/backoffice/compilers"><span>Manage Compilers</span></a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+        <!-- Theme: Switch Theme -->
+        <ul class="list-unstyled mb-0">
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-switch">
+              <input class="form-check-input" type="checkbox" id="theme-switch">
+              <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+            </div>
+          </li>
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-rtl">
+              <input class="form-check-input" type="checkbox" id="theme-rtl">
+              <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+            </div>
+          </li>
+        </ul>
+        <!-- Menu: menu collapse btn -->
+        <!-- Theme: Switch Theme -->
+        <ul class="list-unstyled mb-0">
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-switch">
+              <input class="form-check-input" type="checkbox" id="theme-switch">
+              <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+            </div>
+          </li>
+          <li class="d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch theme-rtl">
+              <input class="form-check-input" type="checkbox" id="theme-rtl">
+              <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+            </div>
+          </li>
+        </ul>
+        <!-- Menu: menu collepce btn -->
+        <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+          <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+        </button>
+      </div>
     </div>
 
     <!-- main body area -->
     <div class="main px-lg-4 px-md-4">
 
-        <!-- Body: Header -->
-        <div class="header">
-            <nav class="navbar py-4">
-                <div class="container-xxl">
-    
-                    <!-- header rightbar icon -->
-                    
-    
-                    <!-- menu toggler -->
-                    <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
-                        <span class="fa fa-bars"></span>
-                    </button>
-    
-                </div>
-            </nav>
-        </div>
-        <div class="body d-flex py-lg-3 py-md-2">
+      <!-- Body: Header -->
+      <div class="header">
+        <nav class="navbar py-4">
           <div class="container-xxl">
-            <div class="row clearfix g-3">
-              <div class="col-xxl-9 col-xl-8 col-lg-8">
-                <div class="border-0 mb-4">
-                  <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom">
-                    <h3 class="fw-bold mb-0">
-                      {{ isEditMode ? 'Update Course' : 'Create New Course' }}
-                    </h3>
-                  </div>
+
+            <!-- header rightbar icon -->
+
+
+            <!-- menu toggler -->
+            <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainHeader">
+              <span class="fa fa-bars"></span>
+            </button>
+
+          </div>
+        </nav>
+      </div>
+      <div class="body d-flex py-lg-3 py-md-2">
+        <div class="container-xxl">
+          <div class="row clearfix g-3">
+            <div class="col-xxl-9 col-xl-8 col-lg-8">
+              <div class="border-0 mb-4">
+                <div
+                  class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom">
+                  <h3 class="fw-bold mb-0">
+                    {{ isEditMode ? 'Update Course' : 'Create New Course' }}
+                  </h3>
                 </div>
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-                      <!-- Course Name -->
-                      <div class="mb-3">
-                        <label for="courseName" class="form-label">
-                          Course Name <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" class="form-control" id="courseName" formControlName="courseName" required>
-                        <div *ngIf="courseForm.get('courseName')?.invalid && (courseForm.get('courseName')?.dirty || courseForm.get('courseName')?.touched)" class="text-danger">
-                          Course name is required.
-                        </div>
+              </div>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+                    <!-- Course Name -->
+                    <div class="mb-3">
+                      <label for="courseName" class="form-label">
+                        Course Name <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" class="form-control" id="courseName" formControlName="courseName" required>
+                      <div
+                        *ngIf="courseForm.get('courseName')?.invalid && (courseForm.get('courseName')?.dirty || courseForm.get('courseName')?.touched)"
+                        class="text-danger">
+                        Course name is required.
                       </div>
-              
-                      <!-- Course Description -->
-                      <div class="mb-3">
-                        <label for="courseDescription" class="form-label">
-                          Description <span class="text-danger">*</span>
-                        </label>
-                        <textarea class="form-control" id="courseDescription" formControlName="courseDescription" rows="3" required></textarea>
-                        <div *ngIf="courseForm.get('courseDescription')?.invalid && (courseForm.get('courseDescription')?.dirty || courseForm.get('courseDescription')?.touched)" class="text-danger">
-                          Description is required.
-                        </div>
+                    </div>
+
+                    <!-- Course Description -->
+                    <div class="mb-3">
+                      <label for="courseDescription" class="form-label">
+                        Description <span class="text-danger">*</span>
+                      </label>
+                      <textarea class="form-control" id="courseDescription" formControlName="courseDescription" rows="3"
+                        required></textarea>
+                      <div
+                        *ngIf="courseForm.get('courseDescription')?.invalid && (courseForm.get('courseDescription')?.dirty || courseForm.get('courseDescription')?.touched)"
+                        class="text-danger">
+                        Description is required.
                       </div>
-              
-                      <!-- Course Level -->
-                      <div class="mb-3">
-                        <label for="courseLevel" class="form-label">
-                          Course Level <span class="text-danger">*</span>
-                        </label>
-                        <select id="courseLevel" class="form-select" formControlName="courseLevel" required>
-                          <option value="ALL_LEVELS">All Levels</option>
-                          <option value="BEGINNER">Beginner</option>
-                          <option value="INTERMEDIATE">Intermediate</option>
-                          <option value="ADVANCED">Advanced</option>
+                    </div>
+
+                    <!-- Course Level -->
+                    <div class="mb-3">
+                      <label for="courseLevel" class="form-label">
+                        Course Level <span class="text-danger">*</span>
+                      </label>
+                      <select id="courseLevel" class="form-select" formControlName="courseLevel" required>
+                        <option value="ALL_LEVELS">All Levels</option>
+                        <option value="BEGINNER">Beginner</option>
+                        <option value="INTERMEDIATE">Intermediate</option>
+                        <option value="ADVANCED">Advanced</option>
+                      </select>
+                      <div
+                        *ngIf="courseForm.get('courseLevel')?.invalid && (courseForm.get('courseLevel')?.dirty || courseForm.get('courseLevel')?.touched)"
+                        class="text-danger">
+                        Course level is required.
+                      </div>
+                    </div>
+
+                    <!-- Pack Type -->
+                    <div class="mb-3">
+                      <label for="packType" class="form-label">
+                        Pack Type <span class="text-danger">*</span>
+                      </label>
+                      <select id="packType" formControlName="packType" class="form-select" required>
+                        <option value="COPPER">Copper</option>
+                        <option value="BRONZE">Bronze</option>
+                        <option value="SILVER">Silver</option>
+                        <option value="GOLD">Gold</option>
+                      </select>
+                      <div
+                        *ngIf="courseForm.get('packType')?.invalid && (courseForm.get('packType')?.dirty || courseForm.get('packType')?.touched)"
+                        class="text-danger">
+                        Pack type is required.
+                      </div>
+                    </div>
+
+                    <!-- Course Format -->
+                    <div class="mb-3">
+                      <label for="courseFormat" class="form-label">
+                        Course Format <span class="text-danger">*</span>
+                      </label>
+                      <select id="courseFormat" class="form-select" formControlName="courseFormat" required>
+                        <option value="PDF">PDF</option>
+                        <option value="VIDEO">Video</option>
+                        <option value="AUDIO">Audio</option>
+                      </select>
+                      <div
+                        *ngIf="courseForm.get('courseFormat')?.invalid && (courseForm.get('courseFormat')?.dirty || courseForm.get('courseFormat')?.touched)"
+                        class="text-danger">
+                        Course format is required.
+                      </div>
+                    </div>
+
+                    <!-- Category Dropdown with Inline Edit and Add -->
+                    <div class="mb-3">
+                      <label for="categoryId" class="form-label">
+                        Category <span class="text-danger">*</span>
+                      </label>
+                      <div class="input-group">
+                        <select id="categoryId" formControlName="categoryId" class="form-select" required>
+                          <option value="">Select a category</option>
+                          <option *ngFor="let category of categories; trackBy: trackByCategoryId" [value]="category.id">
+                            {{ category.name }}
+                          </option>
                         </select>
-                        <div *ngIf="courseForm.get('courseLevel')?.invalid && (courseForm.get('courseLevel')?.dirty || courseForm.get('courseLevel')?.touched)" class="text-danger">
-                          Course level is required.
-                        </div>
-                      </div>
-              
-                      <!-- Pack Type -->
-                      <div class="mb-3">
-                        <label for="packType" class="form-label">
-                          Pack Type <span class="text-danger">*</span>
-                        </label>
-                        <select id="packType" formControlName="packType" class="form-select" required>
-                          <option value="COPPER">Copper</option>
-                          <option value="BRONZE">Bronze</option>
-                          <option value="SILVER">Silver</option>
-                          <option value="GOLD">Gold</option>
-                        </select>
-                        <div *ngIf="courseForm.get('packType')?.invalid && (courseForm.get('packType')?.dirty || courseForm.get('packType')?.touched)" class="text-danger">
-                          Pack type is required.
-                        </div>
-                      </div>
-              
-                      <!-- Course Format -->
-                      <div class="mb-3">
-                        <label for="courseFormat" class="form-label">
-                          Course Format <span class="text-danger">*</span>
-                        </label>
-                        <select id="courseFormat" class="form-select" formControlName="courseFormat" required>
-                          <option value="PDF">PDF</option>
-                          <option value="VIDEO">Video</option>
-                          <option value="AUDIO">Audio</option>
-                        </select>
-                        <div *ngIf="courseForm.get('courseFormat')?.invalid && (courseForm.get('courseFormat')?.dirty || courseForm.get('courseFormat')?.touched)" class="text-danger">
-                          Course format is required.
-                        </div>
-                      </div>
-              
-                      <!-- Category Dropdown with Inline Edit and Add -->
-                      <div class="mb-3">
-                        <label for="categoryId" class="form-label">
-                          Category <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                          <select id="categoryId" formControlName="categoryId" class="form-select" required>
-                            <option value="">Select a category</option>
-                            <option *ngFor="let category of categories; trackBy: trackByCategoryId" [value]="category.id">
-                              {{ category.name }}
-                            </option>
-                          </select>
-                          <button type="button" class="btn btn-outline-secondary" (click)="toggleEditCategory()">
-                            <i class="fas fa-pencil-alt"></i>
-                          </button>
-                          <button type="button" class="btn btn-outline-danger" (click)="deleteSelectedCategory()">
-                            <i class="fas fa-times"></i>
-                          </button>
-                        </div>
-                        <div *ngIf="courseForm.get('categoryId')?.invalid && (courseForm.get('categoryId')?.dirty || courseForm.get('categoryId')?.touched)" class="text-danger">
-                          Category is required.
-                        </div>
-                        <button type="button" class="btn btn-link" (click)="toggleNewCategory()">
-                          Add New Category
+                        <button type="button" class="btn btn-outline-secondary" (click)="toggleEditCategory()">
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" (click)="deleteSelectedCategory()">
+                          <i class="fas fa-times"></i>
                         </button>
                       </div>
-              
-                      <!-- Inline Category Edit Form -->
-                      <div *ngIf="editingCategory" class="mt-2 border p-2 rounded">
-                        <div class="mb-2">
-                          <label for="editedCategoryName" class="form-label">Edit Category Name <span class="text-danger">*</span></label>
-                          <input type="text" id="editedCategoryName" class="form-control" 
-                                 [(ngModel)]="editedCategoryName" name="editedCategoryName" 
-                                 [ngModelOptions]="{standalone: true}" required>
-                        </div>
-                        <div>
-                          <button type="button" class="btn btn-primary btn-sm me-2" (click)="updateCategory()">Update</button>
-                          <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEditCategory()">Cancel</button>
-                        </div>
+                      <div
+                        *ngIf="courseForm.get('categoryId')?.invalid && (courseForm.get('categoryId')?.dirty || courseForm.get('categoryId')?.touched)"
+                        class="text-danger">
+                        Category is required.
                       </div>
-              
-                      <!-- Inline New Category Form -->
-                      <div *ngIf="showNewCategory" class="mt-2 border p-2 rounded">
-                        <h5>Add New Category</h5>
-                        <div class="mb-2">
-                          <label for="newCategoryName" class="form-label">Category Name <span class="text-danger">*</span></label>
-                          <input type="text" id="newCategoryName" class="form-control" 
-                                 [(ngModel)]="newCategoryName" name="newCategoryName" 
-                                 [ngModelOptions]="{standalone: true}" required>
-                        </div>
-                        <div>
-                          <button type="button" class="btn btn-primary btn-sm me-2" (click)="createNewCategory()">Save Category</button>
-                          <button type="button" class="btn btn-secondary btn-sm" (click)="toggleNewCategory()">Cancel</button>
-                        </div>
+                      <button type="button" class="btn btn-link" (click)="toggleNewCategory()">
+                        Add New Category
+                      </button>
+                    </div>
+
+                    <!-- Inline Category Edit Form -->
+                    <div *ngIf="editingCategory" class="mt-2 border p-2 rounded">
+                      <div class="mb-2">
+                        <label for="editedCategoryName" class="form-label">Edit Category Name <span
+                            class="text-danger">*</span></label>
+                        <input type="text" id="editedCategoryName" class="form-control" [(ngModel)]="editedCategoryName"
+                          name="editedCategoryName" [ngModelOptions]="{standalone: true}" required>
                       </div>
-              
-                      <!-- Duration -->
-                      <div class="mb-3">
-                        <label for="duration" class="form-label">
-                          Duration (hours) <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" class="form-control" id="duration" formControlName="duration" required step="0.1" min="0">
-                        <div *ngIf="courseForm.get('duration')?.invalid && (courseForm.get('duration')?.dirty || courseForm.get('duration')?.touched)" class="text-danger">
-                          Duration is required.
-                        </div>
+                      <div>
+                        <button type="button" class="btn btn-primary btn-sm me-2"
+                          (click)="updateCategory()">Update</button>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                          (click)="cancelEditCategory()">Cancel</button>
                       </div>
-              
-                      <!-- Number of Lectures -->
-                      <div class="mb-3">
-                        <label for="numberOfLectures" class="form-label">
-                          Number of Lectures <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" class="form-control" id="numberOfLectures" formControlName="numberOfLectures" required min="1">
-                        <div *ngIf="courseForm.get('numberOfLectures')?.invalid && (courseForm.get('numberOfLectures')?.dirty || courseForm.get('numberOfLectures')?.touched)" class="text-danger">
-                          Number of lectures is required.
-                        </div>
+                    </div>
+
+                    <!-- Inline New Category Form -->
+                    <div *ngIf="showNewCategory" class="mt-2 border p-2 rounded">
+                      <h5>Add New Category</h5>
+                      <div class="mb-2">
+                        <label for="newCategoryName" class="form-label">Category Name <span
+                            class="text-danger">*</span></label>
+                        <input type="text" id="newCategoryName" class="form-control" [(ngModel)]="newCategoryName"
+                          name="newCategoryName" [ngModelOptions]="{standalone: true}" required>
                       </div>
-              
-                      <!-- Points Earned -->
-                      <div class="mb-3">
-                        <label for="pointsEarned" class="form-label">
-                          Points Earned <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" class="form-control" id="pointsEarned" formControlName="pointsEarned" min="1" required>
-                        <div *ngIf="courseForm.get('pointsEarned')?.invalid && (courseForm.get('pointsEarned')?.dirty || courseForm.get('pointsEarned')?.touched)" class="text-danger">
-                          Points must be at least 1.
-                        </div>
+                      <div>
+                        <button type="button" class="btn btn-primary btn-sm me-2" (click)="createNewCategory()">Save
+                          Category</button>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                          (click)="toggleNewCategory()">Cancel</button>
                       </div>
-              
-                      <!-- Thumbnail Section -->
-                      <div class="mb-3">
-                        <label for="thumbnail" class="form-label">
-                          Course Thumbnail <span *ngIf="!isEditMode" class="text-danger">*</span>
-                        </label>
-                        <div class="custom-file">
-                          <input type="file" class="form-control" id="thumbnail" accept="image/*" (change)="onThumbnailSelect($event)" [attr.required]="!isEditMode ? true : null">
-                        </div>
-                        <div *ngIf="!isEditMode && courseForm.get('thumbnail')?.errors?.['required']" class="text-danger">
-                          Thumbnail is required.
-                        </div>
-                        <div *ngIf="thumbnailPreview" class="mt-2">
-                          <img [src]="thumbnailPreview" class="img-thumbnail" style="max-width: 200px;">
-                        </div>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="mb-3">
+                      <label for="duration" class="form-label">
+                        Duration (hours) <span class="text-danger">*</span>
+                      </label>
+                      <input type="number" class="form-control" id="duration" formControlName="duration" required
+                        step="0.1" min="0">
+                      <div
+                        *ngIf="courseForm.get('duration')?.invalid && (courseForm.get('duration')?.dirty || courseForm.get('duration')?.touched)"
+                        class="text-danger">
+                        Duration is required.
                       </div>
-              
-                      <!-- Submit Button -->
-                      <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid">
-                          {{ isEditMode ? 'Update Course' : 'Create Course' }}
-                        </button>
+                    </div>
+
+                    <!-- Number of Lectures -->
+                    <div class="mb-3">
+                      <label for="numberOfLectures" class="form-label">
+                        Number of Lectures <span class="text-danger">*</span>
+                      </label>
+                      <input type="number" class="form-control" id="numberOfLectures" formControlName="numberOfLectures"
+                        required min="1">
+                      <div
+                        *ngIf="courseForm.get('numberOfLectures')?.invalid && (courseForm.get('numberOfLectures')?.dirty || courseForm.get('numberOfLectures')?.touched)"
+                        class="text-danger">
+                        Number of lectures is required.
                       </div>
-                    </form>
-                  </div>
+                    </div>
+
+                    <!-- Points Earned -->
+                    <div class="mb-3">
+                      <label for="pointsEarned" class="form-label">
+                        Points Earned <span class="text-danger">*</span>
+                      </label>
+                      <input type="number" class="form-control" id="pointsEarned" formControlName="pointsEarned" min="1"
+                        required>
+                      <div
+                        *ngIf="courseForm.get('pointsEarned')?.invalid && (courseForm.get('pointsEarned')?.dirty || courseForm.get('pointsEarned')?.touched)"
+                        class="text-danger">
+                        Points must be at least 1.
+                      </div>
+                    </div>
+
+                    <!-- Thumbnail Section -->
+                    <div class="mb-3">
+                      <label for="thumbnail" class="form-label">
+                        Course Thumbnail <span *ngIf="!isEditMode" class="text-danger">*</span>
+                      </label>
+                      <div class="custom-file">
+                        <input type="file" class="form-control" id="thumbnail" accept="image/*"
+                          (change)="onThumbnailSelect($event)" [attr.required]="!isEditMode ? true : null">
+                      </div>
+                      <div *ngIf="!isEditMode && courseForm.get('thumbnail')?.errors?.['required']" class="text-danger">
+                        Thumbnail is required.
+                      </div>
+                      <div *ngIf="thumbnailPreview" class="mt-2">
+                        <img [src]="thumbnailPreview" class="img-thumbnail" style="max-width: 200px;">
+                      </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                      <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid">
+                        {{ isEditMode ? 'Update Course' : 'Create Course' }}
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
+      </div>
 
 
-        <!-- Modal Members-->
-        <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title  fw-bold" id="addUserLabel">Invite Friend's</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      <!-- Modal Members-->
+      <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title  fw-bold" id="addUserLabel">Invite Friend's</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="inviteby_email">
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Members Invite" aria-label="Recipient's username"
+                    aria-describedby="button-addon2">
+                  <button class="btn btn-dark" type="button" id="button-addon2">Members Invite</button>
                 </div>
-                <div class="modal-body">
-                    <div class="inviteby_email">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Members Invite" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <button class="btn btn-dark" type="button" id="button-addon2">Members Invite</button>
+              </div>
+              <div class="members_list">
+                <h6 class="fw-bold ">Members of e-Learn</h6>
+                <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
+                  <li class="list-group-item py-3 text-center text-md-start">
+                    <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                      <div class="no-thumbnail mb-2 mb-md-0">
+                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
+                      </div>
+                      <div class="flex-fill ms-3 text-truncate">
+                        <h6 class="mb-0  fw-bold">Rachel Carr(you)</h6>
+                        <span class="text-muted">rachel.carrcom</span>
+                      </div>
+                      <div class="members-action">
+                        <span class="members-role ">Admin</span>
+                        <div class="btn-group">
+                          <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="icofont-ui-settings  fs-6"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i
+                                  class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                            <li><a class="dropdown-item" href="#"><i
+                                  class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                          </ul>
                         </div>
+                      </div>
                     </div>
-                    <div class="members_list">
-                        <h6 class="fw-bold ">Members of e-Learn</h6>
-                        <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0">
-                            <li class="list-group-item py-3 text-center text-md-start">
-                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                                    <div class="no-thumbnail mb-2 mb-md-0">
-                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar2.jpg" alt="">
-                                    </div>
-                                    <div class="flex-fill ms-3 text-truncate">
-                                        <h6 class="mb-0  fw-bold">Rachel Carr(you)</h6>
-                                        <span class="text-muted">rachel.carrcom</span>
-                                    </div>
-                                    <div class="members-action">
-                                        <span class="members-role ">Admin</span>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="icofont-ui-settings  fs-6"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
-                                              <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                  </li>
+                  <li class="list-group-item py-3 text-center text-md-start">
+                    <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                      <div class="no-thumbnail mb-2 mb-md-0">
+                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
+                      </div>
+                      <div class="flex-fill ms-3 text-truncate">
+                        <h6 class="mb-0  fw-bold">Lucas Baker<a href="#" class="link-secondary ms-2">(Resend
+                            invitation)</a></h6>
+                        <span class="text-muted">lucas.bakercom</span>
+                      </div>
+                      <div class="members-action">
+                        <div class="btn-group">
+                          <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Members
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                <i class="icofont-check-circled"></i>
+                                Member
+                                <span>Can view, edit, delete, comment on and save files</span>
+                              </a>
+
                             </li>
-                            <li class="list-group-item py-3 text-center text-md-start">
-                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                                    <div class="no-thumbnail mb-2 mb-md-0">
-                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar3.jpg" alt="">
-                                    </div>
-                                    <div class="flex-fill ms-3 text-truncate">
-                                        <h6 class="mb-0  fw-bold">Lucas Baker<a href="#" class="link-secondary ms-2">(Resend invitation)</a></h6>
-                                        <span class="text-muted">lucas.bakercom</span>
-                                    </div>
-                                    <div class="members-action">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Members
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li>
-                                                  <a class="dropdown-item" href="#">
-                                                    <i class="icofont-check-circled"></i>
-                                                        Member
-                                                    <span>Can view, edit, delete, comment on and save files</span>
-                                                   </a>
-                                                   
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fs-6 p-2 me-1"></i>
-                                                            Admin
-                                                        <span>Member, but can invite and manage team members</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="icofont-ui-settings  fs-6"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Delete Member</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                <i class="fs-6 p-2 me-1"></i>
+                                Admin
+                                <span>Member, but can invite and manage team members</span>
+                              </a>
                             </li>
-                            <li class="list-group-item py-3 text-center text-md-start">
-                                <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
-                                    <div class="no-thumbnail mb-2 mb-md-0">
-                                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
-                                    </div>
-                                    <div class="flex-fill ms-3 text-truncate">
-                                        <h6 class="mb-0  fw-bold">Una Coleman</h6>
-                                        <span class="text-muted">una.coleman.com</span>
-                                    </div>
-                                    <div class="members-action">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Members
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                              <li>
-                                                  <a class="dropdown-item" href="#">
-                                                    <i class="icofont-check-circled"></i>
-                                                        Member
-                                                    <span>Can view, edit, delete, comment on and save files</span>
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fs-6 p-2 me-1"></i>
-                                                            Admin
-                                                        <span>Member, but can invite and manage team members</span>
-                                                       </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="icofont-ui-settings  fs-6"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Suspend member</a></li>
-                                                  <li><a class="dropdown-item" href="#"><i class="icofont-not-allowed fs-6 me-2"></i>Delete Member</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                          </ul>
+                        </div>
+                        <div class="btn-group">
+                          <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="icofont-ui-settings  fs-6"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Delete
+                                Member</a></li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
-                </div>
+                  </li>
+                  <li class="list-group-item py-3 text-center text-md-start">
+                    <div class="d-flex align-items-center flex-column flex-sm-column flex-md-row">
+                      <div class="no-thumbnail mb-2 mb-md-0">
+                        <img class="avatar lg rounded-circle" src="/assetsback/images/xs/avatar8.jpg" alt="">
+                      </div>
+                      <div class="flex-fill ms-3 text-truncate">
+                        <h6 class="mb-0  fw-bold">Una Coleman</h6>
+                        <span class="text-muted">una.coleman.com</span>
+                      </div>
+                      <div class="members-action">
+                        <div class="btn-group">
+                          <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Members
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                <i class="icofont-check-circled"></i>
+                                Member
+                                <span>Can view, edit, delete, comment on and save files</span>
+                              </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                <i class="fs-6 p-2 me-1"></i>
+                                Admin
+                                <span>Member, but can invite and manage team members</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="btn-group">
+                          <div class="btn-group">
+                            <button type="button" class="btn bg-transparent dropdown-toggle" data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                              <i class="icofont-ui-settings  fs-6"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                              <li><a class="dropdown-item" href="#"><i
+                                    class="icofont-ui-password fs-6 me-2"></i>ResetPassword</a></li>
+                              <li><a class="dropdown-item" href="#"><i
+                                    class="icofont-chart-line fs-6 me-2"></i>ActivityReport</a></li>
+                              <li><a class="dropdown-item" href="#"><i class="icofont-delete-alt fs-6 me-2"></i>Suspend
+                                  member</a></li>
+                              <li><a class="dropdown-item" href="#"><i class="icofont-not-allowed fs-6 me-2"></i>Delete
+                                  Member</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Jquery Core Js -->
-<script src="/assetsback/bundles/libscripts.bundle.js"></script>
+  <!-- Jquery Core Js -->
+  <script src="/assetsback/bundles/libscripts.bundle.js"></script>
 
-<!-- Plugin Js-->
-<script src="/assetsback/bundles/carousel.bundle.js"></script>
-<script src="/assetsback/bundles/apexcharts.bundle.js"></script> 
+  <!-- Plugin Js-->
+  <script src="/assetsback/bundles/carousel.bundle.js"></script>
+  <script src="/assetsback/bundles/apexcharts.bundle.js"></script>
 
-<!-- Jquery Page Js -->
-<script src="../js/template.js"></script>
-<script src="../js/page/elearn-index.js"></script>
+  <!-- Jquery Page Js -->
+  <script src="../js/template.js"></script>
+  <script src="../js/page/elearn-index.js"></script>
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/e-learn/html/dist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Feb 2025 19:53:55 GMT -->
+
 </html>
