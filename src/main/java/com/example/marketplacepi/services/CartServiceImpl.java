@@ -1,5 +1,7 @@
 package com.example.marketplacepi.services;
 
+import com.example.EduNext.Entities.User;
+import com.example.EduNext.Repositories.UserRepository;
 import com.example.marketplacepi.dto.AddProductInCartDto;
 import com.example.marketplacepi.dto.CartItemsDto;
 import com.example.marketplacepi.dto.OrderDto;
@@ -40,23 +42,32 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private final CouponRepository couponRepository;
 
-
+	@Autowired
+	private final UserRepository userRepository;  // Ajouter la dépendance UserRepository
 
 	@Override
-	public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto) {
-
+	public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto, Long userId) {
 		System.out.println(addProductInCartDto.toString());
 
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		}
+
+		User user = userOptional.get();
+
 		// Récupérer la commande active (en attente)
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
 
 		if (activeOrder == null) {
-			log.info("Active order not found, creating a new order.");
+			log.info("Active order not found for user {}, creating a new order.", user.getUsername());
 			activeOrder = new Order();
 			activeOrder.setOrderStatus(OrderStatus.Pending);
 			activeOrder.setTotalAmount(0L);
 			activeOrder.setAmount(0L);
 			activeOrder.setCartItems(new ArrayList<>()); // Initialiser la liste des articles
+			activeOrder.setUser(user);  // Lier l'ordre à l'utilisateur
 			activeOrder = orderRepository.save(activeOrder);
 		}
 
@@ -81,6 +92,7 @@ public class CartServiceImpl implements CartService {
 			cartItem = new CartItems();
 			cartItem.setProduct(product);
 			cartItem.setPrice(product.getPrice());
+			cartItem.setUser(user);
 			cartItem.setQuantity(1L);
 			cartItem.setOrder(activeOrder);
 			activeOrder.getCartItems().add(cartItem);
@@ -102,8 +114,16 @@ public class CartServiceImpl implements CartService {
 		return ResponseEntity.status(HttpStatus.CREATED).body(cartItem);
 	}
 
-	public OrderDto getCart() {
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+	public OrderDto getCart(Long userId) {
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			return null;
+		}
+
+		User user = userOptional.get();
+
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
 		if (activeOrder == null) return null;
 
 		List<CartItemsDto> cartItemsDtosList = activeOrder.getCartItems().stream().map(CartItems::getCartDto)
@@ -123,8 +143,16 @@ public class CartServiceImpl implements CartService {
 		return orderDto;
 	}
 
-	public OrderDto applyCoupon(String code) {
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+	public OrderDto applyCoupon(String code, Long userId) {
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			return null;
+		}
+
+		User user = userOptional.get();
+
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
 		Coupon coupon = couponRepository.findByCode(code)
 				.orElseThrow(() -> new ValidationException("Coupon not found"));
 
@@ -154,17 +182,22 @@ public class CartServiceImpl implements CartService {
 		return activeOrder.getOrderDto();
 	}
 
-
-
-
 	public boolean couponIsExpired(Coupon coupon) {
 		Date currentDate = new Date();
 		Date expirationDate = coupon.getExpirationDate();
 		return expirationDate != null && currentDate.after(expirationDate);
 	}
 
-	public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto) {
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+	public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto, Long userId) {
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			return null;
+		}
+
+		User user = userOptional.get();
+
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
 		Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
 		Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderId(
 				optionalProduct.get().getId(), activeOrder.getId());
@@ -194,8 +227,16 @@ public class CartServiceImpl implements CartService {
 		return null;
 	}
 
-	public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto) {
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+	public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto, Long userId) {
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			return null;
+		}
+
+		User user = userOptional.get();
+
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
 		Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
 		Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderId(
 				optionalProduct.get().getId(), activeOrder.getId());
@@ -226,14 +267,27 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public OrderDto placedOrder(PlaceOrderDto placeOrderDto) {
-		// Récupérer la commande en attente
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+	public OrderDto placedOrder(PlaceOrderDto placeOrderDto, Long userId) {
+		log.info("Début de la méthode placedOrder pour l'utilisateur ID: {}", userId);
 
-		if (activeOrder == null) {
-			log.info("Aucune commande en attente active trouvée.");
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			log.warn("Utilisateur avec ID {} non trouvé.", userId);
 			return null;
 		}
+
+		User user = userOptional.get();
+		log.info("Utilisateur trouvé: {}", user.getUsername());
+
+		// Récupérer la commande en attente
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
+		if (activeOrder == null) {
+			log.info("Aucune commande en attente active trouvée pour l'utilisateur ID: {}", userId);
+			return null;
+		}
+
+		log.info("Commande active trouvée avec ID: {}", activeOrder.getId());
 
 		// Mise à jour des détails de la commande
 		activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
@@ -241,6 +295,7 @@ public class CartServiceImpl implements CartService {
 		activeOrder.setDate(new Date());
 		activeOrder.setOrderStatus(OrderStatus.Placed);
 		activeOrder.setTrackingId(UUID.randomUUID());
+		log.info("Commande mise à jour avec la nouvelle description et l'adresse.");
 
 		// Sauvegarde de la commande mise à jour
 		orderRepository.save(activeOrder);
@@ -252,67 +307,51 @@ public class CartServiceImpl implements CartService {
 		newOrder.setTotalAmount(0L);
 		newOrder.setDiscount(0L);
 		newOrder.setOrderStatus(OrderStatus.Pending);
+		newOrder.setUser(user);  // Lier la nouvelle commande à l'utilisateur
+		log.info("Création d'une nouvelle commande en attente pour l'utilisateur ID: {}", userId);
 
 		// Sauvegarde de la nouvelle commande en attente
 		orderRepository.save(newOrder);
-		log.info("Nouvelle commande en attente créée : {}", newOrder.toString());
+		log.info("Nouvelle commande en attente créée avec ID: {}", newOrder.getId());
 
 		// Retourner le DTO de la commande passée
+		log.info("Retour du DTO de la commande passée avec ID: {}", activeOrder.getId());
 		return activeOrder.getOrderDto();
 	}
 
 
 	@Override
-	public ResponseEntity<?> removeProductFromCart(Long productId) {
+	public ResponseEntity<?> removeProductFromCart(Long productId, Long userId) {
+		// Vérifier si l'utilisateur existe
+		Optional<User> userOptional = userRepository.findById(Math.toIntExact(userId));
+		if (!userOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		}
+
+		User user = userOptional.get();
+
 		// Recherche de la commande active (statut "Pending")
-		Order activeOrder = orderRepository.findByOrderStatus(OrderStatus.Pending);
+		Order activeOrder = orderRepository.findByOrderStatusAndUser(OrderStatus.Pending, user);
 		if (activeOrder == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Active order not found");
 		}
 
-		// Recherche de l'élément du panier par l'ID du produit et l'ID de la commande active
+		// Recherche de l'élément du panier à supprimer
 		Optional<CartItems> cartItemOptional = cartItemsRepository.findByProductIdAndOrderId(productId, activeOrder.getId());
-
 		if (!cartItemOptional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found in the cart");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not in cart");
 		}
 
-		// Si l'élément existe, on le supprime du panier
 		CartItems cartItem = cartItemOptional.get();
-		long productPrice = cartItem.getPrice();
-		long quantity = cartItem.getQuantity();
+		activeOrder.setAmount(activeOrder.getAmount() - (cartItem.getPrice() * cartItem.getQuantity()));
+		activeOrder.setTotalAmount(activeOrder.getTotalAmount() - (cartItem.getPrice() * cartItem.getQuantity()));
 
-		// Suppression de l'élément du panier
-		activeOrder.getCartItems().remove(cartItem);
+		// Supprimer l'élément du panier
 		cartItemsRepository.delete(cartItem);
 
-		// Mise à jour du montant total de la commande
-		activeOrder.setTotalAmount(activeOrder.getTotalAmount() - (productPrice * quantity));
-		activeOrder.setAmount(activeOrder.getTotalAmount());
-
-		// Si un coupon est appliqué, on recalcul la réduction
-		if (activeOrder.getCoupon() != null) {
-			double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
-			double netAmount = activeOrder.getTotalAmount() - discountAmount;
-
-			activeOrder.setAmount((long) netAmount);
-			activeOrder.setDiscount((long) discountAmount);
-		}
-
-		// Sauvegarde des modifications de la commande
+		// Sauvegarder les changements dans la commande
 		orderRepository.save(activeOrder);
 
-		return ResponseEntity.status(HttpStatus.OK).body("Product removed from cart");
-	}
-
-	public List<OrderDto> getMyPlacedOrders() {
-		return orderRepository
-				.findByOrderStatusIn(List.of(OrderStatus.Shipped, OrderStatus.Placed, OrderStatus.Delivered))
-				.stream().map(Order::getOrderDto).collect(Collectors.toList());
-	}
-
-	public OrderDto searchOrderByTrackingId(UUID trackingId) {
-		Optional<Order> optionalOrder = orderRepository.findByTrackingId(trackingId);
-		return optionalOrder.map(Order::getOrderDto).orElse(null);
+		return ResponseEntity.status(HttpStatus.OK).body("Product removed from cart successfully");
 	}
 }

@@ -17,9 +17,10 @@ import java.util.List;
 public class WishlistController {
 	private final WishlistService wishlistService;
 
-	@PostMapping("/wishlist")
-	public ResponseEntity<?> addProductToWishlist(@RequestBody WishlistDto wishlistDto) {
-		log.info("Received request to add product to wishlist");
+	// Ajouter un produit à la wishlist de l'utilisateur
+	@PostMapping("/wishlist/{userId}")
+	public ResponseEntity<?> addProductToWishlist(@PathVariable Long userId, @RequestBody WishlistDto wishlistDto) {
+		log.info("Received request to add product to wishlist for user with ID {}", userId);
 
 		// Vérifier que l'id du produit n'est pas nul
 		if (wishlistDto.getProductId() == null) {
@@ -27,30 +28,31 @@ public class WishlistController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product ID cannot be null");
 		}
 
-		WishlistDto postedWishlistDto = wishlistService.addProductToWishlist(wishlistDto);
+		WishlistDto postedWishlistDto = wishlistService.addProductToWishlist(userId, wishlistDto);
 
 		return postedWishlistDto != null
 				? ResponseEntity.status(HttpStatus.CREATED).body(postedWishlistDto)
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found or already in wishlist");
 	}
 
-	@GetMapping("/wishlist")
-	public ResponseEntity<List<WishlistDto>> getWishlist() {
-		log.info("Received request to get wishlist");
-		return ResponseEntity.ok(wishlistService.getAllWishlists());
+	// Récupérer toutes les wishlists de l'utilisateur
+	@GetMapping("/wishlist/{userId}")
+	public ResponseEntity<List<WishlistDto>> getWishlist(@PathVariable Long userId) {
+		log.info("Received request to get wishlist for user with ID {}", userId);
+		return ResponseEntity.ok(wishlistService.getAllWishlists(userId));
 	}
-	@DeleteMapping("/wishlist/product/{productId}")
-	public ResponseEntity<Void> removeProductFromWishlist(@PathVariable Long productId) {
-		log.info("Received request to delete product with ID: {}", productId);
-		boolean deleted = wishlistService.removeProductFromWishlist(productId);
+
+	// Retirer un produit de la wishlist de l'utilisateur
+	@DeleteMapping("/wishlist/{userId}/product/{productId}")
+	public ResponseEntity<Void> removeProductFromWishlist(@PathVariable Long userId, @PathVariable Long productId) {
+		log.info("Received request to delete product with ID: {} from wishlist of user with ID {}", productId, userId);
+		boolean deleted = wishlistService.removeProductFromWishlist(userId, productId);
 		if (deleted) {
-			log.info("Product with ID: {} removed from wishlist successfully", productId);
+			log.info("Product with ID: {} removed from wishlist of user with ID {}", productId, userId);
 			return ResponseEntity.noContent().build();
 		} else {
-			log.warn("Product with ID: {} not found in wishlist", productId);
+			log.warn("Product with ID: {} not found in wishlist of user with ID {}", productId, userId);
 			return ResponseEntity.notFound().build();
 		}
 	}
-
-
 }

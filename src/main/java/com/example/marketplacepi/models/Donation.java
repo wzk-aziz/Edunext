@@ -1,5 +1,6 @@
 package com.example.marketplacepi.models;
 
+import com.example.EduNext.Entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,10 @@ public class Donation {
     private Double amount;
     private String currency;
     private String status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     @ManyToOne
     private Donor donor;

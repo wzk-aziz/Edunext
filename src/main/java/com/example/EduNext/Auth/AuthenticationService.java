@@ -136,7 +136,12 @@ public class AuthenticationService {
                     .refreshToken("")
                     .mfaEnabled(true)
                     .role(user.getRole().name())  // Add role to response
+                    .firstName(user.getFirstname()) // Ajouter prénom
+                    .lastName(user.getLastname()) // Ajouter nom
+                    .email(user.getEmail()) // Ajouter email
+                    .userId(user.getId()) // Ajouter l'ID utilisateur
                     .build();
+
         }
 
         // Générer un token si l'utilisateur n'est pas banni et MFA désactivé
@@ -148,7 +153,10 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
                 .role(user.getRole().name())
-
+                .firstName(user.getFirstname()) // Ajouter prénom
+                .lastName(user.getLastname()) // Ajouter nom
+                .email(user.getEmail()) // Ajouter email
+                .userId(user.getId()) // Ajouter l'ID utilisateur
                 .build();
     }
 

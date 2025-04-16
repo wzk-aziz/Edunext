@@ -1,6 +1,7 @@
 package com.example.marketplacepi.models;
 
 import com.example.marketplacepi.dto.CartItemsDto;
+import com.example.EduNext.Entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,12 @@ public class CartItems {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
+
     public CartItemsDto getCartDto() {
         return CartItemsDto.builder()
                 .id(id)
@@ -43,6 +50,8 @@ public class CartItems {
                 .quantity(quantity)
                 .productName(product.getName())
                 .returnedImage(product.getImg())
+                .userId(user != null ? user.getId() : null)
+                .userFullName(user != null ? user.getFirstname() + " " + user.getLastname() : null)
                 .build();
     }
 }

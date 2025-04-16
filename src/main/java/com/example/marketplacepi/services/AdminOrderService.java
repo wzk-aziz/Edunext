@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface AdminOrderService {
     List<OrderDto> getAllPlacedOrders();
-
+    List<OrderDto> getOrdersByUserId(Long userId);
     OrderDto changeOrderStatus(Long orderId, String status);
 
     AnalyticsResponse calculateAnalytics();

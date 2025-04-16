@@ -5,20 +5,14 @@ import com.example.marketplacepi.dto.OrderDto;
 import com.example.marketplacepi.dto.PlaceOrderDto;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface CartService {
-	ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto);
-	public OrderDto getCart();
-	OrderDto applyCoupon(String code);
-	
-	OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto);
-	
-	OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto);
-	
-	OrderDto placedOrder(PlaceOrderDto placeOrderDto);
-	
-	OrderDto searchOrderByTrackingId(UUID trackingId);
-	ResponseEntity<?> removeProductFromCart(Long productId);
+	ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto, Long userId);
+	OrderDto getCart(Long userId);
+	OrderDto applyCoupon(String code, Long userId);
+	OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto, Long userId);
+	OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto, Long userId);
+	OrderDto placedOrder(PlaceOrderDto placeOrderDto, Long userId);
+	ResponseEntity<?> removeProductFromCart(Long productId, Long userId);
 }

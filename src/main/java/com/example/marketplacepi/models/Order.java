@@ -1,5 +1,6 @@
 package com.example.marketplacepi.models;
 
+import com.example.EduNext.Entities.User;
 import com.example.marketplacepi.dto.OrderDto;
 import com.example.marketplacepi.enums.OrderStatus;
 import jakarta.persistence.*;
@@ -43,6 +44,10 @@ public class Order {
 
     private UUID trackingId;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
 
     @OneToOne(cascade = CascadeType.MERGE)
@@ -65,6 +70,8 @@ public class Order {
                 .payment(payment)
                 .orderStatus(orderStatus)
                 .trackingId(trackingId)
+                .userId(user != null ? user.getId() : null)
+                .userFullName(user != null ? user.getFirstname() + " " + user.getLastname() : null)
                 .couponName(coupon != null ? coupon.getName() : null)
                 .build();
 

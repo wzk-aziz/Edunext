@@ -1,5 +1,6 @@
 package com.example.marketplacepi.models;
 
+import com.example.EduNext.Entities.User;
 import com.example.marketplacepi.dto.WishlistDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,11 @@ public class Wishlist {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
 
 
     public WishlistDto getWishlistDto() {
@@ -33,6 +39,7 @@ public class Wishlist {
                 .returnedImg(product.getImg())
                 .productName(product.getName())
                 .productDescription(product.getDescription())
+                .userId(user != null ? user.getId() : null)
                 .price(product.getPrice())
                 .build();
     }

@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -23,17 +21,11 @@ import java.util.UUID;
 public class CartController {
 	private final CartService cartService;
 
-	@PostMapping("/add")
-	public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto dto) {
+	@PostMapping("/add/{userId}")
+	public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto dto, @PathVariable Long userId) {
 		try {
-			cartService.addProductToCart(dto); // on suppose que ce service gère tout
-
-			Map<String, Object> response = new HashMap<>();
-			response.put("message", "Produit ajouté avec succès");
-			response.put("status", "success");
-
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+			// Ajouter le produit au panier avec l'ID de l'utilisateur
+			return cartService.addProductToCart(dto, userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -45,54 +37,98 @@ public class CartController {
 		}
 	}
 
-
 	// Obtenir les produits du panier
-	@GetMapping("/cart")
-	public ResponseEntity<OrderDto> getCart() {
-		OrderDto cart = cartService.getCart();
-		return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.noContent().build();
-	}
-
-	// Appliquer un coupon au panier
-	@PostMapping("/apply-coupon/{code}")
-	public ResponseEntity<OrderDto> applyCoupon(@PathVariable String code) {
+	@GetMapping("/cart/{userId}")
+	public ResponseEntity<?> getCart(@PathVariable Long userId) {
 		try {
-			OrderDto updatedOrder = cartService.applyCoupon(code);
-			return ResponseEntity.ok(updatedOrder);  // Réponse avec l'ordre mis à jour
-		} catch (ValidationException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new OrderDto(e.getMessage()));  // Message d'erreur
+			OrderDto orderDto = cartService.getCart(userId);
+			if (orderDto == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Panier vide ou non trouvé");
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			Map<String, Object> error = new HashMap<>();
+			error.put("message", "Erreur lors de la récupération du panier");
+			error.put("status", "error");
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 		}
 	}
 
 
-	// Augmenter la quantité d'un produit
-	@PostMapping("/increase-quantity")
-	public ResponseEntity<OrderDto> increaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
-		return ResponseEntity.ok(cartService.increaseProductQuantity(addProductInCartDto));
-	}
+	// Appliquer un coupon
+	@PostMapping("/applyCoupon")
+	public ResponseEntity<?> applyCoupon(@RequestParam String code, @RequestParam Long userId) {
+		try {
+			OrderDto orderDto = cartService.applyCoupon(code, userId);
+			if (orderDto == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Commande non trouvée");
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+		} catch (ValidationException e) {
+			Map<String, Object> error = new HashMap<>();
+			error.put("message", e.getMessage());
+			error.put("status", "error");
 
-	// Diminuer la quantité d'un produit
-	@PostMapping("/decrease-quantity")
-	public ResponseEntity<OrderDto> decreaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
-		return ResponseEntity.ok(cartService.decreaseProductQuantity(addProductInCartDto));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			Map<String, Object> error = new HashMap<>();
+			error.put("message", "Erreur lors de l'application du coupon");
+			error.put("status", "error");
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+		}
 	}
 
 	// Passer une commande
-	@PostMapping("/place-order")
-	public ResponseEntity<OrderDto> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
-		return ResponseEntity.ok(cartService.placedOrder(placeOrderDto));
+	@PostMapping("/place-order/{userId}")
+	public ResponseEntity<?> placeOrder(@RequestBody PlaceOrderDto placeOrderDto, @PathVariable Long userId) {
+		try {
+			OrderDto orderDto = cartService.placedOrder(placeOrderDto, userId);
+			if (orderDto == null) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Commande invalide ou non trouvée");
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).body(orderDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, Object> error = new HashMap<>();
+			error.put("message", "Erreur lors de la commande");
+			error.put("status", "error");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+		}
 	}
 
-	// Rechercher une commande par tracking ID
-	@GetMapping("/search/{trackingId}")
-	public ResponseEntity<OrderDto> searchOrderByTrackingId(@PathVariable String trackingId) {
-		return ResponseEntity.ok(cartService.searchOrderByTrackingId(UUID.fromString(trackingId)));
-	}
-	// New endpoint to remove a product from the cart
-	@DeleteMapping("/api/customer/cart/{productId}")
-	public ResponseEntity<?> removeProductFromCart(@PathVariable Long productId) {
-		return cartService.removeProductFromCart(productId);
-	}
 
+	// Supprimer un produit du panier
+	@DeleteMapping("/remove")
+	public ResponseEntity<?> removeProductFromCart(@RequestParam Long productId, @RequestParam Long userId) {
+		try {
+			return cartService.removeProductFromCart(productId, userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			Map<String, Object> error = new HashMap<>();
+			error.put("message", "Erreur lors de la suppression du produit");
+			error.put("status", "error");
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+		}
+	}
+	@PostMapping("/increase-quantity/{userId}")
+	public ResponseEntity<OrderDto> increaseProductQuantity(
+			@RequestBody AddProductInCartDto addProductInCartDto,
+			@PathVariable Long userId) {
+		return ResponseEntity.ok(cartService.increaseProductQuantity(addProductInCartDto, userId));
+	}
+	@PostMapping("/decrease-quantity/{userId}")
+	public ResponseEntity<OrderDto> decreaseProductQuantity(
+			@RequestBody AddProductInCartDto addProductInCartDto,
+			@PathVariable Long userId) {
+		return ResponseEntity.ok(cartService.decreaseProductQuantity(addProductInCartDto, userId));
+	}
 
 }

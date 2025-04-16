@@ -18,13 +18,16 @@ public class OrderController {
 
 	private final AdminOrderService adminOrderService;
 
-
-	@GetMapping("/myOrders")
-	public ResponseEntity<List<OrderDto>> getOrders() {
-		// Appel à la méthode dans AdminOrderService pour récupérer toutes les commandes
-		List<OrderDto> orders = adminOrderService.getAllPlacedOrders();
+	@GetMapping("/myOrders/{userId}")
+	public ResponseEntity<List<OrderDto>> getOrdersByUserId(@PathVariable Long userId) {
+		// Appel à la méthode dans AdminOrderService pour récupérer les commandes d'un utilisateur spécifique
+		List<OrderDto> orders = adminOrderService.getOrdersByUserId(userId);
+		if (orders.isEmpty()) {
+			return ResponseEntity.noContent().build();  // Retourner un code 204 si aucune commande n'est trouvée
+		}
 		return ResponseEntity.ok(orders);
 	}
+
 	@GetMapping("/placedOrders")
 	public ResponseEntity<List<OrderDto>> getAllPlacedOrders() {
 		log.info("Received request to get all placed orders");

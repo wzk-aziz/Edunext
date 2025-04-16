@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class PlaceOrderDto {
-	
 
-	
+
 	private String address;
 	
 	private String orderDescription;
