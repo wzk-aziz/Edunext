@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
+import { UpdateUserRequest } from '../../models/UpdateUserRequest';
 
 export interface BanStats {
   banned: number;
@@ -14,12 +15,21 @@ export interface BanStats {
 export class UserService {
 
   private apiUrl = 'http://localhost:8050/api/v1/users';
+  private passUrl = 'http://localhost:8050/api/auth';
+
   
 
 
   constructor(private http: HttpClient) { }
   getAllUsers(): Observable<any[]> {  // Return an array explicitly
     return this.http.get<any[]>(`${this.apiUrl}/all`);
+  }
+
+
+  getBannedUsersByRole(role: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/bannedByRole`, {
+      params: { role: role.toUpperCase() }
+    });
   }
   
 
@@ -42,9 +52,7 @@ export class UserService {
     return `http://localhost:8050/api/v1/auth/files/${fileName}`;
   }
 
-  updateUser(id: number, userData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/update/${id}`, userData);
-  }
+
 
   banUser(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/ban/${id}`, {});
@@ -70,13 +78,58 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/profile/${userId}`);
   }
 
-  // Mettre à jour le profil de l'utilisateur
-  updateUserProfile(userId: number, request: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${userId}`, request);
+  updateUser(id: number, request: UpdateUserRequest): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.put(`${this.apiUrl}/update/${id}`, request, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
 
-  
+  getMyProfile(): Observable<User> {
+    console.log("adem");
+    const token = localStorage.getItem('token'); // Retrieve token from local storage
 
+    // Add the token to the headers if it exists
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<User>(`${this.apiUrl}/profile/me`, { headers });
+  }
+
+
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.passUrl}/forgot-password`, { email });
+  }
+
+  // Validate the reset token
+  validateResetToken(token: string): Observable<any> {
+    return this.http.get(`${this.passUrl}/validate-reset-token`, {
+      params: { token },
+    });
+  }
+
+  // Reset password with token and new password
+  resetPassword(token: string, password: string): Observable<any> {
+    return this.http.post(`${this.passUrl}/reset-password`, { token, password });
+  }
+
+
+  // bannedUsers
+  getAllBannedUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/banned`, {
+    });
+  }
+
+
+  downloadUserPdf(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}`, {
+      responseType: 'blob'
+    });
+  }
+
+
+  
+  
 
   
 

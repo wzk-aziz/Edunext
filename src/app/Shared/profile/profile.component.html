@@ -1,29 +1,19 @@
-<div class="profile-container">
-  <h2>Profile</h2>
-  <form (ngSubmit)="updateProfile()">
-    <div>
-      <label for="firstname">First Name:</label>
-      <input id="firstname" [(ngModel)]="userProfile.firstname" name="firstname" required>
-    </div>
-    <div>
-      <label for="lastname">Last Name:</label>
-      <input id="lastname" [(ngModel)]="userProfile.lastname" name="lastname" required>
-    </div>
-    <div>
-      <label for="email">Email:</label>
-      <input id="email" [(ngModel)]="userProfile.email" name="email" type="email" required>
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input id="password" [(ngModel)]="userProfile.password" name="password" type="password" required>
-    </div>
-    <div>
-      <label for="mfaEnabled">MFA Enabled:</label>
-      <input id="mfaEnabled" [(ngModel)]="userProfile.mfaEnabled" name="mfaEnabled" type="checkbox">
-    </div>
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-    <button type="submit">Update Profile</button>
-  </form>
+<div class="container" *ngIf="loggedInUser">
+  <h2 class="title">Bienvenue, {{ loggedInUser.first_name }} {{ loggedInUser.last_name }} !</h2>
+
+  <div *ngIf="loggedInUser.image">
+    <img [src]="getUserImage(loggedInUser.image)" 
+         alt="{{ loggedInUser.first_name }} {{ loggedInUser.last_name }}" 
+         class="user-image" />
+  </div>
+
+  <p><strong>Email:</strong> {{ loggedInUser.email_address }}</p>
+
+  <p><strong>Rôle:</strong></p>
+  <ul>
+    <li *ngFor="let auth of loggedInUser.authorities">{{ auth.authority }}</li>
+  </ul>
+
+  <p><strong>Authentification à deux facteurs activée:</strong> {{ loggedInUser.mfaEnabled ? 'Oui' : 'Non' }}</p>
+  <p><strong>Banni:</strong> {{ loggedInUser.banned ? 'Oui' : 'Non' }}</p>
 </div>

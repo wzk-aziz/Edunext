@@ -200,3 +200,17 @@ button:disabled {
 .vh-lg-100 {
   height: 100vh !important;
 }
+
+/* Input and select fields - MODIFIED */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"], /* Added phone input type */
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

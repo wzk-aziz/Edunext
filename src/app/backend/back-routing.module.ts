@@ -86,6 +86,8 @@ import { DonationsListComponent } from './donation/donations-list/donations-list
 // Users
 import { UsersComponent } from './users/users.component';
 import { UserStatsComponent } from './user-stats/user-stats.component';
+import { TeachersComponent } from './teachers/teachers.component';
+
 
 const routes: Routes = [
   {
@@ -97,7 +99,7 @@ const routes: Routes = [
       { path: 'Admin2', component: Sidebar2Component },
       { path: 'Student', component: StudentComponent },
       { path: 'Class', component: ClassComponent },
-      { path: 'teachers', component: ClassComponent },
+      { path: 'teachers', component: TeachersComponent },
       { path: 'video_class', component: VideoClassComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'reviews', component: ReviewsComponent },
@@ -157,6 +159,8 @@ const routes: Routes = [
       { path: 'listDonnation', component: DonationsListComponent },
       { path: 'users', component: UsersComponent },
       { path: 'user-stats', component: UserStatsComponent },
+      { path : 'teachers', component: TeachersComponent},
+
       
       // Exam routes
       { path: 'top10', component: Examstop10Component },

@@ -16,8 +16,8 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AuthenticationService {
   
-  private baseUrl: string = 'http://localhost:8087/api/v1/auth';
-  private apiUrl: string = 'http://localhost:8087/api/v1/auth/logout'; 
+  private baseUrl: string = 'http://localhost:8050/api/v1/auth';
+  private apiUrl: string = 'http://localhost:8050/api/v1/auth/logout'; 
 
 
 
@@ -114,9 +114,13 @@ export class AuthenticationService {
       return 0;
     }
   }
-  
-  
 
+
+  getCurrentUser(): any {
+    const userJson = localStorage.getItem('user');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+  
 
 
 

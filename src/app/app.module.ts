@@ -169,6 +169,8 @@ import { OrderAnalyticsComponent } from './backend/marketplace/order-analytics/o
 import { DonationsListComponent } from './backend/donation/donations-list/donations-list.component';
 import { UsersComponent } from './backend/users/users.component';
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
+import { CodeInputModule } from 'angular-code-input';
+
 
 // Charts & Spinner
 import { NgChartsModule } from 'ng2-charts';
@@ -192,6 +194,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 
 // reCAPTCHA
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
@@ -205,9 +210,15 @@ import { JwtModule } from '@auth0/angular-jwt';
 // Angular CDK Drag & Drop
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
+import { VerificationComponent } from './Shared/verification/verification.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -353,6 +364,8 @@ export function tokenGetter() {
     UsersComponent,
     UserStatsComponent,
     ProfileComponent,
+    PasswordResetComponent,
+    VerificationComponent,
     
   ],
   imports: [
@@ -388,15 +401,25 @@ export function tokenGetter() {
     MatButtonToggleModule,
     RecaptchaModule,
     RecaptchaFormsModule,
+    CodeInputModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
         allowedDomains: ["localhost:8050"],
         disallowedRoutes: ["localhost:8050/api/v1/auth"]
       }
-    })
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
+
   providers: [
     HttpClient,
     DatePipe,

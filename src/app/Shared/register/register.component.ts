@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-register',
@@ -27,9 +27,17 @@ export class RegisterComponent {
 
   constructor(
     private authService: AuthenticationService,
-    private socialAuthService: SocialAuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translate: TranslateService
+
+  ) {
+    this.translate.setDefaultLang('en');
+  }
+
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+  }
 
   onResolved(captchaResponse: string | null) {
     console.log(`Réponse du captcha: ${captchaResponse}`);
@@ -67,19 +75,18 @@ export class RegisterComponent {
   }
 
   registerUser() {
-    if (this.isFormValid() && this.recaptchaResponse) { // Ensure reCAPTCHA is resolved
+    if (this.isFormValid() && this.recaptchaResponse) {
       this.message = '';
       this.errorMessage = ''; // Clear error message
       
-      // Création d'un `FormData` pour envoyer les données et le fichier
       const formData = new FormData();
       formData.append('request', JSON.stringify(this.registerRequest));
-      formData.append('recaptchaResponse', this.recaptchaResponse); // Add reCAPTCHA response
+      formData.append('recaptchaResponse', this.recaptchaResponse);
       
       if (this.selectedFile) {
-        formData.append('file', this.selectedFile); // Ajoute le fichier à l'envoi
+        formData.append('file', this.selectedFile);
       }
-
+  
       this.authService.registerWithFile(formData).subscribe({
         next: (response) => {
           if (response) {
@@ -92,11 +99,19 @@ export class RegisterComponent {
           }
         },
         error: (err) => {
-          this.message = err.message;
+          // Check for specific error responses
+          if (err.error && typeof err.error === 'string') {
+            this.errorMessage = err.error; // This will capture the exact message from the backend
+          } else if (err.status === 400) {
+            this.errorMessage = 'Registration failed. Please check your input for forbidden words.';
+          } else {
+            this.errorMessage = 'An error occurred during registration. Please try again.';
+          }
+          console.error('Registration error:', err);
         }
       });
     } else {
-      this.errorMessage = 'You have to fill the fields and resolve the reCAPTCHA!!!'; // Set error message
+      this.errorMessage = 'You have to fill the fields and resolve the reCAPTCHA!!!';
     }
   }
 
@@ -122,54 +137,11 @@ export class RegisterComponent {
       });
   }
 
-  loginWithGoogle() {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then(user => {
-        console.log('Google sign in successful:', user);
-        this.handleGoogleLogin(user);
-      })
-      .catch(error => {
-        console.error('Google sign in failed:', error);
-        this.errorMessage = 'Google sign in failed';
-      });
+  
+  // Fonction pour récupérer l'objet googleAuthRequest
+  getGoogleAuthRequest() {
+    // Supposons que vous utilisez Google Sign-In
+    return { token: 'GOOGLE_AUTH_TOKEN' }; // Remplacez par le vrai token récupéré
   }
-
-  private handleGoogleLogin(user: SocialUser): void {
-    console.log('Handling Google login for user:', user);
-    
-    const googleAuthRequest = {
-      token: user.idToken,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      photoUrl: user.photoUrl
-    };
-
-    this.authService.googleLogin(googleAuthRequest).subscribe({
-      next: (response) => {
-        if (response.accessToken) {
-          localStorage.setItem('token', response.accessToken);
-          
-          const userRole = response.role?.toUpperCase();
-          switch(userRole) {
-            case 'ADMIN':
-              this.router.navigate(['backoffice']);
-              break;
-            case 'TEACHER':
-              this.router.navigate(['listTeachers']);
-              break;
-            case 'LEARNER':
-              this.router.navigate(['studenthome']);
-              break;
-            default:
-              this.router.navigate(['main']);
-          }
-        }
-      },
-      error: (err) => {
-        console.error('Google login error:', err);
-        this.errorMessage = 'Google authentication failed';
-      }
-    });
-  }
+  
 }

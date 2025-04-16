@@ -82,6 +82,8 @@ import { ExamResultComponent } from './Student-Pages/exam/exam-result/exam-resul
 import { TeachersComponent } from './backend/teachers/teachers.component';
 import { UsersComponent } from './backend/users/users.component';
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
+import { VerificationComponent } from './Shared/verification/verification.component';
+import { PasswordResetComponent } from './Shared/password-reset/password-reset.component';
 
 // Route Guard
 import { authGuard } from './Shared/services/auth/auth.guard';
@@ -93,6 +95,12 @@ const routes: Routes = [
   { path: 'signin', component: SigninComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path : 'ResetPassword', component: PasswordResetComponent},
+  { path: 'verify', component: VerificationComponent },
+
+
+
+
   // Main page protected by auth guard
   { path: 'main', component: MainhomepageComponent, canActivate: [authGuard] },
 
