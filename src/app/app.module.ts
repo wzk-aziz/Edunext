@@ -142,6 +142,7 @@ import { UpdateUserComponent } from './Shared/update/update.component';
 import { UsersComponent } from './backend/users/users.component';
 import { UserStatsComponent } from './backend/user-stats/user-stats.component';
 import { ProfileComponent } from './Shared/profile/profile.component';
+import { ChatbotBubbleComponent } from './Student-Pages/Forum/Event/chatbot-bubble/chatbot-bubble.component';
 
 @NgModule({
   declarations: [
@@ -238,7 +239,8 @@ import { ProfileComponent } from './Shared/profile/profile.component';
     UpdateUserComponent,
     UsersComponent,
     UserStatsComponent,
-    ProfileComponent
+    ProfileComponent,
+    ChatbotBubbleComponent
   ],
   imports: [
     BrowserModule,

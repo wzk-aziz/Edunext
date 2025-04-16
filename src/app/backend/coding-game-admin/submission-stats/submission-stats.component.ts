@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SubmissionService } from 'src/app/Student-Pages/coding-game-student/services/submission.service';
+import { SubmissionService } from './submission.service';
 
 @Component({
   selector: 'app-submission-stats',

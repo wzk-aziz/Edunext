@@ -1,35 +1,78 @@
+<!-- problems.component.html -->
 <div class="container">
-    <h2>Problem List</h2>
-    <button class="add-btn" [routerLink]="['/backoffice/problems/new']">➕ Add New Problem</button>
+  <div class="header">
+    <h2>Problem Management</h2>
+    <button class="add-btn" [routerLink]="['/backoffice/problems/new']">
+      <span class="btn-icon">+</span>
+      <span class="btn-text">Add Problem</span>
+    </button>
+  </div>
   
-    <table>
-      <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Actions</th>
-      </tr>
-      <tr *ngFor="let problem of paginatedProblems">
-        <td>{{ problem.title }}</td>
-        <td>{{ problem.description }}</td>
-        <td>
-          <div class="action-buttons">
-            <button class="view-btn" (click)="goToView(problem.id!)">👁 View</button>
-            <button class="edit-btn" (click)="goToUpdate(problem.id!)">✏ Edit</button>
-            <button class="delete-btn" (click)="deleteProblem(problem.id)">🗑 Delete</button>
-          </div>
-        </td>
-      </tr>
+  <div class="table-container">
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading problems...</p>
+    </div>
+    
+    <table *ngIf="!loading && problems.length > 0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let problem of paginatedProblems" class="table-row">
+          <td class="title-cell">{{ problem.title }}</td>
+          <td class="description-cell">
+            <div class="description-text">
+              {{ problem.description | slice:0:120 }}{{ problem.description.length > 120 ? '...' : '' }}
+            </div>
+          </td>
+          <td class="actions-cell">
+            <div class="action-buttons">
+              <button class="action-btn view-btn" (click)="goToView(problem.id!)">
+                <span class="btn-icon">👁</span>
+                <span class="btn-text">View</span>
+              </button>
+              <button class="action-btn edit-btn" (click)="goToUpdate(problem.id!)">
+                <span class="btn-icon">✏️</span>
+                <span class="btn-text">Edit</span>
+              </button>
+              <button class="action-btn delete-btn" (click)="deleteProblem(problem.id)">
+                <span class="btn-icon">🗑️</span>
+                <span class="btn-text">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
-  
-    <!-- Pagination Controls -->
-    <div class="d-flex justify-content-center mt-4">
-      <button class="btn btn-secondary me-2" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
-        Précédent
-      </button>
-      <span>Page {{ currentPage }} / {{ totalPages }}</span>
-      <button class="btn btn-secondary ms-2" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
-        Suivant
-      </button>
+    
+    <div class="empty-state" *ngIf="!loading && problems.length === 0">
+      <div class="empty-icon">📝</div>
+      <h3>No problems found</h3>
+      <p>Get started by adding your first problem</p>
+      <button class="add-btn" [routerLink]="['/backoffice/problems/new']">Add Problem</button>
     </div>
   </div>
   
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="pagination-btn" [disabled]="currentPage === 1" (click)="onPageChange(1)">
+      <span class="pagination-icon">⟪</span>
+    </button>
+    <button class="pagination-btn" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+      <span class="pagination-icon">◀</span>
+    </button>
+    <div class="page-info">
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    </div>
+    <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+      <span class="pagination-icon">▶</span>
+    </button>
+    <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="onPageChange(totalPages)">
+      <span class="pagination-icon">⟫</span>
+    </button>
+  </div>
+</div>

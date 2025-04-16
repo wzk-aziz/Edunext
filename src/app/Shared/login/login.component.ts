@@ -7,11 +7,13 @@ import { Router } from '@angular/router';
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   authRequest: AuthenticationRequest = {};
   otpCode: string = '';
@@ -70,6 +72,7 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (response.accessToken) {
           localStorage.setItem('token', response.accessToken);
+          localStorage.setItem('user', JSON.stringify(response)); //
           
           const userRole = response.role?.toUpperCase();
           switch(userRole) {
@@ -109,7 +112,9 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (response.accessToken) {
           localStorage.setItem('token', response.accessToken);
-          
+          localStorage.setItem('user', JSON.stringify(response)); // ← ici
+
+
           const userRole = response.role?.toUpperCase();
           switch(userRole) {
             case 'ADMIN':
@@ -144,12 +149,20 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.authRequest).subscribe({
       next: (response) => {
         this.authResponse = response;
+
         console.log("User role:", this.authResponse.role);
 
         if (!this.authResponse.mfaEnabled) {
           if (response.accessToken) {
             localStorage.setItem('token', response.accessToken);
-            
+           // Vérifier si l'ID utilisateur est présent et le sauvegarder dans localStorage
+        if (this.authResponse.userId) {
+          localStorage.setItem('userId', JSON.stringify(this.authResponse.userId));
+          console.log("User ID saved in localStorage:", this.authResponse.userId);
+        } else {
+          console.log("User ID is missing in the response.");
+        }
+
             const userRole = this.authResponse.role?.toUpperCase();
             switch(userRole) {
               case 'ADMIN':

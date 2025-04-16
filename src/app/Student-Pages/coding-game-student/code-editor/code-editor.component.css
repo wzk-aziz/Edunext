@@ -17,7 +17,48 @@
     background-color: #2d2d2d;
     border-bottom: 1px solid #3c3c3c;
   }
+  .circular-timer {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin-left: 15px;
+  }
   
+  .timer-background {
+    stroke: #e6e6e6;
+  }
+  
+  .timer-progress {
+    stroke: #0aa879;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+  }
+  
+  .timer-text {
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  /* Change color based on elapsed time */
+  .timer-warning .timer-progress {
+    stroke: #ff9800;
+  }
+  
+  .timer-danger .timer-progress {
+    stroke: #f44336;
+  }
+  
+  /* Pulse animation */
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+  
+  .timer-running .timer-progress {
+    animation: pulse 2s infinite;
+  }
   /* Sélecteur de langage */
   .judge0-language-select {
     background-color: #3c3c3c;

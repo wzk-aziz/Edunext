@@ -47,6 +47,7 @@ import { MyOrderComponent } from './Student-Pages/Marketplace/my-order/my-order.
 import { ViewWishlistComponent } from './Student-Pages/Marketplace/view-wishlist/view-wishlist.component';
 
 import { authGuard } from './Shared/services/auth/auth.guard';
+import { ChatbotBubbleComponent } from './Student-Pages/Forum/Event/chatbot-bubble/chatbot-bubble.component';
 
 const routes: Routes = [
   // Main Landing Page
@@ -87,6 +88,9 @@ const routes: Routes = [
   { path: 'thread', component: ThreadListComponent },
   { path: 'new', component: ThreadAddComponent },
   { path: 'event', component: EventListComponent },
+  // app-routing.module.ts
+  { path: 'chatbot', component: ChatbotBubbleComponent },
+
   { path: 'event/event-detail/:id', component: EventDetailComponent },
 
   // Marketplace

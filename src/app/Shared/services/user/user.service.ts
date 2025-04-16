@@ -13,7 +13,7 @@ export interface BanStats {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8050/api/v1/users';
+  private apiUrl = 'http://localhost:8088/api/v1/users';
   
 
 

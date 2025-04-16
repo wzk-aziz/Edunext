@@ -18,6 +18,7 @@ export class AuthenticationService {
   
   private baseUrl: string = 'http://localhost:8088/api/v1/auth';
   private apiUrl: string = 'http://localhost:8088/api/v1/auth/logout'; 
+  currentUser$: any;
 
 
 
@@ -104,11 +105,22 @@ export class AuthenticationService {
   }
 
   getUserId(): number {
-    // Logic to get the user ID, e.g., from a token or session
-    return 1; // Replace with actual logic
+    const userJson = localStorage.getItem('userId');
+    if (!userJson) return 0;
+  
+    try {
+      const user = JSON.parse(userJson);
+      /* // Si le userId est une string du type "current-user-id", retour 0
+      if (!user.userId || isNaN(+user.userId)) {
+        return 0;
+      } */
+  
+      return user;
+    } catch (e) {
+      return 0;
+    }
   }
-
-
+  
 
 
 

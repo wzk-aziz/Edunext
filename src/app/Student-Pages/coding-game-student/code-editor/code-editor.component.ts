@@ -5,6 +5,9 @@ import { Problem } from 'src/app/backend/coding-game-admin/models/problem.model'
 import { GitService } from './git.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProblemService } from 'src/app/backend/coding-game-admin/problems/problem.service';
+import { AuthenticationService } from 'src/app/Shared/services/authentication.service';
+import { SubmissionService } from '../services/submission.service';
+
 
 @Component({
   selector: 'app-code-editor',
@@ -58,70 +61,198 @@ githubOwner: string = 'Amalesprit01';
   private apiUrl = 'https://judge0-ce.p.rapidapi.com/submissions';
   private headers = new HttpHeaders({
     'content-type': 'application/json',
-    'X-RapidAPI-Key': '58ed86b64fmsh66a4bf39c5ccddep162a57jsne4e639de074e',
+    'X-RapidAPI-Key': '6a711ecbb6msh68b0e418f026859p197313jsnf5b9ce9e42ba',
     'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
   });
 
   constructor(
     private http: HttpClient,
     private gitService: GitService,
-    private el: ElementRef,
     private route: ActivatedRoute,
-    private problemService: ProblemService
+    private el: ElementRef,
+    private problemService: ProblemService, 
+    private authService: AuthenticationService,
+    private submissionService: SubmissionService
   ) {}
+  userId: number = 0;
+// Add these properties to your CodeEditorComponent class
+timerRunning: boolean = false;
+startTime: number = 0;
+elapsedTime: string = '00:00:00';
+timerInterval: any;
+timerProgressOffset: number = 125.6; // Full circle circumference (2πr) where r=20
+timerWarningThreshold: number = 15 * 60 * 1000; // 15 minutes in ms
+timerDangerThreshold: number = 30 * 60 * 1000; // 30 minutes in ms
+timerMaxTime: number = 60 * 60 * 1000; // 60 minutes in ms for progress calculation
+
+// Add this method to start the timer
+startTimer(): void {
+  if (!this.timerRunning) {
+    this.timerRunning = true;
+    this.startTime = Date.now() - (this.parseTimeToMs(this.elapsedTime) || 0);
+    
+    this.timerInterval = setInterval(() => {
+      const elapsedMs = Date.now() - this.startTime;
+      this.elapsedTime = this.formatTime(elapsedMs);
+      this.updateTimerProgress(elapsedMs);
+    }, 1000);
+  }
+}
+
+// Add this method to stop the timer
+stopTimer(): void {
+  if (this.timerRunning) {
+    this.timerRunning = false;
+    clearInterval(this.timerInterval);
+  }
+}
+
+// Add this method to reset the timer
+resetTimer(): void {
+  this.stopTimer();
+  this.elapsedTime = '00:00:00';
+  this.timerProgressOffset = 125.6; // Reset to full circle
+}
+
+// Format milliseconds to MM:SS for display in the circular timer
+formatTime(ms: number): string {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  // For the circular timer, we'll show only minutes:seconds if under an hour
+  if (hours > 0) {
+    return [
+      hours.toString().padStart(2, '0'),
+      minutes.toString().padStart(2, '0'),
+      seconds.toString().padStart(2, '0')
+    ].join(':');
+  } else {
+    return [
+      minutes.toString().padStart(2, '0'),
+      seconds.toString().padStart(2, '0')
+    ].join(':');
+  }
+}
+
+// Parse time string (HH:MM:SS) to milliseconds
+parseTimeToMs(timeStr: string): number {
+  const parts = timeStr.split(':').map(Number);
+  if (parts.length === 3) {
+    // Format is HH:MM:SS
+    return ((parts[0] * 60 + parts[1]) * 60 + parts[2]) * 1000;
+  } else if (parts.length === 2) {
+    // Format is MM:SS
+    return (parts[0] * 60 + parts[1]) * 1000;
+  }
+  return 0;
+}
+
+// Update the timer progress circle
+updateTimerProgress(elapsedMs: number): void {
+  // Calculate percentage of max time
+  const percentage = Math.min(elapsedMs / this.timerMaxTime, 1);
+  // Calculate the stroke-dashoffset (full circle = 125.6)
+  this.timerProgressOffset = 125.6 * (1 - percentage);
+  
+  // Apply class based on elapsed time
+  const timerElement = document.querySelector('.circular-timer');
+  if (timerElement) {
+    timerElement.classList.remove('timer-warning', 'timer-danger');
+    
+    if (elapsedMs >= this.timerDangerThreshold) {
+      timerElement.classList.add('timer-danger');
+    } else if (elapsedMs >= this.timerWarningThreshold) {
+      timerElement.classList.add('timer-warning');
+    }
+    
+    if (this.timerRunning) {
+      timerElement.classList.add('timer-running');
+    } else {
+      timerElement.classList.remove('timer-running');
+    }
+  }
+}
 
   ngOnInit(): void {
+    // Charger le problème depuis l'URL
     const problemId = +this.route.snapshot.paramMap.get('id')!;
     this.problemService.getProblemById(problemId).subscribe({
       next: (data) => {
         this.problem = data;
         console.log("✅ Problème chargé :", this.problem);
+        this.startTimer();
+
       },
       error: (err) => {
         console.error('❌ Problème non trouvé', err);
       }
     });
-
+  
+    // 🔐 Récupérer l’ID de l’utilisateur connecté
+    this.userId = this.authService.getUserId() ?? 0;
+    console.log("User ID:", this.userId);
+  
     this.setupAntiCheatingListeners();
     this.startCodeMonitoring();
   }
 
   submitCode(): void {
-    if (!this.gitLink) {
-      this.output = '❌ Veuillez fournir un lien GitHub avant de soumettre.';
+     // Stop the timer when submitting
+    this.stopTimer();
+    // Vérifier si le code est prêt à être soumis
+    if (!this.sourceCode || this.isRunning) {
+      this.output = '⚠️ Veuillez exécuter votre code avant de le soumettre';
       return;
     }
-    
-    const submission = {
+  
+    // Récupérer l'ID de l'utilisateur depuis localStorage
+    const userId = this.authService.getUserId();
+    console.log(userId);
+    if (!userId) {
+      this.output = '❌ Utilisateur non identifié. Veuillez vous reconnecter.';
+      return;
+    }
+  
+    // Récupérer l'ID du problème actuel
+    const problemId = this.problem?.id;
+    if (!problemId) {
+      this.output = '❌ Problème non identifié.';
+      return;
+    }
+  
+    // Préparer l'objet de soumission
+    const submission: Submission = {
       code: this.sourceCode,
-      gitLink: this.gitLink,
-      problem: { id: this.problem.id },
-      student: { id: 1 }, // Assurez-vous que cet ID est valide
+      language: {
+        id: this.selectedLanguage
+      },
+      output: this.output,
+      problem: {
+        id: problemId
+      },
+      student: {
+        id: userId
+      },
+      gitLink: this.gitLink || this.githubOwner + '/' + this.repoName,
+      elapsedTime: this.elapsedTime
+
     };
-    
-    this.output = '⏳ Soumission en cours...';
-    
-    // Ajout des headers appropriés
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-      // Ajoutez un token d'authentification si nécessaire
-      // 'Authorization': 'Bearer ' + this.authService.getToken()
-    });
-    
-    this.http.post<Submission>('http://localhost:8088/submissions/submit', submission, { headers })
-    .subscribe({
+  
+    // Envoyer la soumission au backend
+    this.submissionService.submit(submission).subscribe({
       next: (response) => {
-        console.log('✔️ Réponse:', response);
-        this.output = `✅ Output:\n${response.output ?? 'No output yet'}\nStatus: ${response.status}\nScore: ${response.score}`;
+        console.log('✅ Soumission réussie:', response);
+        this.output = `✅ Soumission réussie! Score: ${response.score}/100`;
       },
       error: (err) => {
-        this.output = `✅ Code submitted`;
-        if (err.error?.message) {
-          this.output += `\nDétails: ${err.error.message}`;
-        }
+        console.error('❌ Erreur lors de la soumission:', err);
+        this.output = '❌ Erreur lors de la soumission. Veuillez réessayer.';
+        this.startTimer();
+
       }
     });
-  
   }
   
 
@@ -497,40 +628,38 @@ githubOwner: string = 'Amalesprit01';
     });
   }
 
-  runCode(): void {
-    // Check for suspicious activity before running
-    if (this.suspiciousActivity) {
-      this.output = '⚠️ Code execution blocked due to suspicious activity. Please contact your instructor.';
-      this.showCheatingAlert('Code execution blocked due to suspicious activity. This incident has been reported.');
-      return;
-    }
-    
-    this.isRunning = true;
-    this.isCodeExecutedSuccessfully = false;
-    this.output = '⏳ Compiling...';
+runCode(): void {
+  this.isRunning = true;
+  this.isCodeExecutedSuccessfully = false;
+  this.output = '⏳ Compiling...';
 
-    const payload = {
-      source_code: this.sourceCode,
-      language_id: this.selectedLanguage,
-      stdin: this.inputData
-    };
+  const payload = {
+    source_code: this.sourceCode,
+    language_id: this.selectedLanguage,
+    stdin: this.inputData
+  };
 
-    this.http.post<any>(`${this.apiUrl}?base64_encoded=false&wait=false`, payload, { headers: this.headers })
-      .subscribe({
-        next: (response) => {
-          if (response.token) {
-            this.checkResult(response.token);
-          } else {
-            this.output = '❌ Submission error.';
-            this.isRunning = false;
-          }
-        },
-        error: (err) => {
-          this.output = '❌ API connection error.';
+  // Add detailed logging
+  console.log('Sending code to Judge0 API with payload:', payload);
+
+  this.http.post<any>(`${this.apiUrl}?base64_encoded=false&wait=false`, payload, { headers: this.headers })
+    .subscribe({
+      next: (response) => {
+        console.log('Judge0 API response:', response);
+        if (response.token) {
+          this.checkResult(response.token);
+        } else {
+          this.output = '❌ Submission error: No token received';
           this.isRunning = false;
         }
-      });
-  }
+      },
+      error: (err) => {
+        console.error('Judge0 API error details:', err);
+        this.output = `❌ API connection error: ${err.status} ${err.statusText}`;
+        this.isRunning = false;
+      }
+    });
+}
 
   private checkResult(token: string, retries = 10, delay = 2000): void {
     if (retries === 0) {

@@ -1,8 +1,11 @@
 <div class="judge0-container">
   <div class="judge0-toolbar">
-    <select class="judge0-language-select" [(ngModel)]="selectedLanguage">
-      <option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</option>
-    </select>
+    <div class="d-flex align-items-center">
+      <select class="judge0-language-select" [(ngModel)]="selectedLanguage">
+        <option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</option>
+      </select>
+    </div>
+    
     <div class="header-right d-flex align-items-center gap-2">
       <button 
         class="run-btn" 
@@ -21,18 +24,54 @@
       </button>
 
       <input 
-      type="text"
-      [(ngModel)]="gitLink"
-      placeholder="Enter your GitHub link"
-      style="width: 300px; margin: 0 10px;" />
-    <button 
-      class="submit-btn" 
-      (click)="submitCode()" 
-      [disabled]="!isCodeExecutedSuccessfully"
-      style="background-color: #0aa879; color: white; border: none; padding: 8px 12px; border-radius: 4px;">
-      Submit
-    </button>
-    
+        type="text"
+        [(ngModel)]="gitLink"
+        placeholder="Enter your GitHub link"
+        style="width: 300px; margin: 0 10px;" />
+        
+      <button 
+        class="submit-btn" 
+        (click)="submitCode()" 
+        [disabled]="!isCodeExecutedSuccessfully"
+        style="background-color: #0aa879; color: white; border: none; padding: 8px 12px; border-radius: 4px;">
+        Submit
+      </button>
+      
+      <!-- Circular Timer Display -->
+      <div class="circular-timer">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle
+            class="timer-background"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            stroke="#e6e6e6"
+            stroke-width="4"
+          ></circle>
+          <circle
+            class="timer-progress"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            stroke="#0aa879"
+            stroke-width="4"
+            stroke-dasharray="125.6"
+            [attr.stroke-dashoffset]="timerProgressOffset"
+            transform="rotate(-90, 25, 25)"
+          ></circle>
+          <text
+            x="25"
+            y="27"
+            text-anchor="middle"
+            fill="#333"
+            font-size="10"
+            font-weight="bold"
+            class="timer-text"
+          >{{ elapsedTime }}</text>
+        </svg>
+      </div>
     </div>
   </div>
 

@@ -167,3 +167,15 @@
       grid-template-columns: 1fr;
     }
   }
+  :host {
+    position: relative;
+  }
+  
+  /* S’assure que le bouton flottant du chatbot reste au-dessus */
+  app-chatbot-bubble {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+  
