@@ -3,6 +3,7 @@ package com.security.EduNext.Security;
 
 
 import com.security.EduNext.OAuth2.OAuth2LoginSuccessHandler;
+import com.twilio.http.HttpMethod;
 import org.springframework.boot.CommandLineRunner;  // Correct import
 import com.security.EduNext.Entities.Role;
 import com.security.EduNext.Entities.User;
@@ -58,7 +59,7 @@ public class SecurityConfiguration {
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(oAuth2LoginSuccessHandler)
                         .authorizationEndpoint(authorization -> authorization
-                                .baseUri("/oauth2/authorization") // Standard Spring OAuth2 endpoint
+                                .baseUri("/oauth2/authorization")
                         )
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/login/oauth2/code/*")
@@ -67,6 +68,7 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
 
 
 
