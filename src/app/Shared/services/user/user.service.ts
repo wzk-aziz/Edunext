@@ -14,8 +14,8 @@ export interface BanStats {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8050/api/v1/users';
-  private passUrl = 'http://localhost:8050/api/auth';
+  private apiUrl = 'http://localhost:8093/api/v1/users';
+  private passUrl = 'http://localhost:8093/api/auth';
 
   
 

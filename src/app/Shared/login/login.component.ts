@@ -150,20 +150,20 @@ export class LoginComponent implements OnInit {
       this.errorMessage = 'Please enter both email and password';
       return;
     }
-
+  
     // Show warning message if over threshold but still allow the attempt
     if (this.failedAttempts >= 3) {
       this.showForgotPasswordWarning = true;
     }
-
+  
     this.authService.login(this.authRequest).subscribe({
       next: (response) => {
         this.authResponse = response;
         console.log("User role:", this.authResponse.role);
-
+  
         // Reset failed attempts on successful login
         this.resetFailedAttempts();
-
+  
         if (response.mfaEnabled) {
           // Redirect to verification component with email
           this.router.navigate(['verify'], { 
@@ -173,6 +173,14 @@ export class LoginComponent implements OnInit {
           if (response.accessToken) {
             localStorage.setItem('token', response.accessToken);
             
+            // Vérifier si l'ID utilisateur est présent et le sauvegarder dans localStorage
+            if (this.authResponse.userId) {
+              localStorage.setItem('userId', JSON.stringify(this.authResponse.userId));
+              console.log("User ID saved in localStorage:", this.authResponse.userId);
+            } else {
+              console.log("User ID is missing in the response.");
+            }
+  
             const userRole = this.authResponse.role?.toUpperCase();
             switch(userRole) {
               case 'ADMIN':
@@ -211,4 +219,4 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-}
+}  

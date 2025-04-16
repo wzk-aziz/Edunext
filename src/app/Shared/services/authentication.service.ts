@@ -16,8 +16,8 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AuthenticationService {
   
-  private baseUrl: string = 'http://localhost:8050/api/v1/auth';
-  private apiUrl: string = 'http://localhost:8050/api/v1/auth/logout'; 
+  private baseUrl: string = 'http://localhost:8093/api/v1/auth';
+  private apiUrl: string = 'http://localhost:8093/api/v1/auth/logout'; 
 
 
 
