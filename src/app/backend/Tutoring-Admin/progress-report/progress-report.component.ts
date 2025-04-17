@@ -66,7 +66,7 @@ export class ProgressReportComponent implements OnInit {
     console.log('Starting component...');
     
     // First let's inspect raw API data
-    fetch('http://localhost:8087/progress-reports/all')
+    fetch('http://localhost:9090/progress-reports/all')
       .then(response => response.json())
       .then(data => {
         console.log('DIRECT API RESPONSE:', data);

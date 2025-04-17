@@ -16,8 +16,8 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AuthenticationService {
 
-  private baseUrl: string = 'http://localhost:8087/api/v1/auth';
-  private apiUrl: string = 'http://localhost:8087/api/v1/auth/logout';
+  private baseUrl: string = 'http://localhost:9090/api/v1/auth';
+  private apiUrl: string = 'http://localhost:9090/api/v1/auth/logout';
 
 
 
@@ -82,7 +82,7 @@ export class AuthenticationService {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    this.http.post('http://localhost:8093/api/v1/auth/logout', {}, {
+    this.http.post('http://localhost:9090/api/v1/auth/logout', {}, {
 
 
 

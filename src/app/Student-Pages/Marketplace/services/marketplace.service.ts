@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import {loadStripe} from "@stripe/stripe-js";
 
-const BASIC_URL = "http://localhost:8087/";
+const BASIC_URL = "http://localhost:9090/";
 
 @Injectable({
   providedIn: 'root'

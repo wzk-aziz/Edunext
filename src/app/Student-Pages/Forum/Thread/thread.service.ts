@@ -7,7 +7,7 @@ import { Thread } from '../models/thread.model';
   providedIn: 'root'
 })
 export class ThreadService {
-  private baseUrl = 'http://localhost:8087/api/thread';
+  private baseUrl = 'http://localhost:9090/api/thread';
 
   constructor(private http: HttpClient) { }
 

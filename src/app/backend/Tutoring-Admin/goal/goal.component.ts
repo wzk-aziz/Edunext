@@ -55,7 +55,7 @@ export class GoalComponent implements OnInit {
     console.log('🚀 Goal Component initializing...');
     
     // Test direct API access to diagnose issues
-    fetch('http://localhost:8087/goals/all')
+    fetch('http://localhost:9090/goals/all')
       .then(res => {
         console.log('🔍 Direct API status:', res.status, res.statusText);
         return res.text(); // Get raw text first to see what's coming back

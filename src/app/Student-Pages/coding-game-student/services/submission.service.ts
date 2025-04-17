@@ -8,7 +8,7 @@ import { Submission } from '../models/submission.model';
   providedIn: 'root'
 })
 export class SubmissionService {
-  private apiUrl = 'http://localhost:8088/submissions';
+  private apiUrl = 'http://localhost:9090/submissions';
 
   constructor(private http: HttpClient) {}
 

@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class PaymentServiceService {
   private stripePromise = loadStripe('pk_test_51QwtvpR88uyR8EQrqAq8qSIJ61ZsTAUtltcDU3EDqhVBgvQFVH08F5SUsngiPiu2AHTsx5feb7ejgLmfpNDQLiyN00hpHvt7Wk');
-  private apiUrl = 'http://localhost:8087/';
+  private apiUrl = 'http://localhost:9090/';
 
   constructor(private http: HttpClient) {}
 

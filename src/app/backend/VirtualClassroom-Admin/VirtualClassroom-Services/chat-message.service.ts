@@ -8,7 +8,7 @@ import { ChatMessage } from '../chat-message/chat-message.model';
   providedIn: 'root'
 })
 export class ChatMessageService {
-  private apiUrl = 'http://localhost:8088/api/chatMessages';
+  private apiUrl = 'http://localhost:9090/api/chatMessages';
   
   constructor(private http: HttpClient) { }
 

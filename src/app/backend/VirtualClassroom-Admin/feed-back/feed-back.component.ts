@@ -26,7 +26,7 @@ export class FeedBackComponent implements OnInit {
   showFeedbackList = true;
   
   // API endpoint
-  apiUrl = 'http://localhost:8088/api/feedbacks';
+  apiUrl = 'http://localhost:9090/api/feedbacks';
   
   // For template use
   Math = Math; // Expose Math for template calculations
@@ -496,7 +496,7 @@ deleteFeedback(id: number | undefined): Promise<void> {
     
     console.log('Testing direct fetch...');
     
-    fetch('http://localhost:8088/api/feedbacks/all')
+    fetch('http://localhost:9090/api/feedbacks/all')
       .then(response => response.text())
       .then(text => {
         try {

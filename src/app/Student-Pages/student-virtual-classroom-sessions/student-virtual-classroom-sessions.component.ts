@@ -281,7 +281,7 @@ showingFeedback = false;
   
   // Debug methods
   showApiResponse(): void {
-    this.http.get('http://localhost:8088/api/sessions/all').subscribe({
+    this.http.get('http://localhost:9090/api/sessions/all').subscribe({
       next: (response) => {
         console.log('Raw API response:', response);
         alert('API response logged to console - please check browser console (F12)');
@@ -298,7 +298,7 @@ showingFeedback = false;
   }
 
   testAllMethods(): void {
-    const url = 'http://localhost:8088/api/sessions/all';
+    const url = 'http://localhost:9090/api/sessions/all';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -537,7 +537,7 @@ testSessionFeedbackEndpoints(): void {
 
 // Helper method to test individual endpoints
 private testEndpoint(path: string): void {
-  const baseUrl = 'http://localhost:8088';
+  const baseUrl = 'http://localhost:9090';
   const fullUrl = baseUrl + path;
   
   this.http.get(fullUrl).subscribe({

@@ -8,7 +8,7 @@ import { map, tap, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class GoalService {
-  private apiUrl = 'http://localhost:8087/goals';
+  private apiUrl = 'http://localhost:9090/goals';
 
   constructor(private http: HttpClient) { }
 

@@ -411,8 +411,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:8050"],
-        disallowedRoutes: ["localhost:8050/api/v1/auth"]
+        allowedDomains: ["localhost:9090"],
+        disallowedRoutes: ["localhost:9090/api/v1/auth"]
       }
     }),
     TranslateModule.forRoot({

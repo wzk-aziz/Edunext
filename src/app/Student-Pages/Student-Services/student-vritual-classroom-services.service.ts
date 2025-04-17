@@ -8,7 +8,7 @@ import { ClassroomSession } from '../student-virtual-classroom-sessions/student-
   providedIn: 'root'
 })
 export class StudentVirtualClassroomService {
-  private apiUrl = 'http://localhost:8088/api/sessions';
+  private apiUrl = 'http://localhost:9090/api/sessions';
   private instructors = new Map<number, { firstName: string, lastName: string }>();
   
   constructor(private http: HttpClient) {

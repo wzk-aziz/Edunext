@@ -9,8 +9,8 @@ import { Certificate } from '../models/Certificate';
 })
 export class CertificateService {
 
-  private apiUrl = 'http://localhost:8093/api/certificates';
-  private apiUrl1 = 'http://localhost:8093/api/certificates';
+  private apiUrl = 'http://localhost:9090/api/certificates';
+  private apiUrl1 = 'http://localhost:9090/api/certificates';
 
 
   constructor(private http: HttpClient) {}
@@ -39,7 +39,7 @@ export class CertificateService {
 
   getCertificatesByExam(idExam: number): Observable<Certificate[]> {
     console.log(`Fetching certificates for exam ID: ${idExam}`); // Log l'ID de l'examen
-    return this.http.get<Certificate[]>(`http://localhost:8093/api/certificates/exam/${idExam}`)
+    return this.http.get<Certificate[]>(`http://localhost:9090/api/certificates/exam/${idExam}`)
       .pipe(
         catchError(err => {
           console.error('Error fetching certificates:', err);

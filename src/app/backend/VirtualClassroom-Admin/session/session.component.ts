@@ -133,7 +133,7 @@ availableSubjects: string[] = [];
     console.log('Fetching sessions...');
     
     // First, try a direct fetch to see raw response
-    fetch('http://localhost:8088/api/sessions/all')
+    fetch('http://localhost:9090/api/sessions/all')
       .then(response => response.text())
       .then(text => {
         console.log('Raw response sample:', text.substring(0, 200));
@@ -392,7 +392,7 @@ changePageSize(size: number) {
     console.log('Adding session with data:', JSON.stringify(sessionToAdd, null, 2));
     
     // Rest of your fetch code remains the same
-    fetch('http://localhost:8088/api/sessions', {
+    fetch('http://localhost:9090/api/sessions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -527,7 +527,7 @@ changePageSize(size: number) {
     console.log('Updating session with data:', JSON.stringify(sessionToUpdate, null, 2));
     
     // REST of your fetch code remains the same
-    fetch(`http://localhost:8088/api/sessions/${sessionToUpdate.idSession}`, {
+    fetch(`http://localhost:9090/api/sessions/${sessionToUpdate.idSession}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -640,7 +640,7 @@ testAPI() {
   
   console.log('Testing API connection...');
   
-  fetch('http://localhost:8088/api/sessions/all')
+  fetch('http://localhost:9090/api/sessions/all')
     .then(response => {
       console.log('Response status:', response.status);
       
@@ -676,7 +676,7 @@ testAPI() {
 testAlternativeAPI() {
   console.log('Testing alternative API endpoint...');
   
-  fetch('http://localhost:8088/api/sessions')
+  fetch('http://localhost:9090/api/sessions')
     .then(response => response.json())
     .then(data => {
       console.log('Alternative API test successful, received:', data);
@@ -713,7 +713,7 @@ debugUpdate() {
   console.log('Session to update:', sessionToUpdate);
   
   // Test the direct API call
-  fetch(`http://localhost:8088/api/sessions/${sessionToUpdate.idSession}`, {
+  fetch(`http://localhost:9090/api/sessions/${sessionToUpdate.idSession}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -756,7 +756,7 @@ debugAdd() {
   console.log('Minimal session payload:', JSON.stringify(minimalSession));
   
   // Test the direct API call
-  fetch('http://localhost:8088/api/sessions', {
+  fetch('http://localhost:9090/api/sessions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -789,7 +789,7 @@ debugAdd() {
 
 // Add this to your component.ts
 checkApiSchema() {
-  fetch('http://localhost:8088/api/sessions/schema', { method: 'OPTIONS' })
+  fetch('http://localhost:9090/api/sessions/schema', { method: 'OPTIONS' })
     .then(response => response.text())
     .then(data => {
       console.log('API schema info:', data);
@@ -808,7 +808,7 @@ debugFetchSessions() {
   this.error = null;
   
   // Use vanilla fetch to bypass Angular's HTTP client
-  fetch('http://localhost:8088/api/sessions/all')
+  fetch('http://localhost:9090/api/sessions/all')
     .then(response => response.text())
     .then(text => {
       console.log('Raw text sample:', text.substring(0, 200));
@@ -845,7 +845,7 @@ debugSessionsWithRawData() {
   this.loading = true;
   this.error = null;
   
-  fetch('http://localhost:8088/api/sessions/all')
+  fetch('http://localhost:9090/api/sessions/all')
     .then(response => response.text())
     .then(text => {
       console.log('Raw API response length:', text.length);

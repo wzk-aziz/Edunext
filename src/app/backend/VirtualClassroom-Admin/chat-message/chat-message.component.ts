@@ -36,7 +36,7 @@ export class ChatMessageComponent implements OnInit {
   Math = Math; // For template access
 
   // Api URL for direct testing
-  private apiUrl = 'http://localhost:8088/api/chatMessages';
+  private apiUrl = 'http://localhost:9090/api/chatMessages';
 
   constructor(private chatMessageService: ChatMessageService) {}
 

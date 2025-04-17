@@ -341,7 +341,7 @@ export class MentorshipPorgramComponent implements OnInit {
     
     console.log('Testing API connection...');
     
-    fetch('http://localhost:8087/mentorship-programs/all')
+    fetch('http://localhost:9090/mentorship-programs/all')
       .then(response => {
         console.log('Response status:', response.status);
         

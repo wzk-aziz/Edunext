@@ -14,8 +14,8 @@ export interface BanStats {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8087/api/v1/users';
-  private passUrl = 'http://localhost:8087/api/auth';
+  private apiUrl = 'http://localhost:9090/api/v1/users';
+  private passUrl = 'http://localhost:9090/api/auth';
 
 
 
@@ -49,7 +49,7 @@ export class UserService {
   }
 
   getUserImage(fileName: string): string {
-    return `http://localhost:8087/api/v1/auth/files/${fileName}`;
+    return `http://localhost:9090/api/v1/auth/files/${fileName}`;
   }
 
 

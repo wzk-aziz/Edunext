@@ -8,7 +8,7 @@ import { map, tap, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProgressReportService {
-  private apiUrl = 'http://localhost:8087/progress-reports';
+  private apiUrl = 'http://localhost:9090/progress-reports';
 
   constructor(private http: HttpClient) { }
 

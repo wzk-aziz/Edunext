@@ -13,8 +13,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthenticationServiceService {
 
-  private baseUrl: string = 'http://localhost:8093/api/v1/auth';
-  private apiUrl = 'http://localhost:8093/api/v1/auth/logout'; 
+  private baseUrl: string = 'http://localhost:9090/api/v1/auth';
+  private apiUrl = 'http://localhost:9090/api/v1/auth/logout'; 
   private user: User | null = null;
 
 
@@ -106,7 +106,7 @@ export class AuthenticationServiceService {
     const token = localStorage.getItem('token');
     if (!token) return;
   
-    this.http.post('http://localhost:8080/api/v1/auth/logout', {}, {
+    this.http.post('http://localhost:9090/api/v1/auth/logout', {}, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {

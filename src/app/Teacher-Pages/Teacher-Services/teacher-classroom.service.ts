@@ -24,7 +24,7 @@ export interface TeacherClassroomSession {
   providedIn: 'root'
 })
 export class TeacherClassroomService {
-  private apiUrl = 'http://localhost:8088/api/sessions';
+  private apiUrl = 'http://localhost:9090/api/sessions';
   private instructorId = 1; // The current logged-in instructor ID
 
   constructor(private http: HttpClient) { }
