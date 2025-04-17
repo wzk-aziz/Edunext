@@ -66,7 +66,41 @@ export class CoursepageComponent implements OnInit {
     });
   }
 
+  // selectLecture(lecture: Lecture): void {
+  //   this.currentLecture = lecture;
+  
+  //   if (lecture.videoPath && lecture.pdfPath) {
+  //     this.viewMode = 'video';
+  //   } else if (lecture.videoPath) {
+  //     this.viewMode = 'video';
+  //   } else if (lecture.pdfPath) {
+  //     this.viewMode = 'pdf';
+  //   }
+  
+  //   // Resume from last watched time if video
+  //   setTimeout(() => {
+  //     if (this.viewMode === 'video' && this.videoPlayer) {
+  //       const video = this.videoPlayer.nativeElement;
+  //       const savedTime = parseFloat(localStorage.getItem(`lecture_video_time_${lecture.id}`) || '0');
+  //       video.currentTime = savedTime;
+  //     }
+  //   }, 100); // slight delay to ensure player is ready
+  // }
+
+
   selectLecture(lecture: Lecture): void {
+    const lectureIndex = this.lectures.findIndex(l => l.id === lecture.id);
+  
+    if (lectureIndex > 0) {
+      const previousLecture = this.lectures[lectureIndex - 1];
+      const prevProgress = this.getLectureProgress(previousLecture.id);
+  
+      if (prevProgress < 100) {
+        alert('🔒 You must complete the previous lecture to unlock this one.');
+        return;
+      }
+    }
+  
     this.currentLecture = lecture;
   
     if (lecture.videoPath && lecture.pdfPath) {
@@ -77,15 +111,16 @@ export class CoursepageComponent implements OnInit {
       this.viewMode = 'pdf';
     }
   
-    // Resume from last watched time if video
     setTimeout(() => {
       if (this.viewMode === 'video' && this.videoPlayer) {
         const video = this.videoPlayer.nativeElement;
         const savedTime = parseFloat(localStorage.getItem(`lecture_video_time_${lecture.id}`) || '0');
         video.currentTime = savedTime;
       }
-    }, 100); // slight delay to ensure player is ready
+    }, 100);
   }
+  
+
   
 
   getVideoUrl(): SafeResourceUrl {
@@ -191,7 +226,15 @@ export class CoursepageComponent implements OnInit {
   
   
   
-
+  isLectureLocked(lecture: Lecture): boolean {
+    const index = this.lectures.findIndex(l => l.id === lecture.id);
+    if (index === 0) return false;
+  
+    const prevLecture = this.lectures[index - 1];
+    const prevProgress = this.getLectureProgress(prevLecture.id);
+    return prevProgress < 100;
+  }
+  
 
   
 }

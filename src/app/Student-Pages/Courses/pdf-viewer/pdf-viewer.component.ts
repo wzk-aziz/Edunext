@@ -29,7 +29,10 @@ export class PdfViewerComponent implements OnChanges {
   loading: boolean = false;
   bookmarks: { id: number, scrollTop: number, label: string }[] = [];
   editingBookmarkId: number | null = null;
-
+  quizQuestions: any[] = [];
+  showQuiz: boolean = false;
+  quizFetched: boolean = false;
+  
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pdfUrl'] && this.pdfUrl) {
       this.loadPdf();
@@ -132,5 +135,6 @@ export class PdfViewerComponent implements OnChanges {
     this.editingBookmarkId = null;
     this.saveBookmarks();
   }
+  
   
 }

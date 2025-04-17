@@ -118,3 +118,9 @@
     border-left: 4px solid #28a745;
   }
   
+  .lecture-item.locked {
+    opacity: 0.6;
+    pointer-events: auto;
+    cursor: not-allowed;
+  }
+  

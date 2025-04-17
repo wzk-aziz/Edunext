@@ -9,6 +9,7 @@
           (click)="selectLecture(lecture)" 
           [class.active]="lecture.id === currentLecture?.id" 
           [class.completed]="getLectureProgress(lecture.id) >= 100"
+          [class.locked]="isLectureLocked(lecture)"
           class="list-group-item d-flex flex-column lecture-item"
           style="cursor: pointer;">
           
@@ -17,6 +18,10 @@
               <i class="fas fa-play text-primary me-2"></i>
               <span>{{ lecture.lectureOrder }}. {{ lecture.lectureTitle }}</span>
 
+              <span *ngIf="isLectureLocked(lecture)" class="badge bg-danger ms-2 text-white px-2 py-1 rounded">
+                🔒 Locked
+              </span>
+              
               <!-- ✅ Completed badge -->
               <span *ngIf="getLectureProgress(lecture.id) >= 100" 
                     class="badge bg-success ms-2 text-white px-2 py-1 rounded">

@@ -66,6 +66,7 @@ import { QuizResultsComponent } from './Student-Pages/Courses/Quiz/quiz-results/
 import { LectureWhiteboardComponent } from './Student-Pages/Courses/whiteboard/lecture-whiteboard/lecture-whiteboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PdfViewerComponent } from './Student-Pages/Courses/pdf-viewer/pdf-viewer.component';
+import { ShufflePipe } from './shuffle.pipe';
 
 
 
@@ -129,6 +130,7 @@ import { PdfViewerComponent } from './Student-Pages/Courses/pdf-viewer/pdf-viewe
     QuizResultsComponent,
     LectureWhiteboardComponent,
     PdfViewerComponent,
+    ShufflePipe,
   ],
   imports: [
     BrowserModule,

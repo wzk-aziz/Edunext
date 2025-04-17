@@ -19,23 +19,22 @@
         <span *ngIf="editingBookmarkId !== b.id" class="flex-grow-1" (click)="goToBookmark(b.scrollTop)" style="cursor: pointer;">
           {{ b.label }}
         </span>
-  
         <input *ngIf="editingBookmarkId === b.id"
                class="form-control form-control-sm me-2"
                [(ngModel)]="b.label"
                (blur)="finishEditing(b, b.label)"
                (keyup.enter)="finishEditing(b, b.label)"
                style="max-width: 150px;" />
-  
         <button *ngIf="editingBookmarkId !== b.id" class="btn btn-sm btn-outline-secondary me-1" (click)="startEditing(b.id)">📝</button>
         <button class="btn btn-sm btn-danger" (click)="removeBookmark(b.id)">🗑️</button>
       </div>
     </li>
   </ul>
-  
 </div>
 
 <!-- PDF Pages -->
 <div #pdfContainer class="pdf-container" (scroll)="onScroll()">
   <canvas *ngFor="let page of pages; let i = index" [attr.id]="'page_' + (i + 1)"></canvas>
 </div>
+
+

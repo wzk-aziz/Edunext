@@ -22,6 +22,10 @@ export class MycoursesComponent implements OnInit {
     completedLectures: number;
   }> = [];
 
+  averageCourseProgress: number = 0;
+  recommendedCourses: Course[] = [];
+  allCourses: Course[] = [];
+
   constructor(
     private courseService: CourseService,
     private lectureService: LectureService
@@ -33,6 +37,9 @@ export class MycoursesComponent implements OnInit {
 
   async loadCoursesWithProgress(): Promise<void> {
     const courses: Course[] = (await this.courseService.getAllCourses().toPromise()) || [];
+    this.allCourses = courses;
+
+    let overallProgressSum = 0;
 
     for (const course of courses) {
       const lectures: Lecture[] = (await this.lectureService.getLecturesByCourseId(course.id!).toPromise()) || [];
@@ -78,7 +85,29 @@ export class MycoursesComponent implements OnInit {
         totalLectures: lectures.length,
         completedLectures: completedLectures
       });
+
+      overallProgressSum += finalProgress;
     }
+
+    this.averageCourseProgress = this.courseProgressList.length > 0
+      ? Math.floor(overallProgressSum / this.courseProgressList.length)
+      : 0;
+
+    this.generateRecommendations();
+  }
+
+  generateRecommendations(): void {
+    const completedIds = this.courseProgressList.map(c => c.id);
+    const topCategories = this.courseProgressList
+      .map(c => c.category?.id)
+      .filter((id, index, arr) => id !== undefined && arr.indexOf(id) === index);
+
+    this.recommendedCourses = this.allCourses
+      .filter(c =>
+        !completedIds.includes(c.id!) &&
+        topCategories.includes(c.category?.id)
+      )
+      .slice(0, 3);
   }
 
   getTotalCompletedLessons(): number {
