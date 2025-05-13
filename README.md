@@ -1,27 +1,60 @@
-# TemplateFront
+# 🎓 E-Learning Platform - Microservices Architecture
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+Ce projet est une **plateforme d'apprentissage en ligne** moderne basée sur une architecture microservices. Il utilise **Spring Boot**, **Angular 16**, **Node.js**, **MySQL**, et des outils de gestion des services comme **Netflix Eureka** et **Spring Cloud Gateway**.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🧱 Architecture Générale
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 🛠️ Technologies utilisées
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Frontend
+- **Angular 16** (Framework SPA moderne)
+- **Node.js** (Serveur web - port `3000`)
+- **HTML/CSS/TypeScript**
 
-## Running unit tests
+### Backend
+- **Spring Boot** (Microservices)
+- **Spring Cloud Gateway** (API Gateway - port `8093`)
+- **Netflix Eureka** (Service Discovery - port `8761`)
+- **Spring Data JPA** & **Hibernate**
+- **JWT** (Authentification sécurisée)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Base de données
+- **MySQL** (Un schéma par microservice)
 
-## Running end-to-end tests
+---
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 📦 Microservices
 
-## Further help
+| Microservice                                         | Port  |
+|-----------------------------------------------------|-------|
+| 1. User & Reclamation                               | 8082  |
+| 2. Course & Quiz Management                         | 8083  |
+| 3. Exam & Certification                             | 8084  |
+| 4. Gamification, Forum, Blog & Events               | 8085  |
+| 5. Mentorship, Virtual Classroom & Live Sessions    | 8086  |
+| 6. Marketplace, Donation & Crowdfunding             | 8087  |
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+---
+
+## 🚀 Lancement du projet
+
+### 1. Prérequis
+
+- **Node.js** 18+
+- **Angular CLI** `npm install -g @angular/cli`
+- **Java 17**
+- **Maven**
+- **MySQL** 
+
+
+### 2. Lancer le frontend Angular 16
+
+```bash
+cd frontend
+npm install
+ng serve 
